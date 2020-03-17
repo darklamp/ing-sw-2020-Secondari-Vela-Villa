@@ -2,7 +2,7 @@ package it.polimi.ingsw;
 
 /**
  * Hello world!
- * Lollo Puzza
+ * prova push
  */
 public class App 
 {
