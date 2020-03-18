@@ -34,21 +34,20 @@ public class Cell {
         return height;
     }
 
-    public void setHeight(BuildingType height) throws InvalidBuildException {
+    public void setHeight(BuildingType height) throws InvalidBuildException, BuildingOnDomeException, BuildingMoreLevelsException {
         if (builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
         else {
             try {
                 Builder.isValidBuild(this.height, height);
                 this.height = height; //OK
-
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error
             } catch (BuildingOnDomeException e) { // building on dome isn't possible
-//TODO
+                throw new BuildingOnDomeException(); // notify caller
             } catch (BuildingMoreLevelsException e) { // the player is trying to build up more than one level
-//TODO
+                throw new BuildingMoreLevelsException(); // notify caller
             } catch (InvalidBuildException e) { // invalid build action from player
-//TODO
+                throw new InvalidBuildException(); // notify caller
             }
         }
     }

@@ -18,14 +18,14 @@ public class Builder /*implements God*/ {
         return position;
     }
 
-    public void setPosition(Cell position) {
+    public void setPosition(Cell position) throws InvalidMoveException {
         try {
             isValidMove(position); // check validity of move
-            this.position = position;
+            this.position = position; // sets position if no exceptions are thrown
         } catch (NullPointerException e) {
             e.printStackTrace(); // unhandled error
-        } catch (InvalidMoveException e) {
-            //TODO
+        } catch (InvalidMoveException e) { // cannot move here
+            throw new InvalidMoveException(); // notify caller
         }
     }
 
