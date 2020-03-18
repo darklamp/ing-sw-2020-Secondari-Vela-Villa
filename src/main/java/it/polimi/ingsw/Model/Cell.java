@@ -1,42 +1,73 @@
 package it.polimi.ingsw.Model;
 
-import java.util.Objects;
+import it.polimi.ingsw.Model.Exceptions.BuildingMoreLevelsException;
+import it.polimi.ingsw.Model.Exceptions.BuildingOnDomeException;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+
+import java.util.ArrayList;
 
 public class Cell {
 
-    // NOTA: questo metodo va quasi bene ma va inserito in Builder, non qua, poichè può essere necessario override con Dei (in particolare Atlas)
-    /*private void isValidBuild(BuildingType height) throws BuildingOnDomeException,BuildingTwoLevelsException,InvalidBuildException {
+    private Builder builder = null;
 
-        if ((this.height).equals(BuildingType.DOME)) throw new BuildingOnDomeExcepion(); // verify that there is no dome on the cell
-        else if ((this.height).compareTo(height) <= 0)  throw new InvalidBuildException(); // verify that I'm not building on the same level as already present or on a lower level
-        else if ((this.height).equals(BuildingType.TOP) && !(height.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
-        else if ((this.height).compareTo(height) == 2) throw new BuildingTwoLevelsException(); // building two levels
-        else
-    }*/
-
-    private Builder builder;
+    private final Pair coordinates;
 
     private BuildingType height = BuildingType.NONE;
+
+    public Cell(int x, int y) { // constructor for Cell
+        this.coordinates = new Pair(x,y);
+    }
+
+    public int getX() {
+        return coordinates.getFirst();
+    }
+
+    public int getY() {
+        return coordinates.getSecond();
+    }
+
+    public Pair getPosition() {
+        return coordinates;
+    }
 
     public BuildingType getHeight() {
         return height;
     }
 
-    public void setHeight(BuildingType height) {
-        try{
-            builder.isValidBuild(height);
-            this.height = height; //OK
+    public void setHeight(BuildingType height) throws InvalidBuildException {
+        if (builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
+        else {
+            try {
+                Builder.isValidBuild(this.height, height);
+                this.height = height; //OK
 
+            } catch (NullPointerException e) {
+                e.printStackTrace(); // unhandled error
+            } catch (BuildingOnDomeException e) { // building on dome isn't possible
+//TODO
+            } catch (BuildingMoreLevelsException e) { // the player is trying to build up more than one level
+//TODO
+            } catch (InvalidBuildException e) { // invalid build action from player
+//TODO
+            }
         }
-        catch(NullPointerException e) {
+    }
 
-        }
-        catch (BuildingOnDomeException e) {
 
+    public ArrayList<Pair> getNear() { // returns cell numbers near given cell
+        ArrayList<Pair> out = new ArrayList<>();
+        for (int i = coordinates.getFirst() - 1; i <= (coordinates.getFirst() + 1) ; i++) {
+            if (i >= 0 && i <= 5) {
+                for (int j = coordinates.getSecond() - 1; j <= (coordinates.getSecond() + 1); j++) {
+                    if (j >= 0 && j <= 5) {
+                        if (j != coordinates.getSecond() && i != coordinates.getFirst()) {
+                            out.add(new Pair(i,j));
+                        }
+                    }
+                }
+            }
         }
-        catch (SameLevelBuildingException e) {
-
-        }
+        return out;
     }
 
     public Builder getBuilder() {
