@@ -38,7 +38,7 @@ public class Cell {
         if (builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
         else {
             try {
-                Builder.isValidBuild(this.height, height);
+                builder.isValidBuild(this.height, height);
                 this.height = height; //OK
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error

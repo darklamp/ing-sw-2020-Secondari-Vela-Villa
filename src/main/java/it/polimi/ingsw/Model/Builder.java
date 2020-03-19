@@ -1,11 +1,8 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.BuildingMoreLevelsException;
-import it.polimi.ingsw.Model.Exceptions.BuildingOnDomeException;
-import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
-import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.Model.Exceptions.*;
 
-public class Builder /*implements God*/ {
+public class Builder implements God {
 
     private Cell position;
 
@@ -27,10 +24,13 @@ public class Builder /*implements God*/ {
         } catch (InvalidMoveException e) { // cannot move here
             throw new InvalidMoveException(); // notify caller
         }
+        catch (MoveOnOccupiedCellException e) {
+            //TODO
+        }
     }
 
-
-    protected static void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException,BuildingMoreLevelsException,InvalidBuildException {
+    @Override
+    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException,BuildingMoreLevelsException,InvalidBuildException {
 
         if (oldheight.equals(BuildingType.DOME)) throw new BuildingOnDomeException(); // verify that there is no dome on the cell
         else if (newheight.compareTo(oldheight) <= 0)  throw new InvalidBuildException(); // verify that I'm not building on the same level as already present or on a lower level
@@ -38,14 +38,17 @@ public class Builder /*implements God*/ {
         else if (newheight.compareTo(oldheight) >= 2) throw new BuildingMoreLevelsException(); // building more than one level; might be feasible, see Atlas' power
 
     }
+//TODO: capire come organizzare le eccezioni / decorator
 
-    private void isValidMove(Cell finalPoint) throws InvalidMoveException {
+
+    @Override
+    public void isValidMove(Cell finalPoint) throws InvalidMoveException, MoveOnOccupiedCellException {
 
         if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 5 || finalPoint.getY() < 0 || finalPoint.getY() > 5) throw new InvalidMoveException(); //out of bounds
-        else if (finalPoint.getBuilder() != null || finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on occupied cell or on dome
+        else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on occupied cell or on dome
         else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2) throw new InvalidMoveException(); // check if I'm moving up more than one level
         else if (!(position.getNear().contains(finalPoint.getPosition()))) throw new InvalidMoveException(); // check that the cell I'm moving to is adjacent
-
+        else if (finalPoint.getBuilder() != null) throw new MoveOnOccupiedCellException(); // moving on occupied cell can be done with apollo
     }
 
 }
