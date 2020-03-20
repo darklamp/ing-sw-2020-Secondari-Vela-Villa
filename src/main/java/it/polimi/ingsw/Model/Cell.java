@@ -18,18 +18,30 @@ public class Cell {
         this.coordinates = new Pair(x,y);
     }
 
+    /**
+     * @return X coordinate of the given cell
+     */
     public int getX() {
         return coordinates.getFirst();
     }
 
+    /**
+     * @return Y coordinate of the given cell
+     */
     public int getY() {
         return coordinates.getSecond();
     }
 
+    /**
+     * @return coordinates of the given cell, in form of Pair
+     */
     public Pair getPosition() {
         return coordinates;
     }
 
+    /**
+     * @return height of the given cell
+     */
     public BuildingType getHeight() {
         return height;
     }
@@ -59,6 +71,10 @@ public class Cell {
     }
 
 
+    /**
+     * @return list of Pairs of coordinates (x,y) near the given cell
+     * for example, if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
+     */
     public ArrayList<Pair> getNear() { // returns cell numbers near given cell
         ArrayList<Pair> out = new ArrayList<>();
         for (int i = coordinates.getFirst() - 1; i <= (coordinates.getFirst() + 1) ; i++) {
@@ -75,6 +91,9 @@ public class Cell {
         return out;
     }
 
+    /**
+     * @return requested builder
+     */
     public Builder getBuilder() {
         return builder;
     }
@@ -83,6 +102,11 @@ public class Cell {
         this.builder = builder;
     }
 
+    /**
+     * @param x X coordinate of the cell to be checked
+     * @param y Y  ..
+     * @return true if the Cell is empty, else false
+     */
     public boolean emptyCell(int x, int y){
         if(x>4 || x<0 || y>4 || y<0) throw new UnsupportedOperationException();
         else {
@@ -90,6 +114,11 @@ public class Cell {
         }
     }
 
+    /**
+     * @param x X coordinate of the cell to be checked
+     * @param y Y  ..
+     * @return builder on the given coordinates, if any
+     */
     private Builder getBuilder(int x, int y) {
         return this.builder;
     }

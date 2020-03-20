@@ -12,10 +12,17 @@ public class Builder implements God {
         else this.position = position;
     }
 
+    /**
+     * @return position of given builder, in form of cell
+     */
     public Cell getPosition() {
         return position;
     }
 
+    /**
+     * @param position position to move the builder to
+     * @throws InvalidMoveException if the move isn't allowed
+     */
     public void setPosition(Cell position) throws InvalidMoveException {
         try {
             isValidMove(position); // check validity of move
@@ -25,16 +32,22 @@ public class Builder implements God {
         } catch (InvalidMoveException e) { // cannot move here
             throw new InvalidMoveException(); // notify caller
         }
-        catch (ApolloException e) {
-            //TODO
+        catch (ApolloException e) { // swap position cause it's Apollo TODO: do not make someone win if they win by being forced to move
+            swapPosition(this.position,position);
         }
-        catch (MinotaurException e) {
-
+        catch (MinotaurException e) { // change position cause it's Minotaurrr
         }
     }
 
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
 
+    /**
+     * @param oldheight represents "old height", meaning the height on which the builder is before performing the build
+     * @param newheight represents "new height", meaning the height which the builder wants to build on
+     * @throws BuildingOnDomeException when trying to build on a dome; might consider eliminating this TODO
+     * @throws AtlasException when Atlas; TODO better javadoc
+     * @throws InvalidBuildException when the build is illegal
+     */
     public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException, AtlasException,InvalidBuildException {
 
         if (oldheight.equals(BuildingType.DOME)) throw new BuildingOnDomeException(); // verify that there is no dome on the cell
@@ -46,6 +59,12 @@ public class Builder implements God {
     }
 //TODO: fare bene
 
+    /**
+     * @param finalPoint represents the cell to which the builder wants to move
+     * @throws InvalidMoveException when the move is illegal
+     * @throws ApolloException when Apollo TODO better javadoc
+     * @throws MinotaurException TODO better javadoc
+     */
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
     public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException {
 
@@ -60,13 +79,22 @@ public class Builder implements God {
      * @param position specifies position where to force-move the builder
      */
     private void forceMove(Cell position){
+        position.setBuilder(this);
         this.position = position;
     }
 
-    protected void swapPosition(Builder firstBuilder, Builder otherBuilder) {
-        Cell temp = firstBuilder.getPosition();
+    /**
+     * @param firstBuilder builder which wants to swap position
+     * @param otherBuilder builder whose position gets swapped
+     */
+    protected void swapPosition(Builder firstBuilder, Builder otherBuilder) { // TODO verificare che funzioni
+        Cell temp = firstBuilder.getPosition().clone();
         firstBuilder.forceMove(otherBuilder.getPosition());
         otherBuilder.forceMove(temp);
     }
-
+//TODO
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new Cell()
+    }
 }

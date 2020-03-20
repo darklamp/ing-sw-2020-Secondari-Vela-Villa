@@ -24,6 +24,11 @@ public class Minotaur extends Builder {
 //TODO
         }
     }
+
+    /**
+     * @param finalPoint cell on which builder wants to position
+     * @return true if the cell behind the occupied one is empty and valid; else false
+     */
     private boolean checkEmptyCellBehind(Cell finalPoint) {
             int diffX = finalPoint.getX() - this.getPosition().getX();
             int diffY = finalPoint.getY() - this.getPosition().getY();
