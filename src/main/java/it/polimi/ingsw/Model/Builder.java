@@ -33,15 +33,16 @@ public class Builder implements God {
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
 
     @Override
-    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException,BuildingMoreLevelsException,InvalidBuildException {
+    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException, AtlasException,InvalidBuildException {
 
         if (oldheight.equals(BuildingType.DOME)) throw new BuildingOnDomeException(); // verify that there is no dome on the cell
-       // else if (newheight.compareTo(oldheight) <= 0)  throw new InvalidBuildException(); // verify that I'm not building on the same level as already present or on a lower level ; ATLAS can do this ( with domes only )
+        //else if (newheight.compareTo(oldheight) <= 0)  throw new InvalidBuildException(); // verify that I'm not building on the same level as already present or on a lower level ; ATLAS can do this ( with domes only )
         else if (oldheight.equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
-       // else if (newheight.compareTo(oldheight) >= 2) throw new BuildingMoreLevelsException(); // building more than one level up; might be feasible, see Atlas' power
+
+        // else if (newheight.compareTo(oldheight) >= 2) throw new AtlasException(); // building more than one level up; might be feasible, see Atlas' power
 
     }
-//TODO: capire come organizzare le eccezioni / decorator
+//TODO: fare bene
 
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
     @Override

@@ -9,7 +9,7 @@ public class NoGod extends GodDecorator{
     public NoGod(Builder builder) {
         super(builder);
     }
-  public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException, BuildingMoreLevelsException, InvalidBuildException {
+  public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException, AtlasException, InvalidBuildException {
       if (newheight.compareTo(oldheight) >= 2) throw new InvalidBuildException();
       else if (newheight.compareTo(oldheight) <= 0)  throw new InvalidBuildException();
       else super.isValidBuild(oldheight,newheight);
