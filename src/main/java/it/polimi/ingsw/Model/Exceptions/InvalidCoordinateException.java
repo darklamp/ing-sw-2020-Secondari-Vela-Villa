@@ -1,10 +1,10 @@
 package it.polimi.ingsw.Model.Exceptions;
 
 public class InvalidCoordinateException extends Exception{
-    public InvalidMoveException() {
+    public InvalidCoordinateException () {
         super();
     }
-    public InvalidMoveException(String arg){
+    public InvalidCoordinateException (String arg){
         super(arg);
     }
 }
