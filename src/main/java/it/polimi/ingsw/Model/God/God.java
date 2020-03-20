@@ -1,5 +1,7 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Model.God;
 
+import it.polimi.ingsw.Model.BuildingType;
+import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public interface God {
