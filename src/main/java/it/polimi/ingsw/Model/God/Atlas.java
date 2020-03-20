@@ -2,11 +2,12 @@ package it.polimi.ingsw.Model.God;
 
 import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.BuildingType;
+import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
 
-public class Atlas extends GodDecorator{
-    public Atlas(Builder builder){
-        super(builder);
+public class Atlas extends Builder {
+    public Atlas(Cell position){
+        super(position);
     }
 
     /**

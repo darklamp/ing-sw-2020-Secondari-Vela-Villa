@@ -83,4 +83,15 @@ public class Cell {
         this.builder = builder;
     }
 
+    public boolean emptyCell(int x, int y){
+        if(x>4 || x<0 || y>4 || y<0) throw new UnsupportedOperationException();
+        else {
+            return getBuilder(x, y) == null;
+        }
+    }
+
+    private Builder getBuilder(int x, int y) {
+        return this.builder;
+    }
+
 }

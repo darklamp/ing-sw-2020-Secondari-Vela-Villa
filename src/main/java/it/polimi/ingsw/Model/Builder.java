@@ -25,14 +25,16 @@ public class Builder implements God {
         } catch (InvalidMoveException e) { // cannot move here
             throw new InvalidMoveException(); // notify caller
         }
-        catch (MoveOnOccupiedCellException e) {
+        catch (ApolloException e) {
             //TODO
+        }
+        catch (MinotaurException e) {
+
         }
     }
 
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
 
-    @Override
     public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException, AtlasException,InvalidBuildException {
 
         if (oldheight.equals(BuildingType.DOME)) throw new BuildingOnDomeException(); // verify that there is no dome on the cell
@@ -45,14 +47,26 @@ public class Builder implements God {
 //TODO: fare bene
 
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
-    @Override
-    public void isValidMove(Cell finalPoint) throws InvalidMoveException, MoveOnOccupiedCellException {
+    public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException {
 
         if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 4 || finalPoint.getY() < 0 || finalPoint.getY() > 4) throw new InvalidMoveException(); //out of bounds
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
         else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2) throw new InvalidMoveException(); // check if I'm moving up more than one level
         else if (!(position.getNear().contains(finalPoint.getPosition()))) throw new InvalidMoveException(); // check that the cell I'm moving to is adjacent
-     //   else if (finalPoint.getBuilder() != null) throw new MoveOnOccupiedCellException(); // moving on occupied cell can be done with apollo
+     //   else if (finalPoint.getBuilder() != null) throw new ApolloException(); // moving on occupied cell can be done with apollo
+    }
+
+    /**
+     * @param position specifies position where to force-move the builder
+     */
+    private void forceMove(Cell position){
+        this.position = position;
+    }
+
+    protected void swapPosition(Builder firstBuilder, Builder otherBuilder) {
+        Cell temp = firstBuilder.getPosition();
+        firstBuilder.forceMove(otherBuilder.getPosition());
+        otherBuilder.forceMove(temp);
     }
 
 }
