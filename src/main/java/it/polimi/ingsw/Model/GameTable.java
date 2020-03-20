@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
+
 public class GameTable {
 
     private Cell[][] Table;
@@ -8,12 +10,17 @@ public class GameTable {
 
         Table= new Cell[5][5]; //create new Table
     }
-
+    private void InvalidCoordinate throw InvalidCoordinateException(int x, inty){
+        if(x>4 || x<0 || y>4 || y<0) {
+            throw new InvalidCoordinateException();
+        }
+    }
     public Cell getCell(int x,int y) {
         try {
+            InvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
         }
-        chatch(negativeoroverthanfive e) {//se vengono inserite x o y negativi o maggiori di 5
+        catch(InvalidCoordinateException e) {//se vengono inserite x o y negativi o maggiori di 5
         }
     }
     public boolean CheckGameover(){
