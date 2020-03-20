@@ -9,8 +9,9 @@ public class GameTable {
     public GameTable() {   //contructor method for GameTable
 
         Table= new Cell[5][5]; //create new Table
+
     }
-    private void InvalidCoordinate throw InvalidCoordinateException(int x, inty){
+    private void InvalidCoordinate(int x, int y) throws InvalidCoordinateException {
         if(x>4 || x<0 || y>4 || y<0) {
             throw new InvalidCoordinateException();
         }

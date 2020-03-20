@@ -10,11 +10,12 @@ public class NoGod extends GodDecorator{
         super(builder);
     }
   public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws BuildingOnDomeException, BuildingMoreLevelsException, InvalidBuildException {
-      if (newheight.compareTo(oldheight) >= 2) throw new BuildingMoreLevelsException();
+      if (newheight.compareTo(oldheight) >= 2) throw new InvalidBuildException();
+      else if (newheight.compareTo(oldheight) <= 0)  throw new InvalidBuildException();
       else super.isValidBuild(oldheight,newheight);
   }
     public void isValidMove(Cell finalPoint) throws InvalidMoveException, MoveOnOccupiedCellException {
-      if (finalPoint.getBuilder() != null) throw new MoveOnOccupiedCellException();
+      if (finalPoint.getBuilder() != null) throw new InvalidMoveException();
       else super.isValidMove(finalPoint);
     }
 }
