@@ -1,13 +1,14 @@
-package it.polimi.ingsw.Model.God;
+package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Model.Player;
 
 public class Apollo extends Builder{
-    public Apollo(Cell position) {
-        super(position);
+    public Apollo(Cell position, Player player) {
+        super(position,player);
     }
 
 
@@ -25,7 +26,7 @@ public class Apollo extends Builder{
     @Override
     public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException {
             super.isValidMove(finalPoint);
-            if (finalPoint.getBuilder() != null) throw new ApolloException(); //TODO: verificare che l'altro builder sia nemico (creare attributo nel Builder che dice di chi è?)
-            else super.verifyMove(finalPoint);
+            if (finalPoint.getBuilder() != null && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new ApolloException();
+            else verifyMove(finalPoint);
     }
 }

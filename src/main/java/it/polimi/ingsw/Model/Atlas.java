@@ -1,13 +1,14 @@
-package it.polimi.ingsw.Model.God;
+package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Model.Player;
 
 public class Atlas extends Builder{
-    public Atlas(Cell position){
-        super(position);
+    public Atlas(Cell position, Player player){
+        super(position,player);
     }
 
     /**

@@ -6,9 +6,13 @@ public class Builder{
 
     private Cell position;
 
-    public Builder(Cell position) { // constructor for Builder with Cell parameter
+    private final Player player;
+
+    public Builder(Cell position, Player player) { // constructor for Builder with Cell parameter
         if(position == null) throw new NullPointerException();
         else this.position = position;
+        if (player == null) throw new NullPointerException();
+        else this.player = player;
     }
 
     /**
@@ -46,12 +50,10 @@ public class Builder{
      * @throws AtlasException see Atlas
      * @throws InvalidBuildException when the build is illegal
      */
-    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException,AtlasException {
+    protected void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException,AtlasException {
 
         if (oldheight.equals(BuildingType.DOME)) throw new InvalidBuildException(); // verify that there is no dome on the cell
-        //else if (newheight.compareTo(oldheight) <= 0)  throw new InvalidBuildException(); // verify that I'm not building on the same level as already present or on a lower level ; ATLAS can do this ( with domes only )
         else if (oldheight.equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
-     //   else if (newheight.compareTo(oldheight) >= 2) throw new InvalidBuildException(); // building more than one level up; might be feasible, see Atlas' power
 
     }
 
@@ -61,7 +63,7 @@ public class Builder{
      * @param newheight represents "new height", meaning the height which the builder wants to build on
      * @throws InvalidBuildException when the build is illegal
      */
-    public void verifyBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException {
+    protected void verifyBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException {
 
         if (newheight.compareTo(oldheight) <= 0)  throw new InvalidBuildException();
         else if (newheight.compareTo(oldheight) >= 2) throw new InvalidBuildException();
@@ -75,7 +77,7 @@ public class Builder{
      * @throws ApolloException when Apollo TODO better javadoc
      * @throws MinotaurException TODO better javadoc
      */
-    public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException {
 
         if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 4 || finalPoint.getY() < 0 || finalPoint.getY() > 4) throw new InvalidMoveException(); //out of bounds
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
@@ -89,7 +91,7 @@ public class Builder{
      * @param finalPoint position to check
      * @throws InvalidMoveException
      */
-    public void verifyMove(Cell finalPoint) throws InvalidMoveException {
+    protected void verifyMove(Cell finalPoint) throws InvalidMoveException {
 
         if (finalPoint.getBuilder() != null) throw new InvalidMoveException();
 
@@ -113,8 +115,11 @@ public class Builder{
         otherBuilder.forceMove(temp);
     }
 
+    protected Player getPlayer(){
+        return this.player;
+    }
 
-//TODO
+    //TODO
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return new Cell()

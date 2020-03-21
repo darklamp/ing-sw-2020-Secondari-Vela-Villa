@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Model.God;
+package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.BuildingType;

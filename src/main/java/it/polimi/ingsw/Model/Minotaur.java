@@ -1,13 +1,14 @@
-package it.polimi.ingsw.Model.God;
+package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Model.Player;
 
 public class Minotaur extends Builder{
-    public Minotaur(Cell position) {
-        super(position);
+    public Minotaur(Cell position, Player player) {
+        super(position,player);
     }
 
     @Override
@@ -26,7 +27,7 @@ public class Minotaur extends Builder{
     public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException {
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
-                if (checkEmptyCellBehind(finalPoint)) throw new MinotaurException();
+                if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new MinotaurException();
                 else throw new InvalidMoveException();
             }
             else super.verifyMove(finalPoint);

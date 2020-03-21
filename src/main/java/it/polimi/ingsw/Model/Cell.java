@@ -71,7 +71,7 @@ public class Cell {
      * @return list of Pairs of coordinates (x,y) near the given cell
      * for example, if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
      */
-    public ArrayList<Pair> getNear() { // returns cell numbers near given cell
+    protected ArrayList<Pair> getNear() { // returns cell numbers near given cell
         ArrayList<Pair> out = new ArrayList<>();
         for (int i = coordinates.getFirst() - 1; i <= (coordinates.getFirst() + 1) ; i++) {
             if (i >= 0 && i <= 5) {
@@ -103,7 +103,7 @@ public class Cell {
      * @param y Y  ..
      * @return true if the Cell is empty, else false
      */
-    public boolean emptyCell(int x, int y){
+    protected boolean emptyCell(int x, int y){
         if(x>4 || x<0 || y>4 || y<0) throw new UnsupportedOperationException();
         else {
             return getBuilder(x, y) == null;
