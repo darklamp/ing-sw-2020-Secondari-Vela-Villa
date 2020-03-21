@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.AtlasException;
-import it.polimi.ingsw.Model.Exceptions.BuildingOnDomeException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 
 import java.util.ArrayList;
@@ -50,10 +49,9 @@ public class Cell {
      * @param builder represents the builder which is trying to build on the cell
      * @param height represents the height at which the builder wants to build
      * @throws InvalidBuildException if the cell is occupied by another builder OR if the cell is not adjacent
-     * @throws BuildingOnDomeException if I'm trying to build on a dome; TODO: consider deleting if useless
      * @throws AtlasException Atlas' case, in which the builder is building a dome wherever he wants (conditions are checked)
      */
-    public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, BuildingOnDomeException, AtlasException {
+    public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, AtlasException {
             try {
                 if (this.builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
                 else if (!(builder.getPosition().getNear().contains((this)))) throw new InvalidBuildException(); // trying to build on a non-near cell
@@ -61,9 +59,7 @@ public class Cell {
                 this.height = height; //OK
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error
-            } catch (BuildingOnDomeException e) { // building on dome isn't possible
-                throw new BuildingOnDomeException(); // notify caller
-            } catch (AtlasException e) { // the player is trying to build up more than one level
+            }  catch (AtlasException e) { // the player is trying to build up more than one level
                 throw new AtlasException(); // notify caller
             } catch (InvalidBuildException e) { // invalid build action from player
                 throw new InvalidBuildException(); // notify caller

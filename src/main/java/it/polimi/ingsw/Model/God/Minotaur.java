@@ -1,28 +1,35 @@
 package it.polimi.ingsw.Model.God;
 
 import it.polimi.ingsw.Model.Builder;
+import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
-import it.polimi.ingsw.Model.Exceptions.ApolloException;
-import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
-import it.polimi.ingsw.Model.Exceptions.MinotaurException;
+import it.polimi.ingsw.Model.Exceptions.*;
 
-public class Minotaur extends Builder {
+public class Minotaur extends Builder{
     public Minotaur(Cell position) {
         super(position);
     }
 
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException {
-        try{
+    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException, AtlasException {
+        super.isValidBuild(oldheight, newheight);
+        verifyBuild(oldheight,newheight);
+    }
+
+    /**
+     * @param finalPoint represents the cell to which the builder wants to move
+     * @throws MinotaurException when the move is a minotaur-only move and it's valid
+     * @throws ApolloException see super
+     * @throws InvalidMoveException see super
+     */
+    @Override
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException {
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
                 if (checkEmptyCellBehind(finalPoint)) throw new MinotaurException();
                 else throw new InvalidMoveException();
             }
-        }
-        catch(InvalidMoveException e){
-//TODO
-        }
+            else super.verifyMove(finalPoint);
     }
 
     /**
