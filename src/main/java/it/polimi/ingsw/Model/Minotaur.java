@@ -8,7 +8,7 @@ public class Minotaur extends Builder{
     }
 
     @Override
-    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException, AtlasException {
+    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
         super.isValidBuild(oldheight, newheight);
         verifyBuild(oldheight,newheight);
     }
@@ -20,7 +20,7 @@ public class Minotaur extends Builder{
      * @throws InvalidMoveException see super
      */
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException {
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometeusException, ArtemisException {
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
                 if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new MinotaurException();

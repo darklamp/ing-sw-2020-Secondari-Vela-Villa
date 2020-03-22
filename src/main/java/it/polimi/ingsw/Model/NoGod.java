@@ -5,7 +5,7 @@ import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
 
-public class NoGod extends Builder {
+/*public class NoGod extends Builder {
     public NoGod(Cell position) {
         super(position);
     }
@@ -18,4 +18,4 @@ public class NoGod extends Builder {
       if (finalPoint.getBuilder() != null) throw new InvalidMoveException();
       else super.isValidMove(finalPoint);
     }
-}
+}*/

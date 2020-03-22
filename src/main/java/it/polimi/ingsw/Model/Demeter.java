@@ -11,7 +11,7 @@ public class Demeter extends Builder {
     }
 
 
-    @Override
+  //  @Override
     public void isValidBuild(BuildingType oldheight, BuildingType newheight, Cell cell) throws AtlasException, DemeterException, HephaestusException, InvalidBuildException {
         if (firsttime) {
             super.isValidBuild(oldheight, newheight);
@@ -22,7 +22,7 @@ public class Demeter extends Builder {
         } else {
             super.isValidBuild(oldheight, newheight);
             verifyBuild(oldheight, newheight);
-            else if (cell.equals(previous)) {
+            if (cell.equals(previous)) {
                 throw new InvalidBuildException()
             }// non posso costruire su una cella uguale a quella precedente
             else {
@@ -35,6 +35,6 @@ public class Demeter extends Builder {
     @Override
     public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException {
         super.isValidMove(finalPoint);
-        else verifyMove(finalPoint);
+        verifyMove(finalPoint);
     }
 }

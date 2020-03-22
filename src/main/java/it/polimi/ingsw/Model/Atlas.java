@@ -14,14 +14,14 @@ public class Atlas extends Builder{
      * @throws InvalidBuildException see super
      */
     @Override
-    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws AtlasException, InvalidBuildException {
+    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws AtlasException, InvalidBuildException, DemeterException, HephaestusException {
         super.isValidBuild(oldheight,newheight);
         if (newheight.equals(BuildingType.DOME) && !oldheight.equals(BuildingType.DOME)) throw new AtlasException();
         else verifyBuild(oldheight,newheight);
     }
 
     @Override
-    public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException {
+    public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometeusException, ArtemisException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

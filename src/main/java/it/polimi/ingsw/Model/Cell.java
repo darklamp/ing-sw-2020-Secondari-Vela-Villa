@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.AtlasException;
+import it.polimi.ingsw.Model.Exceptions.DemeterException;
+import it.polimi.ingsw.Model.Exceptions.HephaestusException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 
 import java.util.ArrayList;
@@ -60,9 +62,15 @@ public class Cell {
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error
             }  catch (AtlasException e) { // the player is trying to build up more than one level
-                throw new AtlasException(); // notify caller
+                //TODO
+                //throw new AtlasException(); // notify caller
             } catch (InvalidBuildException e) { // invalid build action from player
                 throw new InvalidBuildException(); // notify caller
+            }
+            catch (HephaestusException e) { //TODO
+            }
+            catch (DemeterException e){
+                //TODO
             }
     }
 

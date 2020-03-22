@@ -9,7 +9,7 @@ public class Artemis extends Builder {
     }
 
     @Override
-    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException, AtlasException {
+    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
         super.isValidBuild(oldheight, newheight);
         verifyBuild(oldheight,newheight);
     }
