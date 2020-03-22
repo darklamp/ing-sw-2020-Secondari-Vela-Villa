@@ -15,10 +15,15 @@ public class Artemis extends Builder {
     }
 
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException {
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException,PrometeusException {
         super.isValidMove(finalPoint);
-        if (finalPoint.getBuilder() != null && finalPoint.getBuilder()!= this.getPosition() && (finalPoint.getHeight()-this.getPosition().getHeight() < 3)) throw new ArtemisException();
+        if (finalPoint.getBuilder() != null && finalPoint!=this.getPosition() && (finalPoint.getHeight().compareTo(getPosition().getHeight()) < 3)) throw new ArtemisException();
         //TODO ma non so come,aggiungere condizione che presa una qualsiasi cella X appartenente a position.getNear ,finalPoint appartiene a X.getnear.
         else verifyMove(finalPoint);
+    }
+
+    public void MoveTwoTimes(Cell midPoint,Cell finalPoint){
+        getPlayer().MoveTo(midPoint);
+        getPlayer().MoveTo(finalPoint);
     }
 }

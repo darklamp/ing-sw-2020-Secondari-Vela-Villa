@@ -53,6 +53,8 @@ public class Builder{
     protected void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException,AtlasException {
 
         if (oldheight.equals(BuildingType.DOME)) throw new InvalidBuildException(); // verify that there is no dome on the cell
+        if (oldheight.equals(BuildingType.BASE) && !(newheight.equals(BuildingType.MIDDLE))) throw new InvalidBuildException();
+        if (oldheight.equals(BuildingType.MIDDLE) && !(newheight.equals(BuildingType.TOP))) throw new InvalidBuildException();
         else if (oldheight.equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
 
     }
@@ -77,7 +79,7 @@ public class Builder{
      * @throws ApolloException when Apollo TODO better javadoc
      * @throws MinotaurException TODO better javadoc
      */
-    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException,ArtemisException, MinotaurException,PrometeusException {
 
         if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 4 || finalPoint.getY() < 0 || finalPoint.getY() > 4) throw new InvalidMoveException(); //out of bounds
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome

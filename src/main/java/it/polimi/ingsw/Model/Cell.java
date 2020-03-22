@@ -94,6 +94,7 @@ public class Cell {
         return builder;
     }
 
+
     public void setBuilder(Builder builder) {
         this.builder = builder;
     }

@@ -38,14 +38,13 @@ public class Player {
         //return true if the player can move,otherwise set false
     }
 
-    public void MoveTo(cell){ //the cell where player wants to go
+    public void MoveTo(Cell cell) { //the cell where player wants to go
     }
-
-    public cell MoveFrom(){
+    public Cell MoveFrom(){
         //return the cell before the movement
     }
 
-    public void Build(cell){
+    public void Build(Cell cell){
         //the cell where the player wants to build
     }
 
