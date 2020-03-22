@@ -54,7 +54,7 @@ public class Builder{
      * @throws AtlasException see Atlas
      * @throws InvalidBuildException when the build is illegal
      */
-    protected void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException,AtlasException {
+    protected void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException,AtlasException, HephaestusException {
 
         if (oldheight.equals(BuildingType.DOME)) throw new InvalidBuildException(); // verify that there is no dome on the cell
         else if (oldheight.equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
