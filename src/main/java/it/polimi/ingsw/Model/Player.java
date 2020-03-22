@@ -19,7 +19,7 @@ public class Player {
 
     public Player(String Nickname) {   //contructor method for player
         try {
-            this.Nickname = Nickname  //If the nickname is accepted,the player'll be insert in the game
+            this.Nickname = Nickname;  //If the nickname is accepted,the player'll be insert in the game
             this.IsInGame = true;
         }
 

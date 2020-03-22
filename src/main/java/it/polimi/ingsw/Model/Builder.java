@@ -40,6 +40,10 @@ public class Builder{
         }
         catch (MinotaurException e) { // change position cause it's Minotaurrr TODO: do not make someone win if they win by being forced to move
         }
+        catch (PrometeusException e){
+        }
+        catch (ArtemisException e){
+        }
     }
 
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
@@ -53,8 +57,6 @@ public class Builder{
     protected void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException,AtlasException {
 
         if (oldheight.equals(BuildingType.DOME)) throw new InvalidBuildException(); // verify that there is no dome on the cell
-        if (oldheight.equals(BuildingType.BASE) && !(newheight.equals(BuildingType.MIDDLE))) throw new InvalidBuildException();
-        if (oldheight.equals(BuildingType.MIDDLE) && !(newheight.equals(BuildingType.TOP))) throw new InvalidBuildException();
         else if (oldheight.equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
 
     }
