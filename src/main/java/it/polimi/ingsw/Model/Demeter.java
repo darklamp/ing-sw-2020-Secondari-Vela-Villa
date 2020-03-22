@@ -1,9 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.AtlasException;
-import it.polimi.ingsw.Model.Exceptions.DemeterException;
-import it.polimi.ingsw.Model.Exceptions.HephaestusException;
-import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Demeter extends Builder{
     private boolean firsttime=true;
@@ -30,4 +27,10 @@ public class Demeter extends Builder{
                 firsttime = true; //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if
             }
         }
+    }
+
+    @Override
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException {
+        super.isValidMove(finalPoint);
+        else verifyMove(finalPoint);
     }

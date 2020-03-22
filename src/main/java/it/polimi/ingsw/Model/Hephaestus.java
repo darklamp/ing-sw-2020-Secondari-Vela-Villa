@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.AtlasException;
-import it.polimi.ingsw.Model.Exceptions.HephaestusException;
-import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Hephaestus extends Builder{
     private boolean firsttime=true; //mi dice se è la prima o la seconda costruzione che fa
@@ -30,6 +28,11 @@ public class Hephaestus extends Builder{
                 firsttime = true;  //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if
             }
         }
+    }
+    @Override
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException {
+        super.isValidMove(finalPoint);
+        else verifyMove(finalPoint);
     }
 
 
