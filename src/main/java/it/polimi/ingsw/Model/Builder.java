@@ -36,9 +36,9 @@ public class Builder{
             throw new InvalidMoveException(); // notify caller
         }
         catch (ApolloException e) { // swap position cause it's Apollo TODO: do not make someone win if they win by being forced to move
-            swapPosition(this.position,position);
+            swapPosition(this,position.getBuilder());
         }
-        catch (MinotaurException e) { // change position cause it's Minotaurrr
+        catch (MinotaurException e) { // change position cause it's Minotaurrr TODO: do not make someone win if they win by being forced to move
         }
     }
 
@@ -110,18 +110,39 @@ public class Builder{
      * @param otherBuilder builder whose position gets swapped
      */
     protected void swapPosition(Builder firstBuilder, Builder otherBuilder) { // TODO verificare che funzioni
-        Cell temp = firstBuilder.getPosition().clone();
+        CellPointer temp = new CellPointer(firstBuilder.getPosition());
         firstBuilder.forceMove(otherBuilder.getPosition());
-        otherBuilder.forceMove(temp);
+        otherBuilder.forceMove(temp.getPointer());
     }
 
+    /**
+     * getter for player
+     */
     protected Player getPlayer(){
         return this.player;
     }
 
-    //TODO
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return new Cell()
+
+}
+
+
+/**
+ * this class is just a commodity class whose job is
+ * to keep a pointer to a Cell object
+ */
+class CellPointer {
+    public Cell getPointer() {
+        return pointer;
     }
+
+    public void setPointer(Cell pointer) {
+        this.pointer = pointer;
+    }
+
+    public CellPointer(Cell pointer) {
+        this.pointer = pointer;
+    }
+
+    private Cell pointer;
+
 }

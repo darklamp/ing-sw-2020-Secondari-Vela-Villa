@@ -28,6 +28,15 @@ public class Pair
                 num2 == pair.num2;
     }
 
+    /**
+     * "copy constructor" is basically a clone function
+     * @param input Pair object to be copied
+     */
+    protected Pair(Pair input) {
+        this.num1 = input.num1;
+        this.num2 = input.num2;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(num1, num2);
