@@ -22,8 +22,10 @@ public class Artemis extends Builder {
         else verifyMove(finalPoint);
     }
 
-    public void MoveTwoTimes(Cell midPoint,Cell finalPoint){
+    /*
+      public void MoveTwoTimes(Cell midPoint,Cell finalPoint){ //TODO->va nel controller
         getPlayer().MoveTo(midPoint);
         getPlayer().MoveTo(finalPoint);
-    }
+      }
+      */
 }
