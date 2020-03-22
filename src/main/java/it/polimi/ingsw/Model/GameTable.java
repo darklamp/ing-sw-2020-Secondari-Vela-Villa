@@ -21,7 +21,8 @@ public class GameTable {
             InvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
         }
-        catch(InvalidCoordinateException e) {//se vengono inserite x o y negativi o maggiori di 5
+        catch(InvalidCoordinateException e) {
+            //se vengono inserite x o y negativi o maggiori di 5
         }
     }
     public boolean CheckGameover(){
