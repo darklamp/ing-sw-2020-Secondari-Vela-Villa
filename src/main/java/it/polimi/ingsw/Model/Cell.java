@@ -101,12 +101,12 @@ public class Cell {
     /**
      * @param x X coordinate of the cell to be checked
      * @param y Y  ..
-     * @return true if the Cell is empty, else false
+     * @return true if the Cell is empty (no builder nor dome), else false
      */
-    protected boolean emptyCell(int x, int y){
+    protected boolean movableCell(int x, int y){
         if(x>4 || x<0 || y>4 || y<0) throw new UnsupportedOperationException();
         else {
-            return getBuilder(x, y) == null;
+            return getBuilder(x, y) == null && (height != BuildingType.DOME);
         }
     }
 

@@ -1,10 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Builder;
-import it.polimi.ingsw.Model.BuildingType;
-import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
-import it.polimi.ingsw.Model.Player;
 
 public class Minotaur extends Builder{
     public Minotaur(Cell position, Player player) {
@@ -42,34 +38,35 @@ public class Minotaur extends Builder{
             int diffY = finalPoint.getY() - this.getPosition().getY();
             if(diffX == 1) {
                 if (diffY == 1) {
-                    return finalPoint.getX() != 4 && finalPoint.getY() != 4 && finalPoint.emptyCell(finalPoint.getX() + 1, finalPoint.getY() + 1); //OK
+                    return finalPoint.getX() != 4 && finalPoint.getY() != 4 && finalPoint.movableCell(finalPoint.getX() + 1, finalPoint.getY() + 1); //OK
                 }
                 else if (diffY == -1) {
-                    return finalPoint.getX() != 4 && finalPoint.getY() != 0 && finalPoint.emptyCell(finalPoint.getX() + 1, finalPoint.getY() - 1); //OK
+                    return finalPoint.getX() != 4 && finalPoint.getY() != 0 && finalPoint.movableCell(finalPoint.getX() + 1, finalPoint.getY() - 1); //OK
                 }
                 else {
-                    return finalPoint.getX() != 4 && finalPoint.emptyCell(finalPoint.getX() + 1, finalPoint.getY()); //OK
+                    return finalPoint.getX() != 4 && finalPoint.movableCell(finalPoint.getX() + 1, finalPoint.getY()); //OK
                 }
             }
             else if (diffX == -1){
                 if (diffY == 1) {
-                    return finalPoint.getX() != 0 && finalPoint.getY() != 4 && finalPoint.emptyCell(finalPoint.getX() - 1, finalPoint.getY() + 1); //OK
+                    return finalPoint.getX() != 0 && finalPoint.getY() != 4 && finalPoint.movableCell(finalPoint.getX() - 1, finalPoint.getY() + 1); //OK
                 }
                 else if (diffY == -1) {
-                    return finalPoint.getX() != 0 && finalPoint.getY() != 0 && finalPoint.emptyCell(finalPoint.getX() - 1, finalPoint.getY() - 1); //OK
+                    return finalPoint.getX() != 0 && finalPoint.getY() != 0 && finalPoint.movableCell(finalPoint.getX() - 1, finalPoint.getY() - 1); //OK
                 }
                 else {
-                    return finalPoint.getX() != 0 && finalPoint.emptyCell(finalPoint.getX() - 1, finalPoint.getY()); //OK
+                    return finalPoint.getX() != 0 && finalPoint.movableCell(finalPoint.getX() - 1, finalPoint.getY()); //OK
                 }
             }
             else {
                 if (diffY == 1) {
-                    return finalPoint.getY() != 4 && finalPoint.emptyCell(finalPoint.getX(), finalPoint.getY() + 1); //OK
+                    return finalPoint.getY() != 4 && finalPoint.movableCell(finalPoint.getX(), finalPoint.getY() + 1); //OK
                 }
                 else if (diffY == -1) {
-                    return finalPoint.getY() != 0 && finalPoint.emptyCell(finalPoint.getX(), finalPoint.getY() - 1); //OK
+                    return finalPoint.getY() != 0 && finalPoint.movableCell(finalPoint.getX(), finalPoint.getY() - 1); //OK
                 }
                 return false;
             }
     }
+
 }

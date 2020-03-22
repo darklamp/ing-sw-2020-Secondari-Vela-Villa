@@ -1,10 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Builder;
-import it.polimi.ingsw.Model.BuildingType;
-import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
-import it.polimi.ingsw.Model.Player;
 
 public class Atlas extends Builder{
     public Atlas(Cell position, Player player){
@@ -14,7 +10,7 @@ public class Atlas extends Builder{
     /**
      * @param oldheight see super
      * @param newheight see super
-     * @throws AtlasException when I'm doing something only Atlas can do, alas building a dome on any level
+     * @throws AtlasException when I'm doing something only Atlas can do, aka building a dome on any level
      * @throws InvalidBuildException see super
      */
     @Override
