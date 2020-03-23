@@ -11,19 +11,19 @@ public class Demeter extends Builder {
     }
 
 
-  //  @Override
-    public void isValidBuild(BuildingType oldheight, BuildingType newheight, Cell cell) throws AtlasException, DemeterException, HephaestusException, InvalidBuildException {
+    @Override
+    public void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, DemeterException, HephaestusException, InvalidBuildException {
         if (firsttime) {
-            super.isValidBuild(oldheight, newheight);
-            verifyBuild(oldheight, newheight);
+            super.isValidBuild(cell, newheight);
+            verifyBuild(cell, newheight);
             firsttime = false;
             previous = cell;
             throw new DemeterException();
         } else {
-            super.isValidBuild(oldheight, newheight);
-            verifyBuild(oldheight, newheight);
+            super.isValidBuild(cell, newheight);
+            verifyBuild(cell, newheight);
             if (cell.equals(previous)) {
-                throw new InvalidBuildException()
+                throw new InvalidBuildException();
             }// non posso costruire su una cella uguale a quella precedente
             else {
                 firsttime = true; //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if

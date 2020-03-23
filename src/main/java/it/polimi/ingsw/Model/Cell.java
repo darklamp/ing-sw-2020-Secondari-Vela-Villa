@@ -57,7 +57,7 @@ public class Cell {
             try {
                 if (this.builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
                 else if (!(builder.getPosition().getNear().contains((this)))) throw new InvalidBuildException(); // trying to build on a non-near cell
-                builder.isValidBuild(this.height, height);
+                builder.isValidBuild(this, height);
                 this.height = height; //OK
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error

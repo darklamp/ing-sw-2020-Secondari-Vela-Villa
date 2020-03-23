@@ -49,28 +49,28 @@ public class Builder{
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
 
     /**
-     * @param oldheight represents "old height", meaning the height on which the builder is before performing the build
+     * @param cell represents the cell on which the builder wants to build
      * @param newheight represents "new height", meaning the height which the builder wants to build on
      * @throws AtlasException see Atlas
      * @throws InvalidBuildException when the build is illegal
      */
-    protected void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException,AtlasException, HephaestusException, DemeterException, DemeterException {
+    protected void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException,AtlasException, HephaestusException, DemeterException, DemeterException {
 
-        if (oldheight.equals(BuildingType.DOME)) throw new InvalidBuildException(); // verify that there is no dome on the cell
-        else if (oldheight.equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
+        if (cell.getHeight().equals(BuildingType.DOME)) throw new InvalidBuildException(); // verify that there is no dome on the cell
+        else if (cell.getHeight().equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
 
     }
 
     /**
      * this method check postconditions for building
-     * @param oldheight represents "old height", meaning the height on which the builder is before performing the build
+     * @param cell represents the cell on which the builder wants to build
      * @param newheight represents "new height", meaning the height which the builder wants to build on
      * @throws InvalidBuildException when the build is illegal
      */
-    protected void verifyBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException {
+    protected void verifyBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
 
-        if (newheight.compareTo(oldheight) <= 0)  throw new InvalidBuildException();
-        else if (newheight.compareTo(oldheight) >= 2) throw new InvalidBuildException();
+        if (newheight.compareTo(cell.getHeight()) <= 0)  throw new InvalidBuildException();
+        else if (newheight.compareTo(cell.getHeight()) >= 2) throw new InvalidBuildException();
 
     }
 

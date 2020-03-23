@@ -8,9 +8,9 @@ public class Minotaur extends Builder{
     }
 
     @Override
-    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
-        super.isValidBuild(oldheight, newheight);
-        verifyBuild(oldheight,newheight);
+    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
+        super.isValidBuild(cell, newheight);
+        verifyBuild(cell,newheight);
     }
 
     /**

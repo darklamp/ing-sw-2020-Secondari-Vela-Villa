@@ -1,10 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Builder;
-import it.polimi.ingsw.Model.BuildingType;
-import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
-import it.polimi.ingsw.Model.Player;
 
 public class Apollo extends Builder{
     public Apollo(Cell position, Player player) {
@@ -12,10 +8,13 @@ public class Apollo extends Builder{
     }
 
 
+    /**
+     * combines pre + postconditions
+     */
     @Override
-    public void isValidBuild(BuildingType oldheight, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
-        super.isValidBuild(oldheight, newheight);
-        verifyBuild(oldheight, newheight);
+    protected void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
+        super.isValidBuild(cell, newheight);
+        verifyBuild(cell, newheight);
     }
 
     /**
@@ -24,7 +23,7 @@ public class Apollo extends Builder{
      * @throws ApolloException gets thrown if the builder tries to move to a cell occupied by an enemy builder
      */
     @Override
-    public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometeusException, ArtemisException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometeusException, ArtemisException {
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new ApolloException();
             else verifyMove(finalPoint);
