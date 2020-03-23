@@ -22,11 +22,11 @@ public class Prometeus extends Builder {
         else verifyMove(finalPoint);
     }
 
-    public void BuildBefore(Cell cell){  //the player can build in a cell near position,the move and the other construction can be done normally(he can't go up)
+    /*public void BuildBefore(Cell cell){  //the player can build in a cell near position,the move and the other construction can be done normally(he can't go up)
         if (getPosition().getNear().contains(cell)){
             getPlayer().Build(cell);
         }
-    }
+    }*/
 }
 
 

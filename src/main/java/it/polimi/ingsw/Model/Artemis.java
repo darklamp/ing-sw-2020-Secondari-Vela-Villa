@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
-import org.graalvm.compiler.lir.gen.VerifyingMoveFactory;
 
 public class Artemis extends Builder {
     public Artemis(Cell position, Player player) {

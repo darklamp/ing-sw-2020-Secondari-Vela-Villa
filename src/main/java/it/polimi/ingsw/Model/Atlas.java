@@ -8,7 +8,7 @@ public class Atlas extends Builder{
     }
 
     /**
-     * @param oldheight see super
+     * @param cell see super
      * @param newheight see super
      * @throws AtlasException when I'm doing something only Atlas can do, aka building a dome on any level
      * @throws InvalidBuildException see super

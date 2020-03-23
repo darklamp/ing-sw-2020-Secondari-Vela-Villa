@@ -56,16 +56,15 @@ public class Cell {
     public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, AtlasException {
             try {
                 if (this.builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
-                else if (!(builder.getPosition().getNear().contains((this)))) throw new InvalidBuildException(); // trying to build on a non-near cell
+                else if (!(builder.getPosition().getNear().contains((this.coordinates)))) throw new InvalidBuildException(); // trying to build on a non-near cell
                 builder.isValidBuild(this, height);
                 this.height = height; //OK
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error
-            }  catch (AtlasException e) { // the player is trying to build up more than one level
-                //TODO
-                //throw new AtlasException(); // notify caller
-            } catch (InvalidBuildException e) { // invalid build action from player
-                throw new InvalidBuildException(); // notify caller
+            }  catch (AtlasException e) { // the player is trying to build dome
+                this.height = BuildingType.DOME;
+                //TODO verificare correttezza
+                // notify caller ?
             }
             catch (HephaestusException e) { //TODO
             }
@@ -81,11 +80,11 @@ public class Cell {
      */
     protected ArrayList<Pair> getNear() { // returns cell numbers near given cell
         ArrayList<Pair> out = new ArrayList<>();
-        for (int i = coordinates.getFirst() - 1; i <= (coordinates.getFirst() + 1) ; i++) {
-            if (i >= 0 && i <= 5) {
+        for (int i = coordinates.getFirst() - 1; i <= (coordinates.getFirst() + 1); i++) {
+            if (i >= 0 && i < 5) {
                 for (int j = coordinates.getSecond() - 1; j <= (coordinates.getSecond() + 1); j++) {
-                    if (j >= 0 && j <= 5) {
-                        if (j != coordinates.getSecond() && i != coordinates.getFirst()) {
+                    if (j >= 0 && j < 5) {
+                        if (j != coordinates.getSecond() || i != coordinates.getFirst()) {
                             out.add(new Pair(i,j));
                         }
                     }

@@ -4,9 +4,11 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 
 public class Player {
 
-    private Builder[] BuilderList; //array of builders
+    private Builder[] builderList; //array of builders
 
-    private String Nickname; //private attribute for the Player's ID
+    private GameTable gameTable;
+
+    private String nickname; //private attribute for the Player's ID
 
     private boolean IsInGame; //private boolean to know if the player is still in the Game
 
@@ -14,23 +16,21 @@ public class Player {
 
 
     public void setBuilderList(){ //setter for the array of builders
-        BuilderList = new Builder[2];
+        builderList = new Builder[2];
     }
 
-    public Player(String Nickname) {   //contructor method for player
-        try {
-            this.Nickname = Nickname;  //If the nickname is accepted,the player'll be insert in the game
-            this.IsInGame = true;
-        }
-
-        catch (NullPointerException e) {
-
-        }
-        catch(NickAlreadyTakenException e) { //two players can't choose the same nickname in the same game
-        }
+    public Player(String nickname, GameTable gametable) throws NickAlreadyTakenException, NullPointerException {   //contructor method for player
+            if (gametable == null) throw new NullPointerException();
+            else if (!gametable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
+            else {
+                this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
+                this.IsInGame = true;
+                this.gameTable = gametable;
+                gametable.addPlayer(this);
+            }
     }
 
-    public void UpdatePlayerStatus(){
+  /*  public void UpdatePlayerStatus(){
         this.IsInGame = false;      //why set false?Beacuse the bit is setted at the start of the game to true,so I just have to change it to false.
     }
 
@@ -52,9 +52,11 @@ public class Player {
         return InGameTurn;
     }
 
-    public void
-
     public void setInGameTurn(int inGameTurn) {
         this.InGameTurn = inGameTurn;
+    }*/
+
+    public String getNickname() {
+        return nickname;
     }
 }
