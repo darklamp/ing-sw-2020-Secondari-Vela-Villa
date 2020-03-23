@@ -6,21 +6,26 @@ import java.util.ArrayList;
 
 public class GameTable {
 
-    private Cell[][] Table;
+    private static Cell[][] Table;
     private ArrayList<Player> players;
 
     public GameTable() {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 5; j++){
+                Table[i][j] = new Cell(i,j);
+            }
+        }
         players = null;
 
     }
-    private void isInvalidCoordinate(int x, int y) throws InvalidCoordinateException {
+    private static void isInvalidCoordinate(int x, int y) throws InvalidCoordinateException {
         if(x>4 || x<0 || y>4 || y<0) {
             throw new InvalidCoordinateException();
         }
     }
-    protected Cell getCell(int x,int y) throws InvalidCoordinateException{
+    protected static Cell getCell(int x,int y) throws InvalidCoordinateException{
             isInvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
     }/*
@@ -41,7 +46,6 @@ public class GameTable {
             if ((p.getNickname()).equals(nickname)) {
                 return false;
             }
-            else return true;
             }
         return true;
     }

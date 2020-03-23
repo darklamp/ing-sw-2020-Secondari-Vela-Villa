@@ -1,9 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.AtlasException;
-import it.polimi.ingsw.Model.Exceptions.DemeterException;
-import it.polimi.ingsw.Model.Exceptions.HephaestusException;
-import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.*;
 
 import java.util.ArrayList;
 
@@ -94,13 +91,6 @@ public class Cell {
         return out;
     }
 
-    /**
-     * @return requested builder
-     */
-    public Builder getBuilder() {
-        return builder;
-    }
-
 
     public void setBuilder(Builder builder) {
         this.builder = builder;
@@ -114,16 +104,17 @@ public class Cell {
     protected boolean movableCell(int x, int y){
         if(x>4 || x<0 || y>4 || y<0) throw new UnsupportedOperationException();
         else {
-            return getBuilder(x, y) == null && (height != BuildingType.DOME);
+            try {
+                return GameTable.getCell(x, y).getBuilder() == null && (height != BuildingType.DOME);
+            }
+            catch (InvalidCoordinateException e){
+                e.printStackTrace();
+            }
         }
+        return false;
     }
 
-    /**
-     * @param x X coordinate of the cell to be checked
-     * @param y Y  ..
-     * @return builder on the given coordinates, if any
-     */
-    private Builder getBuilder(int x, int y) {
+    protected Builder getBuilder() {
         return this.builder;
     }
 

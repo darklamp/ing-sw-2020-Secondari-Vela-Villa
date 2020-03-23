@@ -2,7 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
 
-public class Builder{
+public abstract class Builder{
 
     private Cell position;
 
@@ -10,7 +10,10 @@ public class Builder{
 
     public Builder(Cell position, Player player) { // constructor for Builder with Cell parameter
         if(position == null) throw new NullPointerException();
-        else this.position = position;
+        else {
+            this.position = position;
+            position.setBuilder(this);
+        }
         if (player == null) throw new NullPointerException();
         else this.player = player;
     }

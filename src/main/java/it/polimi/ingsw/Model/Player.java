@@ -6,8 +6,6 @@ public class Player {
 
     private Builder[] builderList; //array of builders
 
-    private GameTable gameTable;
-
     private String nickname; //private attribute for the Player's ID
 
     private boolean IsInGame; //private boolean to know if the player is still in the Game
@@ -25,8 +23,8 @@ public class Player {
             else {
                 this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
                 this.IsInGame = true;
-                this.gameTable = gametable;
-                gametable.addPlayer(this);
+                gametable.addPlayer(this); //TODO: forse va nel controller?
+                //TODO : inizializzare builderList (controller)
             }
     }
 

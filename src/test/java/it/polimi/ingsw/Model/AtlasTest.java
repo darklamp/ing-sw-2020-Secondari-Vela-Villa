@@ -1,9 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.AtlasException;
-import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
-import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
-import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
+import it.polimi.ingsw.Model.Exceptions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +13,7 @@ class AtlasTest {
      * @throws Exception --> there's something wrong (that is, if the test does fine no exception are thrown)
      */
     @Test
-    void isValidBuildTest() throws InvalidBuildException, AtlasException, NickAlreadyTakenException, InvalidCoordinateException {
+    void isValidBuildTest() throws Exception{
         GameTable g = new GameTable();
         Player p1 = new Player("Giggino",g);
         Cell c1 = g.getCell(4,3);
@@ -29,9 +26,12 @@ class AtlasTest {
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             b1.isValidBuild(c2,BuildingType.DOME);
         });
+        Cell c3 = g.getCell(3,3);
+        Assertions.assertThrows(AtlasException.class, () -> {
+            b1.isValidBuild(c3,BuildingType.DOME);
+        });
+        Cell c4 = g.getCell(4,2);
+        b1.isValidBuild(c4, BuildingType.BASE);
     }
 
-    @Test
-    void isValidMove() {
-    }
 }
