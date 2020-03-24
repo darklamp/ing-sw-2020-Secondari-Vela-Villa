@@ -18,6 +18,7 @@ public class Player {
     }
 
     public Player(String nickname, GameTable gametable) throws NickAlreadyTakenException, NullPointerException {   //contructor method for player
+        // TODO: probabilmente al builder andrà passato il tipo di dio
             if (gametable == null) throw new NullPointerException();
             else if (!gametable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
             else {
