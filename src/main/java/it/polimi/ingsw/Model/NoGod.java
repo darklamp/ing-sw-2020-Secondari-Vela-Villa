@@ -19,6 +19,3 @@ import it.polimi.ingsw.Model.Exceptions.*;
       else super.isValidMove(finalPoint);
     }
 }*/
-
-asd
-pianeta lollo chiama ale
