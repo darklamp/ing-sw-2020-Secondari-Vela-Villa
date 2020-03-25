@@ -29,7 +29,7 @@ public abstract class Builder{
      * @param position position to move the builder to
      * @throws InvalidMoveException if the move isn't allowed
      */
-    public void setPosition(Cell position) throws InvalidMoveException {
+    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException {
         try {
             isValidMove(position); // check validity of move
             this.position = position; // sets position if no exceptions are thrown
@@ -46,6 +46,7 @@ public abstract class Builder{
         catch (PrometeusException e){
         }
         catch (ArtemisException e){
+            throw new ArtemisException(); // TEMP PER TEST
         }
     }
 
