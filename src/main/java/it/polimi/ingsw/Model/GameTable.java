@@ -2,12 +2,35 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 public class GameTable {
 
     private static Cell[][] Table;
     private ArrayList<Player> players;
+
+
+    /* initial observable pattern implementation via PropertyChangeSupport */
+
+    private PropertyChangeSupport support; // helper object
+    private String news; // example message passed to observer
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
+    }
+
+    public void setNews(String value) {
+        support.firePropertyChange("news", this.news, value);
+        this.news = value;
+    }
+
+    /* end observable pattern */
 
     public GameTable() {   //contructor method for GameTable
 
@@ -18,6 +41,7 @@ public class GameTable {
             }
         }
         players = null;
+        support = new PropertyChangeSupport(this);
 
     }
     private static void isInvalidCoordinate(int x, int y) throws InvalidCoordinateException {
