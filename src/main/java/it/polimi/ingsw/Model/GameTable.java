@@ -16,6 +16,7 @@ public class GameTable {
 
     private PropertyChangeSupport support; // helper object
     private String news; // example message passed to observer
+    private Cell cellNews;
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
@@ -28,6 +29,11 @@ public class GameTable {
     public void setNews(String value) {
         support.firePropertyChange("news", this.news, value);
         this.news = value;
+    }
+
+    public void setNews(Cell cell) {
+        support.firePropertyChange("cellUpdate", this.cellNews, cell);
+        this.cellNews = cell;
     }
 
     /* end observable pattern */

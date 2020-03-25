@@ -19,3 +19,5 @@ import it.polimi.ingsw.Model.Exceptions.*;
       else super.isValidMove(finalPoint);
     }
 }*/
+
+asd
