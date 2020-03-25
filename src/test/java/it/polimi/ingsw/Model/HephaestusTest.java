@@ -17,21 +17,15 @@ class HephaestusTest {
         Builder b1 = new Hephaestus(c1,p1);
         //maybe for hephaestus exception it's better to pass also the cell where I'm building,isn't it?
         Assertions.assertThrows(HephaestusException.class, () -> {
-            b1.isValidBuild(c2,BuildingType.BASE);
-        })
-        Assertions.assertThrows(HephaestusException.class, () -> {
-            b1.isValidBuild(c2,BuildingType.MIDDLE);
-        })
-        Assertions.assertThrows(HephaestusException.class, () -> {
-            b1.isValidBuild(c2,BuildingType.TOP);
-        })
-        c2.setHeight(b1,BuildingType.DOME);
-        Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b1.isValidBuild(c2,BuildingType.DOME);
+            c2.setHeight(b1,BuildingType.BASE);
         });
-        Cell c3 = g.getCell(3,3);
-        c3.setHeight(b1,BuildingType.TOP);
-        b1.isValidBuild(c3, BuildingType.DOME); //doesn't throw anything beacuse if I've built a dome,I can't build anything over it and it's ok.
+        Assertions.assertThrows(InvalidBuildException.class, () -> {
+            c2.setHeight(b1,BuildingType.DOME);
+        });
+        c2.setHeight(b1,BuildingType.MIDDLE); // no exception
+        Assertions.assertThrows(InvalidBuildException.class, () -> {
+            c2.setHeight(b1,BuildingType.DOME);
+        });
     }
 }
 
