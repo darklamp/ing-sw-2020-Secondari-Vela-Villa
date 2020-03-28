@@ -6,7 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 class ApolloTest {
 
     @Test
-    void isValidBuildTest() throws Exception{
+    void isValidMoveTest() throws Exception{
         GameTable g = new GameTable();
         Player p1 = new Player("Giggino",g);
         Player p2 = new Player("Pippo",g);
