@@ -54,11 +54,15 @@ public class GameTable {
     /* end observable pattern */
 
     public static GameTable getInstance(int playersNumber){
-        if (instance != null) throw new NullPointerException();
+        if (instance != null) return instance;
         else {
             instance = new GameTable(playersNumber);
             return instance;
         }
+    }
+
+    public static GameTable getDebugInstance(int playersNumber){
+        return new GameTable(playersNumber);
     }
 
 

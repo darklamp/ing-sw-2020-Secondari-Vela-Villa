@@ -12,7 +12,7 @@ class ArtemisTest {
 
     @Test
     void isValidMoveTest() throws Exception {
-        GameTable g = new GameTable();
+        GameTable g = GameTable.getDebugInstance(2);
         Player p1 = new Player("Giggino",g);
         Player p2 = new Player("Giggino2",g);
         Cell c0 = g.getCell(4,2);

@@ -11,7 +11,7 @@ class ApolloTest {
 
     @Test
     void isValidMoveTest() throws Exception{
-        GameTable g = new GameTable();
+        GameTable g = GameTable.getDebugInstance(2);
         Player p1 = new Player("Giggino",g);
         Player p2 = new Player("Pippo",g);
         Cell c1 = g.getCell(4,3);
@@ -21,7 +21,7 @@ class ApolloTest {
         Builder b2 = new Apollo(c2,p2);
 
         Assertions.assertThrows(ApolloException.class, () -> {
-            b1.setPosition(c2);
+            b1.isValidMove(c2);
         });
         Assertions.assertThrows(InvalidMoveException.class, () -> {
             b1.setPosition(c1);
