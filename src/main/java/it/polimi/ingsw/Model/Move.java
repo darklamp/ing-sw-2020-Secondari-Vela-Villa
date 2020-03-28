@@ -16,11 +16,6 @@ public class Move {
         this.height = height;
     }
 
-    public void handleBuild() throws InvalidBuildException, DemeterException {
-        this.getCell().setHeight(this.getBuilder(), this.getHeight());
-        GameTable.sendNews(this,"BUILD");
-    }
-
     private BuildingType height;
 
     public Cell getCell() {

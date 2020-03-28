@@ -11,6 +11,8 @@ import java.beans.PropertyChangeListener;
 public class MainController implements PropertyChangeListener {
 
     private Player currentPlayer;
+    private BuildController buildController;
+    private GameTable gameTable;
 
     /* observer pattern */
 
@@ -23,63 +25,48 @@ public class MainController implements PropertyChangeListener {
         Object obj = propertyChangeEvent.getNewValue();
         String name = propertyChangeEvent.getPropertyName();
         this.setNews((Move) obj);
-        currentPlayer = GameTable.getCurrentPlayer();
+        currentPlayer = gameTable.getCurrentPlayer();
         //TODO: controllare che si faccia prima move e poi build, o nel caso di efesto (build) move build
+        // creare casi di inizializzione (dei, builder,...)
         switch (name) {
             case "PASS":
-                try{
-                    GameTable.checkWinner();
+               /* try{
+                    gameTable.checkWinner();
                 }
                 catch(GameOverException e){
                     //TODO: handle game won
-                }
-                currentPlayer = GameTable.nextTurn(); // se il giocatore ha passato il turno e non ha vinto
+                }*/
+                gameTable.nextTurn();
+                currentPlayer = gameTable.getCurrentPlayer(); // se il giocatore ha passato il turno e non ha vinto
                 //TODO
                 break;
             case "BUILD":
-                while (true) {
                     try {
-                        news.handleBuild();
-                        //news.getCell().setHeight(news.getBuilder(), news.getHeight());
-                        break;
+                        buildController.handleBuild(news);
                     } catch (DemeterException e) {
                         //TODO nota: bisogna verificare di ricevere solo una eccezione di questo tipo
                     } catch (InvalidBuildException e) {
                         // TODO notificare view
                         break;
                     }
-                }
-                //TODO
                 break;
             case "MOVE":
-                while (true) {
                     try {
                         news.getBuilder().setPosition(news.getCell());
-                        break;
                     } catch (InvalidMoveException e) {
                         // TODO notificare view
                     } catch (ArtemisException e) {
                         //TODO
                     }
-                }
-                //TODO
                 break;
             default:
                 //TODO
         }
     }
 
-    /*private void setNews(String s){
-        this.news = s;
-    }*/
-
     private void setNews(Move news){
         this.news = news;
     }
-
-  /*  public String getNews() {
-        return this.news;
-    }*/
 
     public Move getNews(){
         return this.news;
@@ -87,9 +74,11 @@ public class MainController implements PropertyChangeListener {
 
     /* fine observer pattern */
 
-    public MainController(){//TODO (?)
+    public MainController(int playersNumber){//TODO (?)
         this.currentPlayer = null; // TODO
         this.news = null;
+        this.gameTable = GameTable.getInstance(playersNumber);
+        this.buildController = new BuildController(this.gameTable);
     }
 
 }

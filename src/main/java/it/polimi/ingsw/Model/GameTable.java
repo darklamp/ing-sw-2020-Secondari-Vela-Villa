@@ -10,14 +10,25 @@ public class GameTable {
 
     private static Cell[][] Table;
     private ArrayList<Player> players;
-    private Player currentPlayer;
+    private static GameTable instance; /* Singleton instance for GameTable */
+    private int currentPlayer = 0;
+    private final int playersNumber;
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayer);
+    }
+
+
+
+    public void nextTurn(){
+        if (currentPlayer == playersNumber - 1) currentPlayer = 0;
+        else currentPlayer++;
+    }
 
 
     /* initial observable pattern implementation via PropertyChangeSupport */
 
     private PropertyChangeSupport support; // helper object
-  //  private String news; // example message passed to observer
-   // private Cell cellNews;
     private Move news;
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
@@ -28,10 +39,6 @@ public class GameTable {
         support.removePropertyChangeListener(pcl);
     }
 
-    /*public void setNews(String value) {
-        support.firePropertyChange("news", this.news, value);
-        this.news = value;
-    }*/
 
     public void setNews(Cell cell, Builder builder, String type) {
         Move move = new Move(cell,builder);
@@ -46,7 +53,21 @@ public class GameTable {
 
     /* end observable pattern */
 
-    public GameTable() {   //contructor method for GameTable
+    public static GameTable getInstance(int playersNumber){
+        if (instance != null) throw new NullPointerException();
+        else {
+            instance = new GameTable(playersNumber);
+            return instance;
+        }
+    }
+
+
+    public static GameTable getInstance(){
+        if (instance == null) throw new NullPointerException();
+        else return instance;
+    }
+
+    private GameTable(int playersNumber) {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
         for (int i = 0; i < 5; i++){
@@ -55,7 +76,8 @@ public class GameTable {
             }
         }
         players = null;
-        support = new PropertyChangeSupport(this);
+        this.playersNumber = playersNumber;
+        support = new PropertyChangeSupport(this); //TODO: this o instance? credo sia la stessa cosa
 
     }
     private static void isInvalidCoordinate(int x, int y) throws InvalidCoordinateException {
