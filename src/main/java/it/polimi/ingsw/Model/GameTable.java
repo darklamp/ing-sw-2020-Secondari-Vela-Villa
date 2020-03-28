@@ -19,7 +19,9 @@ public class GameTable {
     }
 
 
-
+    /**
+     * skips to nezt turn
+     */
     public void nextTurn(){
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
         else currentPlayer++;
@@ -39,13 +41,6 @@ public class GameTable {
         support.removePropertyChangeListener(pcl);
     }
 
-
-    public void setNews(Cell cell, Builder builder, String type) {
-        Move move = new Move(cell,builder);
-        support.firePropertyChange(type, this.news, move);
-        this.news = move;
-    }
-
     public void setNews(Move move, String type) {
         support.firePropertyChange(type, this.news, move);
         this.news = move;
@@ -53,6 +48,11 @@ public class GameTable {
 
     /* end observable pattern */
 
+    /**
+     * Singleton public "constructor"
+     * @param playersNumber number of players in game
+     * @return single instance of GameTable
+     */
     public static GameTable getInstance(int playersNumber){
         if (instance != null) return instance;
         else {
@@ -61,6 +61,11 @@ public class GameTable {
         }
     }
 
+
+    /**
+     * this method exists just to unit test w/ the singleton
+     * TODO: delete in deploy
+     */
     public static GameTable getDebugInstance(int playersNumber){
         return new GameTable(playersNumber);
     }
@@ -71,6 +76,9 @@ public class GameTable {
         else return instance;
     }
 
+    /**
+     * private constructor for GameTable singleton
+     */
     private GameTable(int playersNumber) {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
@@ -84,6 +92,12 @@ public class GameTable {
         support = new PropertyChangeSupport(this); //TODO: this o instance? credo sia la stessa cosa
 
     }
+
+    /**
+     * @param x X coord
+     * @param y Y coord
+     * @throws InvalidCoordinateException if coordinate is OOB
+     */
     private static void isInvalidCoordinate(int x, int y) throws InvalidCoordinateException {
         if(x>4 || x<0 || y>4 || y<0) {
             throw new InvalidCoordinateException();
