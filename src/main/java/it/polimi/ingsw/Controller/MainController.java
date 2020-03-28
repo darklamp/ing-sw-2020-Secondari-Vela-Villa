@@ -1,8 +1,8 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.GameTable;
+import it.polimi.ingsw.Model.Move;
 import it.polimi.ingsw.Model.Player;
 
 import java.beans.PropertyChangeEvent;
@@ -39,7 +39,8 @@ public class MainController implements PropertyChangeListener {
             case "BUILD":
                 while (true) {
                     try {
-                        news.getCell().setHeight(news.getBuilder(), news.getHeight());
+                        news.handleBuild();
+                        //news.getCell().setHeight(news.getBuilder(), news.getHeight());
                         break;
                     } catch (DemeterException e) {
                         //TODO nota: bisogna verificare di ricevere solo una eccezione di questo tipo

@@ -1,8 +1,10 @@
-package it.polimi.ingsw.Controller;
+package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
+import it.polimi.ingsw.Model.Exceptions.DemeterException;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 
 public class Move {
 
@@ -12,6 +14,11 @@ public class Move {
 
     public void setHeight(BuildingType height) {
         this.height = height;
+    }
+
+    public void handleBuild() throws InvalidBuildException, DemeterException {
+        this.getCell().setHeight(this.getBuilder(), this.getHeight());
+        GameTable.sendNews(this,"BUILD");
     }
 
     private BuildingType height;

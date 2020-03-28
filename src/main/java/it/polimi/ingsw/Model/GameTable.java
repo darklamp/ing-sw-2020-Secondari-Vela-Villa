@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Controller.Move;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 
 import java.beans.PropertyChangeListener;
@@ -11,6 +10,7 @@ public class GameTable {
 
     private static Cell[][] Table;
     private ArrayList<Player> players;
+    private Player currentPlayer;
 
 
     /* initial observable pattern implementation via PropertyChangeSupport */
@@ -39,6 +39,11 @@ public class GameTable {
         this.news = move;
     }
 
+    public void setNews(Move move, String type) {
+        support.firePropertyChange(type, this.news, move);
+        this.news = move;
+    }
+
     /* end observable pattern */
 
     public GameTable() {   //contructor method for GameTable
@@ -62,7 +67,7 @@ public class GameTable {
             isInvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
     }/*
-    public boolean CheckGameover(){
+    public boolean checkGameover(){
         //return true if there is just one player in game
     }
     public int getPlayerIn(){
