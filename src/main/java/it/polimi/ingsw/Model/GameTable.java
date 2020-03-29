@@ -127,13 +127,11 @@ public class GameTable {
             players = new ArrayList<Player>();
             return true;
         }
-        for (Player p :
-                players) {
-            if ((p.getNickname()).equals(nickname)) {
-                return false;
-            }
-            }
-        return true;
+        return players.stream().noneMatch(player -> sameNickname(player,nickname));
+    }
+
+    private boolean sameNickname(Player player,String nickname){
+        return player.getNickname().equals(nickname);
     }
     protected void addPlayer(Player player){
         players.add(player);

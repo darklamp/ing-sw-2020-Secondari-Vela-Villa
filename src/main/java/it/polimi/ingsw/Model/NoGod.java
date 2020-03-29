@@ -1,10 +1,5 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Builder;
-import it.polimi.ingsw.Model.BuildingType;
-import it.polimi.ingsw.Model.Cell;
-import it.polimi.ingsw.Model.Exceptions.*;
-
 /*public class NoGod extends Builder {
     public NoGod(Cell position) {
         super(position);

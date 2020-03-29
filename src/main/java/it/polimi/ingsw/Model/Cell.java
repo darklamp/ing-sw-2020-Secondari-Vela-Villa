@@ -81,7 +81,7 @@ public class Cell {
      * for example, if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
      */
     protected ArrayList<Cell> getNear() { // returns cell numbers near given cell
-        return GameTable.toArrayList().stream().filter(Pair -> Pair.isNear(this)).collect(toCollection(ArrayList::new));
+        return GameTable.toArrayList().stream().filter(cell -> cell.isNear(this)).collect(toCollection(ArrayList::new));
     }
 
     private boolean isNear(Cell other){

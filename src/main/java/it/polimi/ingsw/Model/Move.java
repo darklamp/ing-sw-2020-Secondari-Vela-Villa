@@ -3,8 +3,6 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
-import it.polimi.ingsw.Model.Exceptions.DemeterException;
-import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 
 public class Move {
 

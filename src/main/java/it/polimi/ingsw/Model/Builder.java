@@ -100,7 +100,7 @@ public abstract class Builder{
     /**
      * this method checks the postconditions for moving
      * @param finalPoint position to check
-     * @throws InvalidMoveException
+     * @throws InvalidMoveException in case postconditions are not met
      */
     protected void verifyMove(Cell finalPoint) throws InvalidMoveException {
 

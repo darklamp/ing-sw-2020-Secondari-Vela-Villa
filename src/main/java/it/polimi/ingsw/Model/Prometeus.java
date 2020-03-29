@@ -2,8 +2,6 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
 
-import javax.swing.*;
-
 public class Prometeus extends Builder {
     public Prometeus(Cell position, Player player) {
         super(position,player);
