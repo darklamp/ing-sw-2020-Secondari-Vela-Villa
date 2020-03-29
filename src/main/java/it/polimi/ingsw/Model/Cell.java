@@ -9,6 +9,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toCollection;
+
 public class Cell {
 
     private Builder builder = null;
@@ -84,8 +86,7 @@ public class Cell {
      * for example, if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
      */
     protected ArrayList<Cell> getNear() { // returns cell numbers near given cell
-        ArrayList<Cell> in = GameTable.toArrayList();
-        return in.stream().filter(Pair -> Pair.isNear(this)).collect(Collectors.toCollection(ArrayList::new));
+        return GameTable.toArrayList().stream().filter(Pair -> Pair.isNear(this)).collect(toCollection(ArrayList::new));
     }
 
     private boolean isNear(Cell other){
@@ -97,8 +98,6 @@ public class Cell {
         }
         return false;
     }
-
-
 
     public void setBuilder(Builder builder) {
         this.builder = builder;
