@@ -62,7 +62,8 @@ public class Cell {
                 //TODO verificare correttezza
                 // notify caller ?
             }
-            catch (HephaestusException e) { //TODO
+            catch (HephaestusException e) { //TODO notify controller
+                this.height = height; //OK
             }
             catch (DemeterException e){
                 //TODO: notify controller?
