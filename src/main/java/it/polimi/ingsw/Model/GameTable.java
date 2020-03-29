@@ -8,19 +8,23 @@ import java.util.ArrayList;
 
 public class GameTable {
 
-    private static Cell[][] Table;
-    private ArrayList<Player> players;
-    private static GameTable instance; /* Singleton instance for GameTable */
-    private int currentPlayer = 0;
-    private final int playersNumber;
+    private static Cell[][] Table; /** 5x5 matrix representing game table **/
+    private ArrayList<Player> players; /** arraylist filled with players **/
+    private static ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
+    private static GameTable instance; /** Singleton instance for GameTable **/
+    private int currentPlayer = 0; /** current player index **/
+    private final int playersNumber; /** number of players in game **/
 
+    /**
+     * returns current player
+     **/
     public Player getCurrentPlayer() {
         return players.get(currentPlayer);
     }
 
 
     /**
-     * skips to nezt turn
+     * skips to next turn
      */
     public void nextTurn(){
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
@@ -30,8 +34,8 @@ public class GameTable {
 
     /* initial observable pattern implementation via PropertyChangeSupport */
 
-    private PropertyChangeSupport support; // helper object
-    private Move news;
+    private PropertyChangeSupport support; /** Listener helper object **/
+    private Move news; /** Listener news **/
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
@@ -54,11 +58,10 @@ public class GameTable {
      * @return single instance of GameTable
      */
     public static GameTable getInstance(int playersNumber){
-        if (instance != null) return instance;
-        else {
+        if (instance == null) {
             instance = new GameTable(playersNumber);
-            return instance;
         }
+        return instance;
     }
 
 
@@ -82,9 +85,11 @@ public class GameTable {
     private GameTable(int playersNumber) {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
+        arrayTable = new ArrayList<>();
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 5; j++){
                 Table[i][j] = new Cell(i,j);
+                arrayTable.add(Table[i][j]);
             }
         }
         players = null;
@@ -102,6 +107,9 @@ public class GameTable {
         if(x>4 || x<0 || y>4 || y<0) {
             throw new InvalidCoordinateException();
         }
+    }
+    protected static ArrayList<Cell> toArrayList(){
+        return arrayTable;
     }
     protected static Cell getCell(int x,int y) throws InvalidCoordinateException{
             isInvalidCoordinate(x,y);

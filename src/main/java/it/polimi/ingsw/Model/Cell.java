@@ -3,6 +3,11 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Cell {
 
@@ -52,7 +57,7 @@ public class Cell {
     public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, DemeterException {
             try {
                 if (this.builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
-                else if (!(builder.getPosition().getNear().contains((this.coordinates)))) throw new InvalidBuildException(); // trying to build on a non-near cell
+                else if (!(builder.getPosition().getNear().contains((this)))) throw new InvalidBuildException(); // trying to build on a non-near cell
                 builder.isValidBuild(this, height);
                 this.height = height; //OK
             } catch (NullPointerException e) {
@@ -78,21 +83,23 @@ public class Cell {
      * @return list of Pairs of coordinates (x,y) near the given cell
      * for example, if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
      */
-    protected ArrayList<Pair> getNear() { // returns cell numbers near given cell
-        ArrayList<Pair> out = new ArrayList<>();
-        for (int i = coordinates.getFirst() - 1; i <= (coordinates.getFirst() + 1); i++) {
-            if (i >= 0 && i < 5) {
-                for (int j = coordinates.getSecond() - 1; j <= (coordinates.getSecond() + 1); j++) {
-                    if (j >= 0 && j < 5) {
-                        if (j != coordinates.getSecond() || i != coordinates.getFirst()) {
-                            out.add(new Pair(i,j));
-                        }
-                    }
-                }
-            }
-        }
+    protected ArrayList<Cell> getNear() { // returns cell numbers near given cell
+        ArrayList<Cell> in = GameTable.toArrayList();
+        ArrayList<Cell> out;
+        out = in.stream().filter(Pair -> Pair.isNear(this)).collect(Collectors.toCollection(ArrayList::new));
         return out;
     }
+
+    private boolean isNear(Cell other){
+        if (this.getX() == other.getX() - 1 || this.getX() == other.getX() + 1){
+            return this.getY() - other.getY() <= 1 && this.getY() - other.getY() >= -1;
+        }
+        else if (this.getY() == other.getY() -1 || this.getY() == other.getY() + 1){
+            return this.getX() - other.getX() <= 1 && this.getX() - other.getX() >= -1;
+        }
+        return false;
+    }
+
 
 
     public void setBuilder(Builder builder) {
