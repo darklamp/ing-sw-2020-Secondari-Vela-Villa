@@ -21,7 +21,7 @@ public class Atlas extends Builder{
     }
 
     @Override
-    public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometeusException, ArtemisException {
+    public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometeusException, ArtemisException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

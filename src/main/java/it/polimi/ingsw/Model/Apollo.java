@@ -23,7 +23,7 @@ public class Apollo extends Builder{
      * @throws ApolloException gets thrown if the builder tries to move to a cell occupied by an enemy builder
      */
     @Override
-    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometeusException, ArtemisException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometeusException, ArtemisException, PanException {
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new ApolloException();
             else verifyMove(finalPoint);

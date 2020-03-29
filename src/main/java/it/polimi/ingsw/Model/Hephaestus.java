@@ -31,7 +31,7 @@ public class Hephaestus extends Builder{
         }
     }
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException {
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

@@ -16,7 +16,7 @@ public class Prometeus extends Builder {
     }
 
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException {
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException, PanException {
         super.isValidMove(finalPoint);
         if (getPosition().getHeight().compareTo(finalPoint.getHeight()) >= 0 && finalPoint.getBuilder()!=null) throw new PrometeusException();
         else verifyMove(finalPoint);
