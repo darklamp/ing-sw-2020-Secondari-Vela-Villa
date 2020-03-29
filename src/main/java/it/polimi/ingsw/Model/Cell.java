@@ -85,9 +85,7 @@ public class Cell {
      */
     protected ArrayList<Cell> getNear() { // returns cell numbers near given cell
         ArrayList<Cell> in = GameTable.toArrayList();
-        ArrayList<Cell> out;
-        out = in.stream().filter(Pair -> Pair.isNear(this)).collect(Collectors.toCollection(ArrayList::new));
-        return out;
+        return in.stream().filter(Pair -> Pair.isNear(this)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private boolean isNear(Cell other){
