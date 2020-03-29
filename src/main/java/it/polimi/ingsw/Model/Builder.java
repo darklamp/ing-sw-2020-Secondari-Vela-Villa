@@ -48,6 +48,9 @@ public abstract class Builder{
         catch (ArtemisException e){
             throw new ArtemisException(); // TEMP PER TEST
         }
+        catch (PanException e){
+            //TODO
+        }
     }
 
     // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
@@ -85,7 +88,7 @@ public abstract class Builder{
      * @throws ApolloException when Apollo TODO better javadoc
      * @throws MinotaurException TODO better javadoc
      */
-    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException,ArtemisException, MinotaurException,PrometeusException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, ArtemisException, MinotaurException, PrometeusException, PanException {
 
         if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 4 || finalPoint.getY() < 0 || finalPoint.getY() > 4) throw new InvalidMoveException(); //out of bounds
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
