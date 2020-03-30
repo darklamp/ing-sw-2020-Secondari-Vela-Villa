@@ -13,7 +13,7 @@ class MinotaurTest {
 
     @Test
     void isValidMoveTest() throws Exception {
-        GameTable g = GameTable.getInstance(2);
+        GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
         Player p1 = new Player("Giggino",g);
         Player p2 = new Player("Giggino2",g);
         Cell c0 = g.getCell(4,2);

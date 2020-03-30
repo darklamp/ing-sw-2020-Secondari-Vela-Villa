@@ -2,7 +2,7 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.GameTable;
-import it.polimi.ingsw.Model.Move;
+import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
 
 import java.beans.PropertyChangeEvent;
@@ -18,13 +18,13 @@ public class MainController implements PropertyChangeListener {
 
    // private String news;
   //  private Cell cellNews;
-    private Move news;
+    private News news;
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
         Object obj = propertyChangeEvent.getNewValue();
         String name = propertyChangeEvent.getPropertyName();
-        this.setNews((Move) obj);
+        this.setNews((News) obj);
         currentPlayer = gameTable.getCurrentPlayer();
         //TODO: controllare che si faccia prima move e poi build, o nel caso di efesto (build) move build
         // creare casi di inizializzione (dei, builder,...)
@@ -64,11 +64,11 @@ public class MainController implements PropertyChangeListener {
         }
     }
 
-    private void setNews(Move news){
+    private void setNews(News news){
         this.news = news;
     }
 
-    public Move getNews(){
+    public News getNews(){
         return this.news;
     }
 

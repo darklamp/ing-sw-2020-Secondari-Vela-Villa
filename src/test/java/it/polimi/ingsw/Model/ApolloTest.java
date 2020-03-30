@@ -9,7 +9,7 @@ class ApolloTest {
 
     @Test
     void isValidMoveTest() throws Exception{
-        GameTable g = GameTable.getDebugInstance(2);
+        GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
         Player p1 = new Player("Giggino",g);
         Player p2 = new Player("Pippo",g);
         Cell c1 = g.getCell(4,3);

@@ -9,7 +9,7 @@ class PrometeusTest {
 
     @Test
     void isValidMoveTest() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2);
+        GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
         Player p1 = new Player("Giggino", g);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);

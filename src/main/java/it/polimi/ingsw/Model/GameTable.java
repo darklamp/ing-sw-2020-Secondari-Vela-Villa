@@ -35,7 +35,7 @@ public class GameTable {
     /* initial observable pattern implementation via PropertyChangeSupport */
 
     private PropertyChangeSupport support; /** Listener helper object **/
-    private Move news; /** Listener news **/
+    private News news; /** Listener news **/
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
@@ -45,9 +45,9 @@ public class GameTable {
         support.removePropertyChangeListener(pcl);
     }
 
-    public void setNews(Move move, String type) {
-        support.firePropertyChange(type, this.news, move);
-        this.news = move;
+    public void setNews(News news, String type) {
+        support.firePropertyChange(type, this.news, news);
+        this.news = news;
     }
 
     /* end observable pattern */
@@ -72,6 +72,14 @@ public class GameTable {
     public static GameTable getDebugInstance(int playersNumber){
         return new GameTable(playersNumber);
     }
+    /**
+     * this method exists just to unit test w/ the singleton
+     * TODO: delete in deploy
+     */
+    public void setDebugInstance(){
+        instance = this;
+    }
+
 
 
     public static GameTable getInstance(){
@@ -122,6 +130,10 @@ public class GameTable {
         //ritorna il numero di player ancora in gioco
     }*/
 
+    /**
+     * @param nickname contains nickname to be checked
+     * @return true if the nickname isn't already in use, false otherwise
+     */
     protected boolean isValidPlayer(String nickname){
         if(players == null) {
             players = new ArrayList<Player>();
@@ -130,10 +142,20 @@ public class GameTable {
         return players.stream().noneMatch(player -> sameNickname(player,nickname));
     }
 
+    /**
+     * @return true if player's nickname is the same as nickname
+     */
     private boolean sameNickname(Player player,String nickname){
         return player.getNickname().equals(nickname);
     }
+
+    /**
+     * @param player player to be added
+     */
     protected void addPlayer(Player player){
+
         players.add(player);
+        setNews(new News(player), "ADDPLAYER"); /* sets news for view */
+
     }
 }

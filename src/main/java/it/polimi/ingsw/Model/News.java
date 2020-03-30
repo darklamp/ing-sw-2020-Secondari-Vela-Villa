@@ -4,7 +4,7 @@ import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
 
-public class Move {
+public class News {
 
     public BuildingType getHeight() {
         return height;
@@ -26,6 +26,8 @@ public class Move {
 
     private Cell cell;
 
+    private Player player;
+
     public Builder getBuilder() {
         return builder;
     }
@@ -35,8 +37,22 @@ public class Move {
     }
 
     private Builder builder;
-    public Move(Cell cell, Builder builder) {
+    public News(Cell cell, Builder builder) {
         this.cell = cell;
         this.builder = builder;
+        this.player = null;
+    }
+    public News(Player player) {
+        this.cell = null;
+        this.builder = null;
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

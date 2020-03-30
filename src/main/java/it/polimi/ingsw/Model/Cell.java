@@ -53,10 +53,17 @@ public class Cell {
      */
     public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, DemeterException {
             try {
+
                 if (this.builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
+
                 else if (!(builder.getPosition().getNear().contains((this)))) throw new InvalidBuildException(); // trying to build on a non-near cell
+
                 builder.isValidBuild(this, height);
+
                 this.height = height; //OK
+
+                GameTable.getInstance().setNews(new News(this,builder), "BUILDOK"); /* notify view */
+
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error
             }  catch (AtlasException e) { // the player is trying to build dome
@@ -72,6 +79,10 @@ public class Cell {
                 // TEMP per test
                 throw new DemeterException();
                 // TEMP
+            }
+            catch (InvalidBuildException e){
+                GameTable.getInstance().setNews(new News(this,builder), "BUILDKO"); /* notify view */
+                throw new InvalidBuildException(); //this is here just for tests TODO remove
             }
     }
 

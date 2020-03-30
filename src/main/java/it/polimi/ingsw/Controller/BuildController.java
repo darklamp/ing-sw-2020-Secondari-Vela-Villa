@@ -3,7 +3,7 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Model.Exceptions.DemeterException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.GameTable;
-import it.polimi.ingsw.Model.Move;
+import it.polimi.ingsw.Model.News;
 
 public class BuildController {
 
@@ -13,8 +13,8 @@ public class BuildController {
         this.gameTable = g;
     }
 
-    public void handleBuild(Move move) throws InvalidBuildException, DemeterException {
-        move.getCell().setHeight(move.getBuilder(), move.getHeight());
-        gameTable.setNews(move,"BUILD");
+    public void handleBuild(News news) throws InvalidBuildException, DemeterException {
+        news.getCell().setHeight(news.getBuilder(), news.getHeight());
+        gameTable.setNews(news,"BUILD");
     }
 }
