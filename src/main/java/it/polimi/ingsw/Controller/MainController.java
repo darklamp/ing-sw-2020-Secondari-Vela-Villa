@@ -46,12 +46,13 @@ public class MainController implements PropertyChangeListener {
                     } catch (DemeterException e) {
                         //TODO nota: bisogna verificare di ricevere solo una eccezione di questo tipo
                     } catch (InvalidBuildException e) {
-                        // TODO notificare view
+                        gameTable.setNews(news,"BUILDKO");
                         break;
                     }
                 break;
             case "MOVE":
                     try {
+                        moveController.handleMove(news);
                         news.getBuilder().setPosition(news.getCell());
                     } catch (InvalidMoveException e) {
                         // TODO notificare view

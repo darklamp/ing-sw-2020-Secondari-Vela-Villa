@@ -62,8 +62,6 @@ public class Cell {
 
                 this.height = height; //OK
 
-                GameTable.getInstance().setNews(new News(this,builder), "BUILDOK"); /* notify view */
-
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error
             }  catch (AtlasException e) { // the player is trying to build dome
@@ -81,7 +79,6 @@ public class Cell {
                 // TEMP
             }
             catch (InvalidBuildException e){
-                GameTable.getInstance().setNews(new News(this,builder), "BUILDKO"); /* notify view */
                 throw new InvalidBuildException(); //this is here just for tests TODO remove
             }
     }

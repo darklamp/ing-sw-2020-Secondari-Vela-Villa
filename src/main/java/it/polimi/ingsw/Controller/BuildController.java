@@ -15,6 +15,6 @@ public class BuildController {
 
     public void handleBuild(News news) throws InvalidBuildException, DemeterException {
         news.getCell().setHeight(news.getBuilder(), news.getHeight());
-        gameTable.setNews(news,"BUILD");
+        gameTable.setNews(news,"BUILDOK");
     }
 }

@@ -15,7 +15,6 @@ public abstract class Builder{
         else {
             this.position = position;
             position.setBuilder(this);
-            GameTable.getInstance().setNews(new News(position,this), "SETBUILDER"); /* notify view */
         }
     }
 
@@ -34,12 +33,10 @@ public abstract class Builder{
         try {
             isValidMove(position); // check validity of move
             this.position = position; // sets position if no exceptions are thrown
-            GameTable.getInstance().setNews(new News(position,this), "MOVEOK"); /* notify view */
         } catch (NullPointerException e) {
             e.printStackTrace(); // unhandled error
         } catch (InvalidMoveException e) { // cannot move here
-            GameTable.getInstance().setNews(new News(position,this), "MOVEKO"); /* notify view */
-            throw new InvalidMoveException(); /* sta qua solo per debug  !!! va tolta dopo */
+            throw new InvalidMoveException();
         }
         catch (ApolloException e) { // swap position cause it's Apollo TODO: do not make someone win if they win by being forced to move
             swapPosition(this,position.getBuilder());
@@ -117,7 +114,6 @@ public abstract class Builder{
     private void forceMove(Cell position){
         position.setBuilder(this);
         this.position = position;
-        GameTable.getInstance().setNews(new News(position,this), "SETBUILDER"); /* notify view */
     }
 
     /**
