@@ -25,6 +25,7 @@ public class MainController implements PropertyChangeListener {
         String name = propertyChangeEvent.getPropertyName();
         this.setNews((News) obj);
         currentPlayer = gameTable.getCurrentPlayer();
+        //TODO: check turno giusto?
         //TODO: controllare che si faccia prima move e poi build, o nel caso di efesto (build) move build
         // creare casi di inizializzione (dei, builder,...)
         switch (name) {
