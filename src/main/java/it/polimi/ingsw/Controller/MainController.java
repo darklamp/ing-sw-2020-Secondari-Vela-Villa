@@ -12,12 +12,11 @@ public class MainController implements PropertyChangeListener {
 
     private Player currentPlayer;
     private BuildController buildController;
+    private MoveController moveController;
     private GameTable gameTable;
 
     /* observer pattern */
 
-   // private String news;
-  //  private Cell cellNews;
     private News news;
 
     @Override
@@ -38,7 +37,6 @@ public class MainController implements PropertyChangeListener {
                 }*/
                 gameTable.nextTurn();
                 currentPlayer = gameTable.getCurrentPlayer(); // se il giocatore ha passato il turno e non ha vinto
-                //TODO
                 break;
             case "BUILD":
                     try {
@@ -47,16 +45,17 @@ public class MainController implements PropertyChangeListener {
                         //TODO nota: bisogna verificare di ricevere solo una eccezione di questo tipo
                     } catch (InvalidBuildException e) {
                         gameTable.setNews(news,"BUILDKO");
-                        break;
                     }
                 break;
             case "MOVE":
                     try {
                         moveController.handleMove(news);
                         news.getBuilder().setPosition(news.getCell());
+                        break;
                     } catch (InvalidMoveException e) {
-                        // TODO notificare view
-                    } catch (ArtemisException e) {
+                        gameTable.setNews(news,"MOVEKO");
+                        break;
+                    } catch (ArtemisException e){
                         //TODO
                     }
                 break;
@@ -80,6 +79,7 @@ public class MainController implements PropertyChangeListener {
         this.news = null;
         this.gameTable = GameTable.getInstance(playersNumber);
         this.buildController = new BuildController(this.gameTable);
+        this.moveController = new MoveController(this.gameTable);
     }
 
 }
