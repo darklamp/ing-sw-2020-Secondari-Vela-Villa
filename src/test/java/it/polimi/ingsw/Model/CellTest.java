@@ -18,6 +18,9 @@ class CellTest {
     static Builder b1;
     static Builder b2;
 
+    /**
+     * Initiates various support variables.
+     */
     @BeforeAll
     static void init() throws Exception{
         g = GameTable.getDebugInstance(2); g.setDebugInstance();
@@ -36,10 +39,9 @@ class CellTest {
      * because they are known to be the only cells near c1 (4,4). The assertion tests that
      * every single one of those cells is contained in the object returned by getNear and
      * that same object contains only those values (this is done by checking the item's size).
-     * @throws Exception
      */
     @Test
-    void getNear() throws Exception{
+    void getNearTest() throws Exception{
         ArrayList<Cell> test1 = new ArrayList<>();
         test1.add(g.getCell(4,3));
         test1.add(g.getCell(3,3));
@@ -56,6 +58,14 @@ class CellTest {
         assertEquals(test2.size(),5);
     }
 
+    /**
+     * Tests the movableCell method by building on top of three cells.
+     * Two of the cells are set to a BASE level, whereas the last one is set to DOME level.
+     * The test expects the function to return true when checking the two BASE cells,
+     * which have no builders on them;
+     * it expects the function to return false when tested with the DOME cell, and when tested
+     * with the cells on which the two builders (p1 and p2) are located.
+     */
     @Test
     void movableCellTest() throws Exception{
         GameTable.getCell(4,3).setHeight(b1,BuildingType.BASE);

@@ -19,37 +19,11 @@ public class Cell {
     }
 
     /**
-     * @return X coordinate of the given cell
-     */
-    public int getX() {
-        return coordinates.getFirst();
-    }
-
-    /**
-     * @return Y coordinate of the given cell
-     */
-    public int getY() {
-        return coordinates.getSecond();
-    }
-
-    /**
-     * @return coordinates of the given cell, in form of Pair
-     */
-    public Pair getPosition() {
-        return coordinates;
-    }
-
-    /**
-     * @return height of the given cell
-     */
-    public BuildingType getHeight() {
-        return height;
-    }
-
-    /**
+     * This function is responsible for setting a cell's height, which translates to building on a cell.
      * @param builder represents the builder which is trying to build on the cell
      * @param height represents the height at which the builder wants to build
      * @throws InvalidBuildException if the cell is occupied by another builder OR if the cell is not adjacent
+     * @throws DemeterException --> {@link Demeter}
      */
     public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, DemeterException {
             try {
@@ -83,15 +57,19 @@ public class Cell {
             }
     }
 
-
     /**
-     * @return list of Pairs of coordinates (x,y) near the given cell
-     * for example, if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
+     * @return list of cells which are near the given cell
+     * @example if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
      */
     protected ArrayList<Cell> getNear() { // returns cell numbers near given cell
         return GameTable.toArrayList().stream().filter(cell -> cell.isNear(this)).collect(toCollection(ArrayList::new));
     }
 
+    /**
+     * This simple function checks whether the  " other "  Cell is near to this.
+     * It is a helper function to getNear().
+     * @return true if near, false otherwise
+     */
     private boolean isNear(Cell other){
         if (this.getX() == other.getX() - 1 || this.getX() == other.getX() + 1){
             return this.getY() - other.getY() <= 1 && this.getY() - other.getY() >= -1;
@@ -100,10 +78,6 @@ public class Cell {
             return this.getX() - other.getX() <= 1 && this.getX() - other.getX() >= -1;
         }
         return false;
-    }
-
-    public void setBuilder(Builder builder) {
-        this.builder = builder;
     }
 
     /**
@@ -115,8 +89,33 @@ public class Cell {
         return GameTable.getCell(x,y).getBuilder() == null && (GameTable.getCell(x,y).getHeight() != BuildingType.DOME);
     }
 
+
+
+    /** getter / setter **/
+
+
+    public void setBuilder(Builder builder) {
+        this.builder = builder;
+    }
+
     protected Builder getBuilder() {
         return this.builder;
+    }
+
+    public int getX() {
+        return coordinates.getFirst();
+    }
+
+    public int getY() {
+        return coordinates.getSecond();
+    }
+
+    public Pair getPosition() {
+        return coordinates;
+    }
+
+    public BuildingType getHeight() {
+        return height;
     }
 
 }
