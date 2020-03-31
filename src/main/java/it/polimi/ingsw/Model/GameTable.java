@@ -10,7 +10,7 @@ public class GameTable {
 
     private static Cell[][] Table; /** 5x5 matrix representing game table **/
     private ArrayList<Player> players; /** arraylist filled with players **/
-    private final ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
+    private static ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
     private static GameTable instance; /** Singleton instance for GameTable **/
     private int currentPlayer = 0; /** current player index **/
     private final int playersNumber; /** number of players in game **/

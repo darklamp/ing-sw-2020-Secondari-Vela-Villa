@@ -109,19 +109,10 @@ public class Cell {
     /**
      * @param x X coordinate of the cell to be checked
      * @param y Y  ..
-     * @return true if the Cell is empty (no builder nor dome), else false
+     * @return true if the Cell has no builder nor dome on it, else false
      */
-    protected boolean movableCell(int x, int y){
-        if(x>4 || x<0 || y>4 || y<0) throw new UnsupportedOperationException();
-        else {
-            try {
-                return GameTable.getCell(x, y).getBuilder() == null && (height != BuildingType.DOME);
-            }
-            catch (InvalidCoordinateException e){
-                e.printStackTrace();
-            }
-        }
-        return false;
+    static boolean movableCell(int x, int y) throws InvalidCoordinateException{
+        return GameTable.getCell(x,y).getBuilder() == null && (GameTable.getCell(x,y).getHeight() != BuildingType.DOME);
     }
 
     protected Builder getBuilder() {
