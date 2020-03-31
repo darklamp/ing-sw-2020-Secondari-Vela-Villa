@@ -51,11 +51,9 @@ public class MainController implements PropertyChangeListener {
             case "MOVE":
                     try {
                         moveController.handleMove(news);
-                        news.getBuilder().setPosition(news.getCell());
                         break;
                     } catch (InvalidMoveException e) {
                         gameTable.setNews(news,"MOVEKO");
-                        break;
                     } catch (ArtemisException e){
                         //TODO
                     }
