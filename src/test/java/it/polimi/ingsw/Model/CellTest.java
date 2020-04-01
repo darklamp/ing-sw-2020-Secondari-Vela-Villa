@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Model;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -26,8 +24,8 @@ class CellTest {
         g = GameTable.getDebugInstance(2); g.setDebugInstance();
         c1 = g.getCell(4,4);
         c2 = g.getCell(2,0);
-        p1 = new Player("Giggino",g);
-        p2 = new Player("Giggino2",g);
+        p1 = new Player("Giggino", g, "MINOTAUR" );
+        p2 = new Player("Giggino2", g, "ATLAS");
         b1 = new Minotaur(c1,p1);
         b2 = new Atlas(c2,p2);
     }

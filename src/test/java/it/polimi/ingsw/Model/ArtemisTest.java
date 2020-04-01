@@ -2,19 +2,16 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.ArtemisException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
-import it.polimi.ingsw.Model.Exceptions.MinotaurException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ArtemisTest {
 
     @Test
     void isValidMoveTest() throws Exception {
         GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
-        Player p1 = new Player("Giggino",g);
-        Player p2 = new Player("Giggino2",g);
+        Player p1 = new Player("Giggino", g, "ARTEMIS");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
         Cell c0 = g.getCell(4,2);
         Cell c1 = g.getCell(4,3);
         Cell c2 = g.getCell(4,4);

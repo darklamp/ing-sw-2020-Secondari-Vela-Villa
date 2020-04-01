@@ -9,10 +9,9 @@ public abstract class Builder{
     private final Player player;
 
     public Builder(Cell position, Player player) { // constructor for Builder with Cell parameter
-        if (player == null) throw new NullPointerException();
-        else this.player = player;
-        if(position == null) throw new NullPointerException();
+        if (player == null || position == null) throw new NullPointerException();
         else {
+            this.player = player;
             this.position = position;
             position.setBuilder(this);
         }

@@ -10,8 +10,8 @@ class ApolloTest {
     @Test
     void isValidMoveTest() throws Exception{
         GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
-        Player p1 = new Player("Giggino",g);
-        Player p2 = new Player("Pippo",g);
+        Player p1 = new Player("Giggino", g, "APOLLO");
+        Player p2 = new Player("Pippo", g, "APOLLO");
         Cell c1 = g.getCell(4,3);
         Cell c2 = g.getCell(4,4);
         Cell c3 = g.getCell(4,0);

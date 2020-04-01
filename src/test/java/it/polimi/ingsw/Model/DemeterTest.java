@@ -4,14 +4,12 @@ import it.polimi.ingsw.Model.Exceptions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class DemeterTest {
 
     @Test
     void isValidBuildTest() throws Exception {
         GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
-        Player p1 = new Player("Giggino",g);
+        Player p1 = new Player("Giggino", g, "DEMETER");
         Cell c1 = g.getCell(4,3);
         Cell c2 = g.getCell(4,4);
         Builder b1 = new Demeter(c1,p1);

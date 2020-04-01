@@ -5,6 +5,8 @@ import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GameTable {
 
@@ -14,7 +16,8 @@ public class GameTable {
     private static GameTable instance; /** Singleton instance for GameTable **/
     private int currentPlayer = 0; /** current player index **/
     private final int playersNumber; /** number of players in game **/
-
+    public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATLAS","ATHENA","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS");
+    private static ArrayList<String> godChoices;
     /**
      * returns current player
      **/
@@ -29,6 +32,10 @@ public class GameTable {
     public void nextTurn(){
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
         else currentPlayer++;
+    }
+
+    ArrayList<String> getGodChoices(){
+        return godChoices;
     }
 
 
