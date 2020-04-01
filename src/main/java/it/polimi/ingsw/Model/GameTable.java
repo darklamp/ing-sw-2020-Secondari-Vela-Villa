@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
+import it.polimi.ingsw.Model.Exceptions.InvalidPlayersNumberException;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -64,8 +65,9 @@ public class GameTable {
      * @param playersNumber number of players in game
      * @return single instance of GameTable
      */
-    public static GameTable getInstance(int playersNumber){
+    public static GameTable getInstance(int playersNumber) throws InvalidPlayersNumberException{
         if (instance == null) {
+            if(!(playersNumber == 2 || playersNumber == 3)) throw new InvalidPlayersNumberException();
             instance = new GameTable(playersNumber);
         }
         return instance;

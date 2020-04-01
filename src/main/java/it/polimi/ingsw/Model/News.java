@@ -26,6 +26,12 @@ public class News {
 
     private Cell cell;
 
+    public int getNumber() {
+        return number;
+    }
+
+    private int number = 0;
+
     private Player player;
 
     public Builder getBuilder() {
@@ -46,6 +52,9 @@ public class News {
         this.cell = null;
         this.builder = null;
         this.player = player;
+    }
+    public News(int number) {
+        this.number = number;
     }
 
     public Player getPlayer() {
