@@ -65,9 +65,8 @@ public class GameTable {
      * @param playersNumber number of players in game
      * @return single instance of GameTable
      */
-    public static GameTable getInstance(int playersNumber) throws InvalidPlayersNumberException{
+    public static GameTable getInstance(int playersNumber){
         if (instance == null) {
-            if(!(playersNumber == 2 || playersNumber == 3)) throw new InvalidPlayersNumberException();
             instance = new GameTable(playersNumber);
         }
         return instance;

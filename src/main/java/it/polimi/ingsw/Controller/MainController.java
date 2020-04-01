@@ -1,9 +1,11 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
 import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Model.TurnState;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -25,22 +27,11 @@ public class MainController implements PropertyChangeListener {
         String name = propertyChangeEvent.getPropertyName();
         this.setNews((News) obj);
         currentPlayer = gameTable.getCurrentPlayer();
-        //TODO: check turno giusto !!   --> servirà fare un controllo tra currentPlayer e player che ha inviato news (info data dalla view)
-        // TODO: controllare che si faccia prima move e poi build, o nel caso di efesto (build) move build
         // TODO: fare bene gestione turni
-        if (name == null); //TODO ERRORE: news invalida
-        else if (gameTable == null){
-            /** in this case gametable is yet to be initialized **/
-            try{
-                gameTable = GameTable.getInstance(news.getNumber());
-            }
-            catch (InvalidPlayersNumberException e){
-
-             }
-        }
+        if (name == null) gameTable.setNews(new News(), "INVALIDNEWS");
         else {
             try {
-                isLegalState(name,player.getState());
+                isLegalState(name,currentPlayer.getState());
                 switch (name) {
                     case "PASS":
                /* try{
@@ -72,7 +63,7 @@ public class MainController implements PropertyChangeListener {
                         }
                         break;
                     case "SETPLAYERNAME":
-                        //TODO
+                        //TODO NB: una volta inizializzata la partita queste news non possono più essere usate!
                         break;
                     case "SETGODLIST":
                         //TODO
@@ -84,11 +75,11 @@ public class MainController implements PropertyChangeListener {
                         //TODO
                         break;
                     default:
-                        //TODO
+                        throw new IllegalTurnStateException();
                 }
             }
-            catch(NotAllowedExpection e){ // player isn't in a legal state for the move
-                //TODO
+            catch(IllegalTurnStateException e){ // player isn't in a legal state for the move
+                gameTable.setNews(new News(), "ILLEGALSTATE");
             }
         }
 
@@ -102,14 +93,32 @@ public class MainController implements PropertyChangeListener {
         return this.news;
     }
 
+    private void isLegalState(String name, TurnState turn) throws IllegalTurnStateException {
+        switch(turn){
+            case BUILD:
+                if (!name.equals("BUILD")) throw new IllegalTurnStateException();
+                break;
+            case MOVE:
+                if (!name.equals("MOVE")) throw new IllegalTurnStateException();
+                break;
+            case BOTH:
+                break;
+            case PASS:
+                if (!name.equals("PASS")) throw new IllegalTurnStateException();
+                break;
+            default:
+                throw new IllegalTurnStateException();
+        }
+    }
+
     /* fine observer pattern */
 
-    public MainController(){//TODO (?)
-        this.currentPlayer = null; // TODO
+    public MainController(int playersNumber){//TODO nota: bisogna controllare quando si usa il metodo che playersNumber sia valido
+        this.currentPlayer = null;
         this.news = null;
-        this.gameTable = null;
-       // this.buildController = new BuildController(this.gameTable);
-      //  this.moveController = new MoveController(this.gameTable);
+        this.gameTable = GameTable.getInstance(playersNumber);
+        this.buildController = new BuildController(this.gameTable);
+        this.moveController = new MoveController(this.gameTable);
     }
 
 }

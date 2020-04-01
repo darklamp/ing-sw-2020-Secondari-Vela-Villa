@@ -6,6 +6,10 @@ import it.polimi.ingsw.Model.Cell;
 
 public class News {
 
+    public News() {
+
+    }
+
     public BuildingType getHeight() {
         return height;
     }

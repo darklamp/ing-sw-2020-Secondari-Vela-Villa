@@ -67,6 +67,10 @@ public class Player {
         else return false;
     }
 
+    public TurnState getState(){
+        return this.turnState;
+    }
+
     /**
      * This function gets called twice per player by the controller, to initialize the player's builders
      * @param position position on which the builder is to be placed
