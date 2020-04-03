@@ -11,6 +11,7 @@ public class BuildController {
 
     public void handleBuild(News news) {
         try{
+            if (news.getBuilder() != GameTable.getInstance().getCurrentBuilder()) throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
             news.getCell().setHeight(news.getBuilder(), news.getHeight());
             GameTable.getInstance().getCurrentPlayer().setState(PASS);
             GameTable.getInstance().setNews(news,"BUILDOK");

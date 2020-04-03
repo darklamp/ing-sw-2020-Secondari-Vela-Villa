@@ -2,6 +2,8 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
 
+import static it.polimi.ingsw.Model.TurnState.MOVE;
+
 public abstract class Builder{
 
     private Cell position;
@@ -60,7 +62,7 @@ public abstract class Builder{
      * @throws AtlasException see Atlas
      * @throws InvalidBuildException when the build is illegal
      */
-    protected void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException,AtlasException, HephaestusException, DemeterException, DemeterException {
+    protected void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException,AtlasException, HephaestusException, DemeterException {
 
         if (cell.getHeight().equals(BuildingType.DOME)) throw new InvalidBuildException(); // verify that there is no dome on the cell
         else if (cell.getHeight().equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
@@ -78,6 +80,10 @@ public abstract class Builder{
         if (newheight.compareTo(cell.getHeight()) <= 0)  throw new InvalidBuildException();
         else if (newheight.compareTo(cell.getHeight()) >= 2) throw new InvalidBuildException();
 
+    }
+
+    void resetState(){
+        this.getPlayer().setState(MOVE);
     }
 
     /**

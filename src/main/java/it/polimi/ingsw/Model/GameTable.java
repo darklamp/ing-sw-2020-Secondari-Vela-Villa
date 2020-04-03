@@ -17,26 +17,38 @@ public class GameTable {
     private static GameTable instance; /** Singleton instance for GameTable **/
     private int currentPlayer = 0; /** current player index **/
     private final int playersNumber; /** number of players in game **/
-    public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATLAS","ATHENA","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS");
-    private static ArrayList<String> godChoices;
-    /**
-     * returns current player
-     **/
+    public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATLAS","ATHENA","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS"); /* list containing all the basic gods */
+    private static ArrayList<String> godChoices; /* list of gods chosen by the first player to be available in the game */
+    private Builder currentBuilder = null; /* variable which holds the current builder being used by the player */
+
     public Player getCurrentPlayer() {
         return players.get(currentPlayer);
     }
 
 
     /**
-     * skips to next turn
+     * The purpose of this function is going to the next turn;
+     * specifically, what this function does is:
+     * - reset the boolean firstTime in currentPlayer to true
+     * - reset the currentBuilder attribute to a default null value
+     * - increase the currentPlayer index, so as to effectively skip to next player
      */
     public void nextTurn(){
-        if (!getCurrentPlayer().isFirstTime()){
-            getCurrentPlayer().setFirstTime(true);
-        }
+        getCurrentPlayer().setFirstTime(true);
+        getCurrentBuilder().resetState();
+        setCurrentBuilder(null);
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
         else currentPlayer++;
     }
+
+    public Builder getCurrentBuilder() {
+        return currentBuilder;
+    }
+
+    public void setCurrentBuilder(Builder currentBuilder) {
+        this.currentBuilder = currentBuilder;
+    }
+
 
     ArrayList<String> getGodChoices(){
         return godChoices;

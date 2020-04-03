@@ -25,7 +25,6 @@ public class MainController implements PropertyChangeListener {
         String name = propertyChangeEvent.getPropertyName();
         this.setNews((News) obj);
         currentPlayer = gameTable.getCurrentPlayer();
-        // TODO: fare bene gestione turni
         // TODO: controllo bene che mossa provenga da persona giusta (come?)
         if (name == null) gameTable.setNews(new News(), "INVALIDNEWS");
         else {
@@ -72,6 +71,7 @@ public class MainController implements PropertyChangeListener {
                 break;
             case MOVEORBUILD:
                 if (name.equals("PASS")) throw new IllegalTurnStateException();
+                gameTable.setCurrentBuilder(news.getBuilder());
                 break;
             case BUILDORPASS:
                 if (name.equals("MOVE")) throw new IllegalTurnStateException();
