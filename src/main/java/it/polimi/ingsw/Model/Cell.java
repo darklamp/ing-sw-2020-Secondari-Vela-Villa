@@ -47,10 +47,8 @@ public class Cell {
                 this.height = height; //OK
             }
             catch (DemeterException e){
-                //TODO: notify controller?
-                // TEMP per test
+                this.height = height;
                 throw new DemeterException();
-                // TEMP
             }
             catch (InvalidBuildException e){
                 throw new InvalidBuildException(); //this is here just for tests TODO remove

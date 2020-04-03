@@ -8,5 +8,5 @@ package it.polimi.ingsw.Model;
  * PASS --> the player has to pass
  */
 public enum TurnState {
-    MOVE,BUILD,BOTH,PASS
+    MOVE,BUILD,MOVEORBUILD,BUILDORPASS,PASS
 }

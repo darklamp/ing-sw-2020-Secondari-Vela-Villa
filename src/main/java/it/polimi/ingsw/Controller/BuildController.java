@@ -5,16 +5,20 @@ import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 
+import static it.polimi.ingsw.Model.TurnState.*;
+
 public class BuildController {
 
-    public final GameTable gameTable;
-
-    public BuildController(GameTable g) {
-        this.gameTable = g;
-    }
-
-    public void handleBuild(News news) throws InvalidBuildException, DemeterException {
-        news.getCell().setHeight(news.getBuilder(), news.getHeight());
-        gameTable.setNews(news,"BUILDOK");
+    public void handleBuild(News news) {
+        try{
+            news.getCell().setHeight(news.getBuilder(), news.getHeight());
+            GameTable.getInstance().getCurrentPlayer().setState(PASS);
+            GameTable.getInstance().setNews(news,"BUILDOK");
+        }catch (DemeterException e) {
+            GameTable.getInstance().getCurrentPlayer().setState(BUILDORPASS);
+            GameTable.getInstance().setNews(news,"BUILDOK");
+        } catch (InvalidBuildException e) {
+            GameTable.getInstance().setNews(news, "BUILDKO");
+        }
     }
 }

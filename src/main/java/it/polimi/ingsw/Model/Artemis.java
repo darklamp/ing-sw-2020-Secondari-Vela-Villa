@@ -6,7 +6,7 @@ public class Artemis extends Builder {
     public Artemis(Cell position, Player player) {
         super(position,player);
     }
-    private boolean firstTime = true;
+
     private Cell previous;
 
     @Override
@@ -25,10 +25,11 @@ public class Artemis extends Builder {
      */
     @Override
     public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException, PanException {
+        boolean firstTime = this.getPlayer().isFirstTime();
         if (firstTime) {
             super.isValidMove(finalPoint);
             verifyMove(finalPoint);
-            firstTime = false;
+            this.getPlayer().setFirstTime(false);
             previous = this.getPosition();
             throw new ArtemisException();
         } else {
@@ -38,7 +39,7 @@ public class Artemis extends Builder {
             else {
                 super.isValidMove(finalPoint);
                 verifyMove(finalPoint);
-                firstTime = true; //così quando verrà richiamato il metodo isValidMove entrerò nel ramo if
+               // firstTime = true; //così quando verrà richiamato il metodo isValidMove entrerò nel ramo if
             }
         }
     }

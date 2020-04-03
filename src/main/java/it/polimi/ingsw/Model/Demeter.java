@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Demeter extends Builder {
-    private boolean firstTime = true;
+    private boolean firstTime;
     private Cell previous;
 
     public Demeter(Cell position, Player player) {
@@ -21,10 +21,11 @@ public class Demeter extends Builder {
      */
     @Override
     public void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, DemeterException, HephaestusException, InvalidBuildException {
+        firstTime = this.getPlayer().isFirstTime();
         if (firstTime) {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
-            firstTime = false;
+            this.getPlayer().setFirstTime(false);
             previous = cell;
             throw new DemeterException();
         } else {
@@ -34,7 +35,7 @@ public class Demeter extends Builder {
             else {
                 super.isValidBuild(cell, newheight);
                 verifyBuild(cell, newheight);
-                firstTime = true; //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if
+             //   this.getPlayer().setFirstTime(true); //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if
             }
         }
     }

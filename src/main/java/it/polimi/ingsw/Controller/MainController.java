@@ -26,6 +26,7 @@ public class MainController implements PropertyChangeListener {
         this.setNews((News) obj);
         currentPlayer = gameTable.getCurrentPlayer();
         // TODO: fare bene gestione turni
+        // TODO: controllo bene che mossa provenga da persona giusta (come?)
         if (name == null) gameTable.setNews(new News(), "INVALIDNEWS");
         else {
             try {
@@ -37,23 +38,10 @@ public class MainController implements PropertyChangeListener {
                         gameTable.setNews(new News(), "PASSOK");
                         break;
                     case "BUILD":
-                        try {
-                            buildController.handleBuild(news);
-                        } catch (DemeterException e) {
-                            //TODO nota: bisogna verificare di ricevere solo una eccezione di questo tipo
-                        } catch (InvalidBuildException e) {
-                            gameTable.setNews(news, "BUILDKO");
-                        }
+                        buildController.handleBuild(news);
                         break;
                     case "MOVE":
-                        try {
-                            moveController.handleMove(news);
-                            break;
-                        } catch (InvalidMoveException e) {
-                            gameTable.setNews(news, "MOVEKO");
-                        } catch (ArtemisException e) {
-                            //TODO
-                        }
+                        moveController.handleMove(news);
                         break;
                     default:
                         throw new IllegalTurnStateException();
@@ -82,8 +70,11 @@ public class MainController implements PropertyChangeListener {
             case MOVE:
                 if (!name.equals("MOVE")) throw new IllegalTurnStateException();
                 break;
-            case BOTH:
+            case MOVEORBUILD:
                 if (name.equals("PASS")) throw new IllegalTurnStateException();
+                break;
+            case BUILDORPASS:
+                if (name.equals("MOVE")) throw new IllegalTurnStateException();
                 break;
             case PASS:
                 if (!name.equals("PASS")) throw new IllegalTurnStateException();
@@ -97,8 +88,8 @@ public class MainController implements PropertyChangeListener {
         this.currentPlayer = null;
         this.news = null;
         this.gameTable = GameTable.getInstance(playersNumber);
-        this.buildController = new BuildController(this.gameTable);
-        this.moveController = new MoveController(this.gameTable);
+        this.buildController = new BuildController();
+        this.moveController = new MoveController();
     }
 
 }

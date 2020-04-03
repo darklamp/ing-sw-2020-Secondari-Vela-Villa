@@ -18,6 +18,16 @@ public class Player {
 
     private TurnState turnState;
 
+    public boolean isFirstTime() {
+        return firstTime;
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        this.firstTime = firstTime;
+    }
+
+    private boolean firstTime = true;
+
     /**
      * Constructor for player; once the object is built, it gets added to the player list in GameTable.
      * @param nickname player's nickname
@@ -53,6 +63,10 @@ public class Player {
         }
     }
 
+    String getGod(){
+        return this.god;
+    }
+
     /**
      * Checks if the provided god is valid and selectable; if it is, it returns true and
      * it removes the god from the selectable pool, so other player(s) can't pick it
@@ -69,6 +83,9 @@ public class Player {
 
     public TurnState getState(){
         return this.turnState;
+    }
+    public void setState(TurnState state){
+        this.turnState = state;
     }
 
     /**

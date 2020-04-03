@@ -31,6 +31,9 @@ public class GameTable {
      * skips to next turn
      */
     public void nextTurn(){
+        if (!getCurrentPlayer().isFirstTime()){
+            getCurrentPlayer().setFirstTime(true);
+        }
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
         else currentPlayer++;
     }
