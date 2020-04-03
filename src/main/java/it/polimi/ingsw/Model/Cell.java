@@ -18,6 +18,9 @@ public class Cell {
         this.coordinates = new Pair(x,y);
     }
 
+    public void mustsetHeight(BuildingType height) {
+        this.height = height; //mette per forza quella costruzione
+    }
     /**
      * This function is responsible for setting a cell's height, which translates to building on a cell.
      * @param builder represents the builder which is trying to build on the cell
