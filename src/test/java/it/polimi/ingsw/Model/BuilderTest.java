@@ -91,10 +91,10 @@ class BuilderTest {
 
     @Test
     void swapPosition() {
-        Cell temp1=b1.getPosition();
-        Cell temp2=b2.getPosition();
-        swapPosition(b1,b2);
-        assertEquals(b1.getPosition(),temp2); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
-        assertEquals(b2.getPosition(),temp1);
+        Cell temp1=b1.getPosition(); //mi salvo la posizione
+        Cell temp2=b2.getPosition(); //mi salvo la posizione
+        b1.swapPosition(b1,b2); //scambio posizioni builders
+        Assertions.assertEquals(b1.getPosition(),temp2); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
+        Assertions.assertEquals(b2.getPosition(),temp1); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
     }
 }
