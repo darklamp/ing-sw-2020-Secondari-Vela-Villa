@@ -15,7 +15,7 @@ public class Athena extends Builder{
     public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
-        if (getPosition().getHeight().compareTo(finalPoint.getHeight()) == 1) GameTable.setAthenaMove(true);
+        if (finalPoint.getHeight().compareTo(getPosition().getHeight()) == 1) GameTable.setAthenaMove(true);
         else GameTable.setAthenaMove(false);
     }
 }
