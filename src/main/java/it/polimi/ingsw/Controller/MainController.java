@@ -34,12 +34,8 @@ public class MainController implements PropertyChangeListener {
                         currentPlayer = gameTable.getCurrentPlayer(); // se il giocatore ha passato il turno e non ha vinto
                         gameTable.setNews(new News(), "PASSOK");
                     }
-                    case "BUILD" -> {
-                        buildController.handleBuild(news);
-                    }
-                    case "MOVE" -> {
-                        moveController.handleMove(news);
-                    }
+                    case "BUILD" -> buildController.handleBuild(news);
+                    case "MOVE" -> moveController.handleMove(news);
                     default -> throw new IllegalTurnStateException();
                 }
             }
