@@ -19,7 +19,7 @@ public class Athena extends Builder{
      * @throws InvalidMoveException see super
      */
     @Override
-    public void isValidMove(Cell finalPoint) throws InvalidMoveException {
+    void isValidMove(Cell finalPoint) throws InvalidMoveException {
 
         if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 4 || finalPoint.getY() < 0 || finalPoint.getY() > 4) throw new InvalidMoveException(); //out of bounds
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome

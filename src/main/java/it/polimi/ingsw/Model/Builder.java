@@ -92,7 +92,7 @@ public abstract class Builder{
      * @throws ApolloException when Apollo TODO better javadoc
      * @throws MinotaurException TODO better javadoc
      */
-    protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, ArtemisException, MinotaurException, PrometeusException, PanException {
+    void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, ArtemisException, MinotaurException, PrometeusException, PanException {
 
         if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 4 || finalPoint.getY() < 0 || finalPoint.getY() > 4) throw new InvalidMoveException(); //out of bounds
         else if (GameTable.getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1) throw new InvalidMoveException(); // Athena moved up last turn, so this player can't go up

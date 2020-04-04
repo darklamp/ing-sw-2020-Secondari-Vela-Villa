@@ -24,7 +24,7 @@ public class Artemis extends Builder {
      * @throws PrometeusException n/a
      */
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException, PanException {
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException, PanException {
         boolean firstTime = this.getPlayer().isFirstTime();
         if (firstTime) {
             super.isValidMove(finalPoint);

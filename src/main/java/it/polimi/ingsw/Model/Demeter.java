@@ -20,7 +20,7 @@ public class Demeter extends Builder {
      * @throws InvalidBuildException when thrown by super method or when trying to build using Demeter's power on the same cell as before (see previous)
      */
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, DemeterException, HephaestusException, InvalidBuildException {
+    protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, DemeterException, HephaestusException, InvalidBuildException {
         firstTime = this.getPlayer().isFirstTime();
         if (firstTime) {
             super.isValidBuild(cell, newheight);

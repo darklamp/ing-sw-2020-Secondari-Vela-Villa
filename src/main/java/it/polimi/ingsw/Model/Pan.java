@@ -24,7 +24,7 @@ public class Pan extends Builder{
      * @throws PanException when builder goes down by two or more levels --> players wins game
      */
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometeusException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometeusException, ArtemisException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
         if (this.getPosition().getHeight().compareTo(finalPoint.getHeight()) >= 2){

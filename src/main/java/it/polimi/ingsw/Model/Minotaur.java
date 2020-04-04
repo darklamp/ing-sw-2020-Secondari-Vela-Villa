@@ -22,7 +22,7 @@ public class Minotaur extends Builder{
      * @throws InvalidMoveException see super
      */
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometeusException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometeusException, ArtemisException, PanException {
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
                 try{

@@ -12,7 +12,7 @@ public class Hephaestus extends Builder{
 
 
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, HephaestusException, InvalidBuildException, DemeterException {
+    protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, HephaestusException, InvalidBuildException, DemeterException {
         if(firsttime) {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);

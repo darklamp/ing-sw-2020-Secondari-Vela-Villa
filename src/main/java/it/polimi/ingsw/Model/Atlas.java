@@ -14,7 +14,7 @@ public class Atlas extends Builder{
      * @throws InvalidBuildException see super
      */
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, InvalidBuildException, DemeterException, HephaestusException {
+    protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, InvalidBuildException, DemeterException, HephaestusException {
         super.isValidBuild(cell,newheight);
         if (newheight.equals(BuildingType.DOME) && !cell.getHeight().equals(BuildingType.DOME)) throw new AtlasException();
         else verifyBuild(cell,newheight);
