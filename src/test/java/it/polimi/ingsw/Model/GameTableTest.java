@@ -16,5 +16,5 @@ class GameTableTest {
 
     @Test
     void addPlayer() {
-    }
+     }
 }
