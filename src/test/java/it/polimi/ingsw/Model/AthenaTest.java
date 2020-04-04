@@ -18,12 +18,13 @@ public class AthenaTest {
         Player p1 = new Player("Giggino", g, "ATHENA");
         Cell c1 = g.getCell(4,3);
         Cell c2 = g.getCell(4,4);
+        Cell c3 = g.getCell(3,4);
         Builder b1 = new Athena(c1,p1);
         Assertions.assertFalse(g.getAthenaMove());
         c2.mustSetHeight(BuildingType.BASE);
         b1.setPosition(c2);
         Assertions.assertTrue(g.getAthenaMove());
-        b1.setPosition(c1);
+        b1.setPosition(c3);
         Assertions.assertFalse(g.getAthenaMove());
     }
 }

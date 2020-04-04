@@ -33,18 +33,19 @@ public abstract class Builder{
     public void setPosition(Cell position) throws InvalidMoveException, ArtemisException {
         try {
             isValidMove(position); // check validity of move
+            this.position.setBuilder(null);
             this.position = position; // sets position if no exceptions are thrown
         } catch (NullPointerException e) {
             e.printStackTrace(); // unhandled error
-        } catch (InvalidMoveException e) { // cannot move here
-            throw new InvalidMoveException();
         }
         catch (ApolloException e) { // swap position cause it's Apollo TODO: do not make someone win if they win by being forced to move
             swapPosition(this,position.getBuilder());
+            //todo?
         }
         catch (MinotaurException e) { // change position cause it's Minotaurrr TODO: do not make someone win if they win by being forced to move
+            //todo
         }
-        catch (PrometeusException e){
+        catch (PrometeusException e){//todo
         }
         catch (ArtemisException e){
             throw new ArtemisException(); // TEMP PER TEST
