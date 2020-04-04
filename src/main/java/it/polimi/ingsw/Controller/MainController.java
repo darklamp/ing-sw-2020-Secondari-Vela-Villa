@@ -29,19 +29,18 @@ public class MainController implements PropertyChangeListener {
             try {
                 isLegalState(name,currentPlayer.getState());
                 switch (name) {
-                    case "PASS":
+                    case "PASS" -> {
                         gameTable.nextTurn();
                         currentPlayer = gameTable.getCurrentPlayer(); // se il giocatore ha passato il turno e non ha vinto
                         gameTable.setNews(new News(), "PASSOK");
-                        break;
-                    case "BUILD":
+                    }
+                    case "BUILD" -> {
                         buildController.handleBuild(news);
-                        break;
-                    case "MOVE":
+                    }
+                    case "MOVE" -> {
                         moveController.handleMove(news);
-                        break;
-                    default:
-                        throw new IllegalTurnStateException();
+                    }
+                    default -> throw new IllegalTurnStateException();
                 }
             }
             catch(IllegalTurnStateException e){ // player isn't in a legal state for the move
