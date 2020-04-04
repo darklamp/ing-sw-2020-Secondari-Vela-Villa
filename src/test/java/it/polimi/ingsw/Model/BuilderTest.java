@@ -25,7 +25,7 @@ class BuilderTest {
         p1 = new Player("Giggino", g, "MINOTAUR");
         p2 = new Player("Giggino2", g, "ATLAS");
         b1 = new Minotaur(c1, p1);
-        b2 = new Atlas(c2, p2);
+        b2 = new Demeter(c2, p2);
     }
     @Test
     void isValidBuild() throws Exception {
