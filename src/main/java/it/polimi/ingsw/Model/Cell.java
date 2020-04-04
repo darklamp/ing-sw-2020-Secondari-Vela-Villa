@@ -18,7 +18,7 @@ public class Cell {
         this.coordinates = new Pair(x,y);
     }
 
-    public void mustsetHeight(BuildingType height) {
+    public void mustSetHeight(BuildingType height) {
         this.height = height; //mette per forza quella costruzione
     }
     /**
