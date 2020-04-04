@@ -17,6 +17,7 @@ class AtlasTest {
         Cell c1 = g.getCell(4,3);
         Cell c2 = g.getCell(4,4);
         Builder b1 = new Atlas(c1,p1);
+
         Assertions.assertThrows(AtlasException.class, () -> {
             b1.isValidBuild(c2,BuildingType.DOME);
         });
