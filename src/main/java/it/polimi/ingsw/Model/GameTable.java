@@ -20,6 +20,7 @@ public class GameTable {
     public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATLAS","ATHENA","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS"); /* list containing all the basic gods */
     private static ArrayList<String> godChoices; /* list of gods chosen by the first player to be available in the game */
     private Builder currentBuilder = null; /* variable which holds the current builder being used by the player */
+    private static boolean athenaMove = false;
 
     public Player getCurrentPlayer() {
         return players.get(currentPlayer);
@@ -181,4 +182,9 @@ public class GameTable {
         setNews(new News(player), "ADDPLAYER"); /* sets news for view */
 
     }
+
+    static void setAthenaMove(boolean newValue){
+        athenaMove = newValue;
+    }
+    static boolean getAthenaMove(){ return athenaMove; }
 }

@@ -18,7 +18,9 @@ public class Cell {
         this.coordinates = new Pair(x,y);
     }
 
-    public void mustSetHeight(BuildingType height) {
+
+    // DEBUG function TODO remove in deploy
+    void mustSetHeight(BuildingType height) {
         this.height = height; //mette per forza quella costruzione
     }
     /**

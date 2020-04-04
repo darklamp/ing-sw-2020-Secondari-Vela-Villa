@@ -54,8 +54,6 @@ public abstract class Builder{
         }
     }
 
-    // questa implementazione è la base; su questa poi si vanno a specificare più restrizioni
-
     /**
      * @param cell represents the cell on which the builder wants to build
      * @param newheight represents "new height", meaning the height which the builder wants to build on
@@ -96,6 +94,7 @@ public abstract class Builder{
     protected void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, ArtemisException, MinotaurException, PrometeusException, PanException {
 
         if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 4 || finalPoint.getY() < 0 || finalPoint.getY() > 4) throw new InvalidMoveException(); //out of bounds
+        else if (GameTable.getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1) throw new InvalidMoveException(); // Athena moved up last turn, so this player can't go up
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
         else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2) throw new InvalidMoveException(); // check if I'm moving up more than one level
         else if (!(position.getNear().contains(finalPoint))) throw new InvalidMoveException(); // check that the cell I'm moving to is adjacent
