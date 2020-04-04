@@ -50,13 +50,13 @@ class BuilderTest {
         c3.mustSetHeight(BuildingType.DOME);
         c4.mustSetHeight(BuildingType.MIDDLE);
         Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b2.isValidBuild(c3,BuildingType.DOME); //non si può costruire qualcosa di uguale o livello inferiore a un certo tipo di costruizione
+            b2.verifyBuild(c3,BuildingType.DOME); //non si può costruire qualcosa di uguale o livello inferiore a un certo tipo di costruizione
         });
         Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b2.isValidBuild(c3,BuildingType.TOP); //non si può costruire qualcosa di uguale o livello inferiore a un certo tipo di costruizione
+            b2.verifyBuild(c3,BuildingType.TOP); //non si può costruire qualcosa di uguale o livello inferiore a un certo tipo di costruizione
         });
         Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b2.isValidBuild(c4,BuildingType.DOME); //non si può costruire qualcosa di 2 o più livelli superiore
+            b2.verifyBuild(c4,BuildingType.DOME); //non si può costruire qualcosa di 2 o più livelli superiore
         });
     }
 
@@ -85,12 +85,16 @@ class BuilderTest {
     @Test
     void verifyMove() {
         Assertions.assertThrows(InvalidMoveException.class, () -> {
-            b2.isValidMove(c1); //ci sta già in player p1
+            b2.verifyMove(c1); //ci sta già un player p1
         });
     }
 
     @Test
     void swapPosition() {
-    //da completare
+        Cell temp1=b1.getPosition();
+        Cell temp2=b2.getPosition();
+        swapPosition(b1,b2);
+        assertEquals(b1.getPosition(),temp2); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
+        assertEquals(b2.getPosition(),temp1);
     }
 }
