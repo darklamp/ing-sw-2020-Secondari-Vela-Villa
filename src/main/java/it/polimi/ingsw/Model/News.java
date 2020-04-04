@@ -10,15 +10,19 @@ public class News {
 
     }
 
-    public BuildingType getHeight() {
-        return height;
-    }
-
-    public void setHeight(BuildingType height) {
-        this.height = height;
-    }
-
     private BuildingType height;
+
+    private Cell cell;
+
+    private int number = 0;
+
+    private Player player;
+
+    private Builder builder;
+
+    public int getNumber() {
+        return number;
+    }
 
     public Cell getCell() {
         return cell;
@@ -28,16 +32,6 @@ public class News {
         this.cell = cell;
     }
 
-    private Cell cell;
-
-    public int getNumber() {
-        return number;
-    }
-
-    private int number = 0;
-
-    private Player player;
-
     public Builder getBuilder() {
         return builder;
     }
@@ -46,7 +40,6 @@ public class News {
         this.builder = builder;
     }
 
-    private Builder builder;
     public News(Cell cell, Builder builder) {
         this.cell = cell;
         this.builder = builder;
@@ -57,6 +50,15 @@ public class News {
         this.builder = null;
         this.player = player;
     }
+
+    public BuildingType getHeight() {
+        return height;
+    }
+
+    public void setHeight(BuildingType height) {
+        this.height = height;
+    }
+
     public News(int number) {
         this.number = number;
     }

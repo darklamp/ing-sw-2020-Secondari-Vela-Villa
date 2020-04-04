@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
-import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
@@ -16,7 +15,6 @@ public class MainController implements PropertyChangeListener {
     private BuildController buildController;
     private MoveController moveController;
     private GameTable gameTable;
-
     private News news;
 
     @Override
