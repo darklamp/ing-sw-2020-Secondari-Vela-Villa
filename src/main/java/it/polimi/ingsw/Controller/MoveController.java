@@ -2,6 +2,7 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Model.Exceptions.ArtemisException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.Model.Exceptions.PanException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 
@@ -20,6 +21,9 @@ public class MoveController {
             GameTable.getInstance().setNews(news,"MOVEKO");
         }
         catch (ArtemisException e){
+
+        }
+        catch (PanException e){
 
         }
 

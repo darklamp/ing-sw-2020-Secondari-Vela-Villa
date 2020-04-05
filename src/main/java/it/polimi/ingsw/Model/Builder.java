@@ -32,7 +32,7 @@ public abstract class Builder implements Serializable {
      * @param position position to move the builder to
      * @throws InvalidMoveException if the move isn't allowed
      */
-    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException {
+    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException {
         try {
             isValidMove(position); // check validity of move
             this.position.setBuilder(null);
@@ -51,9 +51,6 @@ public abstract class Builder implements Serializable {
         }
         catch (ArtemisException e){
             throw new ArtemisException(); // TEMP PER TEST
-        }
-        catch (PanException e){
-            //TODO
         }
     }
 
