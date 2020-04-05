@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Athena extends Builder{
-    public Athena(Cell position, Player player){
+    Athena(Cell position, Player player){
         super(position,player);
     }
     @Override

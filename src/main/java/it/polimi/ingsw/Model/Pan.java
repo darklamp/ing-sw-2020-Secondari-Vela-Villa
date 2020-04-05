@@ -4,7 +4,7 @@ import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Pan extends Builder{
 
-    public Pan(Cell position, Player player) {
+    Pan(Cell position, Player player) {
         super(position, player);
     }
 

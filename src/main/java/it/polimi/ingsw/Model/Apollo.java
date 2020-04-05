@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Apollo extends Builder{
-    public Apollo(Cell position, Player player) {
+    Apollo(Cell position, Player player) {
         super(position,player);
     }
 

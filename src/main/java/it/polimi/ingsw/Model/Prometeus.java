@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Prometeus extends Builder {
-    public Prometeus(Cell position, Player player) {
+    Prometeus(Cell position, Player player) {
         super(position,player);
     }
 

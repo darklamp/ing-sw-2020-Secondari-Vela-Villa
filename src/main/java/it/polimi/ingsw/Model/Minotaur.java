@@ -5,7 +5,7 @@ import it.polimi.ingsw.Model.Exceptions.*;
 import static it.polimi.ingsw.Model.Cell.movableCell;
 
 public class Minotaur extends Builder{
-    public Minotaur(Cell position, Player player) {
+    Minotaur(Cell position, Player player) {
         super(position,player);
     }
 

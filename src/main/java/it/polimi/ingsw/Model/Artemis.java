@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Artemis extends Builder {
-    public Artemis(Cell position, Player player) {
+    Artemis(Cell position, Player player) {
         super(position,player);
     }
 

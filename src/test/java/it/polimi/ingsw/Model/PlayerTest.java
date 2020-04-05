@@ -31,6 +31,7 @@ class  PlayerTest {
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             p2.initBuilderList(c4); // anche se è libera la cella parte l'eccezione perchè p2 ha già due builder posizionati
         });
+
     }
 
 }

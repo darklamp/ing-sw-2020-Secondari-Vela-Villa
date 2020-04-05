@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Atlas extends Builder{
-    public Atlas(Cell position, Player player){
+    Atlas(Cell position, Player player){
         super(position,player);
     }
 

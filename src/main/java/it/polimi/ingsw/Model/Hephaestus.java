@@ -5,7 +5,7 @@ import it.polimi.ingsw.Model.Exceptions.*;
 public class Hephaestus extends Builder{
     private boolean firsttime=true; //mi dice se è la prima o la seconda costruzione che fa
     private Cell previous;  //ci salvo la cella dove costruisco la prima volta
-    public Hephaestus(Cell position, Player player) {
+    Hephaestus(Cell position, Player player) {
         super(position,player);
     }
 

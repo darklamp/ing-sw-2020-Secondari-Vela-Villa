@@ -6,7 +6,7 @@ public class Demeter extends Builder {
     private boolean firstTime;
     private Cell previous;
 
-    public Demeter(Cell position, Player player) {
+    Demeter(Cell position, Player player) {
         super(position, player);
     }
 
