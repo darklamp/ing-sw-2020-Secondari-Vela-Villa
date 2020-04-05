@@ -32,7 +32,7 @@ public abstract class Builder implements Serializable {
      * @param position position to move the builder to
      * @throws InvalidMoveException if the move isn't allowed
      */
-    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException {
+    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException, PrometeusException {
         try {
             isValidMove(position); // check validity of move
             this.position.setBuilder(null);
@@ -46,8 +46,6 @@ public abstract class Builder implements Serializable {
         }
         catch (MinotaurException e) { // change position cause it's Minotaurrr TODO: do not make someone win if they win by being forced to move
             //todo
-        }
-        catch (PrometeusException e){//todo
         }
         catch (ArtemisException e){
             throw new ArtemisException(); // TEMP PER TEST

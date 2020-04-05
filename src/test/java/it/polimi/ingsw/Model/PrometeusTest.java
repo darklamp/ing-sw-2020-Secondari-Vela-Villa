@@ -17,18 +17,11 @@ class PrometeusTest {
         Cell c4 = g.getCell(3, 3);
         Cell c5 = g.getCell(2, 3);
         Builder b1 = new Prometeus(c3, p1);
-        if((c4.getHeight().compareTo(c3.getHeight()) <= 0)) {
             Assertions.assertThrows(PrometeusException.class, () -> {
-                c1.setHeight(b1, BuildingType.BASE);
-                b1.setPosition(c4);
-                c5.setHeight(b1, BuildingType.BASE);
-
+                c1.mustSetHeight(BuildingType.BASE);
+                b1.setPosition(c1);
             });
-        }
-        else {
-            b1.setPosition(c4);
-            c5.setHeight(b1, BuildingType.BASE);
-        }
+
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             c2.setHeight(b1,BuildingType.DOME);
         });
