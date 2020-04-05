@@ -2,9 +2,11 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
 
+import java.io.Serializable;
+
 import static it.polimi.ingsw.Model.TurnState.MOVE;
 
-public abstract class Builder{
+public abstract class Builder implements Serializable {
 
     private Cell position;
 

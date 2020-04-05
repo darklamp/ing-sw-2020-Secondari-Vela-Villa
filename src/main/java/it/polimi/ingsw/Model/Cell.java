@@ -2,11 +2,12 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static java.util.stream.Collectors.toCollection;
 
-public class Cell {
+public class Cell implements Serializable {
 
     private Builder builder = null;
 
