@@ -44,6 +44,7 @@ public class Player {
                 this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
                 this.isInGame = true;
                 this.god = god.toUpperCase();
+                this.builderList = new ArrayList<>();
                 GameTable.getInstance().addPlayer(this);
                 //TODO : inizializzare builderList (controller)
             }
@@ -58,6 +59,7 @@ public class Player {
             this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
             this.isInGame = true;
             this.god = god.toUpperCase();
+            this.builderList = new ArrayList<>();
             GameTable.getInstance().addPlayer(this);
             //TODO : inizializzare builderList (controller)
         }
@@ -95,36 +97,17 @@ public class Player {
      */
     public void initBuilderList(Cell position) throws InvalidBuildException {
         if (position.getBuilder() != null || this.builderList.size() == 2) throw new InvalidBuildException();
-        switch(this.god){
-            case "ATLAS":
-                this.builderList.add(new Atlas(position,this));
-                break;
-            case "APOLLO":
-                this.builderList.add(new Apollo(position,this));
-                break;
-            case "ARTEMIS":
-                this.builderList.add(new Artemis(position,this));
-                break;
-            case "ATHENA":
-                this.builderList.add(new Athena(position,this));
-                break;
-            case "DEMETER":
-                this.builderList.add(new Demeter(position,this));
-                break;
-            case "HEPHAESTUS":
-                this.builderList.add(new Hephaestus(position,this));
-                break;
-            case "MINOTAUR":
-                this.builderList.add(new Minotaur(position,this));
-                break;
-            case "PAN":
-                this.builderList.add(new Pan(position,this));
-                break;
-            case "PROMETEUS":
-                this.builderList.add(new Prometeus(position,this));
-                break;
-            default:
-                throw new InvalidBuildException();
+        switch (this.god) {
+            case "ATLAS" -> this.builderList.add(new Atlas(position, this));
+            case "APOLLO" -> this.builderList.add(new Apollo(position, this));
+            case "ARTEMIS" -> this.builderList.add(new Artemis(position, this));
+            case "ATHENA" -> this.builderList.add(new Athena(position, this));
+            case "DEMETER" -> this.builderList.add(new Demeter(position, this));
+            case "HEPHAESTUS" -> this.builderList.add(new Hephaestus(position, this));
+            case "MINOTAUR" -> this.builderList.add(new Minotaur(position, this));
+            case "PAN" -> this.builderList.add(new Pan(position, this));
+            case "PROMETEUS" -> this.builderList.add(new Prometeus(position, this));
+            default -> throw new InvalidBuildException();
         }
     }
   /*  public void UpdatePlayerStatus(){

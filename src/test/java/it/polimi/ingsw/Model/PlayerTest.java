@@ -19,8 +19,8 @@ class  PlayerTest {
         Cell c3 = g.getCell(4,1);
         Cell c4 = g.getCell(4,2);
         Builder b1 = new Minotaur(c1,p1);
-        Builder b2 = new Atlas(c2,p2);
-        Builder b3 = new Atlas(c3,p2);
+        p2.initBuilderList(c2);
+        p2.initBuilderList(c3);
 
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             p1.initBuilderList(c2);  //parte l'eccezione perchè la cella c2 è occupata dal player p2
