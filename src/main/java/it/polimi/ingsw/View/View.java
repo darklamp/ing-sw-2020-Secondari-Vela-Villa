@@ -13,7 +13,7 @@ public abstract class View implements PropertyChangeListener {
 
     private Player player;
 
-    private News modelNews; /* news coming from model */
+    News modelNews; /* news coming from model */
 
     News controllerNews; /* news to be sent to controller */
 
@@ -40,11 +40,11 @@ public abstract class View implements PropertyChangeListener {
 
     }
 
-    public News getModelNews(){
+    private News getModelNews(){
         return this.modelNews;
     }
 
-    private void setModelNews(News news){
+    public void setModelNews(News news){
         this.modelNews = news;
     }
 
@@ -58,9 +58,10 @@ public abstract class View implements PropertyChangeListener {
 
     protected abstract void showMessage(Object message);
 
-    void handleMove(int row, int column) {
-        System.out.println(row + " " + column);
-        notify(new PlayerMove(player, row, column, this));
+    void handleMove() {
+        //System.out.println(row + " " + column);
+        //notify(new re(player, row, column, this));
+        setControllerNews(new News(/*TODO*/),"TYPE");
     }
 
     public void reportError(String message){

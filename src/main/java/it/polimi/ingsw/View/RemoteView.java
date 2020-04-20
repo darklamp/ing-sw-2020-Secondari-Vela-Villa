@@ -57,32 +57,19 @@ public class RemoteView extends View {
     }
 
     @Override
-    public void update(MoveMessage message)
-    {
-        showMessage(message.getBoard());
-        String resultMsg = "";
-        boolean gameOver = message.getBoard().isGameOver(message.getPlayer().getMarker());
-        boolean draw = message.getBoard().isFull();
-        if (gameOver) {
-            if (message.getPlayer() == getPlayer()) {
-                resultMsg = gameMessage.winMessage + "\n";
-            } else {
-                resultMsg = gameMessage.loseMessage + "\n";
-            }
-        }
-        else {
-            if (draw) {
-                resultMsg = gameMessage.drawMessage + "\n";
-            }
-        }
-        if(message.getPlayer() == getPlayer()){
-            resultMsg += gameMessage.waitMessage;
-        }
-        else{
-            resultMsg += gameMessage.moveMessage;
-        }
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        Object obj = propertyChangeEvent.getNewValue();
+        String name = propertyChangeEvent.getPropertyName();
+        setModelNews((News) obj);
+        System.out.println("Received: " + "news"); //?
+        try {
+//                handleMove(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
 
-        showMessage(resultMsg);
+            //todo move handling
+        } catch (IllegalArgumentException e) {
+            clientConnection.asyncSend("Error!");
+
+        }
     }
 
 }
