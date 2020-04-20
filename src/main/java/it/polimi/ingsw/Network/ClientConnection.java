@@ -7,7 +7,7 @@ public interface ClientConnection{
     void closeConnection();
 
     //void addObserver(Observer<String> observer);
-    public void addPropertyChangeListener(PropertyChangeListener pcl);
+    void addPropertyChangeListener(PropertyChangeListener pcl);
 
     void asyncSend(Object message);
 }
