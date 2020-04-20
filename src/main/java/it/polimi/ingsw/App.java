@@ -1,13 +1,23 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Network.Server;
+
+import java.io.IOException;
+
 /**
  * Hello world!
- * ok
+ *
  */
-public class App 
+public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        Server server;
+        try {
+            server = new Server();
+            server.run();
+        } catch (IOException e) {
+            System.err.println("Impossible to initialize the server: " + e.getMessage() + "!");
+        }
     }
 }
