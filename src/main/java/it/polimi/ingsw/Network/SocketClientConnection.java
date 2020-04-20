@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Network;
 
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -12,8 +14,13 @@ public class SocketClientConnection extends Observable<String> implements Client
     private Socket socket;
     private ObjectOutputStream out;
     private Server server;
+    private PropertyChangeSupport support; /** Listener helper object **/
 
     private boolean active = true;
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
 
     public SocketClientConnection(Socket socket, Server server) {
         this.socket = socket;

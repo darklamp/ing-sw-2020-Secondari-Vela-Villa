@@ -50,7 +50,6 @@ public class GameTable {
         this.currentBuilder = currentBuilder;
     }
 
-
     ArrayList<String> getGodChoices(){
         return godChoices;
     }
