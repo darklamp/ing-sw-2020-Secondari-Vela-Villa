@@ -15,6 +15,7 @@ public class RemoteView extends View {
 
         private News news;
 
+        /** this method listens for messages from the client, to which it must react forwarding to the controller **/
         @Override
         public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
             Object obj = propertyChangeEvent.getNewValue();
@@ -56,20 +57,12 @@ public class RemoteView extends View {
         clientConnection.asyncSend(message);
     }
 
+    /** this method gets called when the model sends a news; its purpose is to update the view.
+     **/
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        Object obj = propertyChangeEvent.getNewValue();
-        String name = propertyChangeEvent.getPropertyName();
-        setModelNews((News) obj);
-        System.out.println("Received: " + "news"); //?
-        try {
-//                handleMove(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
 
-            //todo move handling
-        } catch (IllegalArgumentException e) {
-            clientConnection.asyncSend("Error!");
 
-        }
     }
 
 }
