@@ -35,12 +35,12 @@ public class Server {
     //Wait for another player
     public synchronized void lobby(ClientConnection c, String name){
         waitingConnection.put(name, c);
-        if (playersNumber != 0 && waitingConnection.size() == playersNumber) {
+      /*  if (playersNumber != 0 && waitingConnection.size() == playersNumber) {
             List<String> keys = new ArrayList<>(waitingConnection.keySet());
             ClientConnection c1 = waitingConnection.get(keys.get(0));
             ClientConnection c2 = waitingConnection.get(keys.get(1));
-         /*   Player player1 = new Player(keys.get(0), Cell.X);
-            Player player2 = new Player(keys.get(0), Cell.O);*/
+            Player player1 = new Player(keys.get(0), Cell.X);
+            Player player2 = new Player(keys.get(0), Cell.O);
             View player1View = new RemoteView(player1, keys.get(1), c1);
             View player2View = new RemoteView(player2, keys.get(0), c2);
             Model model = new Model();
@@ -64,7 +64,7 @@ public class Server {
             }
 
 
-        }
+        }*/
     }
 
     public Server() throws IOException {

@@ -81,7 +81,7 @@ public class SocketClientConnection implements ClientConnection, Runnable {
             send("Welcome!\nWhat's your name?");
             String read = in.nextLine();
             name = read;
-            try{
+           /* try{
                 server.lobby(this, name);
             }
             catch (FirstPlayerException e){
@@ -91,7 +91,7 @@ public class SocketClientConnection implements ClientConnection, Runnable {
                     send("Looks like you're the first to connect. You get to decide the number of players.\nPlease input a natural lower than 4 and higher than 1: ");
                     playersNumber = in.nextInt();
                 }
-            }
+            }*/
             while(isActive()){
                 read = in.nextLine();
               //  notify(read);
