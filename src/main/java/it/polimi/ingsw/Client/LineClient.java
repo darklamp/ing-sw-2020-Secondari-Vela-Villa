@@ -36,11 +36,7 @@ public class LineClient {
         try{
             while (true){
 
-                /*String inputLine = stdin.nextLine();
-                System.out.println(inputLine);
-                socketOut.reset();
-                socketOut.writeUTF(inputLine);
-                socketOut.flush();*/
+
                 String socketLine = socketIn.readUTF();
                 System.out.println(socketLine);
                 Scanner input = new Scanner (System.in);
@@ -49,7 +45,7 @@ public class LineClient {
                 socketOut.reset();
                 socketOut.writeInt(NP);
                 socketOut.flush();
-                System.out.println("MANDATO");
+                System.out.println("mandato");
 
             }
         }
