@@ -10,7 +10,7 @@ public class ServerMain
 {
     public static void main( String[] args )
     {
-        EchoServer server = new EchoServer(1337);
+        MultiEchoServer server = new MultiEchoServer(1337);
         try {
             server.startServer();
         } catch(IOException e) {
