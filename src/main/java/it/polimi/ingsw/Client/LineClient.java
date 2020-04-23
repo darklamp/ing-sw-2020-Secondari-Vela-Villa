@@ -25,10 +25,8 @@ public class LineClient {
         Socket socket = new Socket(ip, port);
         System.out.println("Connection established");
         Scanner stdin = new Scanner(System.in);
-        System.out.println("29");
         ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
-        System.out.println("30");
         int status = socketIn.readInt();
         System.out.println("Server is in status " +status);
         try{

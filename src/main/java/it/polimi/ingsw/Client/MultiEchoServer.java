@@ -25,11 +25,15 @@ public class MultiEchoServer {
             return;
         }
         System.out.println("Server ready");
-        while (true){
-            try{
+        while (true) {
+            try {
                 Socket socket = serverSocket.accept();
-                executor.submit(new ClientHandler(socket));
-            }catch(IOException e){
+                System.out.println("Conessione primo ok"); //crea client con parametro, se è il primo tipo gli passo 1 come parametro e gli faccio fare qualcosa,altrimenti no!!
+                executor.submit(new ClientHandler(socket, 1));
+                socket = serverSocket.accept();
+                System.out.println("Conessione secondo ok");
+                executor.submit(new ClientHandler(socket, 2));
+            } catch (IOException e) {
                 break; //In case the serverSocket gets closed
             }
         }
