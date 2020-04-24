@@ -4,7 +4,7 @@ package it.polimi.ingsw.View;
 import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Network.ClientConnection;
+import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,7 +27,7 @@ public class RemoteView extends View {
 
                 //todo move handling
             } catch (IllegalArgumentException e) {
-                clientConnection.asyncSend("Error!");
+                SocketClientConnection.asyncSend("Error!");
 
             }
         }
@@ -42,11 +42,11 @@ public class RemoteView extends View {
 
     }
 
-    private ClientConnection clientConnection;
+    private SocketClientConnection SocketClientConnection;
 
-    public RemoteView(Player player, String opponent, ClientConnection c) {
+    public RemoteView(Player player, String opponent, SocketClientConnection c) {
         super(player);
-        this.clientConnection = c;
+        this.SocketClientConnection = c;
         c.addPropertyChangeListener(new MessageReceiver());
         c.asyncSend("Your opponent is: " + opponent);
 
@@ -54,7 +54,7 @@ public class RemoteView extends View {
 
     @Override
     protected void showMessage(Object message) {
-        clientConnection.asyncSend(message);
+        SocketClientConnection.asyncSend(message);
     }
 
     /** this method gets called when the model sends a news; its purpose is to update the view.

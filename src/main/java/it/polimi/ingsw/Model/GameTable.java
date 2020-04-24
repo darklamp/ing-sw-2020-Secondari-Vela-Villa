@@ -42,6 +42,11 @@ public class GameTable {
         else currentPlayer++;
     }
 
+
+    public static List<String> getCompleteGodList() {
+        return completeGodList;
+    }
+
     public Builder getCurrentBuilder() {
         return currentBuilder;
     }

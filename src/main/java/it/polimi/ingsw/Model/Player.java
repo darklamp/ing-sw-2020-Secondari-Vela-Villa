@@ -50,6 +50,10 @@ public class Player {
             }
     }
 
+    public Player(String nickname, Integer god) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
+        this(nickname,GameTable.getCompleteGodList().get(god));
+    }
+
     /** DEBUG package-private constructor TODO remove in deploy **/
     Player(String nickname, GameTable g, String god) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
         if (GameTable.getInstance() == null) throw new NullPointerException();

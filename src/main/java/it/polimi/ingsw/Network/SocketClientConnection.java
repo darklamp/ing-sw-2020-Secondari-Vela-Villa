@@ -1,15 +1,17 @@
 package it.polimi.ingsw.Network;
 
 
+import it.polimi.ingsw.Model.GameTable;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class SocketClientConnection implements ClientConnection, Runnable {
+public class SocketClientConnection implements Runnable {
 
     private Socket socket;
     private ObjectOutputStream out;
@@ -42,7 +44,6 @@ public class SocketClientConnection implements ClientConnection, Runnable {
 
     }
 
-    @Override
     public synchronized void closeConnection() {
         send("Connection closed!");
         try {
@@ -60,7 +61,6 @@ public class SocketClientConnection implements ClientConnection, Runnable {
         System.out.println("Done!");
     }
 
-    @Override
     public void asyncSend(final Object message){
         new Thread(new Runnable() {
             @Override
@@ -68,6 +68,63 @@ public class SocketClientConnection implements ClientConnection, Runnable {
                 send(message);
             }
         }).start();
+    }
+
+    synchronized int getGodChoice(ArrayList<Integer> gods){
+        Scanner in = null;
+        try {
+            in = new Scanner(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert in != null;
+        int choice = in.nextInt();
+        while(true){
+            if (choice < 10 && choice >= 0 && gods.contains(choice)){
+                gods.remove((Integer) choice);
+                return choice;
+            }
+            else{
+                send("Wrong number. Try again: ");
+                choice = in.nextInt();
+            }
+        }
+
+    }
+
+    /**
+     * Asks the first player to input the playerNumber and the choice of gods.
+     * @return array of integers; in the first position resides playerNumber, while the next 2/3 positions contain the gods
+     */
+    synchronized ArrayList<Integer> firstPlayer() {
+        send("Looks like you're the first player to connect. You get to decide the number of players.\nPlease input a natural lower than 4 and higher than 1: ");
+        Scanner in = null;
+        try {
+            in = new Scanner(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert in != null;
+        int playersNumber = in.nextInt();
+        while (playersNumber != 2 && playersNumber != 3){
+            send("Looks like you're the first to connect. You get to decide the number of players.\nPlease input a natural lower than 4 and higher than 1: ");
+            playersNumber = in.nextInt();
+        }
+        send("Nice! Now you need to choose " + playersNumber + " gods to be used in the game.\n");
+        AtomicInteger counter = new AtomicInteger(0);
+        GameTable.getCompleteGodList().forEach(name -> send(counter.getAndIncrement() + ") " + name + "\n"));
+        int count = 0;
+        ArrayList<Integer> gods =  new ArrayList<>();
+        while(count < playersNumber){
+            int i = in.nextInt();
+            send("Please input the next number: ");
+            if (i < 10 && i >= 0 && !gods.contains(i)) {
+                gods.add(count + 1,i);
+                count += 1;
+            }
+        }
+        gods.add(0,playersNumber);
+        return gods;
     }
 
     @Override
@@ -81,17 +138,12 @@ public class SocketClientConnection implements ClientConnection, Runnable {
             send("Welcome!\nWhat's your name?");
             String read = in.nextLine();
             name = read;
-           /* try{
+            try{
                 server.lobby(this, name);
             }
-            catch (FirstPlayerException e){
-                send("Looks like you're the first to connect. You get to decide the number of players.\nPlease input a natural lower than 4 and higher than 1: ");
-                int playersNumber = in.nextInt();
-                while (playersNumber != 2 && playersNumber != 3){
-                    send("Looks like you're the first to connect. You get to decide the number of players.\nPlease input a natural lower than 4 and higher than 1: ");
-                    playersNumber = in.nextInt();
-                }
-            }*/
+            catch (Exception e){
+                e.printStackTrace();
+            }
             while(isActive()){
                 read = in.nextLine();
               //  notify(read);
