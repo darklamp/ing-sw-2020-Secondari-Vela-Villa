@@ -20,8 +20,8 @@ public class Cell implements Serializable {
         this.coordinates = new Pair(x,y);
     }
 
-    CellView getModelView(){
-        return new CellView(height,builder == null ? null : builder.getPlayer());
+    CellView getModelView(GameTable table){
+        return new CellView(height,builder == null ? -1 : table.getPlayerIndex(builder.getPlayer()));
     }
 
 

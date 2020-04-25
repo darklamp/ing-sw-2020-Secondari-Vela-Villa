@@ -48,6 +48,12 @@ public class GameTable {
         return completeGodList;
     }
 
+    int getPlayerIndex(Player player){
+        if (players.get(0).equals(player)) return 0;
+        else if (players.get(1).equals(player)) return 1;
+        else return playersNumber == 3 ? 2 : -1; // -1 is error case
+    }
+
     public Builder getCurrentBuilder() {
         return currentBuilder;
     }
@@ -85,7 +91,7 @@ public class GameTable {
         CellView[][] out = new CellView[5][5];
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 5; j++){
-                out[i][j] = Table[i][j].getModelView();
+                out[i][j] = Table[i][j].getModelView(this);
             }
         }
         return out;
@@ -119,9 +125,7 @@ public class GameTable {
         else return instance;
     }*/
 
-    /**
-     * private constructor for GameTable singleton
-     */
+    /** debug for tests **/
     public GameTable(int playersNumber) {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
@@ -133,6 +137,22 @@ public class GameTable {
             }
         }
         players = null;
+        this.playersNumber = playersNumber;
+        support = new PropertyChangeSupport(this); //TODO: this o instance? credo sia la stessa cosa
+
+    }
+
+    public GameTable(int playersNumber, ArrayList<Player> players) {   //contructor method for GameTable
+
+        Table = new Cell[5][5]; //create new Table
+        arrayTable = new ArrayList<>();
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 5; j++){
+                Table[i][j] = new Cell(i,j);
+                arrayTable.add(Table[i][j]);
+            }
+        }
+        this.players = players;
         this.playersNumber = playersNumber;
         support = new PropertyChangeSupport(this); //TODO: this o instance? credo sia la stessa cosa
 

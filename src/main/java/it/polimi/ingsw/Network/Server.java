@@ -83,7 +83,9 @@ public class Server {
                 if (c3 != null) {
                     player3View = new RemoteView(player3, c3);
                 }
-                GameTable gameTable = new GameTable(keys.size());
+                ArrayList<Player> players = new ArrayList<>();
+                players.add(player1); players.add(player2); players.add(player3);
+                GameTable gameTable = new GameTable(keys.size(), players);
                 MainController controller = new MainController(keys.size());
                 gameTable.addPropertyChangeListener(player1View);
                 gameTable.addPropertyChangeListener(player2View);
