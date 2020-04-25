@@ -22,19 +22,18 @@ public class Server {
 
     private static final int PORT = 1337;
     private final ServerSocket serverSocket;
-    private final ExecutorService executor = Executors.newFixedThreadPool(64);
-    private Map<String, SocketClientConnection> waitingConnection = new HashMap<>();
-    private Map<SocketClientConnection, SocketClientConnection> playingConnection = new HashMap<>();
-    private Map<Integer, ArrayList<SocketClientConnection>> gameList = new HashMap<>();
-    private Map<Integer, ArrayList<Integer>> gameProperties = new HashMap<>(); /* position [0] contains the number of players for the game; positions [1..2/3] contain the chosen gods*/
-    private static int currentGameIndex = 0;
+    private final ExecutorService executor = Executors.newFixedThreadPool(128); /** Thread pool creator **/
+    private Map<String, SocketClientConnection> waitingConnection = new HashMap<>(); /** contains player connections waiting to be matchmade **/
+    private Map<Integer, ArrayList<SocketClientConnection>> gameList = new HashMap<>(); /** Integer contains the game index, ArrayList contains client connections for the respective game **/
+    private Map<Integer, ArrayList<Integer>> gameProperties = new HashMap<>(); /** position [0] contains the number of players for the game; positions [1..2/3] contain the chosen gods**/
+    private static int currentGameIndex = 0; /** index of game currently in the process of being created; eg: if it's set to 1 it means game 0 is already started / finished, while game 1 is being made **/
 
     public synchronized static int getCurrentGameIndex() {
         return currentGameIndex;
     }
 
     //Deregister connection
-    public synchronized void deregisterConnection(SocketClientConnection c) {
+  /*  public synchronized void deregisterConnection(SocketClientConnection c) {
         SocketClientConnection opponent = playingConnection.get(c);
         if(opponent != null) {
             opponent.closeConnection();
@@ -42,7 +41,7 @@ public class Server {
         playingConnection.remove(c);
         playingConnection.remove(opponent);
         waitingConnection.keySet().removeIf(s -> waitingConnection.get(s) == c);
-    }
+    }*/
 
     //Wait for another player
     public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException {
@@ -67,68 +66,53 @@ public class Server {
                 SocketClientConnection c3 = null;
                 if (waitingConnection.size() == 3) c3 = waitingConnection.get(keys.get(2));
                 ArrayList<Integer> gods = new ArrayList<>();
-                for (int i = 1; i < gameProperties.get(getCurrentGameIndex()).get(0); i++){
+                for (int i = 1; i <= gameProperties.get(getCurrentGameIndex()).get(0); i++){
                     gods.add(gameProperties.get(getCurrentGameIndex()).get(i));
                 }
                 ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
 
                 Player player1 = new Player(keys.get(0), choices.get(0));
                 Player player2 = new Player(keys.get(1), choices.get(1));
-               // View player1View = new RemoteView(player1, keys.get(1), c1);
-                //View player2View = new RemoteView(player2, keys.get(0), c2);
-           /*     Model model = new Model();
-                MainControllerController controller = new MainController();
-                model.addObserver(player1View);
-                model.addObserver(player2View);
-                player1View.addObserver(controller);
-                player2View.addObserver(controller);
-                playingConnection.put(c1, c2);
-                playingConnection.put(c2, c1);
+                Player player3 = null;
+                if (c3 != null) {
+                    player3 = new Player(keys.get(2), choices.get(2));
+                }
+                View player1View = new RemoteView(player1, c1);
+                View player2View = new RemoteView(player2, c2);
+                View player3View = null;
+                if (c3 != null) {
+                    player3View = new RemoteView(player3, c3);
+                }
+                GameTable gameTable = new GameTable(keys.size());
+                MainController controller = new MainController(keys.size());
+                gameTable.addPropertyChangeListener(player1View);
+                gameTable.addPropertyChangeListener(player2View);
+                if (c3 != null){
+                    gameTable.addPropertyChangeListener(player3View);
+                }
+                player1View.addPropertyChangeListener(controller);
+                player2View.addPropertyChangeListener(controller);
+                if (c3 != null){
+                    player3View.addPropertyChangeListener(controller);
+                }
+                ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
+                playingConnections.add(c1);
+                playingConnections.add(c2);
+                if (c3 != null) playingConnections.add(c3);
+                gameList.put(getCurrentGameIndex(), playingConnections);
                 waitingConnection.clear();
 
-                c1.asyncSend(model.getBoardCopy());
-                c2.asyncSend(model.getBoardCopy());
-                if(model.isPlayerTurn(player1)){
-                    c1.asyncSend(gameMessage.moveMessage);
-                    c2.asyncSend(gameMessage.waitMessage);
-                } else {
-                    c2.asyncSend(gameMessage.moveMessage);
-                    c1.asyncSend(gameMessage.waitMessage);
-                }*/
+                c1.asyncSend(gameTable.getBoardCopy());
+                c2.asyncSend(gameTable.getBoardCopy());
+                if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
+                c1.asyncSend(gameMessage.moveMessage);
+                c2.asyncSend(gameMessage.waitMessage);
+                if (c3 != null) c3.asyncSend(gameMessage.waitMessage);
+
             }  finally {
                 currentGameIndex += 1;
             }
         }
-      /*  if (playersNumber != 0 && waitingConnection.size() == playersNumber) {
-            List<String> keys = new ArrayList<>(waitingConnection.keySet());
-            SocketClientConnection c1 = waitingConnection.get(keys.get(0));
-            SocketClientConnection c2 = waitingConnection.get(keys.get(1));
-            Player player1 = new Player(keys.get(0), Cell.X);
-            Player player2 = new Player(keys.get(0), Cell.O);
-            View player1View = new RemoteView(player1, keys.get(1), c1);
-            View player2View = new RemoteView(player2, keys.get(0), c2);
-            Model model = new Model();
-            MainControllerController controller = new MainController();
-            model.addObserver(player1View);
-            model.addObserver(player2View);
-            player1View.addObserver(controller);
-            player2View.addObserver(controller);
-            playingConnection.put(c1, c2);
-            playingConnection.put(c2, c1);
-            waitingConnection.clear();
-
-            c1.asyncSend(model.getBoardCopy());
-            c2.asyncSend(model.getBoardCopy());
-            if(model.isPlayerTurn(player1)){
-                c1.asyncSend(gameMessage.moveMessage);
-                c2.asyncSend(gameMessage.waitMessage);
-            } else {
-                c2.asyncSend(gameMessage.moveMessage);
-                c1.asyncSend(gameMessage.waitMessage);
-            }
-
-
-        }*/
     }
 
     private synchronized ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){

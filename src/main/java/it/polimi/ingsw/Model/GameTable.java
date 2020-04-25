@@ -80,16 +80,9 @@ public class GameTable {
 
     /* end observable pattern */
 
-    /**
-     * Singleton public "constructor"
-     * @param playersNumber number of players in game
-     * @return single instance of GameTable
-     */
+
     public static GameTable getInstance(int playersNumber){
-        if (instance == null) {
-            instance = new GameTable(playersNumber);
-        }
-        return instance;
+        return new GameTable(playersNumber);
     }
 
 
@@ -110,15 +103,15 @@ public class GameTable {
 
 
 
-    public static GameTable getInstance(){
+   /* public static GameTable getInstance(){
         if (instance == null) throw new NullPointerException();
         else return instance;
-    }
+    }*/
 
     /**
      * private constructor for GameTable singleton
      */
-    private GameTable(int playersNumber) {   //contructor method for GameTable
+    public GameTable(int playersNumber) {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
         arrayTable = new ArrayList<>();

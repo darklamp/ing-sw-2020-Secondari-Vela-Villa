@@ -20,13 +20,22 @@ public class News implements Serializable {
         this.cell = null;
     }
 
+    public News(String string) {
+        this();
+        this.string = string;
+    }
+
     private final BuildingType height;
 
     private final Cell cell;
 
+    private String string;
+
     private final int number;
 
     private final Builder builder;
+
+    public String getString(){ return string; }
 
     public int getNumber() {
         return number;

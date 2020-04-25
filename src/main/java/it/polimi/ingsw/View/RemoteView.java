@@ -44,11 +44,11 @@ public class RemoteView extends View {
 
     private SocketClientConnection SocketClientConnection;
 
-    public RemoteView(Player player, String opponent, SocketClientConnection c) {
+    public RemoteView(Player player, SocketClientConnection c) {
         super(player);
         this.SocketClientConnection = c;
         c.addPropertyChangeListener(new MessageReceiver());
-        c.asyncSend("Your opponent is: " + opponent);
+       // c.asyncSend("Your opponent is: " + opponent);
 
     }
 

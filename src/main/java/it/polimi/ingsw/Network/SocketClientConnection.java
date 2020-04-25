@@ -2,6 +2,7 @@ package it.polimi.ingsw.Network;
 
 
 import it.polimi.ingsw.Model.GameTable;
+import it.polimi.ingsw.Model.News;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -17,6 +18,7 @@ public class SocketClientConnection implements Runnable {
     private ObjectOutputStream out;
     private Server server;
     private PropertyChangeSupport support; /** Listener helper object **/
+    private News news;
 
     private boolean active = true;
 
@@ -57,17 +59,12 @@ public class SocketClientConnection implements Runnable {
     private void close() {
         closeConnection();
         System.out.println("Deregistering client...");
-        server.deregisterConnection(this);
+      //  server.deregisterConnection(this);
         System.out.println("Done!");
     }
 
     public void asyncSend(final Object message){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                send(message);
-            }
-        }).start();
+        new Thread(() -> send(message)).start();
     }
 
     synchronized int getGodChoice(ArrayList<Integer> gods){
@@ -146,12 +143,17 @@ public class SocketClientConnection implements Runnable {
             }
             while(isActive()){
                 read = in.nextLine();
-              //  notify(read);
+                setNews(new News(),"INPUT");
             }
         } catch (IOException | NoSuchElementException e) {
             System.err.println("Error!" + e.getMessage());
         }finally{
             close();
         }
+    }
+
+    public void setNews(News news, String type) {
+        support.firePropertyChange(type, this.news, news);
+        this.news = news;
     }
 }
