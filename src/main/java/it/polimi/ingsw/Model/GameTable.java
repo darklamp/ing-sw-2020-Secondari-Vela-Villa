@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.InvalidPlayersNumberException;
+import it.polimi.ingsw.View.CellView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -79,6 +80,16 @@ public class GameTable {
     }
 
     /* end observable pattern */
+
+    public CellView[][] getBoardCopy(){
+        CellView[][] out = new CellView[5][5];
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 5; j++){
+                out[i][j] = Table[i][j].getModelView();
+            }
+        }
+        return out;
+    }
 
 
     public static GameTable getInstance(int playersNumber){

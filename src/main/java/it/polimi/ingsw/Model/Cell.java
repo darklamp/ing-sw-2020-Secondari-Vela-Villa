@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.View.CellView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +18,10 @@ public class Cell implements Serializable {
 
     public Cell(int x, int y) { // constructor for Cell
         this.coordinates = new Pair(x,y);
+    }
+
+    CellView getModelView(){
+        return new CellView(coordinates.getFirst(),coordinates.getSecond(),height,builder == null ? null : builder.getPlayer());
     }
 
 
