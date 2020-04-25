@@ -129,7 +129,6 @@ public class SocketClientConnection implements Runnable {
         Scanner in;
         String name;
         try{
-
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
             send("Welcome!\nWhat's your name?");

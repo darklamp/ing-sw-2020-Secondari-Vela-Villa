@@ -10,16 +10,21 @@ import it.polimi.ingsw.Model.News;
 import static it.polimi.ingsw.Model.TurnState.BUILD;
 
 public class MoveController {
+    private GameTable gameTable;
+
+    public MoveController(GameTable gameTable){
+        this.gameTable = gameTable;
+    }
 
     public void handleMove(News news) {
         try{
             news.getBuilder().setPosition(news.getCell());
-            GameTable.getInstance().getCurrentPlayer().setState(BUILD);
-            GameTable.getInstance().setCurrentBuilder(news.getBuilder());
-            GameTable.getInstance().setNews(news,"MOVEOK");
+            gameTable.getCurrentPlayer().setState(BUILD);
+            gameTable.setCurrentBuilder(news.getBuilder());
+            gameTable.setNews(news,"MOVEOK");
         }
         catch (InvalidMoveException e){
-            GameTable.getInstance().setNews(news,"MOVEKO");
+            gameTable.setNews(news,"MOVEKO");
         }
         catch (ArtemisException e){
 

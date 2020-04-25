@@ -27,9 +27,11 @@ public class LineClient {
         Scanner stdin = new Scanner(System.in);
         ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
-        int status = socketIn.readInt();
-        System.out.println("Server is in status " +status);
-        try{
+        //int status = socketIn.readInt();
+       // System.out.println("Server is in status " +status);
+        String a = socketIn.readUTF();
+        System.out.println(a);
+      /*  try{
             while (true) {
                 if (status == 1) {
                     s = socketIn.readUTF();
@@ -71,7 +73,7 @@ public class LineClient {
             socketIn.close();
             socketOut.close();
             socket.close();
-        }
+        }*/
     }
 
 }

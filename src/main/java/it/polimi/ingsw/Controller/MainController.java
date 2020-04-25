@@ -81,8 +81,8 @@ public class MainController implements PropertyChangeListener {
         this.currentPlayer = null;
         this.news = null;
         this.gameTable = GameTable.getInstance(playersNumber);
-        this.buildController = new BuildController();
-        this.moveController = new MoveController();
+        this.buildController = new BuildController(gameTable);
+        this.moveController = new MoveController(gameTable);
     }
 
 }

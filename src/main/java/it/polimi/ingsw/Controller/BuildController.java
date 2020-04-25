@@ -9,17 +9,23 @@ import static it.polimi.ingsw.Model.TurnState.*;
 
 public class BuildController {
 
+    private GameTable gameTable;
+
     public void handleBuild(News news) {
         try{
-            if (news.getBuilder() != GameTable.getInstance().getCurrentBuilder()) throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
+            if (news.getBuilder() != gameTable.getCurrentBuilder()) throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
             news.getCell().setHeight(news.getBuilder(), news.getHeight());
-            GameTable.getInstance().getCurrentPlayer().setState(PASS);
-            GameTable.getInstance().setNews(news,"BUILDOK");
+            gameTable.getCurrentPlayer().setState(PASS);
+            gameTable.setNews(news,"BUILDOK");
         }catch (DemeterException e) {
-            GameTable.getInstance().getCurrentPlayer().setState(BUILDORPASS);
-            GameTable.getInstance().setNews(news,"BUILDOK");
+            gameTable.getCurrentPlayer().setState(BUILDORPASS);
+            gameTable.setNews(news,"BUILDOK");
         } catch (InvalidBuildException e) {
-            GameTable.getInstance().setNews(news, "BUILDKO");
+            gameTable.setNews(news, "BUILDKO");
         }
+    }
+
+    public BuildController(GameTable gameTable){
+        this.gameTable = gameTable;
     }
 }

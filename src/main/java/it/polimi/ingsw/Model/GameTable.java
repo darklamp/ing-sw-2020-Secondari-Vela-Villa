@@ -142,20 +142,8 @@ public class GameTable {
 
     }
 
-    public GameTable(int playersNumber, ArrayList<Player> players) {   //contructor method for GameTable
-
-        Table = new Cell[5][5]; //create new Table
-        arrayTable = new ArrayList<>();
-        for (int i = 0; i < 5; i++){
-            for (int j = 0; j < 5; j++){
-                Table[i][j] = new Cell(i,j);
-                arrayTable.add(Table[i][j]);
-            }
-        }
+    public void setPlayers(ArrayList<Player> players){
         this.players = players;
-        this.playersNumber = playersNumber;
-        support = new PropertyChangeSupport(this); //TODO: this o instance? credo sia la stessa cosa
-
     }
 
     /**

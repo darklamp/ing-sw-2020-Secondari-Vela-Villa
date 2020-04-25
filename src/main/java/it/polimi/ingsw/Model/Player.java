@@ -9,12 +9,14 @@ import java.util.ArrayList;
 public class Player {
 
     private ArrayList<Builder> builderList; //array of builders
+    
+    private GameTable gameTable;
 
-    private final String nickname; //private attribute for the Player's ID
+    private String nickname; //private attribute for the Player's ID
 
     private boolean isInGame; //private boolean to know if the player is still in the Game
 
-    private final String god;
+    private String god;
 
     private TurnState turnState;
 
@@ -36,35 +38,36 @@ public class Player {
      * @throws NullPointerException when the gametable has not been initialized (shouldn't happen btw)
      * @throws InvalidGodException if the chosen god is invalid
      */
-    public Player(String nickname, String god) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
-            if (GameTable.getInstance() == null) throw new NullPointerException();
-            else if (!GameTable.getInstance().isValidPlayer(nickname)) throw new NickAlreadyTakenException();
+    public Player(String nickname, String god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
+            if (gameTable == null) throw new NullPointerException();
+            else if (!gameTable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
             else if (!isValidGod(god)) throw new InvalidGodException();
             else {
+                this.gameTable = gameTable;
                 this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
                 this.isInGame = true;
                 this.god = god.toUpperCase();
                 this.builderList = new ArrayList<>();
-                GameTable.getInstance().addPlayer(this);
+                gameTable.addPlayer(this);
                 //TODO : inizializzare builderList (controller)
             }
     }
 
-    public Player(String nickname, Integer god) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
-        this(nickname,GameTable.getCompleteGodList().get(god));
+    public Player(String nickname, Integer god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
+        this(nickname,GameTable.getCompleteGodList().get(god), gameTable);
     }
 
     /** DEBUG package-private constructor TODO remove in deploy **/
     Player(String nickname, GameTable g, String god) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
-        if (GameTable.getInstance() == null) throw new NullPointerException();
-        else if (!GameTable.getInstance().isValidPlayer(nickname)) throw new NickAlreadyTakenException();
+        if (g == null) throw new NullPointerException();
+        else if (!g.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
        // else if (!isValidGod(god)) throw new InvalidGodException();
         else {
             this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
             this.isInGame = true;
             this.god = god.toUpperCase();
             this.builderList = new ArrayList<>();
-            GameTable.getInstance().addPlayer(this);
+            g.addPlayer(this);
             //TODO : inizializzare builderList (controller)
         }
     }
@@ -79,7 +82,7 @@ public class Player {
      * @return true if valid and selectable, false otherwise
      */
     private boolean isValidGod(String god){
-        ArrayList<String> godChoices = GameTable.getInstance().getGodChoices();
+        ArrayList<String> godChoices = gameTable.getGodChoices();
         if (godChoices.contains(god.toUpperCase())) {
             godChoices.remove(god);
             return true;

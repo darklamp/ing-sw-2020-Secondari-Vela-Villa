@@ -71,11 +71,12 @@ public class Server {
                 }
                 ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
 
-                Player player1 = new Player(keys.get(0), choices.get(0));
-                Player player2 = new Player(keys.get(1), choices.get(1));
+                GameTable gameTable = new GameTable(keys.size());
+                Player player1 = new Player(keys.get(0), choices.get(0), gameTable);
+                Player player2 = new Player(keys.get(1), choices.get(1), gameTable);
                 Player player3 = null;
                 if (c3 != null) {
-                    player3 = new Player(keys.get(2), choices.get(2));
+                    player3 = new Player(keys.get(2), choices.get(2), gameTable);
                 }
                 View player1View = new RemoteView(player1, c1);
                 View player2View = new RemoteView(player2, c2);
@@ -85,7 +86,7 @@ public class Server {
                 }
                 ArrayList<Player> players = new ArrayList<>();
                 players.add(player1); players.add(player2); players.add(player3);
-                GameTable gameTable = new GameTable(keys.size(), players);
+                gameTable.setPlayers(players);
                 MainController controller = new MainController(keys.size());
                 gameTable.addPropertyChangeListener(player1View);
                 gameTable.addPropertyChangeListener(player2View);
@@ -107,9 +108,12 @@ public class Server {
                 c1.asyncSend(gameTable.getBoardCopy());
                 c2.asyncSend(gameTable.getBoardCopy());
                 if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
-                c1.asyncSend(gameMessage.moveMessage);
+              /*  c1.asyncSend(gameMessage.moveMessage);
                 c2.asyncSend(gameMessage.waitMessage);
-                if (c3 != null) c3.asyncSend(gameMessage.waitMessage);
+                if (c3 != null) c3.asyncSend(gameMessage.waitMessage);*/
+                c1.asyncSend("asd");
+                c2.asyncSend("asdasd");
+                if (c3 != null) c3.asyncSend("asdasdasd");
 
             }  finally {
                 currentGameIndex += 1;
