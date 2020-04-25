@@ -124,7 +124,7 @@ public class Server {
     private synchronized ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){
         c2.asyncSend("Here are the available gods:\n");
         ArrayList<Integer> out = new ArrayList<>();
-        for(int i : gods){
+        for(int i = 0; i < gods.size(); i++){
             c2.asyncSend(Integer.toString(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) +"\n");
         }
         c2.asyncSend("Please choose one: ");

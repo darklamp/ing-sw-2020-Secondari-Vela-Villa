@@ -113,10 +113,10 @@ public class SocketClientConnection implements Runnable {
         int count = 0;
         ArrayList<Integer> gods =  new ArrayList<>();
         while(count < playersNumber){
-            int i = in.nextInt();
             send("Please input the next number: ");
+            int i = in.nextInt();
             if (i < 10 && i >= 0 && !gods.contains(i)) {
-                gods.add(count + 1,i);
+                gods.add(count,i);
                 count += 1;
             }
         }

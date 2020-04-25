@@ -18,7 +18,7 @@ public class GameTable {
     private static GameTable instance; /** Singleton instance for GameTable **/
     private int currentPlayer = 0; /** current player index **/
     private final int playersNumber; /** number of players in game **/
-    public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATLAS","ATHENA","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS"); /* list containing all the basic gods */
+    public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATHENA","ATLAS","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS"); /* list containing all the basic gods */
     private static ArrayList<String> godChoices; /* list of gods chosen by the first player to be available in the game */
     private Builder currentBuilder = null; /* variable which holds the current builder being used by the player */
     private static boolean athenaMove = false;
