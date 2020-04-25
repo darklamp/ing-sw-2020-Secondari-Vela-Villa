@@ -21,7 +21,7 @@ public class Cell implements Serializable {
     }
 
     CellView getModelView(){
-        return new CellView(coordinates.getFirst(),coordinates.getSecond(),height,builder == null ? null : builder.getPlayer());
+        return new CellView(height,builder == null ? null : builder.getPlayer());
     }
 
 
