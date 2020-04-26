@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Server {
-
+    private int k;
     private static final int PORT = 1337;
     private final ServerSocket serverSocket;
     private final ExecutorService executor = Executors.newFixedThreadPool(128); /** Thread pool creator **/
@@ -138,25 +138,33 @@ public class Server {
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
             out.add(0,gods.get(0));
+            c1.send("For you is left " + GameTable.getCompleteGodList().get(gods.get(0)));
+            out.add(0);
+            out.add(0,gods.get(0));
             return out;
         }
         else {
             c1.asyncSend("Sei stato il primo a connetterti");
             c2.asyncSend("Sei stato il secondo a connetterti");
             c3.asyncSend("Sei stato il terzo a connetterti");
-            c2.send("Here are the available gods:\n");
+            c3.send("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
             for (Integer integer : gods) {
-                c2.send(integer + ") " + GameTable.getCompleteGodList().get(integer) + "\n");
-            }
-            int p2choice = c2.getGodChoice(gods);
-            out.add(p2choice);
-            c3.send("Here are the available gods:\n");
-            for (Integer god : gods) {
-                c3.send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
+                c3.send(integer + ") " + GameTable.getCompleteGodList().get(integer) + "\n");
             }
             int p3choice = c3.getGodChoice(gods);
             out.add(p3choice);
+            c2.send("Here are the available gods:\n");
+            for (Integer god : gods) {
+                c2.send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
+            }
+            int p2choice = c2.getGodChoice(gods);
+            out.add(p2choice);
+            for(Integer remain : gods) {
+                c1.send("For you is left " + GameTable.getCompleteGodList().get(remain));// + "\n");
+                k = remain;
+            }
+            out.add(k);
             out.add(0,gods.get(0));
             return out;
         }
