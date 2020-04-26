@@ -9,12 +9,14 @@ import java.util.Scanner;
 
 public class LineClient {
     private String ip,id,s;
-    private int port,x;
+    private int port,x,r,c;
     Scanner input;
+    private CellView[][] MatrixCell;
 
     public LineClient(String ip, int port){
         this.ip = ip;
         this.port = port;
+        MatrixCell=new CellView[5][5];
     }
 
     public Thread asyncReadFromSocket(final ObjectInputStream socketIn){
@@ -134,8 +136,35 @@ public class LineClient {
             socket.close();
         }*/
     }
-    public void ShowTable() throws NullCellVieW {
+    public void ShowTable() throws NullCellException {
+        for(r=0,r<5,r++)
+        {
+            for(c=0,c<5,c++)
+            {
+                if(r==0 & c==0)
+                {
+                    System.out.println("   a   b   c   d   e\n\n\n0  ");
+                }
+                if(r==1 & c==0)
+                {
+                    System.out.println("1  ");
+                }
+                if(r==2 & c==0)
+                {
+                    System.out.println("2  ");
+                }
+                if(r==3 & c==0)
+                {
+                    System.out.println("3  ");
+                }
+                if(r==4 & c==0)
+                {
+                    System.out.println("4  ");
+                }
+                System.out.println("4  ");
 
+            }
+        }
     }
 
 }
