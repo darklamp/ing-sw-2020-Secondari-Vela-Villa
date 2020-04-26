@@ -134,5 +134,8 @@ public class LineClient {
             socket.close();
         }*/
     }
+    public void ShowTable() throws NullCellVieW {
+
+    }
 
 }
