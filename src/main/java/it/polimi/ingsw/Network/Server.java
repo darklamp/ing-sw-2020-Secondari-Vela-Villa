@@ -45,6 +45,7 @@ public class Server {
 
     //Wait for another player
     public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException {
+        System.out.println("nome è "+name);
         waitingConnection.put(name, c);
         if (waitingConnection.size() == 1){
             ArrayList<Integer> gameProps = c.firstPlayer();
@@ -62,8 +63,10 @@ public class Server {
             try{
                 List<String> keys = new ArrayList<>(waitingConnection.keySet());
                 SocketClientConnection c1 = waitingConnection.get(keys.get(0));
+
                 SocketClientConnection c2 = waitingConnection.get(keys.get(1));
                 SocketClientConnection c3 = null;
+                //SocketClientConnection c3 = waitingConnection.get(keys.get(2));
                 if (waitingConnection.size() == 3) c3 = waitingConnection.get(keys.get(2));
                 ArrayList<Integer> gods = new ArrayList<>();
                 for (int i = 1; i <= gameProperties.get(getCurrentGameIndex()).get(0); i++){
@@ -122,16 +125,26 @@ public class Server {
     }
 
     private synchronized ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){
-        c2.asyncSend("Here are the available gods:\n");
-        ArrayList<Integer> out = new ArrayList<>();
-        for(int i = 0; i < gods.size(); i++){
-            c2.asyncSend(Integer.toString(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) +"\n");
+        if(c3 == null) {
+            c1.asyncSend("Sei stato il primo a connetterti");
+            c2.asyncSend("Sei stato il secondo a connetterti");
+            c2.asyncSend("Here are the available gods:\n");
+            ArrayList<Integer> out = new ArrayList<>();
+            for (int i = 0; i < gods.size(); i++) {
+                c2.asyncSend(Integer.toString(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) + "\n");
+            }
+            c2.asyncSend("Please choose one: ");
+            int p2choice = c2.getGodChoice(gods);
+            out.add(p2choice);
+            out.add(gods.get(0) == p2choice ? gods.get(1) : gods.get(0));
+            return out;
         }
-        c2.asyncSend("Please choose one: ");
-        int p2choice = c2.getGodChoice(gods);
-        out.add(p2choice);
-        if (c3 == null){ out.add(gods.get(0) == p2choice ? gods.get(1) : gods.get(0)); return out;}
+            //if (c3 == null){ out.add(gods.get(0) == p2choice ? gods.get(1) : gods.get(0)); return out;}
         else {
+            c1.asyncSend("Sei stato il primo a connetterti");
+            c2.asyncSend("Sei stato il secondo a connetterti");
+            c3.asyncSend("Sei stato il terzo a connetterti");
+            ArrayList<Integer> out = new ArrayList<>();
             int p3choice = c3.getGodChoice(gods);
             out.add(gods.get(0) == p3choice ? gods.get(1) : gods.get(0)); return out;
         }
