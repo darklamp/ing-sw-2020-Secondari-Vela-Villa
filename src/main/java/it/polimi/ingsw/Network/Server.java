@@ -4,28 +4,25 @@ import it.polimi.ingsw.Controller.MainController;
 import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
-import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.View.RemoteView;
 import it.polimi.ingsw.View.View;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class Server {
 
     private static final int PORT = 1337;
     private final ServerSocket serverSocket;
     private final ExecutorService executor = Executors.newFixedThreadPool(128); /** Thread pool creator **/
-    private Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>(); /** contains player connections waiting to be matchmade **/
-    private Map<Integer, ArrayList<SocketClientConnection>> gameList = new HashMap<>(); /** Integer contains the game index, ArrayList contains client connections for the respective game **/
-    private Map<Integer, ArrayList<Integer>> gameProperties = new HashMap<>(); /** position [0] contains the number of players for the game; positions [1..2/3] contain the chosen gods**/
+    private final Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>(); /** contains player connections waiting to be matchmade **/
+    private final Map<Integer, ArrayList<SocketClientConnection>> gameList = new HashMap<>(); /** Integer contains the game index, ArrayList contains client connections for the respective game **/
+    private final Map<Integer, ArrayList<Integer>> gameProperties = new HashMap<>(); /** position [0] contains the number of players for the game; positions [1..2/3] contain the chosen gods**/
     private static int currentGameIndex = 0; /** index of game currently in the process of being created; eg: if it's set to 1 it means game 0 is already started / finished, while game 1 is being made **/
 
     public synchronized static int getCurrentGameIndex() {
