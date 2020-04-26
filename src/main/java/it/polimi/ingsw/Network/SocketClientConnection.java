@@ -14,10 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SocketClientConnection implements Runnable {
 
-    private Socket socket;
+    private final Socket socket;
     private ObjectOutputStream out;
-    private Server server;
-    private PropertyChangeSupport support; /** Listener helper object **/
+    private final Server server;
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
     private News news;
 
     private boolean active = true;
@@ -75,6 +75,7 @@ public class SocketClientConnection implements Runnable {
             e.printStackTrace();
         }
         assert in != null;
+        send("Please choose one: ");
         int choice = in.nextInt();
         while(true){
             if (choice < 10 && choice >= 0 && gods.contains(choice)){

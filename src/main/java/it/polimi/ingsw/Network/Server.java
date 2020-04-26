@@ -71,7 +71,7 @@ public class Server {
                 }
                 ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
 
-                GameTable gameTable = new GameTable(keys.size());
+                GameTable gameTable = new GameTable(keys.size(),choices);
                 Player player1 = new Player(keys.get(0), choices.get(0), gameTable);
                 Player player2 = new Player(keys.get(1), choices.get(1), gameTable);
                 Player player3 = null;
@@ -125,9 +125,12 @@ public class Server {
         c2.asyncSend("Here are the available gods:\n");
         ArrayList<Integer> out = new ArrayList<>();
         for(int i = 0; i < gods.size(); i++){
-            c2.asyncSend(Integer.toString(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) +"\n");
+            c2.asyncSend(Integer.toString(gods.get(i)) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) +"\n");
         }
-        c2.asyncSend("Please choose one: ");
+        try {
+            wait(100);
+        } catch (InterruptedException e) {
+        }
         int p2choice = c2.getGodChoice(gods);
         out.add(p2choice);
         if (c3 == null){ out.add(gods.get(0) == p2choice ? gods.get(1) : gods.get(0)); return out;}

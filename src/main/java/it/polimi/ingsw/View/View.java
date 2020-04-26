@@ -11,13 +11,13 @@ import java.beans.PropertyChangeSupport;
 
 public abstract class View implements PropertyChangeListener {
 
-    private Player player;
+    private final Player player;
 
     News modelNews; /* news coming from model */
 
     News controllerNews; /* news to be sent to controller */
 
-    PropertyChangeSupport support; /** Listener helper object **/
+    PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);

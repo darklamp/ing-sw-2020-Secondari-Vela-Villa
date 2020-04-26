@@ -41,7 +41,7 @@ public class Player {
     public Player(String nickname, String god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
             if (gameTable == null) throw new NullPointerException();
             else if (!gameTable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
-            else if (!isValidGod(god)) throw new InvalidGodException();
+            else if (!isValidGod(god,gameTable)) throw new InvalidGodException();
             else {
                 this.gameTable = gameTable;
                 this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
@@ -81,7 +81,7 @@ public class Player {
      * it removes the god from the selectable pool, so other player(s) can't pick it
      * @return true if valid and selectable, false otherwise
      */
-    private boolean isValidGod(String god){
+    private boolean isValidGod(String god, GameTable gameTable){
         ArrayList<String> godChoices = gameTable.getGodChoices();
         if (godChoices.contains(god.toUpperCase())) {
             godChoices.remove(god);
