@@ -137,9 +137,7 @@ public class Server {
             }
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
-            out.add(0,gods.get(0));
-            c1.send("For you is left " + GameTable.getCompleteGodList().get(gods.get(0)));
-            out.add(0);
+            c1.send("You're left with " + GameTable.getCompleteGodList().get(gods.get(0)));
             out.add(0,gods.get(0));
             return out;
         }
@@ -147,24 +145,20 @@ public class Server {
             c1.asyncSend("Sei stato il primo a connetterti");
             c2.asyncSend("Sei stato il secondo a connetterti");
             c3.asyncSend("Sei stato il terzo a connetterti");
-            c3.send("Here are the available gods:\n");
+            c2.send("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
             for (Integer integer : gods) {
-                c3.send(integer + ") " + GameTable.getCompleteGodList().get(integer) + "\n");
-            }
-            int p3choice = c3.getGodChoice(gods);
-            out.add(p3choice);
-            c2.send("Here are the available gods:\n");
-            for (Integer god : gods) {
-                c2.send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
+                c2.send(integer + ") " + GameTable.getCompleteGodList().get(integer) + "\n");
             }
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
-            for(Integer remain : gods) {
-                c1.send("For you is left " + GameTable.getCompleteGodList().get(remain));// + "\n");
-                k = remain;
+            c3.send("Here are the available gods:\n");
+            for (Integer god : gods) {
+                c3.send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
             }
-            out.add(k);
+            int p3choice = c3.getGodChoice(gods);
+            out.add(p3choice);
+            c1.send("You're left with " + GameTable.getCompleteGodList().get(gods.get(0)));
             out.add(0,gods.get(0));
             return out;
         }
