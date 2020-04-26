@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Network;
 
 
+import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 
@@ -35,7 +36,7 @@ public class SocketClientConnection implements Runnable {
         return active;
     }
 
-    private synchronized void send(Object message) {
+    synchronized void send(Object message) {
         try {
             out.reset();
             out.writeObject(message);
@@ -79,7 +80,7 @@ public class SocketClientConnection implements Runnable {
         int choice = in.nextInt();
         while(true){
             if (choice < 10 && choice >= 0 && gods.contains(choice)){
-                gods.remove((Integer) choice);
+                gods.remove(Integer.valueOf(choice));
                 return choice;
             }
             else{
@@ -135,11 +136,16 @@ public class SocketClientConnection implements Runnable {
             send("Welcome!\nWhat's your name?");
             String read = in.nextLine();
             name = read;
-            try{
-                server.lobby(this, name);
-            }
-            catch (Exception e){
-                e.printStackTrace();
+            while(true){
+                try{
+                    server.lobby(this, name);
+                    break;
+                }
+                catch (Exception ee){
+                    send("Username already taken. Please enter a different one: ");
+                    read = in.nextLine();
+                    name = read;
+                }
             }
             while(isActive()){
                 read = in.nextLine();

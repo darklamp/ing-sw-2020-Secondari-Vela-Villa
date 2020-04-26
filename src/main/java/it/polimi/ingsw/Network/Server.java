@@ -45,7 +45,7 @@ public class Server {
 
     //Wait for another player
     public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException {
-        /* TODO: controllare (qui?) se nome esiste già */
+        if (waitingConnection.containsKey(name)) throw new NickAlreadyTakenException();
         System.out.println("nome è "+name);
         waitingConnection.put(name, c);
         if (waitingConnection.size() == 1){
@@ -138,23 +138,21 @@ public class Server {
             out.add(gods.get(0) == p2choice ? gods.get(1) : gods.get(0));
             return out;
         }
-            //if (c3 == null){ out.add(gods.get(0) == p2choice ? gods.get(1) : gods.get(0)); return out;}
         else {
             c1.asyncSend("Sei stato il primo a connetterti");
             c2.asyncSend("Sei stato il secondo a connetterti");
             c3.asyncSend("Sei stato il terzo a connetterti");
-            c2.asyncSend("Here are the available gods:\n");
+            c2.send("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
-            for (int i = 0; i < gods.size(); i++) {
-                c2.asyncSend(gods.get(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) + "\n");
+            for (Integer integer : gods) {
+                c2.send(integer + ") " + GameTable.getCompleteGodList().get(integer) + "\n");
             }
-            c2.asyncSend("Please choose one: ");
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
-            for (int i = 0; i < gods.size(); i++) {
-                c3.asyncSend(gods.get(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) + "\n");
+            c3.send("Here are the available gods:\n");
+            for (Integer god : gods) {
+                c3.asyncSend(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
             }
-            c3.asyncSend("Please choose one: ");
             int p3choice = c3.getGodChoice(gods);
             out.add(gods.get(0) == p3choice ? gods.get(1) : gods.get(0)); return out;
         }
