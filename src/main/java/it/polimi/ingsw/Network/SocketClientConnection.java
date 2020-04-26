@@ -4,6 +4,7 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
+import it.polimi.ingsw.Utility.Message;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -69,6 +70,9 @@ public class SocketClientConnection implements Runnable {
     }
 
     synchronized int getGodChoice(ArrayList<Integer> gods){
+        for (Integer god : gods) {
+            send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
+        }
         Scanner in = null;
         try {
             in = new Scanner(socket.getInputStream());
@@ -97,7 +101,7 @@ public class SocketClientConnection implements Runnable {
      * @return array of integers; in the first position resides playerNumber, while the next 2/3 positions contain the gods
      */
     synchronized ArrayList<Integer> firstPlayer() {
-        send("Looks like you're the first player to connect. You get to decide the number of players.\nPlease input a natural lower than 4 and higher than 1: ");
+        send(Message.firstPlayer);
         Scanner in = null;
         try {
             in = new Scanner(socket.getInputStream());
@@ -107,7 +111,7 @@ public class SocketClientConnection implements Runnable {
         assert in != null;
         int playersNumber = in.nextInt();
         while (playersNumber != 2 && playersNumber != 3){
-            send("Looks like you're the first to connect. You get to decide the number of players.\nPlease input a natural lower than 4 and higher than 1: ");
+            send(Message.firstPlayer);
             playersNumber = in.nextInt();
         }
         send("Nice! Now you need to choose " + playersNumber + " gods to be used in the game.\n");
@@ -116,7 +120,7 @@ public class SocketClientConnection implements Runnable {
         int count = 0;
         ArrayList<Integer> gods =  new ArrayList<>();
         while(count < playersNumber){
-            send("Please input the next number: ");
+            send(Message.nextNumber);
             int i = in.nextInt();
             if (i < 10 && i >= 0 && !gods.contains(i)) {
                 gods.add(count,i);
@@ -134,7 +138,7 @@ public class SocketClientConnection implements Runnable {
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
-            send("Welcome!\nWhat's your name?");
+            send(Message.welcome);
             String read = in.nextLine();
             name = read;
             while(true){
@@ -143,7 +147,7 @@ public class SocketClientConnection implements Runnable {
                     break;
                 }
                 catch (Exception ee){
-                    send("Username already taken. Please enter a different one: ");
+                    send(Message.userAlreadyTaken);
                     read = in.nextLine();
                     name = read;
                 }
