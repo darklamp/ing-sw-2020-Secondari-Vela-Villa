@@ -56,18 +56,15 @@ public class LineClient {
     }
 
     public Thread asyncWriteToSocket(final Scanner stdin, final PrintWriter socketOut){
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (isActive()) {
-                        String inputLine = stdin.nextLine();
-                        socketOut.println(inputLine);
-                        socketOut.flush();
-                    }
-                }catch(Exception e){
-                    setActive(false);
+        Thread t = new Thread(() -> {
+            try {
+                while (isActive()) {
+                    String inputLine = stdin.nextLine();
+                    socketOut.println(inputLine);
+                    socketOut.flush();
                 }
+            }catch(Exception e){
+                setActive(false);
             }
         });
         t.start();

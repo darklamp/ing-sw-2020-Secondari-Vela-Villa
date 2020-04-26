@@ -23,9 +23,9 @@ public class Server {
     private static final int PORT = 1337;
     private final ServerSocket serverSocket;
     private final ExecutorService executor = Executors.newFixedThreadPool(128); /** Thread pool creator **/
-    private Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>(); /** contains player connections waiting to be matchmade **/
-    private Map<Integer, ArrayList<SocketClientConnection>> gameList = new HashMap<>(); /** Integer contains the game index, ArrayList contains client connections for the respective game **/
-    private Map<Integer, ArrayList<Integer>> gameProperties = new HashMap<>(); /** position [0] contains the number of players for the game; positions [1..2/3] contain the chosen gods**/
+    private final Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>(); /** contains player connections waiting to be matchmade **/
+    private final Map<Integer, ArrayList<SocketClientConnection>> gameList = new HashMap<>(); /** Integer contains the game index, ArrayList contains client connections for the respective game **/
+    private final Map<Integer, ArrayList<Integer>> gameProperties = new HashMap<>(); /** position [0] contains the number of players for the game; positions [1..2/3] contain the chosen gods**/
     private static int currentGameIndex = 0; /** index of game currently in the process of being created; eg: if it's set to 1 it means game 0 is already started / finished, while game 1 is being made **/
 
     public synchronized static int getCurrentGameIndex() {
@@ -73,10 +73,12 @@ public class Server {
                 }
                 ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
 
-                GameTable gameTable = new GameTable(keys.size());
+                GameTable gameTable = new GameTable(keys.size(),choices);
+
                 Player player1 = new Player(keys.get(0), choices.get(0), gameTable);
                 Player player2 = new Player(keys.get(1), choices.get(1), gameTable);
                 Player player3 = null;
+
                 if (c3 != null) {
                     player3 = new Player(keys.get(2), choices.get(2), gameTable);
                 }
@@ -87,7 +89,8 @@ public class Server {
                     player3View = new RemoteView(player3, c3);
                 }
                 ArrayList<Player> players = new ArrayList<>();
-                players.add(player1); players.add(player2); players.add(player3);
+                players.add(player1); players.add(player2);
+                if (player3 != null) players.add(player3);
                 gameTable.setPlayers(players);
                 MainController controller = new MainController(keys.size());
                 gameTable.addPropertyChangeListener(player1View);
@@ -130,12 +133,12 @@ public class Server {
             c2.asyncSend("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
             for (int i = 0; i < gods.size(); i++) {
-                c2.asyncSend(Integer.toString(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) + "\n");
+                c2.send(gods.get(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) + "\n");
             }
-            c2.asyncSend("Please choose one: ");
+            c2.send("Please choose one: ");
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
-            out.add(gods.get(0) == p2choice ? gods.get(1) : gods.get(0));
+            out.add(0,gods.get(0));
             return out;
         }
         else {
@@ -151,10 +154,12 @@ public class Server {
             out.add(p2choice);
             c3.send("Here are the available gods:\n");
             for (Integer god : gods) {
-                c3.asyncSend(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
+                c3.send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
             }
             int p3choice = c3.getGodChoice(gods);
-            out.add(gods.get(0) == p3choice ? gods.get(1) : gods.get(0)); return out;
+            out.add(p3choice);
+            out.add(0,gods.get(0));
+            return out;
         }
     }
 

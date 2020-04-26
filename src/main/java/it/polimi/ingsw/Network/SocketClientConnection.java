@@ -81,6 +81,7 @@ public class SocketClientConnection implements Runnable {
         while(true){
             if (choice < 10 && choice >= 0 && gods.contains(choice)){
                 gods.remove(Integer.valueOf(choice));
+                send("You choose: " + GameTable.getCompleteGodList().get(choice));
                 return choice;
             }
             else{
