@@ -15,11 +15,11 @@ public class GameTable {
     private static Cell[][] Table; /** 5x5 matrix representing game table **/
     private ArrayList<Player> players; /** arraylist filled with players **/
     private static ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
-    private static GameTable instance; /** Singleton instance for GameTable **/
+    private static GameTable instance; /** Singleton instance for GameTable **/ //TODO remove!!
     private int currentPlayer = 0; /** current player index **/
     private final int playersNumber; /** number of players in game **/
     public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATHENA","ATLAS","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS"); /* list containing all the basic gods */
-    private static ArrayList<String> godChoices; /* list of gods chosen by the first player to be available in the game */
+    private ArrayList<String> godChoices; /* list of gods chosen by the first player to be available in the game */
     private Builder currentBuilder = null; /* variable which holds the current builder being used by the player */
     private static boolean athenaMove = false;
 
@@ -69,7 +69,9 @@ public class GameTable {
 
     /* initial observable pattern implementation via PropertyChangeSupport */
 
-    private PropertyChangeSupport support; /** Listener helper object **/
+    //TODO: this o instance? credo sia la stessa cosa
+    //TODO: this o instance? credo sia la stessa cosa
+    private PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
     private News news; /** Listener news **/
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
@@ -138,7 +140,26 @@ public class GameTable {
         }
         players = null;
         this.playersNumber = playersNumber;
-        support = new PropertyChangeSupport(this); //TODO: this o instance? credo sia la stessa cosa
+
+    }
+
+    public GameTable(int playersNumber, ArrayList<Integer> godChoices) {   //contructor method for GameTable
+
+        Table = new Cell[5][5]; //create new Table
+        arrayTable = new ArrayList<>();
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 5; j++){
+                Table[i][j] = new Cell(i,j);
+                arrayTable.add(Table[i][j]);
+            }
+        }
+        players = null;
+        this.playersNumber = playersNumber;
+        ArrayList<String> gods = new ArrayList<>();
+        for (Integer godChoice : godChoices) {
+            gods.add(completeGodList.get(godChoice));
+        }
+        this.godChoices = gods;
 
     }
 
