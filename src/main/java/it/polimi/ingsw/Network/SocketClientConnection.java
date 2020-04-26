@@ -77,7 +77,7 @@ public class SocketClientConnection implements Runnable {
         }
         assert in != null;
         send("Please choose one: ");
-        int choice = in.nextInt();
+        int choice = in.nextInt(); //possibile bug qua
         while(true){
             if (choice < 10 && choice >= 0 && gods.contains(choice)){
                 gods.remove(Integer.valueOf(choice));
