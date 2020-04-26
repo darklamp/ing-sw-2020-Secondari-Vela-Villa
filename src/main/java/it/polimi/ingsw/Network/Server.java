@@ -130,7 +130,7 @@ public class Server {
         if(c3 == null) {
             c1.asyncSend("Sei stato il primo a connetterti");
             c2.asyncSend("Sei stato il secondo a connetterti");
-            c2.asyncSend("Here are the available gods:\n");
+            c2.send("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
