@@ -132,10 +132,9 @@ public class Server {
             c2.asyncSend("Sei stato il secondo a connetterti");
             c2.asyncSend("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
-            for (int i = 0; i < gods.size(); i++) {
-                c2.send(gods.get(i) + ") " + GameTable.getCompleteGodList().get(gods.get(i)) + "\n");
+            for (Integer god : gods) {
+                c2.send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
             }
-            c2.send("Please choose one: ");
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
             out.add(0,gods.get(0));
