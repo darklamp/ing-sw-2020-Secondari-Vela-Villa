@@ -72,8 +72,8 @@ public class Server {
                     gods.add(gameProperties.get(getCurrentGameIndex()).get(i));
                 }
                 ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
-                System.out.println("HO FINITOTOOTOTOOT");
-                //ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
+                ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
+                System.out.println("HO XXX");
                 GameTable gameTable = new GameTable(keys.size(),choices);
 
                 Player player1 = new Player(keys.get(0), choices.get(0), gameTable);
@@ -127,24 +127,25 @@ public class Server {
         }
     }
 
-    /*private synchronized ArrayList<Pair> getPlayerBuilderChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3) {
+    private synchronized ArrayList<Pair> getPlayerBuilderChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3) { //metodo che richiede le posizioni inziali dei worker
+        ArrayList<Pair> choices = new ArrayList<Pair>(); //array che conterrà tutte le coppie delle posizioni iniziali
         if( c3 == null) {
             c2.send("Insert the starting postitions of your first worker");
-            ArrayList<Pair> choices = new ArrayList</*Pair>();
-            Pair c2b1 = c2.getBuilderchoice(choices);
+            Pair c2b1 = c2.getBuilderChoice(choices);
+            System.out.println("Il giocatore 1 per il lavoratore 1 ha inserito riga "+c2b1.getFirst()+" e colonna "+c2b1.getSecond());
             choices.add(c2b1);
             c2.send("Insert the starting postitions of your second worker");
-            Pair c2b2 = c2.getBuilderchoice(choices);
+            Pair c2b2 = c2.getBuilderChoice(choices);
             choices.add(c2b2);
             c1.send("Insert the starting postitions of your first worker");
-            Pair c1b1 = c1.getBuilderchoice(choices);
+            Pair c1b1 = c1.getBuilderChoice(choices);
             choices.add(c1b1);
             c1.send("Insert the starting postitions of your second worker");
-            Pair c1b2 = c1.getBuilderchoice(choices);
+            Pair c1b2 = c1.getBuilderChoice(choices);
             choices.add(c1b2);
-            return choices;
         }
-    } */
+        return choices;
+    }
 
     private synchronized ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){
         if(c3 == null) {

@@ -70,8 +70,9 @@ public class SocketClientConnection implements Runnable {
         new Thread(() -> send(message)).start();
     }
 
-    /*synchronized Pair getBuilderChoice(ArrayList<Pair> choices){
+    synchronized Pair getBuilderChoice(ArrayList<Pair> choices){ //mi porto dietro choice perchè dovrò effettuare il confronto tra tutte le posizioni inserite in precedenza
         Pair out;
+        int c,r; //sia righe che colonne vanno da 1 a 5 compresi
         Scanner in = null;
         try {
             in = new Scanner(socket.getInputStream());
@@ -79,15 +80,29 @@ public class SocketClientConnection implements Runnable {
             e.printStackTrace();
         }
         assert in != null;
-        send("Please choose : ");
-        int choice = in.nextInt(); //possibile bug qua
-        while(true){
-            if (choice < 10 && choice >= 0 && gods.contains(choice)){
-                gods.remove(Integer.valueOf(choice));
-                send("You choose: " + GameTable.getCompleteGodList().get(choice));
-                return choice;
+        send("Insert a row upper than 0 and lower than 6: ");
+        while(true) {
+            r = in.nextInt();
+            if(r > 0 && r < 6){
+                break;
+            }
+            else{
+                send("Wrong number. Try again: ");
+            }
+        }
+        send("Insert a column upper than 0 and lower than 6: ");
+        while(true) {
+            c = in.nextInt();
+            if(c > 0 && c < 6){
+                break;
+            }
+            else{
+                send("Wrong number. Try again: ");
+            }
+        }
+        out = new Pair(r,c);
         return out;
-    } */
+    }
 
     synchronized int getGodChoice(ArrayList<Integer> gods){
         for (Integer god : gods) {
