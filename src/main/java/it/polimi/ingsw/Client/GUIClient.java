@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client;
+/*package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Utility.Utils;
 import javafx.application.Application;
@@ -58,3 +58,4 @@ public class GUIClient extends Application {
         client.startClient();
     }
 }
+*/

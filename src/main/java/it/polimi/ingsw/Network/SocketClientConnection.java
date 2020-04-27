@@ -4,6 +4,7 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
+import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Utility.Message;
 
 import java.beans.PropertyChangeListener;
@@ -68,6 +69,25 @@ public class SocketClientConnection implements Runnable {
     public void asyncSend(final Object message){
         new Thread(() -> send(message)).start();
     }
+
+    /*synchronized Pair getBuilderChoice(ArrayList<Pair> choices){
+        Pair out;
+        Scanner in = null;
+        try {
+            in = new Scanner(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert in != null;
+        send("Please choose : ");
+        int choice = in.nextInt(); //possibile bug qua
+        while(true){
+            if (choice < 10 && choice >= 0 && gods.contains(choice)){
+                gods.remove(Integer.valueOf(choice));
+                send("You choose: " + GameTable.getCompleteGodList().get(choice));
+                return choice;
+        return out;
+    } */
 
     synchronized int getGodChoice(ArrayList<Integer> gods){
         for (Integer god : gods) {

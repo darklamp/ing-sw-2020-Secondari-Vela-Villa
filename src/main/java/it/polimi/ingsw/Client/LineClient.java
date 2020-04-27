@@ -11,12 +11,12 @@ public class LineClient {
     private String ip,id,s;
     private int port,x,r,c;
     Scanner input;
-    private CellView[][] MatrixCell;
+    //private CellView[][] MatrixCell;
 
     public LineClient(String ip, int port){
         this.ip = ip;
         this.port = port;
-        MatrixCell=new CellView[5][5];
+        //MatrixCell=new CellView[5][5];
     }
 
     public Thread asyncReadFromSocket(final ObjectInputStream socketIn){
@@ -136,7 +136,7 @@ public class LineClient {
             socket.close();
         }*/
     }
-    public void ShowTable() throws NullCellException {
+    /*public void ShowTable() throws NullCellException {
         for(r=0,r<5,r++)
         {
             for(c=0,c<5,c++)
@@ -165,6 +165,6 @@ public class LineClient {
 
             }
         }
-    }
+    }*/
 
 }
