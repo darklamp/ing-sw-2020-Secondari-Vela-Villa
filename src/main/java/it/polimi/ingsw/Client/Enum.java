@@ -4,4 +4,21 @@ public enum Color {
     ANSI_YELLOW("\u001B[33m"),
     ANSI_BLUE("\u001B[34m"),
     ANSI_PURPLE("\u001B[35m");
+
+    staticfinalStringRESET = "\u001B[0m";
+
+    private Stringescape;
+
+    Color(Stringescape)
+    {
+        this.escape= escape;
+    }
+    public StringgetEscape()
+    {
+        returnescape;
+    }
+        @Overridepublic StringtoString()
+        {
+        returnescape;
+        }
 }

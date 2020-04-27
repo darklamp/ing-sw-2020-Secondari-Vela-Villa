@@ -143,25 +143,25 @@ public class LineClient {
             {
                 if(r==0 & c==0)
                 {
-                    System.out.println("   a   b   c   d   e\n\n\n0  ");
+                    System.out.print("   a   b   c   d   e\n\n\n0  ");
                 }
                 if(r==1 & c==0)
                 {
-                    System.out.println("1  ");
+                    System.out.print("1  ");
                 }
                 if(r==2 & c==0)
                 {
-                    System.out.println("2  ");
+                    System.out.print("2  ");
                 }
                 if(r==3 & c==0)
                 {
-                    System.out.println("3  ");
+                    System.out.print("3  ");
                 }
                 if(r==4 & c==0)
                 {
-                    System.out.println("4  ");
+                    System.out.print("4  ");
                 }
-                System.out.println("4  ");
+
 
             }
         }
