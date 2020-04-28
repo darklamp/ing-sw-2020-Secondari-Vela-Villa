@@ -30,13 +30,13 @@ public class LoginWindowController {
     private void print(ActionEvent event) throws IOException {
         event.consume();
         String ipAddress = ipInput.getText();
-        String s = null;
+        String s;
         if (!Utils.isValidIP(ipAddress)) s = "Invalid IP. Please enter a valid IP address then click Connect.";
         else {
-            s = "Connecting to: " + ipInput.getText() + "...";
+            s = "Connecting to: " + ipAddress + "...";
             textAreaMain.setText(s);
-            client.run(s);
-            MainWindowController.getInstance().changeScene();
+            client.run(ipAddress);
+            //MainWindowController.getInstance().changeScene();
         }
     }
 

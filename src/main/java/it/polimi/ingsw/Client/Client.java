@@ -112,7 +112,7 @@ public class Client implements Runnable {
         }
     }
 
-    public void run(String s) throws IOException {
+    public void run(String s)  {
         ip = s;
         new Thread(this).start();
     }
