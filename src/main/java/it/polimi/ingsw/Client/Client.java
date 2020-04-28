@@ -11,7 +11,7 @@ public class Client implements Runnable {
     private static String ip,id,s;
     private int port,x,r,c;
     Scanner input;
-    private Color blu,green,yellow.red;
+    private Color blue,green,yellow,red;
     private Dice dice;
     private static Ui ui;
 
@@ -110,10 +110,10 @@ public class Client implements Runnable {
         new Thread(this).start();
     }
 
-    /*public void ShowTable(CellView[][] matrix) throws NullCellException {
-        for(r=0,r<5,r++)
+    public void ShowTable(CellView[][] matrix){
+        for(r=0;r<5;r++)
         {
-            for(c=0,c<5,c++)
+            for(c=0;c<5;c++)
             {
                 if(r==0 & c==0)
                 {
@@ -121,19 +121,19 @@ public class Client implements Runnable {
                 }
                 if(r==1 & c==0)
                 {
-                    System.out.print("1  ");
+                    System.out.print("\n\n\n1  ");
                 }
                 if(r==2 & c==0)
                 {
-                    System.out.print("2  ");
+                    System.out.print("\n\n\n2  ");
                 }
                 if(r==3 & c==0)
                 {
-                    System.out.print("3  ");
+                    System.out.print("\n\n\n3  ");
                 }
                 if(r==4 & c==0)
                 {
-                    System.out.print("4  ");
+                    System.out.print("\n\n\n4  ");
                 }
                 if(matrix[r][c].height == NONE){
                     dice.Zero();
@@ -234,6 +234,6 @@ public class Client implements Runnable {
 
             }
         }
-    }*/
+    }
 
 }

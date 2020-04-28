@@ -1,9 +1,9 @@
 package it.polimi.ingsw.Utility;
 
 public class Dice {
-    private staticfinalString[] DICE_FACES = {"\u26BE","\u2680", "\u2681", "\u2682","\u2683", "\u2684", "\u2685"};
+    private static final String[] DICE_FACES = {"\u26BE","\u2680", "\u2681", "\u2682","\u2683", "\u2684", "\u2685"};
 
-    private Stringface;
+    private String face;
     private Color color;
 
     public void Zero(){
@@ -22,13 +22,13 @@ public class Dice {
         this.face= DICE_FACES[4];}
 
     public Color GetColor(){
-        returncolor;}
+        return color;}
 
     public void SetColor(Color color){
         this.color= color;}
 
-    @Override public StringtoString(){
-        returnthis.color+ face + Color.RESET;}
+    @Override public String toString(){
+        return this.color+ face + Color.RESET;}
 
     void Stamp(){System.out.print(this+"  ");}
 }
