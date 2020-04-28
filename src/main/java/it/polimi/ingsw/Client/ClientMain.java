@@ -38,15 +38,18 @@ public class ClientMain {
             GUI gui = new GUI();
             new Thread(gui).start();
             GUIClient.setGUI(gui);
-            System.out.print("Starting GUI..");
+            System.out.println("Starting GUI..");
+            StringBuilder s1 = new StringBuilder();
             while (!gui.isReady()) {
                 try {
-                    sleep(500);
+                    sleep(20);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-                System.out.print(".");
+                s1.append("█");
+                System.out.print(s1.toString() + "\r");
             }
+            System.out.println(Color.ANSI_GREEN + s1.append("\n").toString() + "GUI Ready!\n" + Color.RESET);
             Client.setUi(gui);
             ui = gui;
         }

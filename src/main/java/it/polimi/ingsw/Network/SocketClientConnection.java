@@ -72,7 +72,7 @@ public class SocketClientConnection implements Runnable {
 
     synchronized Pair getBuilderChoice(ArrayList<Pair> choices){ //mi porto dietro choices perchè dovrò effettuare il confronto tra tutte le posizioni inserite in precedenza
         Pair out;
-        int c,r; //sia righe che colonne vanno da 1 a 5 compresi
+        int c,r; //sia righe che colonne vanno da 0 a 4 compresi
         Scanner in = null;
         try {
             in = new Scanner(socket.getInputStream());
@@ -82,24 +82,24 @@ public class SocketClientConnection implements Runnable {
         while(true){
             int x=0;
             assert in != null;
-            send("Insert a row upper than 0 and lower than 6: ");
+            send("Insert a row number >= 0 and < 5: ");
             while(true) {
                 r = in.nextInt();
-                if(r > 0 && r < 6){
+                if(r >= 0 && r < 5){
                     break;
                 }
                 else{
-                    send("Wrong number. Try again: ");
+                    send(Message.wrongNumber);
                 }
             }
-            send("Insert a column upper than 0 and lower than 6: ");
+            send("Insert a column >= 0 and < 5: ");
             while(true) {
                 c = in.nextInt();
-                if(c > 0 && c < 6){
+                if(c >= 0 && c < 5){
                     break;
                 }
                 else{
-                    send("Wrong number. Try again: ");
+                    send(Message.wrongNumber);
                 }
             }
             out = new Pair(r,c);
@@ -112,7 +112,7 @@ public class SocketClientConnection implements Runnable {
                 break;
             }
             else{
-                send("This cell is not avaible, try another one");
+                send("This cell is not available, try another one");
             }
         }
         return out;
