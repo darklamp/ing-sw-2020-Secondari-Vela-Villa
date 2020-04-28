@@ -180,7 +180,7 @@ public class GameTable {
     protected static ArrayList<Cell> toArrayList(){
         return arrayTable;
     }
-    protected static Cell getCell(int x,int y) throws InvalidCoordinateException{
+    public static Cell getCell(int x,int y) throws InvalidCoordinateException{
             isInvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
     }/*

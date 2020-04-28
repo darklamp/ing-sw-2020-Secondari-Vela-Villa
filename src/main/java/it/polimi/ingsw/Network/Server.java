@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Controller.MainController;
+import it.polimi.ingsw.Model.Builder;
+import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
@@ -8,6 +10,9 @@ import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.View.RemoteView;
 import it.polimi.ingsw.View.View;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
+import it.polimi.ingsw.Model.Exceptions.InvalidPlayersNumberException;
+import it.polimi.ingsw.View.CellView;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -44,7 +49,7 @@ public class Server {
     }*/
 
     //Wait for another player
-    public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException {
+    public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException, InvalidCoordinateException {
         if (waitingConnection.containsKey(name)) throw new NickAlreadyTakenException();
         System.out.println("nome è "+name);
         waitingConnection.put(name, c);
@@ -73,13 +78,13 @@ public class Server {
                 }
                 ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
                 ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
-                System.out.println("posizionamento worker completato");
+                System.out.println("The workers are ready!!");
                 GameTable gameTable = new GameTable(keys.size(),choices);
 
                 Player player1 = new Player(keys.get(0), choices.get(0), gameTable);
                 Player player2 = new Player(keys.get(1), choices.get(1), gameTable);
                 Player player3 = null;
-
+                 //Builder b2_1 = new Builder(gameTable.getCell(startPos.get(0).getFirst(), startPos.get(0).getSecond()), player2); booo
                 if (c3 != null) {
                     player3 = new Player(keys.get(2), choices.get(2), gameTable);
                 }

@@ -177,6 +177,12 @@ public class SocketClientConnection implements Runnable {
             }
         }
         gods.add(0,playersNumber);
+        if (playersNumber == 2){
+            send("Wait for another player...");
+        }
+        else {
+            send("Wait for 2 more players...");
+        }
         return gods;
     }
 
