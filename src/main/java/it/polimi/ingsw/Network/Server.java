@@ -15,16 +15,13 @@ import it.polimi.ingsw.Model.Exceptions.InvalidPlayersNumberException;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class Server {
-    private int k;
     private static final int PORT = 1337;
     private final ServerSocket serverSocket;
     private final ExecutorService executor = Executors.newFixedThreadPool(128); /** Thread pool creator **/
@@ -175,8 +172,6 @@ public class Server {
 
     private synchronized ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){
         if(c3 == null) {
-            c1.asyncSend("Sei stato il primo a connetterti");
-            c2.asyncSend("Sei stato il secondo a connetterti");
             c2.send("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
@@ -186,17 +181,11 @@ public class Server {
             return out;
         }
         else {
-            c1.asyncSend("Sei stato il primo a connetterti");
-            c2.asyncSend("Sei stato il secondo a connetterti");
-            c3.asyncSend("Sei stato il terzo a connetterti");
             c2.send("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
             c3.send("Here are the available gods:\n");
-            for (Integer god : gods) {
-                c3.send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
-            }
             int p3choice = c3.getGodChoice(gods);
             out.add(p3choice);
             c1.send("You're left with " + GameTable.getCompleteGodList().get(gods.get(0)));

@@ -1,5 +1,5 @@
 //NON DA USARE
-package it.polimi.ingsw.Client;
+package it.polimi.ingsw.Client.deprecated;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="150.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUIClient">
+<AnchorPane prefHeight="150.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.GUIController">
    <children>
       <BorderPane prefHeight="150.0" prefWidth="400.0">
          <top>
@@ -17,7 +17,7 @@
                   <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <TextField fx:id="ipInput" prefHeight="50.0" prefWidth="308.0" promptText="IP" text="127.0.0.1" />
-                        <Button fx:id="ipSubmitBTN" alignment="CENTER" mnemonicParsing="false" onAction="#printHelloWorld" prefHeight="50.0" prefWidth="92.0" text="Connect" textAlignment="CENTER" />
+                        <Button fx:id="ipSubmitBTN" alignment="CENTER" mnemonicParsing="false" onAction="#print" prefHeight="50.0" prefWidth="92.0" text="Connect" textAlignment="CENTER" />
                      </children>
                   </HBox>
                </children>
