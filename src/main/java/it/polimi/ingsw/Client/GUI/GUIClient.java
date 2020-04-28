@@ -6,26 +6,35 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 
 public class GUIClient extends Application {
 
 
     private static GUI gui = null;
 
-    static GUIController getController() {
+    static LoginWindowController getController() {
         return controller;
     }
 
-    private static GUIController controller;
+    private static LoginWindowController controller;
+
+    public static Stage getStage() {
+        return stage;
+    }
+
+    private static Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
         Parent root = loader.load();
         controller = loader.getController();
         primaryStage.setTitle("Santorini Client");
         primaryStage.setScene(new Scene(root,400,150));
         primaryStage.show();
+        stage = primaryStage;
         gui.setReady(true);
     }
 

@@ -16,6 +16,11 @@ import static it.polimi.ingsw.Model.BuildingType.NONE;
 public class Client implements Runnable {
     private static String ip;
     private static int port;
+
+    public static Ui getUi() {
+        return ui;
+    }
+
     private static Ui ui;
 
     public Client(int port){

@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class GUIController {
+public class LoginWindowController {
 
     @FXML
     TextField ipInput;
@@ -36,11 +36,12 @@ public class GUIController {
             s = "Connecting to: " + ipInput.getText() + "...";
             textAreaMain.setText(s);
             client.run(s);
+            MainWindowController.getInstance().changeScene();
         }
     }
 
     static void waitForIP(Client client){
-        GUIController.client = client;
+        LoginWindowController.client = client;
     }
 
 }

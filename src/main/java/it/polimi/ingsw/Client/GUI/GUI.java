@@ -8,7 +8,7 @@ import javafx.application.Platform;
 
 public class GUI implements Ui,Runnable {
     private static boolean isReady = false;
-    private static GUIController controller;
+    private static LoginWindowController controller;
     
     @Override
     public void run() {
@@ -29,7 +29,7 @@ public class GUI implements Ui,Runnable {
 
     @Override
     public void waitForIP(Client client) {
-        Platform.runLater(() -> GUIController.waitForIP(client));
+        Platform.runLater(() -> LoginWindowController.waitForIP(client));
     }
 
     @Override
