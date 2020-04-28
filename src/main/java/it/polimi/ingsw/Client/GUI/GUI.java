@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.Ui;
+import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -29,5 +30,10 @@ public class GUI implements Ui,Runnable {
     @Override
     public void waitForIP(Client client) {
         Platform.runLater(() -> GUIController.waitForIP(client));
+    }
+
+    @Override
+    public void showTable(CellView[][] table) {
+
     }
 }

@@ -7,6 +7,7 @@ import it.polimi.ingsw.Utility.Color;
 
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
@@ -61,7 +62,8 @@ public class ClientMain {
         }
         try {
             ui.waitForIP(client);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

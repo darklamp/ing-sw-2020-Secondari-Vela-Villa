@@ -1,29 +1,25 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Utility.Color;
+import it.polimi.ingsw.View.CellView;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import static it.polimi.ingsw.Model.BuildingType.NONE;
+
 public class Client implements Runnable {
-    private static String ip,id,s;
-    private int port,x,r,c;
-    Scanner input;
-    private Color blue,green,yellow,red;
-    private Dice dice;
+    private static String ip;
+    private static int port;
     private static Ui ui;
 
     public Client(int port){
-        this.port = port;
-        r=0;
-        c=0;
-        blue = Color.ANSI_BLUE;
-        green = Color.ANSI_GREEN;
-        yellow = Color.ANSI_YELLOW;
-        red = Color.ANSI_RED;
-        dice = new Dice();
+        Client.port = port;
     }
 
     static void setUi(Ui ui){
@@ -37,9 +33,9 @@ public class Client implements Runnable {
                     Object inputObject = socketIn.readObject();
                     if(inputObject instanceof String){
                         ui.process((String) inputObject);
-                    } /*else if (inputObject instanceof Board){
-                        ((Board)inputObject).print();
-                    } */else {
+                    } else if (inputObject instanceof CellView[][]){
+                        ui.showTable((CellView[][])inputObject);
+                    } else {
                         throw new IllegalArgumentException();
                     }
                 }
@@ -100,6 +96,12 @@ public class Client implements Runnable {
                 socket.close();
             }
         }
+        catch (ConnectException ee){
+            if (ee.getMessage().contains("Connection refused")) {
+                System.out.println(Color.ANSI_RED + "[CRITICAL] Connection refused. Server probably down or full." + Color.RESET);
+            }
+            else  ee.getMessage();
+        }
         catch (Exception e){
             e.printStackTrace();
         }
@@ -108,132 +110,6 @@ public class Client implements Runnable {
     public void run(String s) throws IOException {
         ip = s;
         new Thread(this).start();
-    }
-
-    public void ShowTable(CellView[][] matrix){
-        for(r=0;r<5;r++)
-        {
-            for(c=0;c<5;c++)
-            {
-                if(r==0 & c==0)
-                {
-                    System.out.print("   a  b  c  d  e\n\n\n0  ");
-                }
-                if(r==1 & c==0)
-                {
-                    System.out.print("\n\n\n1  ");
-                }
-                if(r==2 & c==0)
-                {
-                    System.out.print("\n\n\n2  ");
-                }
-                if(r==3 & c==0)
-                {
-                    System.out.print("\n\n\n3  ");
-                }
-                if(r==4 & c==0)
-                {
-                    System.out.print("\n\n\n4  ");
-                }
-                if(matrix[r][c].height == NONE){
-                    dice.Zero();
-                    if(matrix[r][c].player == -1){
-                        dice.SetColor=(yellow);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 0){
-                        dice.SetColor=(blue);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 1){
-                        dice.SetColor=(red);
-                        dice.Stamp;
-                    };
-                    if(matrix[r][c].player == 2){
-                        dice.SetColor=(green);
-                        dice.Stamp;
-                    }
-                    }
-                if(matrix[r][c].height == BASE){
-                    dice.One();
-                    if(matrix[r][c].player == -1){
-                        dice.SetColor=(yellow);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 0){
-                        dice.SetColor=(blue);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 1){
-                        dice.SetColor=(red);
-                        dice.Stamp;
-                    };
-                    if(matrix[r][c].player == 2){
-                        dice.SetColor=(green);
-                        dice.Stamp;
-                    }
-                    }
-                if(matrix[r][c].height == MIDDLE){
-                    dice.Two();
-                    if(matrix[r][c].player == -1){
-                        dice.SetColor=(yellow);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 0){
-                        dice.SetColor=(blue);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 1){
-                        dice.SetColor=(red);
-                        dice.Stamp;
-                    };
-                    if(matrix[r][c].player == 2){
-                        dice.SetColor=(green);
-                        dice.Stamp;
-                    }
-                    }
-                if(matrix[r][c].height == TOP){
-                    dice.Three();
-                    if(matrix[r][c].player == -1){
-                        dice.SetColor=(yellow);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 0){
-                        dice.SetColor=(blue);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 1){
-                        dice.SetColor=(red);
-                        dice.Stamp;
-                    };
-                    if(matrix[r][c].player == 2){
-                        dice.SetColor=(green);
-                        dice.Stamp;
-                    }
-                    }
-                if(matrix[r][c].height == DOME){
-                    dice.Four();
-                    if(matrix[r][c].player == -1){
-                        dice.SetColor=(yellow);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 0){
-                        dice.SetColor=(blue);
-                        dice.Stamp;
-                    }
-                    if(matrix[r][c].player == 1){
-                        dice.SetColor=(red);
-                        dice.Stamp;
-                    };
-                    if(matrix[r][c].player == 2){
-                        dice.SetColor=(green);
-                        dice.Stamp;
-                    }
-                    }
-
-
-            }
-        }
     }
 
 }
