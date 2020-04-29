@@ -78,6 +78,7 @@ public class CLI implements Ui {
 
             }
         }
+        System.out.print("\n\n\n"+Color.ANSI_BLUE+ "PLAYER ONE-" +Color.ANSI_RED+ "PLAYER TWO-"+ Color.ANSI_GREEN+ "PLAYER THREE-"+ Color.ANSI_YELLOW+ "NO BUILDER ON THE CELL"+Color.RESET );
     }
 
 }
