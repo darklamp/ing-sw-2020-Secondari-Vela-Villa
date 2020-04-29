@@ -8,10 +8,6 @@ import it.polimi.ingsw.Model.BuildingType;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CLITest {
-
-
-
-
     private static final CLI classecli = new CLI();
     private static final CellView [][] Matrix = new CellView[5][5];
     @Test
