@@ -40,23 +40,12 @@ public class CLI implements Ui {
             {
                 if(r==0 && c==0)
                 {
-                    System.out.print("   a  b  c  d  e\n\n\n0  ");
+                    System.out.print("    A | B | C | D | E \n");
+                    System.out.print("  ┌───┬───┬───┬───┬───┐\n0 │ ");
                 }
-                if(r==1 && c==0)
+                else if(c==0)
                 {
-                    System.out.print("\n\n\n1  ");
-                }
-                if(r==2 && c==0)
-                {
-                    System.out.print("\n\n\n2  ");
-                }
-                if(r==3 && c==0)
-                {
-                    System.out.print("\n\n\n3  ");
-                }
-                if(r==4 && c==0)
-                {
-                    System.out.print("\n\n\n4  ");
+                    System.out.print("\n─ ├───┼───┼───┼───┼───┤\n" + r + " │ ");
                 }
                 switch (table[r][c].getHeight()){
                     case NONE -> dice.Zero();
@@ -76,15 +65,22 @@ public class CLI implements Ui {
                 dice.setColor(color);
                 dice.Stamp();
 
+                if (c == 4){
+                    if (r == 0) System.out.print(Color.ANSI_BLUE + "  ██  PLAYER ONE    ██" + Color.RESET);
+                    else if (r == 1) System.out.print(Color.ANSI_RED + "  ██  PLAYER TWO    ██" + Color.RESET);
+                    else if (r == 2) System.out.print(Color.ANSI_GREEN + "  ██  PLAYER THREE  ██" + Color.RESET);
+                    else if (r == 3) System.out.print(Color.ANSI_YELLOW+ "  ██  NO PLAYER     ██" + Color.RESET);
+                }
+
             }
         }
-        System.out.print("\n\n\n"+Color.ANSI_BLUE+ "PLAYER ONE-" +Color.ANSI_RED+ "PLAYER TWO-"+ Color.ANSI_GREEN+ "PLAYER THREE-"+ Color.ANSI_YELLOW+ "NO BUILDER ON THE CELL"+Color.RESET );
+        System.out.print("\n  └───┴───┴───┴───┴───┘\n");
     }
 
 }
 
 class Dice {
-    private static final String[] DICE_FACES = {"\u26BE","\u2680", "\u2681", "\u2682","\u2683", "\u2684", "\u2685"};
+    private static final String[] DICE_FACES = {"#","\u2680", "\u2681", "\u2682","\u2683", "\u2684", "\u2685"};
 
     private String face;
     private Color color;
@@ -116,5 +112,5 @@ class Dice {
         return this.color + face + Color.RESET;
     }
 
-    void Stamp(){System.out.print(this+"  ");}
+    void Stamp(){System.out.print(this+" │ ");}
 }

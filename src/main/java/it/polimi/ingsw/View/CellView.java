@@ -2,7 +2,9 @@ package it.polimi.ingsw.View;
 
 import it.polimi.ingsw.Model.BuildingType;
 
-public class CellView {
+import java.io.Serializable;
+
+public class CellView implements Serializable {
     public int getPlayer() {
         return player;
     }

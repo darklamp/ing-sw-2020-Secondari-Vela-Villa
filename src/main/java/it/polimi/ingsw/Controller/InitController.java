@@ -9,6 +9,9 @@ import it.polimi.ingsw.View.View;
 
 import java.util.ArrayList;
 
+/**
+ * Responsible for initiating a match; gets called asynchronously by {@link it.polimi.ingsw.Network.Server}
+ */
 public class InitController implements Runnable{
 
     private final SocketClientConnection c1,c2,c3;
@@ -16,7 +19,6 @@ public class InitController implements Runnable{
     private final Player player1,player2,player3;
     private final GameTable gameTable;
     private final MainController mainController;
-    private String userChoice;
 
     public InitController(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods, Player player1, Player player2, Player player3, GameTable gameTable, MainController mainController){
         this.c1 = c1;
@@ -30,6 +32,12 @@ public class InitController implements Runnable{
         this.mainController = mainController;
     }
 
+    /**
+     * Gets players' god choices
+     * @param c1,c2,c3 client connections
+     * @param gods list of available gods, from which players have to choose
+     * @return list of chosen gods, in order from first to last player
+     */
     /*synchronized*/ public ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){
         if(c3 == null) {
             c2.send("Here are the available gods:\n");
@@ -54,27 +62,32 @@ public class InitController implements Runnable{
         }
     }
 
+    /**
+     * Gets players' initial builder positioning choices
+     * @param c1,c2,c3 client connections
+     * @return list of chosen coordinates where to put builders
+     */
     private synchronized ArrayList<Pair> getPlayerBuilderChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3) { //metodo che richiede le posizioni inziali dei worker
         ArrayList<Pair> choices = new ArrayList<Pair>(); //array che conterrà tutte le coppie delle posizioni iniziali
-        c2.send("Insert the starting postitions of your first worker");
+        c2.send("Insert the starting positions of your first worker");
         Pair c2b1 = c2.getBuilderChoice(choices); //nomenclatura è NomeConnessione+NumeroWorker
        // System.out.println("Il giocatore 1 per il lavoratore 1 ha inserito riga "+c2b1.getFirst()+" e colonna "+c2b1.getSecond());
         choices.add(c2b1); //aggiungo man mano ogni coppia all'array choices. Il controllo dell'input avviene nel metodo getBuilderChoice.
-        c2.send("Insert the starting postitions of your second worker");
+        c2.send("Insert the starting positions of your second worker");
         Pair c2b2 = c2.getBuilderChoice(choices);
         choices.add(c2b2);
         if (c3 != null){
-            c3.send("Insert the starting postitions of your first worker");
+            c3.send("Insert the starting positions of your first worker");
             Pair c3b1 = c3.getBuilderChoice(choices);
             choices.add(c3b1);
-            c3.send("Insert the starting postitions of your second worker");
+            c3.send("Insert the starting positions of your second worker");
             Pair c3b2 = c3.getBuilderChoice(choices);
             choices.add(c3b2);
         }
-        c1.send("Insert the starting postitions of your first worker");
+        c1.send("Insert the starting positions of your first worker");
         Pair c1b1 = c1.getBuilderChoice(choices);
         choices.add(c1b1);
-        c1.send("Insert the starting postitions of your second worker");
+        c1.send("Insert the starting positions of your second worker");
         Pair c1b2 = c1.getBuilderChoice(choices);
         choices.add(c1b2);
         return choices;
@@ -114,7 +127,7 @@ public class InitController implements Runnable{
        if (c3 != null){
            c3.setReady();
        }
-       c1.asyncSend(gameTable.getBoardCopy());
+       c1.send(gameTable.getBoardCopy());
        c2.asyncSend(gameTable.getBoardCopy());
        if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
     }

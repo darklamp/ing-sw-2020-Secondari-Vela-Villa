@@ -85,7 +85,12 @@ public class SocketClientConnection implements Runnable {
         new Thread(() -> send(message)).start();
     }
 
-    public synchronized Pair getBuilderChoice(ArrayList<Pair> choices){ //mi porto dietro choices perchè dovrò effettuare il confronto tra tutte le posizioni inserite in precedenza
+    /**
+     * Asks for builder coordinates
+     * @param choices list of previously chosen coordinates
+     * @return pair of chosen coordinates
+     */
+    public synchronized Pair getBuilderChoice(ArrayList<Pair> choices){
         Pair out;
         int c,r; //sia righe che colonne vanno da 0 a 4 compresi
         Scanner in = null;
