@@ -9,6 +9,7 @@ import it.polimi.ingsw.Utility.Color;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Thread.sleep;
 
@@ -32,7 +33,7 @@ public class ClientMain {
         """;
 
         System.out.println(Color.ANSI_BLUE + s + Color.RESET);
-
+        CountDownLatch c = new CountDownLatch(20);
         System.out.println("Would you like to use a fancy GUI? (y/N)");
         String choice = stdin.nextLine().toUpperCase();
         if (choice.equals("Y") || choice.equals("YES") || choice.equals("SI") || choice.equals("OUI")){
@@ -43,7 +44,7 @@ public class ClientMain {
             StringBuilder s1 = new StringBuilder();
             while (!gui.isReady()) {
                 try {
-                    sleep(20);
+                    c.await();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }

@@ -1,0 +1,5 @@
+#mainGrid {
+    -fx-background-image:url('../images/test.jpeg');  
+    -fx-opacity: 90%; 
+    -fx-background-size: cover;
+}
