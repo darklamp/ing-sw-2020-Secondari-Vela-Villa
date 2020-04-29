@@ -3,3 +3,6 @@
     -fx-opacity: 90%; 
     -fx-background-size: cover;
 }
+#anchorPane {
+    -fx-background-color: #f08080;
+}

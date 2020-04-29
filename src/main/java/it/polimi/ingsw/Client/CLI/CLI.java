@@ -37,23 +37,23 @@ public class CLI implements Ui {
         {
             for(c=0;c<5;c++)
             {
-                if(r==0 & c==0)
+                if(r==0 && c==0)
                 {
                     System.out.print("   a  b  c  d  e\n\n\n0  ");
                 }
-                if(r==1 & c==0)
+                if(r==1 && c==0)
                 {
                     System.out.print("\n\n\n1  ");
                 }
-                if(r==2 & c==0)
+                if(r==2 && c==0)
                 {
                     System.out.print("\n\n\n2  ");
                 }
-                if(r==3 & c==0)
+                if(r==3 && c==0)
                 {
                     System.out.print("\n\n\n3  ");
                 }
-                if(r==4 & c==0)
+                if(r==4 && c==0)
                 {
                     System.out.print("\n\n\n4  ");
                 }
