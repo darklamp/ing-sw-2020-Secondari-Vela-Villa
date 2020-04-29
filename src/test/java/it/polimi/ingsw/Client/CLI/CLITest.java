@@ -1,10 +1,17 @@
 package it.polimi.ingsw.Client.CLI;
 
+import it.polimi.ingsw.Model.BuildingType;
+import it.polimi.ingsw.View.CellView;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CLITest {
+
+    private static final BuildingType NONE ;
+    private static final BuildingType MIDDLE = ;
+    private static final BuildingType TOP = ;
+    private static final BuildingType DOME = ;
 
     @Test
     void showTable() {
@@ -34,6 +41,8 @@ class CLITest {
         Matrix[4][2]= new CellView(DOME,-1);
         Matrix[4][3]= new CellView(DOME,-1);
         Matrix[4][4]= new CellView(DOME,-1);
+        CLI classecli = new CLI();
+        classecli.showTable(Matrix);
 
 
 
