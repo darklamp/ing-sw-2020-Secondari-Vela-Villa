@@ -19,13 +19,14 @@ public class CLI implements Ui {
 
     @Override
     public void waitForIP(Client client) throws IOException {
-        Scanner stdin  = new Scanner(System.in);
+        /*Scanner stdin  = new Scanner(System.in);
         System.out.println("Insert IP address: ");
         String s = stdin.nextLine();
         while (!Utils.isValidIP(s)){
             System.out.println("Insert IP address: ");
             s = stdin.nextLine();
-        }
+        }*/
+        String s = "127.0.0.1";
         client.run(s);
     }
 
