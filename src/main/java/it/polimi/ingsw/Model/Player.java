@@ -12,7 +12,7 @@ public class Player {
     
     private GameTable gameTable;
 
-    private String nickname; //private attribute for the Player's ID
+    private final String nickname; //private attribute for the Player's ID
 
     private boolean isInGame; //private boolean to know if the player is still in the Game
 
@@ -38,6 +38,7 @@ public class Player {
      * @throws NullPointerException when the gametable has not been initialized (shouldn't happen btw)
      * @throws InvalidGodException if the chosen god is invalid
      */
+    @Deprecated
     public Player(String nickname, String god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
             if (gameTable == null) throw new NullPointerException();
             else if (!gameTable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
@@ -53,8 +54,26 @@ public class Player {
             }
     }
 
+    @Deprecated
     public Player(String nickname, Integer god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
         this(nickname,GameTable.getCompleteGodList().get(god), gameTable);
+    }
+
+    public Player(String nickname, GameTable gameTable) throws NickAlreadyTakenException {
+        if (gameTable == null) throw new NullPointerException();
+        else if (!gameTable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
+        else {
+            this.gameTable = gameTable;
+            this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
+            this.isInGame = true;
+            this.builderList = new ArrayList<>();
+            gameTable.addPlayer(this);
+            //TODO : inizializzare builderList (controller)
+        }
+    }
+
+    public void setGod(Integer god){
+        this.god = GameTable.getCompleteGodList().get(god);
     }
 
     /** DEBUG package-private constructor TODO remove in deploy **/

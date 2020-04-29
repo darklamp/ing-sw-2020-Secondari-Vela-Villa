@@ -1,17 +1,121 @@
 package it.polimi.ingsw.Controller;
 
-public class InitController {
-    // Nota: bisogna caprie dove mettere questi, se qua o nella parte di network
-                /*    case "SETPLAYERNAME":
-                            //TODO NB: una volta inizializzata la partita queste news non possono più essere usate!
-                            break;
-                    case "SETGODLIST":
-                            //TODO
-                            break;
-                    case "SETPLAYERGOD":
-                            //TODO
-                            break;
-                    case "INITBUILDER":
-                            //TODO
-                            break;*/
+import it.polimi.ingsw.Model.GameTable;
+import it.polimi.ingsw.Model.Pair;
+import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.View.RemoteView;
+import it.polimi.ingsw.View.View;
+
+import java.util.ArrayList;
+
+public class InitController implements Runnable{
+
+    private final SocketClientConnection c1,c2,c3;
+    private final ArrayList<Integer> gods;
+    private final Player player1,player2,player3;
+    private final GameTable gameTable;
+    private final MainController mainController;
+    private String userChoice;
+
+    public InitController(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods, Player player1, Player player2, Player player3, GameTable gameTable, MainController mainController){
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.gods = gods;
+        this.player1 = player1;
+        this.player2 = player2;
+        this.player3 = player3;
+        this.gameTable = gameTable;
+        this.mainController = mainController;
+    }
+
+    /*synchronized*/ public ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){
+        if(c3 == null) {
+            c2.send("Here are the available gods:\n");
+            ArrayList<Integer> out = new ArrayList<>();
+            int p2choice = c2.getGodChoice(gods);
+            out.add(p2choice);
+            c1.send("You're left with " + GameTable.getCompleteGodList().get(gods.get(0)));
+            out.add(0,gods.get(0));
+            return out;
+        }
+        else {
+            c2.send("Here are the available gods:\n");
+            ArrayList<Integer> out = new ArrayList<>();
+            int p2choice = c2.getGodChoice(gods);
+            out.add(p2choice);
+            c3.send("Here are the available gods:\n");
+            int p3choice = c3.getGodChoice(gods);
+            out.add(p3choice);
+            c1.send("You're left with " + GameTable.getCompleteGodList().get(gods.get(0)));
+            out.add(0,gods.get(0));
+            return out;
+        }
+    }
+
+    private synchronized ArrayList<Pair> getPlayerBuilderChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3) { //metodo che richiede le posizioni inziali dei worker
+        ArrayList<Pair> choices = new ArrayList<Pair>(); //array che conterrà tutte le coppie delle posizioni iniziali
+        c2.send("Insert the starting postitions of your first worker");
+        Pair c2b1 = c2.getBuilderChoice(choices); //nomenclatura è NomeConnessione+NumeroWorker
+       // System.out.println("Il giocatore 1 per il lavoratore 1 ha inserito riga "+c2b1.getFirst()+" e colonna "+c2b1.getSecond());
+        choices.add(c2b1); //aggiungo man mano ogni coppia all'array choices. Il controllo dell'input avviene nel metodo getBuilderChoice.
+        c2.send("Insert the starting postitions of your second worker");
+        Pair c2b2 = c2.getBuilderChoice(choices);
+        choices.add(c2b2);
+        if (c3 != null){
+            c3.send("Insert the starting postitions of your first worker");
+            Pair c3b1 = c3.getBuilderChoice(choices);
+            choices.add(c3b1);
+            c3.send("Insert the starting postitions of your second worker");
+            Pair c3b2 = c3.getBuilderChoice(choices);
+            choices.add(c3b2);
+        }
+        c1.send("Insert the starting postitions of your first worker");
+        Pair c1b1 = c1.getBuilderChoice(choices);
+        choices.add(c1b1);
+        c1.send("Insert the starting postitions of your second worker");
+        Pair c1b2 = c1.getBuilderChoice(choices);
+        choices.add(c1b2);
+        return choices;
+    }
+
+
+    @Override
+    public void run() {
+        ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        if(c3 != null) player1.setGod(choices.get(2));
+        ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
+        //Builder b2_1 = new Builder(gameTable.getCell(startPos.get(0).getFirst(), startPos.get(0).getSecond()), player2); booo
+        View player1View = new RemoteView(player1, c1);
+        View player2View = new RemoteView(player2, c2);
+        View player3View = null;
+        if (c3 != null) {
+            player3View = new RemoteView(player3, c3);
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1); players.add(player2);
+        if (player3 != null) players.add(player3);
+        gameTable.setPlayers(players);
+        gameTable.setGods(choices);
+        gameTable.addPropertyChangeListener(player1View);
+        gameTable.addPropertyChangeListener(player2View);
+        if (c3 != null){
+            gameTable.addPropertyChangeListener(player3View);
+        }
+        player1View.addPropertyChangeListener(mainController);
+        player2View.addPropertyChangeListener(mainController);
+        if (c3 != null){
+            player3View.addPropertyChangeListener(mainController);
+        }
+        c1.setReady(); c2.setReady();
+       if (c3 != null){
+           c3.setReady();
+       }
+       c1.asyncSend(gameTable.getBoardCopy());
+       c2.asyncSend(gameTable.getBoardCopy());
+       if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
+    }
 }

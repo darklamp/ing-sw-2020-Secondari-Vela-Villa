@@ -12,10 +12,12 @@ import java.beans.PropertyChangeListener;
 public class MainController implements PropertyChangeListener {
 
     private Player currentPlayer;
-    private BuildController buildController;
-    private MoveController moveController;
-    private GameTable gameTable;
+    private final BuildController buildController;
+    private final MoveController moveController;
+    private final GameTable gameTable;
+    private InitController initController;
     private News news;
+    private ControllerState state = ControllerState.INIT;
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
@@ -23,20 +25,27 @@ public class MainController implements PropertyChangeListener {
         String name = propertyChangeEvent.getPropertyName();
         this.setNews((News) obj);
         currentPlayer = gameTable.getCurrentPlayer();
-        // TODO: controllo bene che mossa provenga da persona giusta (come?)
-        if (name == null) gameTable.setNews(new News(), "INVALIDNEWS");
+        if (currentPlayer != news.getClient().getPlayer()) gameTable.setNews(new News(), "NOTYOURTURN");
+        else if (name == null) gameTable.setNews(new News(), "INVALIDNEWS");
         else {
             try {
-                isLegalState(name,currentPlayer.getState());
-                switch (name) {
-                    case "PASS" -> {
-                        gameTable.nextTurn();
-                        currentPlayer = gameTable.getCurrentPlayer(); // se il giocatore ha passato il turno e non ha vinto
-                        gameTable.setNews(new News(), "PASSOK");
+                switch (state){
+                    case INIT -> {
+
                     }
-                    case "BUILD" -> buildController.handleBuild(news);
-                    case "MOVE" -> moveController.handleMove(news);
-                    default -> throw new IllegalTurnStateException();
+                    case PLAY -> {
+                        isLegalState(name,currentPlayer.getState());
+                        switch (name) {
+                            case "PASS" -> {
+                                gameTable.nextTurn();
+                                currentPlayer = gameTable.getCurrentPlayer(); // se il giocatore ha passato il turno e non ha vinto
+                                gameTable.setNews(new News(), "PASSOK");
+                            }
+                            case "BUILD" -> buildController.handleBuild(news);
+                            case "MOVE" -> moveController.handleMove(news);
+                            default -> throw new IllegalTurnStateException();
+                        }
+                    }
                 }
             }
             catch(IllegalTurnStateException e){ // player isn't in a legal state for the move
@@ -85,4 +94,12 @@ public class MainController implements PropertyChangeListener {
         this.moveController = new MoveController(gameTable);
     }
 
+    public void setInitController(InitController initController){
+        if (this.initController == null) this.initController = initController;
+    }
+
+}
+
+enum ControllerState{
+    INIT,PLAY;
 }

@@ -127,7 +127,6 @@ public class GameTable {
         else return instance;
     }*/
 
-    /** debug for tests **/
     public GameTable(int playersNumber) {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
@@ -143,6 +142,7 @@ public class GameTable {
 
     }
 
+    @Deprecated
     public GameTable(int playersNumber, ArrayList<Integer> godChoices) {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
@@ -161,6 +161,14 @@ public class GameTable {
         }
         this.godChoices = gods;
 
+    }
+
+    public void setGods(ArrayList<Integer> godChoices){
+        ArrayList<String> gods = new ArrayList<>();
+        for (Integer godChoice : godChoices) {
+            gods.add(completeGodList.get(godChoice));
+        }
+        this.godChoices = gods;
     }
 
     public void setPlayers(ArrayList<Player> players){

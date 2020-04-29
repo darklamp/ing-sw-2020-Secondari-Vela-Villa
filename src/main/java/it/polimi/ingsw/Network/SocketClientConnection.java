@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Pair;
+import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Utility.Message;
 
 import java.beans.PropertyChangeListener;
@@ -22,6 +23,8 @@ public class SocketClientConnection implements Runnable {
     private final Server server;
     private final PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
     private News news;
+    private Player player;
+    private boolean ready;
 
     private boolean active = true;
 
@@ -34,11 +37,23 @@ public class SocketClientConnection implements Runnable {
         this.server = server;
     }
 
+    public void setReady(){
+        this.ready = true;
+    }
+
+    public void setPlayer(Player player) {
+        if (this.player == null && player != null) this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
     private synchronized boolean isActive(){
         return active;
     }
 
-    synchronized void send(Object message) {
+    public synchronized void send(Object message) {
         try {
             out.reset();
             out.writeObject(message);
@@ -70,7 +85,7 @@ public class SocketClientConnection implements Runnable {
         new Thread(() -> send(message)).start();
     }
 
-    synchronized Pair getBuilderChoice(ArrayList<Pair> choices){ //mi porto dietro choices perchè dovrò effettuare il confronto tra tutte le posizioni inserite in precedenza
+    public synchronized Pair getBuilderChoice(ArrayList<Pair> choices){ //mi porto dietro choices perchè dovrò effettuare il confronto tra tutte le posizioni inserite in precedenza
         Pair out;
         int c,r; //sia righe che colonne vanno da 0 a 4 compresi
         Scanner in = null;
@@ -118,7 +133,7 @@ public class SocketClientConnection implements Runnable {
         return out;
     }
 
-    synchronized int getGodChoice(ArrayList<Integer> gods){
+    public synchronized int getGodChoice(ArrayList<Integer> gods){
         for (Integer god : gods) {
             send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
         }
@@ -208,8 +223,10 @@ public class SocketClientConnection implements Runnable {
                 }
             }
             while(isActive()){
-                read = in.nextLine();
-                setNews(new News(),"INPUT");
+                if (ready){
+                    read = in.nextLine();
+                    setNews(new News(read,this),"INPUT");
+                }
             }
         } catch (IOException | NoSuchElementException e) {
             System.err.println("Error!" + e.getMessage());

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View;
 
 
-import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.SocketClientConnection;
@@ -9,7 +8,9 @@ import it.polimi.ingsw.Network.SocketClientConnection;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+
 public class RemoteView extends View {
+
 
     private class MessageReceiver implements PropertyChangeListener {
 
@@ -19,27 +20,14 @@ public class RemoteView extends View {
         @Override
         public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
             Object obj = propertyChangeEvent.getNewValue();
-            String name = propertyChangeEvent.getPropertyName();
             setNews((News) obj);
             System.out.println("Received: " + "news"); //?
-            try {
-//                handleMove(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
-
-                //todo move handling
-            } catch (IllegalArgumentException e) {
-                SocketClientConnection.asyncSend("Error!");
-
-            }
+            setControllerNews(news, "INPUT");
         }
 
         private void setNews(News news){
             this.news = news;
         }
-
-        public News getNews(){
-            return this.news;
-        }
-
     }
 
     private SocketClientConnection SocketClientConnection;
@@ -66,3 +54,4 @@ public class RemoteView extends View {
     }
 
 }
+
