@@ -16,6 +16,7 @@ import static it.polimi.ingsw.Model.BuildingType.NONE;
 public class Client implements Runnable {
     private static String ip;
     private static int port;
+    private static ClientState state = ClientState.INIT;
 
     public static Ui getUi() {
         return ui;
@@ -40,7 +41,10 @@ public class Client implements Runnable {
                         ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]){
                         ui.showTable((CellView[][])inputObject);
-                    } else {
+                    } else if (inputObject instanceof ClientState c){
+                        state = c;
+                    }
+                    else {
                         throw new IllegalArgumentException();
                     }
                 }
@@ -68,7 +72,23 @@ public class Client implements Runnable {
             try {
                 while (isActive()) {
                     String inputLine = stdin.nextLine();
-                    socketOut.println(inputLine);
+                    if (state == ClientState.INIT)  socketOut.println(inputLine);
+                    else if (state == ClientState.MOVE) {
+                        try{
+                            String[] s = inputLine.split(",");
+                            socketOut.println("MOVE" + "$$" + s[0] + "$$" + s[1] + "$$" + s[2]);
+                        }
+                        catch (Exception ignored){
+                        }
+                    }
+                    else if(state == ClientState.BUILD){
+                        try{
+                            String[] s = inputLine.split(",");
+                            socketOut.println("BUILD" + "$$" + s[0] + "$$" + s[1] + "$$" + s[2]);
+                        }
+                        catch (Exception ignored){
+                        }
+                    }
                     socketOut.flush();
                 }
             }catch(Exception e){
@@ -118,3 +138,4 @@ public class Client implements Runnable {
     }
 
 }
+

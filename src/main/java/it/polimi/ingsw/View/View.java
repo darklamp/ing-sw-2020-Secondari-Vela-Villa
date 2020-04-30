@@ -58,12 +58,6 @@ public abstract class View implements PropertyChangeListener {
 
     protected abstract void showMessage(Object message);
 
-    void handleMove() {
-        //System.out.println(row + " " + column);
-        //notify(new re(player, row, column, this));
-        setControllerNews(new News(/*TODO*/),"TYPE");
-    }
-
     public void reportError(String message){
         showMessage(message);
     }

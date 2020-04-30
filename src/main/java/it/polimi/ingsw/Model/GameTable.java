@@ -16,7 +16,7 @@ public class GameTable {
     private ArrayList<Player> players; /** arraylist filled with players **/
     private static ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
     private static GameTable instance; /** Singleton instance for GameTable **/ //TODO remove!!
-    private int currentPlayer = 0; /** current player index **/
+    private int currentPlayer = 1; /** current player index **/
     private final int playersNumber; /** number of players in game **/
     public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATHENA","ATLAS","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS"); /* list containing all the basic gods */
     private ArrayList<String> godChoices; /* list of gods chosen by the first player to be available in the game */
@@ -224,7 +224,6 @@ public class GameTable {
     protected void addPlayer(Player player){
 
         players.add(player);
-        setNews(new News(player), "ADDPLAYER"); /* sets news for view */
 
     }
 

@@ -6,6 +6,9 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.Model.TurnState.MOVE;
+import static it.polimi.ingsw.Model.TurnState.MOVEORBUILD;
+
 public class Player {
 
     private ArrayList<Builder> builderList; //array of builders
@@ -47,7 +50,6 @@ public class Player {
                 this.god = god.toUpperCase();
                 this.builderList = new ArrayList<>();
                 gameTable.addPlayer(this);
-                //TODO : inizializzare builderList (controller)
             }
     }
 
@@ -64,12 +66,16 @@ public class Player {
             this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
             this.builderList = new ArrayList<>();
             gameTable.addPlayer(this);
-            //TODO : inizializzare builderList (controller)
         }
     }
 
     public void setGod(Integer god){
         this.god = GameTable.getCompleteGodList().get(god);
+        this.turnState = gameTable.getPlayerIndex(this) == 1 ? getFirstTurnState(god) : TurnState.NOOP;
+    }
+
+    private TurnState getFirstTurnState(Integer god){
+        return (god == 8) ? MOVEORBUILD : MOVE; /* if god is prometheus, he can move as well as build at first */
     }
 
     /** DEBUG package-private constructor TODO remove in deploy **/
@@ -82,7 +88,6 @@ public class Player {
             this.god = god.toUpperCase();
             this.builderList = new ArrayList<>();
             g.addPlayer(this);
-            //TODO : inizializzare builderList (controller)
         }
     }
 

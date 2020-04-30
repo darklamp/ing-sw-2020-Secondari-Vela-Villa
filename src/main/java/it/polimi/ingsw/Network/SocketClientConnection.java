@@ -1,12 +1,11 @@
 package it.polimi.ingsw.Network;
 
 
-import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Utility.Message;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -24,7 +23,7 @@ public class SocketClientConnection implements Runnable {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
     private News news;
     private Player player;
-    private boolean ready;
+    private boolean ready = false;
 
     private boolean active = true;
 
@@ -38,7 +37,13 @@ public class SocketClientConnection implements Runnable {
     }
 
     public void setReady(){
+        ClientState newState = ClientState.WAIT;
+        this.send(newState);
         this.ready = true;
+    }
+
+    public void setState(ClientState state){
+        this.send(state);
     }
 
     public void setPlayer(Player player) {
@@ -109,7 +114,7 @@ public class SocketClientConnection implements Runnable {
                     break;
                 }
                 else{
-                    send(Message.wrongNumber);
+                    send(ServerMessage.wrongNumber);
                 }
             }
             send("Insert a column >= 0 and < 5: ");
@@ -119,7 +124,7 @@ public class SocketClientConnection implements Runnable {
                     break;
                 }
                 else{
-                    send(Message.wrongNumber);
+                    send(ServerMessage.wrongNumber);
                 }
             }
             out = new Pair(r,c);
@@ -170,7 +175,7 @@ public class SocketClientConnection implements Runnable {
      * @return array of integers; in the first position resides playerNumber, while the next 2/3 positions contain the gods
      */
     synchronized ArrayList<Integer> firstPlayer() {
-        send(Message.firstPlayer);
+        send(ServerMessage.firstPlayer);
         Scanner in = null;
         try {
             in = new Scanner(socket.getInputStream());
@@ -180,7 +185,7 @@ public class SocketClientConnection implements Runnable {
         assert in != null;
         int playersNumber = in.nextInt();
         while (playersNumber != 2 && playersNumber != 3){
-            send(Message.firstPlayer);
+            send(ServerMessage.firstPlayer);
             playersNumber = in.nextInt();
         }
         send("Nice! Now you need to choose " + playersNumber + " gods to be used in the game.\n");
@@ -189,7 +194,7 @@ public class SocketClientConnection implements Runnable {
         int count = 0;
         ArrayList<Integer> gods =  new ArrayList<>();
         while(count < playersNumber){
-            send(Message.nextNumber);
+            send(ServerMessage.nextNumber);
             int i = in.nextInt();
             if (i < 10 && i >= 0 && !gods.contains(i)) {
                 gods.add(count,i);
@@ -213,7 +218,7 @@ public class SocketClientConnection implements Runnable {
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
-            send(Message.welcome);
+            send(ServerMessage.welcome);
             String read = in.nextLine();
             name = read;
             while(true){
@@ -222,7 +227,7 @@ public class SocketClientConnection implements Runnable {
                     break;
                 }
                 catch (Exception ee){
-                    send(Message.userAlreadyTaken);
+                    send(ServerMessage.userAlreadyTaken);
                     read = in.nextLine();
                     name = read;
                 }

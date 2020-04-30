@@ -75,8 +75,8 @@ public class Server {
                 for (int i = 1; i <= gameProperties.get(getCurrentGameIndex()).get(0); i++){
                     gods.add(gameProperties.get(getCurrentGameIndex()).get(i));
                 }
-                MainController controller = new MainController(keys.size());
                 GameTable gameTable = new GameTable(keys.size());
+                MainController controller = new MainController(gameTable);
                 Player player1 = new Player(keys.get(0), gameTable);
                 c1.setPlayer(player1);
                 Player player2 = new Player(keys.get(1), gameTable);

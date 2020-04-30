@@ -5,8 +5,8 @@ package it.polimi.ingsw.Model;
  * MOVE --> the player is allowed to move
  * BUILD -->                         build
  * BOTH -->                          move/build
- * PASS --> the player has to pass
+ * NOOP --> the player cannot do anything
  */
 public enum TurnState {
-    MOVE,BUILD,MOVEORBUILD,BUILDORPASS,PASS
+    MOVE,BUILD,MOVEORBUILD,BUILDORPASS, NOOP
 }

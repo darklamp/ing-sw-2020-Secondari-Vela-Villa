@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Model.Builder;
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
@@ -116,11 +116,11 @@ public class InitController implements Runnable{
         } catch (InvalidBuildException | InvalidCoordinateException e) {
             e.printStackTrace();
         }
-        View player1View = new RemoteView(player1, c1);
-        View player2View = new RemoteView(player2, c2);
+        View player1View = new RemoteView(player1, c1, gameTable);
+        View player2View = new RemoteView(player2, c2, gameTable);
         View player3View = null;
         if (c3 != null) {
-            player3View = new RemoteView(player3, c3);
+            player3View = new RemoteView(player3, c3, gameTable);
         }
         ArrayList<Player> players = new ArrayList<>();
         players.add(player1); players.add(player2);
@@ -138,11 +138,12 @@ public class InitController implements Runnable{
             player3View.addPropertyChangeListener(mainController);
         }
         c1.setReady(); c2.setReady();
-       if (c3 != null){
-           c3.setReady();
-       }
-       c1.send(gameTable.getBoardCopy());
+        if (c3 != null){
+            c3.setReady();
+        }
+       c1.asyncSend(gameTable.getBoardCopy());
        c2.asyncSend(gameTable.getBoardCopy());
        if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
+       c2.setState(ClientState.MOVE);
     }
 }
