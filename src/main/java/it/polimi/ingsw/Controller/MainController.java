@@ -17,10 +17,10 @@ public class MainController implements PropertyChangeListener {
     private final GameTable gameTable;
     private InitController initController;
     private News news;
-    private ControllerState state = ControllerState.INIT;
+    private ControllerState state = ControllerState.PLAY;
 
     @Override
-    public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
+    synchronized public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
         Object obj = propertyChangeEvent.getNewValue();
         String name = propertyChangeEvent.getPropertyName();
         this.setNews((News) obj);
@@ -30,9 +30,6 @@ public class MainController implements PropertyChangeListener {
         else {
             try {
                 switch (state){
-                    case INIT -> {
-
-                    }
                     case PLAY -> {
                         isLegalState(name,currentPlayer.getState());
                         switch (name) {
@@ -101,5 +98,5 @@ public class MainController implements PropertyChangeListener {
 }
 
 enum ControllerState{
-    INIT,PLAY;
+    PLAY;
 }

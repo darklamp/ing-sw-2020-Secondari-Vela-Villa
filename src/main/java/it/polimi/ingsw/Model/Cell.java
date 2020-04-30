@@ -14,9 +14,12 @@ public class Cell implements Serializable {
 
     private final Pair coordinates;
 
+    private final GameTable gameTable;
+
     private BuildingType height = BuildingType.NONE;
 
-    public Cell(int x, int y) { // constructor for Cell
+    public Cell(int x, int y, GameTable gameTable) { // constructor for Cell
+        this.gameTable = gameTable;
         this.coordinates = new Pair(x,y);
     }
 
@@ -94,8 +97,8 @@ public class Cell implements Serializable {
      * @param y Y  ..
      * @return true if the Cell has no builder nor dome on it, else false
      */
-    static boolean movableCell(int x, int y) throws InvalidCoordinateException{
-        return GameTable.getCell(x,y).getBuilder() == null && (GameTable.getCell(x,y).getHeight() != BuildingType.DOME);
+    boolean movableCell(int x, int y) throws InvalidCoordinateException{
+        return gameTable.getCell(x,y).getBuilder() == null && (gameTable.getCell(x,y).getHeight() != BuildingType.DOME);
     }
 
 

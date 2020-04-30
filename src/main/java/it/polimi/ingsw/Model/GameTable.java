@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GameTable {
 
-    private static Cell[][] Table; /** 5x5 matrix representing game table **/
+    private final Cell[][] Table; /** 5x5 matrix representing game table **/
     private ArrayList<Player> players; /** arraylist filled with players **/
     private static ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
     private static GameTable instance; /** Singleton instance for GameTable **/ //TODO remove!!
@@ -133,7 +133,7 @@ public class GameTable {
         arrayTable = new ArrayList<>();
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 5; j++){
-                Table[i][j] = new Cell(i,j);
+                Table[i][j] = new Cell(i,j,this);
                 arrayTable.add(Table[i][j]);
             }
         }
@@ -149,7 +149,7 @@ public class GameTable {
         arrayTable = new ArrayList<>();
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 5; j++){
-                Table[i][j] = new Cell(i,j);
+                Table[i][j] = new Cell(i,j,this);
                 arrayTable.add(Table[i][j]);
             }
         }
@@ -188,7 +188,7 @@ public class GameTable {
     protected static ArrayList<Cell> toArrayList(){
         return arrayTable;
     }
-    public static Cell getCell(int x,int y) throws InvalidCoordinateException{
+    public Cell getCell(int x,int y) throws InvalidCoordinateException{
             isInvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
     }/*

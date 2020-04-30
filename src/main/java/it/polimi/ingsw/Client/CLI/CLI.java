@@ -40,7 +40,7 @@ public class CLI implements Ui {
             {
                 if(r==0 && c==0)
                 {
-                    System.out.print("    A | B | C | D | E \n");
+                    System.out.print("    1 | 2 | 3 | 4 | 5 \n");
                     System.out.print("  ┌───┬───┬───┬───┬───┐\n0 │ ");
                 }
                 else if(c==0)

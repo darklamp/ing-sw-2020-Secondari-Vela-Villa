@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static it.polimi.ingsw.Model.Cell.movableCell;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CellTest {
@@ -66,18 +65,18 @@ class CellTest {
      */
     @Test
     void movableCellTest() throws Exception{
-        GameTable.getCell(4,3).setHeight(b1,BuildingType.BASE);
-        GameTable.getCell(3,3).setHeight(b1,BuildingType.BASE);
-        GameTable.getCell(3,4).setHeight(b1,BuildingType.BASE);
-        GameTable.getCell(3,4).setHeight(b1,BuildingType.MIDDLE);
-        GameTable.getCell(3,4).setHeight(b1,BuildingType.TOP);
-        GameTable.getCell(3,4).setHeight(b1,BuildingType.DOME);
+        g.getCell(4,3).setHeight(b1,BuildingType.BASE);
+        g.getCell(3,3).setHeight(b1,BuildingType.BASE);
+        g.getCell(3,4).setHeight(b1,BuildingType.BASE);
+        g.getCell(3,4).setHeight(b1,BuildingType.MIDDLE);
+        g.getCell(3,4).setHeight(b1,BuildingType.TOP);
+        g.getCell(3,4).setHeight(b1,BuildingType.DOME);
 
-        assertTrue(movableCell(4,3));
-        assertTrue(movableCell(3,3));
-        assertFalse(movableCell(3,4));
-        assertFalse(movableCell(4,4));
-        assertFalse(movableCell(2,0));
+        assertTrue(c1.movableCell(4,3));
+        assertTrue(c1.movableCell(3,3));
+        assertFalse(c1.movableCell(3,4));
+        assertFalse(c1.movableCell(4,4));
+        assertFalse(c1.movableCell(2,0));
     }
 
 }

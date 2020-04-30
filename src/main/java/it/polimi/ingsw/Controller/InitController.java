@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Model.Builder;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
@@ -86,10 +89,10 @@ public class InitController implements Runnable{
         }
         c1.send("Insert the starting positions of your first worker");
         Pair c1b1 = c1.getBuilderChoice(choices);
-        choices.add(c1b1);
+        choices.add(0,c1b1);
         c1.send("Insert the starting positions of your second worker");
         Pair c1b2 = c1.getBuilderChoice(choices);
-        choices.add(c1b2);
+        choices.add(1,c1b2);
         return choices;
     }
 
@@ -101,7 +104,18 @@ public class InitController implements Runnable{
         player2.setGod(choices.get(1));
         if(c3 != null) player1.setGod(choices.get(2));
         ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
-        //Builder b2_1 = new Builder(gameTable.getCell(startPos.get(0).getFirst(), startPos.get(0).getSecond()), player2); booo
+        try {
+            player1.initBuilderList(gameTable.getCell(startPos.get(0).getFirst(), startPos.get(0).getSecond()));
+            player1.initBuilderList(gameTable.getCell(startPos.get(1).getFirst(), startPos.get(1).getSecond()));
+            player2.initBuilderList(gameTable.getCell(startPos.get(2).getFirst(), startPos.get(2).getSecond()));
+            player2.initBuilderList(gameTable.getCell(startPos.get(3).getFirst(), startPos.get(3).getSecond()));
+            if (player3 != null) {
+                player3.initBuilderList(gameTable.getCell(startPos.get(4).getFirst(), startPos.get(4).getSecond()));
+                player3.initBuilderList(gameTable.getCell(startPos.get(5).getFirst(), startPos.get(5).getSecond()));
+            }
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
         View player1View = new RemoteView(player1, c1);
         View player2View = new RemoteView(player2, c2);
         View player3View = null;

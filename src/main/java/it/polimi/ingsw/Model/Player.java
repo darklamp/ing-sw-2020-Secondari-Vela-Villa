@@ -14,8 +14,6 @@ public class Player {
 
     private final String nickname; //private attribute for the Player's ID
 
-    private boolean isInGame; //private boolean to know if the player is still in the Game
-
     private String god;
 
     private TurnState turnState;
@@ -46,7 +44,6 @@ public class Player {
             else {
                 this.gameTable = gameTable;
                 this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
-                this.isInGame = true;
                 this.god = god.toUpperCase();
                 this.builderList = new ArrayList<>();
                 gameTable.addPlayer(this);
@@ -65,7 +62,6 @@ public class Player {
         else {
             this.gameTable = gameTable;
             this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
-            this.isInGame = true;
             this.builderList = new ArrayList<>();
             gameTable.addPlayer(this);
             //TODO : inizializzare builderList (controller)
@@ -83,7 +79,6 @@ public class Player {
        // else if (!isValidGod(god)) throw new InvalidGodException();
         else {
             this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
-            this.isInGame = true;
             this.god = god.toUpperCase();
             this.builderList = new ArrayList<>();
             g.addPlayer(this);
