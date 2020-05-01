@@ -9,12 +9,13 @@ public enum Color {
     ANSI_CYAN("\u001B[36m"),
     ANSI_WHITE("\u001B[37m"),
     ANSI_WHITE_BG("\u001B[47m"),
+    ANSI_CYAN_BG("\u001b[46"),
     ANSI_LEVEL1("\u001B[2680m");
 
     public static final String RESET = "\u001B[0m";
     public static final String BOLD = "\u001b[1m";
 
-    private String escape;
+    private final String escape;
 
     Color(String escape)
     {

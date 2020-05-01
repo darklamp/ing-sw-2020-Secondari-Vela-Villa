@@ -13,8 +13,8 @@ public class BuildController {
 
     public void handleBuild(News news) {
         try{
-            if (news.getBuilder() != gameTable.getCurrentBuilder()) throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
-            news.getCell().setHeight(news.getBuilder(), news.getHeight());
+            if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder()) throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
+            news.getCell().setHeight(news.getBuilder(gameTable), news.getHeight());
             gameTable.getCurrentPlayer().setState(NOOP);
             gameTable.setNews(news,"BUILDOK");
         }catch (DemeterException e) {

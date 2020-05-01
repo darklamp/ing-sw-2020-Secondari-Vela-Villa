@@ -4,13 +4,9 @@ import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
 import it.polimi.ingsw.Utility.Color;
-import it.polimi.ingsw.Utility.Utils;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.IOException;
-import java.util.Scanner;
-
-import static it.polimi.ingsw.Model.BuildingType.*;
 
 public class CLI implements Ui {
     @Override
@@ -41,12 +37,12 @@ public class CLI implements Ui {
             {
                 if(r==0 && c==0)
                 {
-                    System.out.print("    0 | 1 | 2 | 3 | 4 \n");
-                    System.out.print("  ┌───┬───┬───┬───┬───┐\n0 │ ");
+                    System.out.print(Color.ANSI_WHITE + "    0 | 1 | 2 | 3 | 4 \n");
+                    System.out.print(Color.ANSI_CYAN +  "  ┌───┬───┬───┬───┬───┐\n" + Color.ANSI_WHITE + "0" + Color.ANSI_CYAN + " │ ");
                 }
                 else if(c==0)
                 {
-                    System.out.print("\n─ ├───┼───┼───┼───┼───┤\n" + r + " │ ");
+                    System.out.print(Color.ANSI_CYAN + "\n─ ├───┼───┼───┼───┼───┤\n" + Color.ANSI_WHITE + r + Color.ANSI_CYAN + " │ ");
                 }
                 switch (table[r][c].getHeight()){
                     case NONE -> dice.Zero();
@@ -66,10 +62,10 @@ public class CLI implements Ui {
                 dice.Stamp();
 
                 if (c == 4){
-                    if (r == 0) System.out.print(Color.BOLD + "  PLAYER ONE  " + Color.ANSI_BLUE + "    █ 1 █ " + Color.ANSI_YELLOW +"█ 2 █" + Color.RESET);
-                    else if (r == 1) System.out.print(Color.BOLD + "  PLAYER TWO  "+ Color.ANSI_RED + "    █ 1 █ " + Color.ANSI_CYAN +"█ 2 █" + Color.RESET);
-                    else if (r == 2) System.out.print(Color.BOLD + "  PLAYER THREE  " + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE +"█ 2 █" + Color.RESET);
-                    else if (r == 3) System.out.print(Color.BOLD + Color.ANSI_WHITE+ "  ███  NO PLAYER     ███" + Color.RESET);
+                    if (r == 0) System.out.print(Color.RESET + Color.BOLD + "  PLAYER ONE  " + Color.ANSI_BLUE + "    █ 1 █ " + Color.ANSI_YELLOW +"█ 2 █" + Color.RESET);
+                    else if (r == 1) System.out.print(Color.RESET + Color.BOLD + "  PLAYER TWO  "+ Color.ANSI_RED + "    █ 1 █ " + Color.ANSI_CYAN +"█ 2 █" + Color.RESET);
+                    else if (r == 2) System.out.print(Color.RESET + Color.BOLD + "  PLAYER THREE  " + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE +"█ 2 █" + Color.RESET);
+                    else if (r == 3) System.out.print(Color.RESET + Color.BOLD + Color.ANSI_WHITE+ "  ███  NO PLAYER     ███" + Color.RESET);
                 }
 
             }
@@ -122,5 +118,5 @@ class Dice {
         return this.color + face + Color.RESET;
     }
 
-    void Stamp(){System.out.print(this+" │ ");}
+    void Stamp(){System.out.print(this.toString() + Color.ANSI_CYAN + " │ ");}
 }

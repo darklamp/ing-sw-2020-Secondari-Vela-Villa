@@ -18,9 +18,9 @@ public class MoveController {
 
     public void handleMove(News news) {
         try{
-            news.getBuilder().setPosition(news.getCell());
+            news.getBuilder(gameTable).setPosition(news.getCell());
             gameTable.getCurrentPlayer().setState(BUILD);
-            gameTable.setCurrentBuilder(news.getBuilder());
+            gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             gameTable.setNews(news,"MOVEOK");
         }
         catch (InvalidMoveException e){

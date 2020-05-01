@@ -37,7 +37,6 @@ public abstract class View implements PropertyChangeListener {
         Object obj = propertyChangeEvent.getNewValue();
         String name = propertyChangeEvent.getPropertyName();
         this.setModelNews((News) obj);
-
     }
 
     private News getModelNews(){

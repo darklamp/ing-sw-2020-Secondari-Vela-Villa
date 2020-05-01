@@ -48,7 +48,7 @@ public class RemoteView extends View {
             String s = news.getString();
             if (s == null) news.setInvalid();
             else {
-                String[] args = s.split("$$");
+                String[] args = s.split("@@@");
                 if (args[0] == null || !validTypes.contains(args[0])) {
                     news.setInvalid();
                 }
@@ -66,8 +66,8 @@ public class RemoteView extends View {
                                             j = Integer.parseInt(args[2]);
                                             if (j < 5 && j >= 0){
                                                 k = Integer.parseInt(args[3]);
-                                                if (k != 0 && k != 1){
-                                                    news.setCoords(i,j,k);
+                                                if (k == 2 || k == 1){
+                                                    news.setCoords(i,j,k-1);
                                                     setControllerNews(news, "MOVE");
                                                     break;
                                                 }
@@ -91,8 +91,8 @@ public class RemoteView extends View {
                                         j = Integer.parseInt(args[2]);
                                         if (j < 5 && j >= 0){
                                             k = Integer.parseInt(args[3]);
-                                            if (k != 0 && k != 1){
-                                                news.setCoords(i,j,k);
+                                            if (k == 2 || k == 1){
+                                                news.setCoords(i,j,k-1);
                                                 setControllerNews(news, "BUILD");
                                                 break;
                                             }
@@ -144,12 +144,12 @@ public class RemoteView extends View {
                 case "ILLEGALTURNSTATE","INVALIDNEWS" -> this.socketClientConnection.asyncSend(ServerMessage.invalidMove);
                 case "NEXTPLAYER" -> this.socketClientConnection.asyncSend(ClientState.MOVE); //TODO verificare vada bene con Prometheus
                 case "MOVEOK" -> {
-                    this.socketClientConnection.asyncSend(ClientState.BUILD);
-                    this.socketClientConnection.asyncSend(gameTable.getBoardCopy());
+                    this.socketClientConnection.send(gameTable.getBoardCopy());
+                    this.socketClientConnection.send(ClientState.BUILD);
                 }
                 case "BUILDOK" -> {
-                    this.socketClientConnection.asyncSend(ClientState.WAIT);
-                    this.socketClientConnection.asyncSend(gameTable.getBoardCopy());
+                    this.socketClientConnection.send(gameTable.getBoardCopy());
+                    this.socketClientConnection.send(ClientState.WAIT);
                 }
             }
         }

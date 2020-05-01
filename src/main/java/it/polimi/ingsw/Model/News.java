@@ -1,7 +1,10 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Controller.BuildController;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -80,8 +83,12 @@ public class News {
         return cell;
     }
 
-    public Builder getBuilder() {
-        return builder;
+    public Builder getBuilder(GameTable gameTable) {
+        try {
+            return gameTable.getCell(this.coords.getFirst(),this.getCoords().getSecond()).getBuilder();
+        } catch (InvalidCoordinateException ignored) {
+        }
+        return null;
     }
 
     public BuildingType getHeight() {

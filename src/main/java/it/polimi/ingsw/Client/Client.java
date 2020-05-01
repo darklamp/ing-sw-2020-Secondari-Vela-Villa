@@ -77,7 +77,7 @@ public class Client implements Runnable {
                     else if (state == ClientState.MOVE) {
                         try{
                             String[] s = inputLine.split(",");
-                            socketOut.println("MOVE" + "$$" + s[0] + "$$" + s[1] + "$$" + s[2]);
+                            socketOut.println("MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
                         }
                         catch (Exception ignored){
                         }
@@ -85,7 +85,7 @@ public class Client implements Runnable {
                     else if(state == ClientState.BUILD){
                         try{
                             String[] s = inputLine.split(",");
-                            socketOut.println("BUILD" + "$$" + s[0] + "$$" + s[1] + "$$" + s[2]);
+                            socketOut.println("BUILD" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
                         }
                         catch (Exception ignored){
                         }
