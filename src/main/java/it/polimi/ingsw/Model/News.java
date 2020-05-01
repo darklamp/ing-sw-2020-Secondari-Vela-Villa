@@ -79,16 +79,16 @@ public class News {
 
     public String getString(){ return string; }
 
-    public Cell getCell() {
-        return cell;
-    }
-
-    public Builder getBuilder(GameTable gameTable) {
+    public Cell getCell(GameTable gameTable) {
         try {
-            return gameTable.getCell(this.coords.getFirst(),this.getCoords().getSecond()).getBuilder();
+            return gameTable.getCell(this.coords.getFirst(),this.getCoords().getSecond());
         } catch (InvalidCoordinateException ignored) {
         }
         return null;
+    }
+
+    public Builder getBuilder(GameTable gameTable) {
+        return gameTable.getCell(this.sender).getBuilder();
     }
 
     public BuildingType getHeight() {

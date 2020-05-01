@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.InvalidPlayersNumberException;
+import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.View.CellView;
 
 import java.beans.PropertyChangeListener;
@@ -191,7 +192,11 @@ public class GameTable {
     public Cell getCell(int x,int y) throws InvalidCoordinateException{
             isInvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
-    }/*
+    }
+    public Cell getCell(SocketClientConnection c){
+        return c.getPlayer().getBuilderList().get(0).getPosition();
+    }
+    /*
     public boolean checkGameover(){
         //return true if there is just one player in game
     }

@@ -53,8 +53,8 @@ public class CLI implements Ui {
                 }
                 Color color;
                 switch (table[r][c].getPlayer()){
-                    case 0 -> color = table[r][c].isFirst() ? Color.ANSI_BLUE : Color.ANSI_CYAN;
-                    case 1 -> color = table[r][c].isFirst() ? Color.ANSI_RED : Color.ANSI_YELLOW;
+                    case 0 -> color = table[r][c].isFirst() ? Color.ANSI_BLUE : Color.ANSI_YELLOW;
+                    case 1 -> color = table[r][c].isFirst() ? Color.ANSI_RED : Color.ANSI_CYAN;
                     case 2 -> color = table[r][c].isFirst() ? Color.ANSI_GREEN : Color.ANSI_PURPLE;
                     default -> color = Color.ANSI_WHITE;
                 }

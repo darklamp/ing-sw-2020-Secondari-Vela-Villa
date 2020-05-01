@@ -16,5 +16,6 @@ public final class ServerMessage implements Serializable {
     public static String makeYourMove = "It's your turn. Please make a move: ";
     public static String notYourTurn = "Wait for your turn you heathen";
     public static String invalidMove = "Invalid move. Please try again.";
+    public static String genericErrorMessage = "Richiesta no buena.";
 
 }

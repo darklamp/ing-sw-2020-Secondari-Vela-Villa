@@ -141,6 +141,10 @@ public class Player {
         return this.builderList.size() == 0;
     }
 
+    ArrayList<Builder> getBuilderList(){
+        return this.builderList;
+    }
+
     public String getNickname() {
         return nickname;
     }

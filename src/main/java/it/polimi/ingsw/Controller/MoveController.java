@@ -10,7 +10,7 @@ import it.polimi.ingsw.Model.News;
 import static it.polimi.ingsw.Model.TurnState.BUILD;
 
 public class MoveController {
-    private GameTable gameTable;
+    private final GameTable gameTable;
 
     public MoveController(GameTable gameTable){
         this.gameTable = gameTable;
@@ -18,19 +18,19 @@ public class MoveController {
 
     public void handleMove(News news) {
         try{
-            news.getBuilder(gameTable).setPosition(news.getCell());
+            news.getBuilder(gameTable).setPosition(news.getCell(gameTable));
             gameTable.getCurrentPlayer().setState(BUILD);
             gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             gameTable.setNews(news,"MOVEOK");
-        }
-        catch (InvalidMoveException e){
-            gameTable.setNews(news,"MOVEKO");
         }
         catch (ArtemisException e){
 
         } catch (PanException e){
 
         } catch (PrometeusException e) {
+        }
+        catch (Exception e){
+            gameTable.setNews(news,"MOVEKO");
         }
 
     }

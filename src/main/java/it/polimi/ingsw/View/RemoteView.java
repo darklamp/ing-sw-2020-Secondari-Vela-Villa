@@ -141,7 +141,7 @@ public class RemoteView extends View {
         if (c == null || c.contains(this.socketClientConnection)) {
             switch (name){
                 case "NOTYOURTURN" -> this.socketClientConnection.asyncSend(ServerMessage.notYourTurn);
-                case "ILLEGALTURNSTATE","INVALIDNEWS" -> this.socketClientConnection.asyncSend(ServerMessage.invalidMove);
+                case "ILLEGALSTATE","INVALIDNEWS","MOVEKO" -> this.socketClientConnection.asyncSend(ServerMessage.invalidMove);
                 case "NEXTPLAYER" -> this.socketClientConnection.asyncSend(ClientState.MOVE); //TODO verificare vada bene con Prometheus
                 case "MOVEOK" -> {
                     this.socketClientConnection.send(gameTable.getBoardCopy());
@@ -151,6 +151,7 @@ public class RemoteView extends View {
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                     this.socketClientConnection.send(ClientState.WAIT);
                 }
+                default -> this.socketClientConnection.asyncSend(ServerMessage.genericErrorMessage);
             }
         }
     }
