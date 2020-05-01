@@ -9,14 +9,16 @@ import static it.polimi.ingsw.Model.TurnState.*;
 
 public class BuildController {
 
-    private GameTable gameTable;
+    private final GameTable gameTable;
 
     public void handleBuild(News news) {
         try{
             if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder()) throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
-            news.getCell(gameTable).setHeight(news.getBuilder(gameTable), news.getHeight());
+            news.getCell(gameTable).setHeight(news.getBuilder(gameTable));
             gameTable.getCurrentPlayer().setState(NOOP);
+            news.setRecipients(gameTable.getPlayerConnections());
             gameTable.setNews(news,"BUILDOK");
+            // logica di passaggio turno TODO
         }catch (DemeterException e) {
             gameTable.getCurrentPlayer().setState(BUILDORPASS);
             gameTable.setNews(news,"BUILDOK");

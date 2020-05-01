@@ -30,6 +30,10 @@ public class News {
         this.recipients.add(sender);
     }
 
+    public void setRecipients(ArrayList<SocketClientConnection> list){
+        this.recipients = list;
+    }
+
     private final BuildingType height;
 
     private final Cell cell;

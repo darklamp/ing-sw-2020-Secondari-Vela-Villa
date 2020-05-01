@@ -77,13 +77,13 @@ public class Server {
                 }
                 GameTable gameTable = new GameTable(keys.size());
                 MainController controller = new MainController(gameTable);
-                Player player1 = new Player(keys.get(0), gameTable);
+                Player player1 = new Player(keys.get(0), gameTable, c1);
                 c1.setPlayer(player1);
-                Player player2 = new Player(keys.get(1), gameTable);
+                Player player2 = new Player(keys.get(1), gameTable, c2);
                 c2.setPlayer(player2);
                 Player player3 = null;
                 if (c3 != null) {
-                    player3 = new Player(keys.get(2), gameTable);
+                    player3 = new Player(keys.get(2), gameTable, c3);
                     c3.setPlayer(player3);
                 }
                 InitController initController = new InitController(c1,c2,c3,gods,player1,player2,player3,gameTable,controller);

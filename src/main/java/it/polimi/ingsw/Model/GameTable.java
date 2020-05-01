@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
-import it.polimi.ingsw.Model.Exceptions.InvalidPlayersNumberException;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.View.CellView;
 
@@ -53,6 +52,14 @@ public class GameTable {
         if (players.get(0).equals(player)) return 0;
         else if (players.get(1).equals(player)) return 1;
         else return playersNumber == 3 ? 2 : -1; // -1 is error case
+    }
+
+    public ArrayList<SocketClientConnection> getPlayerConnections(){
+        ArrayList<SocketClientConnection> out = new ArrayList<>();
+        for (Player p : players){
+            out.add(p.getConnection());
+        }
+        return out;
     }
 
     public Builder getCurrentBuilder() {

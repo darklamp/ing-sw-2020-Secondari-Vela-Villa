@@ -44,6 +44,7 @@ public abstract class Builder implements Serializable {
             isValidMove(position); // check validity of move
             this.position.setBuilder(null);
             this.position = position; // sets position if no exceptions are thrown
+            position.setBuilder(this);
         } catch (NullPointerException e) {
             e.printStackTrace(); // unhandled error
         }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
+import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class Player {
     private ArrayList<Builder> builderList; //array of builders
     
     private GameTable gameTable;
+    private SocketClientConnection connection;
 
     private final String nickname; //private attribute for the Player's ID
 
@@ -58,11 +60,12 @@ public class Player {
         this(nickname,GameTable.getCompleteGodList().get(god), gameTable);
     }
 
-    public Player(String nickname, GameTable gameTable) throws NickAlreadyTakenException {
+    public Player(String nickname, GameTable gameTable, SocketClientConnection c) throws NickAlreadyTakenException {
         if (gameTable == null) throw new NullPointerException();
         else if (!gameTable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
         else {
             this.gameTable = gameTable;
+            this.connection = c;
             this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
             this.builderList = new ArrayList<>();
             gameTable.addPlayer(this);
@@ -76,6 +79,10 @@ public class Player {
 
     private TurnState getFirstTurnState(Integer god){
         return (god == 8) ? MOVEORBUILD : MOVE; /* if god is prometheus, he can move as well as build at first */
+    }
+
+    SocketClientConnection getConnection(){
+        return this.connection;
     }
 
     /** DEBUG package-private constructor TODO remove in deploy **/
