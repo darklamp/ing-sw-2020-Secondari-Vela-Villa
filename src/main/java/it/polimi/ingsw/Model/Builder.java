@@ -12,13 +12,20 @@ public abstract class Builder implements Serializable {
 
     private final Player player;
 
+    private boolean first = false;
+
     public Builder(Cell position, Player player) { // constructor for Builder with Cell parameter
         if (player == null || position == null) throw new NullPointerException();
         else {
             this.player = player;
             this.position = position;
+            this.first = player.hasNoBuilder();
             position.setBuilder(this);
         }
+    }
+
+    public boolean isFirst(){
+        return first;
     }
 
     /**

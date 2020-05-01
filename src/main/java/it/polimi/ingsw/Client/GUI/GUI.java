@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
 import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
@@ -34,6 +35,11 @@ public class GUI implements Ui,Runnable {
 
     @Override
     public void showTable(CellView[][] table) {
+
+    }
+
+    @Override
+    public void processTurnChange(ClientState newState) {
 
     }
 }

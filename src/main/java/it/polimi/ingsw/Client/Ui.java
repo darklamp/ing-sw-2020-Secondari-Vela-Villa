@@ -20,4 +20,6 @@ public interface Ui {
      * @param table to be printed
      */
     void showTable(CellView[][] table);
+
+    void processTurnChange(ClientState newState);
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.CLI;
 
 import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.Utility.Utils;
@@ -40,7 +41,7 @@ public class CLI implements Ui {
             {
                 if(r==0 && c==0)
                 {
-                    System.out.print("    1 | 2 | 3 | 4 | 5 \n");
+                    System.out.print("    0 | 1 | 2 | 3 | 4 \n");
                     System.out.print("  ┌───┬───┬───┬───┬───┐\n0 │ ");
                 }
                 else if(c==0)
@@ -56,25 +57,34 @@ public class CLI implements Ui {
                 }
                 Color color;
                 switch (table[r][c].getPlayer()){
-                    case -1 -> color = Color.ANSI_YELLOW;
-                    case 0 -> color = Color.ANSI_BLUE;
-                    case 1 -> color = Color.ANSI_RED;
-                    case 2 -> color = Color.ANSI_GREEN;
-                    default -> color = Color.ANSI_PURPLE;
+                    case 0 -> color = table[r][c].isFirst() ? Color.ANSI_BLUE : Color.ANSI_CYAN;
+                    case 1 -> color = table[r][c].isFirst() ? Color.ANSI_RED : Color.ANSI_YELLOW;
+                    case 2 -> color = table[r][c].isFirst() ? Color.ANSI_GREEN : Color.ANSI_PURPLE;
+                    default -> color = Color.ANSI_WHITE;
                 }
                 dice.setColor(color);
                 dice.Stamp();
 
                 if (c == 4){
-                    if (r == 0) System.out.print(Color.ANSI_BLUE + "  ██  PLAYER ONE    ██" + Color.RESET);
-                    else if (r == 1) System.out.print(Color.ANSI_RED + "  ██  PLAYER TWO    ██" + Color.RESET);
-                    else if (r == 2) System.out.print(Color.ANSI_GREEN + "  ██  PLAYER THREE  ██" + Color.RESET);
-                    else if (r == 3) System.out.print(Color.ANSI_YELLOW+ "  ██  NO PLAYER     ██" + Color.RESET);
+                    if (r == 0) System.out.print(Color.BOLD + "  PLAYER ONE  " + Color.ANSI_BLUE + "    █ 1 █ " + Color.ANSI_YELLOW +"█ 2 █" + Color.RESET);
+                    else if (r == 1) System.out.print(Color.BOLD + "  PLAYER TWO  "+ Color.ANSI_RED + "    █ 1 █ " + Color.ANSI_CYAN +"█ 2 █" + Color.RESET);
+                    else if (r == 2) System.out.print(Color.BOLD + "  PLAYER THREE  " + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE +"█ 2 █" + Color.RESET);
+                    else if (r == 3) System.out.print(Color.BOLD + Color.ANSI_WHITE+ "  ███  NO PLAYER     ███" + Color.RESET);
                 }
 
             }
         }
         System.out.print("\n  └───┴───┴───┴───┴───┘\n");
+    }
+
+    public void processTurnChange(ClientState newState){
+        String s = "";
+        switch (newState){
+            case WAIT -> s = "Waiting for turn...";
+            case MOVE -> s = "It's your turn! Please choose a cell to move to and which builder to use (x,y,b): ";
+            case BUILD -> s = "Please choose a cell to build on and which builder to use (x,y,b): ";
+        }
+        System.out.println(s);
     }
 
 }

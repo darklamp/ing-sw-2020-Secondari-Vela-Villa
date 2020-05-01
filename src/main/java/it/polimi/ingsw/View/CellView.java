@@ -11,14 +11,21 @@ public class CellView implements Serializable {
 
     int player;
 
+    public boolean isFirst() {
+        return first;
+    }
+
+    boolean first;
+
     public BuildingType getHeight() {
         return height;
     }
 
     BuildingType height;
-    public CellView(BuildingType height, int player){
+    public CellView(BuildingType height, int player, boolean isFirst){
         this.height = height;
         this.player = player;
+        this.first = isFirst;
     }
 
 }

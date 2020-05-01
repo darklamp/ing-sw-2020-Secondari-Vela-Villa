@@ -136,31 +136,10 @@ public class Player {
             default -> throw new InvalidBuildException();
         }
     }
-  /*  public void UpdatePlayerStatus(){
-        this.IsInGame = false;      //why set false?Beacuse the bit is setted at the start of the game to true,so I just have to change it to false.
-    }
 
-    public boolean CanMove(){
-        //return true if the player can move,otherwise set false
+    public boolean hasNoBuilder(){
+        return this.builderList.size() == 0;
     }
-
-    public void MoveTo(Cell cell) { //the cell where player wants to go
-    }
-    public Cell MoveFrom(){
-        //return the cell before the movement
-    }
-
-    public void Build(Cell cell){
-        //the cell where the player wants to build
-    }
-
-    public int getInGameTurn() {
-        return InGameTurn;
-    }
-
-    public void setInGameTurn(int inGameTurn) {
-        this.InGameTurn = inGameTurn;
-    }*/
 
     public String getNickname() {
         return nickname;

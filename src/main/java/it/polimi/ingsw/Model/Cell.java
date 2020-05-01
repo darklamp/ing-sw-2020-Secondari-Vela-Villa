@@ -24,7 +24,7 @@ public class Cell implements Serializable {
     }
 
     CellView getModelView(GameTable table){
-        return new CellView(height,builder == null ? -1 : table.getPlayerIndex(builder.getPlayer()));
+        return new CellView(height,builder == null ? -1 : table.getPlayerIndex(builder.getPlayer()), builder != null && builder.isFirst());
     }
 
 

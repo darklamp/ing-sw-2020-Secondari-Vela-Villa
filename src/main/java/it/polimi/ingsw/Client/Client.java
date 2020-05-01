@@ -43,6 +43,7 @@ public class Client implements Runnable {
                         ui.showTable((CellView[][])inputObject);
                     } else if (inputObject instanceof ClientState c){
                         state = c;
+                        ui.processTurnChange(c);
                     }
                     else {
                         throw new IllegalArgumentException();
