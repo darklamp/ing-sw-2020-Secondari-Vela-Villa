@@ -56,7 +56,11 @@ public abstract class Builder implements Serializable {
             //todo
         }
         catch (ArtemisException e){
-            throw new ArtemisException(); // TEMP PER TEST
+           // throw new ArtemisException(); // TEMP PER TEST
+            this.position.setBuilder(null);
+            this.position = position; // sets position if no exceptions are thrown
+            position.setBuilder(this);
+            throw new ArtemisException();
         }
     }
 

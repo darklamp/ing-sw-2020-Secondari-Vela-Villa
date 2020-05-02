@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class News {
 
     public News() {
-        this.height = BuildingType.NONE;
+        this.height = null;
         this.builder = null;
         this.cell = null;
     }
@@ -50,7 +50,7 @@ public class News {
         }
     }
 
-    private final BuildingType height;
+    private BuildingType height;
 
     private final Cell cell;
 
@@ -61,6 +61,13 @@ public class News {
     public void setCoords(int x, int y, int builderIndex){
         this.coords = new Pair(x,y);
         this.builderIndex = builderIndex;
+        this.height = null;
+    }
+
+    public void setCoords(int x, int y, int builderIndex, int height){
+        this.coords = new Pair(x,y);
+        this.builderIndex = builderIndex;
+        this.height = BuildingType.parse(height);
     }
 
     private int builderIndex;
@@ -108,7 +115,7 @@ public class News {
     }
 
     public Builder getBuilder(GameTable gameTable) {
-        return gameTable.getCell(this.sender).getBuilder();
+        return gameTable.getCurrentPlayer().getBuilderList().get(builderIndex);
     }
 
     public BuildingType getHeight() {

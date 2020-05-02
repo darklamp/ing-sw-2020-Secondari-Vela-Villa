@@ -42,6 +42,10 @@ public class Cell implements Serializable {
     public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, DemeterException {
             try {
 
+                if (height == null){
+                    height = this.height.getNext();
+                }
+
                 if (this.builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
 
                 else if (!(builder.getPosition().getNear().contains((this)))) throw new InvalidBuildException(); // trying to build on a non-near cell
@@ -69,10 +73,6 @@ public class Cell implements Serializable {
             }
     }
 
-    public void setHeight(Builder builder) throws InvalidBuildException, DemeterException {
-        BuildingType height = this.height.getNext();
-        setHeight(builder,height);
-    }
     /**
      * @return list of cells which are near the given cell
      * @example if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)

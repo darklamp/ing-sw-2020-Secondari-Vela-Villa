@@ -85,7 +85,12 @@ public class Client implements Runnable {
                     else if(state == ClientState.BUILD){
                         try{
                             String[] s = inputLine.split(",");
-                            socketOut.println("BUILD" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
+                            String out = "BUILD" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2];
+                            if (s.length == 4) {
+                                out += "@@@";
+                                out += s[3];
+                            }
+                            socketOut.println(out);
                         }
                         catch (Exception ignored){
                         }

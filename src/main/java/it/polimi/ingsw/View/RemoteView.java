@@ -94,7 +94,12 @@ public class RemoteView extends View {
                                         if (j < 5 && j >= 0){
                                             k = Integer.parseInt(args[3]);
                                             if (k == 2 || k == 1){
-                                                news.setCoords(i,j,k-1);
+                                                if (args.length == 5 && args[4] != null){
+                                                    int h = Integer.parseInt(args[4]);
+                                                    if (h < 0 || h > 3) throw new NumberFormatException();
+                                                    else news.setCoords(i,j,k-1,h);
+                                                }
+                                                else news.setCoords(i,j,k-1);
                                                 setControllerNews(news, "BUILD");
                                                 break;
                                             }

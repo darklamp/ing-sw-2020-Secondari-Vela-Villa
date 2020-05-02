@@ -8,6 +8,7 @@ import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 
 import static it.polimi.ingsw.Model.TurnState.BUILD;
+import static it.polimi.ingsw.Model.TurnState.MOVEORBUILD;
 
 public class MoveController {
     private final GameTable gameTable;
@@ -24,7 +25,9 @@ public class MoveController {
             gameTable.setNews(news,"MOVEOK");
         }
         catch (ArtemisException e){
-
+            gameTable.getCurrentPlayer().setState(MOVEORBUILD);
+            gameTable.setCurrentBuilder(news.getBuilder(gameTable));
+            gameTable.setNews(news,"MOVEOK");
         } catch (PanException e){
 
         } catch (PrometeusException e) {

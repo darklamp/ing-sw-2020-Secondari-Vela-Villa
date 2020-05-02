@@ -49,7 +49,7 @@ public class Server {
 
     //Wait for another player
     public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException, InvalidCoordinateException {
-        if (waitingConnection.containsKey(name)) throw new NickAlreadyTakenException();
+        if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n")) throw new NickAlreadyTakenException();
         System.out.println("nome è "+name);
         waitingConnection.put(name, c);
         if (waitingConnection.size() == 1){

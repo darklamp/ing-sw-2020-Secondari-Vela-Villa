@@ -21,4 +21,20 @@ public enum BuildingType {
             default -> throw new InvalidBuildException();
         }
     }
+    public static BuildingType parse(int i)  {
+        switch (i){
+            case 1 -> {
+                return MIDDLE;
+            }
+            case 2 -> {
+                return TOP;
+            }
+            case 3 -> {
+                return DOME;
+            }
+            default -> {
+                return BASE;
+            }
+        }
+    }
 }
