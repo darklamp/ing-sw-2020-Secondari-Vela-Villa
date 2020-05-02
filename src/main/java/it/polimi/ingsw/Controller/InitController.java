@@ -71,6 +71,12 @@ public class InitController implements Runnable{
      * @return list of chosen coordinates where to put builders
      */
     private synchronized ArrayList<Pair> getPlayerBuilderChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3) { //metodo che richiede le posizioni inziali dei worker
+        if (c3 != null) {
+            c1.send("Wait for the other players to choose their starting position...");
+        }
+        else {
+            c1.send("Wait for the other player to choose his starting position...");
+        }
         ArrayList<Pair> choices = new ArrayList<Pair>(); //array che conterrà tutte le coppie delle posizioni iniziali
         c2.send("Insert the starting positions of your first worker");
         Pair c2b1 = c2.getBuilderChoice(choices); //nomenclatura è NomeConnessione+NumeroWorker
@@ -80,12 +86,17 @@ public class InitController implements Runnable{
         Pair c2b2 = c2.getBuilderChoice(choices);
         choices.add(c2b2);
         if (c3 != null){
+            c2.send("Wait for the other players to choose their starting position...");
             c3.send("Insert the starting positions of your first worker");
             Pair c3b1 = c3.getBuilderChoice(choices);
             choices.add(c3b1);
             c3.send("Insert the starting positions of your second worker");
             Pair c3b2 = c3.getBuilderChoice(choices);
             choices.add(c3b2);
+            c3.send("Wait for the other player to choose his starting positions...");
+        }
+        else {
+            c2.send("Wait for the other player to choose his starting positions...");
         }
         c1.send("Insert the starting positions of your first worker");
         Pair c1b1 = c1.getBuilderChoice(choices);
