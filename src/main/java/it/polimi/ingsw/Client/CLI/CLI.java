@@ -86,7 +86,7 @@ public class CLI implements Ui {
 }
 
 class Dice {
-    private static final String[] DICE_FACES = {"#","\u2680", "\u2681", "\u2682","\u2683", "\u2684", "\u2685"};
+    private static final String[] DICE_FACES = {"#","1", "2", "3","4", "\u2684", "\u2685"};
 
     private String face;
     private Color color;

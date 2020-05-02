@@ -17,6 +17,8 @@ import java.util.List;
 
 public class RemoteView extends View {
 
+    private ClientState state = ClientState.WAIT;
+
 
     private class MessageReceiver implements PropertyChangeListener {
 
@@ -150,6 +152,9 @@ public class RemoteView extends View {
                 case "BUILDOK" -> {
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                     this.socketClientConnection.send(ClientState.WAIT);
+                }
+                case "YOURTURN" -> {
+                    this.socketClientConnection.send(ClientState.MOVE); // TODO cambiare in moveorbuild per prometheus
                 }
                 default -> this.socketClientConnection.asyncSend(ServerMessage.genericErrorMessage);
             }

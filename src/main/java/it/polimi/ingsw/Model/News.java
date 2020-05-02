@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class News {
 
-    private News() {
+    public News() {
         this.height = BuildingType.NONE;
         this.builder = null;
         this.cell = null;
@@ -32,6 +32,22 @@ public class News {
 
     public void setRecipients(ArrayList<SocketClientConnection> list){
         this.recipients = list;
+    }
+    public void setRecipients(ArrayList<Player> p, boolean ignored){
+        if (p != null){
+            ArrayList<SocketClientConnection> list = new ArrayList<>();
+            for (Player player : p){
+                list.add(player.getConnection());
+            }
+            this.recipients = list;
+        }
+    }
+    public void setRecipients(Player p){
+        if (p != null){
+            ArrayList<SocketClientConnection> list = new ArrayList<>();
+            list.add(p.getConnection());
+            this.recipients = list;
+        }
     }
 
     private final BuildingType height;

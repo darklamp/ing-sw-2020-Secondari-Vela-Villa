@@ -4,7 +4,7 @@ import it.polimi.ingsw.Model.Exceptions.*;
 
 import java.io.Serializable;
 
-import static it.polimi.ingsw.Model.TurnState.MOVE;
+import static it.polimi.ingsw.Model.TurnState.NOOP;
 
 public abstract class Builder implements Serializable {
 
@@ -87,7 +87,7 @@ public abstract class Builder implements Serializable {
     }
 
     void resetState(){
-        this.getPlayer().setState(MOVE);
+        this.getPlayer().setState(NOOP);
     }
 
     /**

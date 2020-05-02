@@ -41,8 +41,8 @@ public class GameTable {
         setCurrentBuilder(null);
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
         else currentPlayer++;
+        getCurrentPlayer().setState(TurnState.MOVE); //TODO handle prometheus
     }
-
 
     public static List<String> getCompleteGodList() {
         return completeGodList;

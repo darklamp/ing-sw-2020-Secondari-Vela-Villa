@@ -18,6 +18,10 @@ public class BuildController {
             gameTable.getCurrentPlayer().setState(NOOP);
             news.setRecipients(gameTable.getPlayerConnections());
             gameTable.setNews(news,"BUILDOK");
+            gameTable.nextTurn();
+            News news1 = new News();
+            news1.setRecipients(gameTable.getCurrentPlayer());
+            gameTable.setNews(news1,"YOURTURN");
             // logica di passaggio turno TODO
         }catch (DemeterException e) {
             gameTable.getCurrentPlayer().setState(BUILDORPASS);
