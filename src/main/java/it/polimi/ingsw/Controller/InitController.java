@@ -94,6 +94,7 @@ public class InitController implements Runnable{
             Pair c3b2 = c3.getBuilderChoice(choices);
             choices.add(c3b2);
             c3.send("Wait for the other player to choose his starting positions...");
+            //this comment is for a commit test
         }
         else {
             c2.send("Wait for the other player to choose his starting positions...");
