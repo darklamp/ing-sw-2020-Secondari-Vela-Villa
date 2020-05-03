@@ -9,6 +9,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class GameTable {
 
@@ -62,6 +63,12 @@ public class GameTable {
         return out;
     }
 
+    private boolean checkWinningConditions(){
+        Stream<Cell> c = Arrays.stream(Table).flatMap(Arrays::stream);
+        c = c.filter(cell -> cell.getBuilder() != null);
+        return c.anyMatch(cell -> cell.getHeight() == BuildingType.TOP || cell.getNear().stream().allMatch(cell1 -> cell1.getHeight() == BuildingType.DOME));
+    }
+
     public Builder getCurrentBuilder() {
         return currentBuilder;
     }
@@ -77,8 +84,6 @@ public class GameTable {
 
     /* initial observable pattern implementation via PropertyChangeSupport */
 
-    //TODO: this o instance? credo sia la stessa cosa
-    //TODO: this o instance? credo sia la stessa cosa
     private PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
     private News news; /** Listener news **/
 
@@ -91,6 +96,9 @@ public class GameTable {
     }
 
     public void setNews(News news, String type) {
+        if (checkWinningConditions()){
+            //TODO handle win
+        }
         support.firePropertyChange(type, this.news, news);
         this.news = news;
     }
