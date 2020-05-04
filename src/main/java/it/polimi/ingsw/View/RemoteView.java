@@ -162,6 +162,7 @@ public class RemoteView extends View {
                     this.socketClientConnection.send(ClientState.MOVE); // TODO cambiare in moveorbuild per prometheus
                 }
                 case "WIN" -> {
+                    this.socketClientConnection.asyncSend(gameTable.getBoardCopy());
                     if (news.getSender() == this.socketClientConnection) {
                         this.socketClientConnection.send(ClientState.WIN);
                     }

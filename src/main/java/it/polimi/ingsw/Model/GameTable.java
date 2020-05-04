@@ -61,7 +61,7 @@ public class GameTable {
         return completeGodList;
     }
 
-    int getPlayerIndex(Player player){
+    public int getPlayerIndex(Player player){
         if (players.get(0).equals(player)) return 0;
         else if (players.get(1).equals(player)) return 1;
         else return playersNumber == 3 ? 2 : -1; // -1 is error case
