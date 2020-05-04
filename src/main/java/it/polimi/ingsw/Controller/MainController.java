@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Controller;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
@@ -62,7 +63,22 @@ public class MainController implements PropertyChangeListener {
                 gameTable.closeGame();
             }
             catch (NoMoreMovesException e){
-                gameTable.removePlayer(e.getPlayer());
+                if (gameTable.getPlayerConnections().size() == 2) {
+                    SocketClientConnection winner = gameTable.getPlayerConnections().get(0);
+                    for (SocketClientConnection c : gameTable.getPlayerConnections()){
+                        if (c.getPlayer() != e.getPlayer()) {
+                            winner = c;
+                            break;
+                        }
+                    }
+                    News n = new News(null, winner);
+                    n.setRecipients(gameTable.getPlayerConnections());
+                    gameTable.setNews(n,"WIN");
+                    gameTable.closeGame();
+                }
+                else {
+                    gameTable.removePlayer(e.getPlayer());
+                }
             }
         }
 
@@ -77,7 +93,7 @@ public class MainController implements PropertyChangeListener {
         return this.news;
     }
 
-    private void isLegalState(String name, TurnState turn) throws IllegalTurnStateException {
+    private void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
         switch(turn){
             case BUILD:
                 if (!name.equals("BUILD")) throw new IllegalTurnStateException();
@@ -92,7 +108,7 @@ public class MainController implements PropertyChangeListener {
             case BUILDORPASS:
                 if (name.equals("MOVE")) throw new IllegalTurnStateException();
                 break;
-            case NOOP:
+            case WAIT:
                 if (!name.equals("NOOP")) throw new IllegalTurnStateException();
                 break;
             default:

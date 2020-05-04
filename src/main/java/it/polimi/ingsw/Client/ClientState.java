@@ -1,5 +1,5 @@
 package it.polimi.ingsw.Client;
 
 public enum ClientState {
-    INIT,WAIT,MOVE,BUILD,WIN,LOSE;
+    MOVE,BUILD,MOVEORBUILD,BUILDORPASS,WAIT,WIN,LOSE,INIT
 }

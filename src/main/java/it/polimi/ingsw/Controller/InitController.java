@@ -114,7 +114,7 @@ public class InitController implements Runnable{
         ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
         player1.setGod(choices.get(0));
         player2.setGod(choices.get(1));
-        if(c3 != null) player1.setGod(choices.get(2));
+        if(c3 != null) player3.setGod(choices.get(2));
         ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
         try {
             player1.initBuilderList(gameTable.getCell(startPos.get(0).getFirst(), startPos.get(0).getSecond()));

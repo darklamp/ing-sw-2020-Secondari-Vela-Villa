@@ -1,17 +1,15 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
-import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.Stream;
 
-import static it.polimi.ingsw.Model.TurnState.MOVE;
-import static it.polimi.ingsw.Model.TurnState.MOVEORBUILD;
+import static it.polimi.ingsw.Client.ClientState.MOVE;
+import static it.polimi.ingsw.Client.ClientState.MOVEORBUILD;
 
 public class Player {
 
@@ -24,7 +22,7 @@ public class Player {
 
     private String god;
 
-    private TurnState turnState;
+    private ClientState turnState;
 
     public boolean isFirstTime() {
         return firstTime;
@@ -77,10 +75,10 @@ public class Player {
 
     public void setGod(Integer god){
         this.god = GameTable.getCompleteGodList().get(god);
-        this.turnState = gameTable.getPlayerIndex(this) == 1 ? getFirstTurnState(god) : TurnState.NOOP;
+        this.turnState = gameTable.getPlayerIndex(this) == 1 ? getFirstTurnState(god) : ClientState.WAIT;
     }
 
-    private TurnState getFirstTurnState(Integer god){
+    private ClientState getFirstTurnState(Integer god){
         return (god == 8) ? MOVEORBUILD : MOVE; /* if god is prometheus, he can move as well as build at first */
     }
 
@@ -124,10 +122,10 @@ public class Player {
         else return false;
     }
 
-    public TurnState getState(){
+    public ClientState getState(){
         return this.turnState;
     }
-    public void setState(TurnState state){
+    public void setState(ClientState state){
         this.turnState = state;
     }
 

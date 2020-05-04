@@ -4,8 +4,8 @@ import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 
-import static it.polimi.ingsw.Model.TurnState.BUILD;
-import static it.polimi.ingsw.Model.TurnState.MOVEORBUILD;
+import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Client.ClientState.MOVEORBUILD;
 
 public class MoveController {
     private final GameTable gameTable;

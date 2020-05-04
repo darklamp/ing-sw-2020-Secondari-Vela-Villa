@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Client.ClientState.MOVE;
 import static it.polimi.ingsw.Model.BuildingType.NONE;
 
 public class Client implements Runnable {
@@ -74,7 +76,23 @@ public class Client implements Runnable {
                 while (isActive()) {
                     String inputLine = stdin.nextLine();
                     if (state == ClientState.INIT)  socketOut.println(inputLine);
-                    else if (state == ClientState.MOVE) {
+                    else if (state == ClientState.MOVEORBUILD) {
+                        try{
+                            String choice = "MOVE";
+                            if (inputLine.toUpperCase().contains("B")) choice = "BUILD";
+                            if (choice.equals("MOVE")){
+                                state = MOVE;
+                                ui.processTurnChange(MOVE);
+                            }
+                            else {
+                                state = BUILD;
+                                ui.processTurnChange(BUILD);
+                            }
+                        }
+                        catch (Exception ignored){
+                        }
+                    }
+                    else if (state == MOVE) {
                         try{
                             String[] s = inputLine.split(",");
                             socketOut.println("MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
@@ -82,7 +100,7 @@ public class Client implements Runnable {
                         catch (Exception ignored){
                         }
                     }
-                    else if(state == ClientState.BUILD){
+                    else if(state == BUILD){
                         try{
                             String[] s = inputLine.split(",");
                             String out = "BUILD" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2];

@@ -84,6 +84,7 @@ public class CLI implements Ui {
         String s = "";
         switch (newState){
             case WAIT -> s = "Waiting for turn...";
+            case MOVEORBUILD -> s = "It's your turn, You can choose whether to move(m) or build(b). Please choose: ";
             case MOVE -> s = "It's your turn! Please choose a cell to move to and which builder to use (x,y,b): ";
             case BUILD -> s = "Please choose a cell to build on and which builder to use (x,y,b): ";
             case WIN -> s = "Hurray! You won the game!";

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Model.Exceptions.WinnerException;
@@ -53,8 +54,7 @@ public class GameTable {
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
         else currentPlayer++;
         checkMovePreConditions();
-        if (getCurrentPlayer().getBuilderList().get(0) instanceof Prometeus) getCurrentPlayer().setState(TurnState.MOVEORBUILD);
-        else getCurrentPlayer().setState(TurnState.MOVE);
+        getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0) instanceof Prometeus ? ClientState.MOVEORBUILD : ClientState.MOVE);
     }
 
     public static List<String> getCompleteGodList() {

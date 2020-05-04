@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Prometeus extends Builder {
@@ -27,7 +28,7 @@ public class Prometeus extends Builder {
     }*/
     @Override
     void resetState(){
-        this.getPlayer().setState(TurnState.MOVEORBUILD);
+        this.getPlayer().setState(ClientState.MOVEORBUILD);
     }
 }
 
