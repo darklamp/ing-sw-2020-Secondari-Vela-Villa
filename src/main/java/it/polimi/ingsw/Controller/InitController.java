@@ -121,7 +121,8 @@ public class InitController implements Runnable{
             player1.initBuilderList(gameTable.getCell(startPos.get(1).getFirst(), startPos.get(1).getSecond()));
             player2.initBuilderList(gameTable.getCell(startPos.get(2).getFirst(), startPos.get(2).getSecond()));
             player2.initBuilderList(gameTable.getCell(startPos.get(3).getFirst(), startPos.get(3).getSecond()));
-            if (player3 != null) {
+            if (c3 != null) {
+                //errore qua nel caso con 3 giocatori
                 player3.initBuilderList(gameTable.getCell(startPos.get(4).getFirst(), startPos.get(4).getSecond()));
                 player3.initBuilderList(gameTable.getCell(startPos.get(5).getFirst(), startPos.get(5).getSecond()));
             }
