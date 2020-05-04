@@ -24,6 +24,7 @@ public class SocketClientConnection implements Runnable {
     private News news;
     private Player player;
     private boolean ready = false;
+    private int gameIndex;
 
     private boolean active = true;
 
@@ -69,20 +70,20 @@ public class SocketClientConnection implements Runnable {
 
     }
 
-    public synchronized void closeConnection() {
+    public synchronized void closeConnection(int gameIndex) {
         send("Connection closed!");
         try {
             socket.close();
         } catch (IOException e) {
             System.err.println("Error when closing socket!");
         }
+        this.gameIndex = gameIndex;
         active = false;
     }
 
     private void close() {
-        closeConnection();
         System.out.println("Deregistering client...");
-      //  server.deregisterConnection(this);
+        Server.deregisterConnection(gameIndex, this);
         System.out.println("Done!");
     }
 

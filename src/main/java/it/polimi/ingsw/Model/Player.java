@@ -3,9 +3,12 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
+import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static it.polimi.ingsw.Model.TurnState.MOVE;
 import static it.polimi.ingsw.Model.TurnState.MOVEORBUILD;
@@ -85,6 +88,11 @@ public class Player {
         return this.connection;
     }
 
+    void removeBuilders(){
+        this.getBuilderList().get(0).getPosition().setBuilder(null);
+        this.getBuilderList().get(1).getPosition().setBuilder(null);
+    }
+
     /** DEBUG package-private constructor TODO remove in deploy **/
     Player(String nickname, GameTable g, String god) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
         if (g == null) throw new NullPointerException();
@@ -154,5 +162,9 @@ public class Player {
 
     public String getNickname() {
         return nickname;
+    }
+
+    void kick() {
+        this.connection.closeConnection(gameTable.getGameIndex());
     }
 }

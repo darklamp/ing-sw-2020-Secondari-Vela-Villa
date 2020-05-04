@@ -1,19 +1,29 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
+import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
+import it.polimi.ingsw.Model.Exceptions.WinnerException;
+import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.View.CellView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class GameTable {
 
-    private final Cell[][] Table; /** 5x5 matrix representing game table **/
+    private final Cell[][] Table;
+
+    public int getGameIndex() {
+        return gameIndex;
+    }
+
+    /** 5x5 matrix representing game table **/
+    private int gameIndex;
     private ArrayList<Player> players; /** arraylist filled with players **/
     private static ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
     private static GameTable instance; /** Singleton instance for GameTable **/ //TODO remove!!
@@ -36,13 +46,15 @@ public class GameTable {
      * - reset the currentBuilder attribute to a default null value
      * - increase the currentPlayer index, so as to effectively skip to next player
      */
-    public void nextTurn(){
+    public void nextTurn() throws NoMoreMovesException {
         getCurrentPlayer().setFirstTime(true);
         getCurrentBuilder().resetState();
         setCurrentBuilder(null);
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
         else currentPlayer++;
-        getCurrentPlayer().setState(TurnState.MOVE); //TODO handle prometheus
+        checkMovePreConditions();
+        if (getCurrentPlayer().getBuilderList().get(0) instanceof Prometeus) getCurrentPlayer().setState(TurnState.MOVEORBUILD);
+        else getCurrentPlayer().setState(TurnState.MOVE);
     }
 
     public static List<String> getCompleteGodList() {
@@ -63,12 +75,6 @@ public class GameTable {
         return out;
     }
 
-    private boolean checkWinningConditions(){
-        Stream<Cell> c = Arrays.stream(Table).flatMap(Arrays::stream);
-        c = c.filter(cell -> cell.getBuilder() != null);
-        return c.anyMatch(cell -> cell.getHeight() == BuildingType.TOP || cell.getNear().stream().allMatch(cell1 -> cell1.getHeight() == BuildingType.DOME));
-    }
-
     public Builder getCurrentBuilder() {
         return currentBuilder;
     }
@@ -79,6 +85,29 @@ public class GameTable {
 
     ArrayList<String> getGodChoices(){
         return godChoices;
+    }
+
+
+    public final void checkMovePreConditions() throws NoMoreMovesException {
+        ArrayList<Builder> builderList = players.get(currentPlayer).getBuilderList();
+        int movableBuilders = 2;
+        for (Builder b : builderList){
+            if (!b.hasAvailableMoves()) movableBuilders -= 1;
+        }
+        if (movableBuilders == 0)  throw new NoMoreMovesException(players.get(currentPlayer));
+    }
+
+    public void removePlayer(Player player){
+        this.players.remove(player);
+        player.removeBuilders();
+        player.kick();
+        //TODO handle new player number etc..
+    }
+
+    public void closeGame(){
+        for (Player p : players){
+            removePlayer(p);
+        }
     }
 
 
@@ -96,9 +125,6 @@ public class GameTable {
     }
 
     public void setNews(News news, String type) {
-        if (checkWinningConditions()){
-            //TODO handle win
-        }
         support.firePropertyChange(type, this.news, news);
         this.news = news;
     }
@@ -153,6 +179,7 @@ public class GameTable {
                 arrayTable.add(Table[i][j]);
             }
         }
+        this.gameIndex = Server.getCurrentGameIndex();
         players = null;
         this.playersNumber = playersNumber;
 

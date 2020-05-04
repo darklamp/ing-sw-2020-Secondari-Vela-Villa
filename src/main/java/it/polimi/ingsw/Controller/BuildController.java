@@ -2,6 +2,7 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Model.Exceptions.DemeterException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 
@@ -11,7 +12,7 @@ public class BuildController {
 
     private final GameTable gameTable;
 
-    public void handleBuild(News news) {
+    public void handleBuild(News news) throws NoMoreMovesException {
         try{
             if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder()) throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
             news.getCell(gameTable).setHeight(news.getBuilder(gameTable),news.getHeight());

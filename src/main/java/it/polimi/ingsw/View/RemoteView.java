@@ -161,6 +161,12 @@ public class RemoteView extends View {
                 case "YOURTURN" -> {
                     this.socketClientConnection.send(ClientState.MOVE); // TODO cambiare in moveorbuild per prometheus
                 }
+                case "WIN" -> {
+                    if (news.getSender() == this.socketClientConnection) {
+                        this.socketClientConnection.send(ClientState.WIN);
+                    }
+                    else this.socketClientConnection.send(ClientState.LOSE);
+                }
                 default -> this.socketClientConnection.asyncSend(ServerMessage.genericErrorMessage);
             }
         }

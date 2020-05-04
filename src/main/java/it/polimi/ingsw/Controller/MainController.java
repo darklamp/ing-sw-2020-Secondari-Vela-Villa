@@ -1,10 +1,10 @@
 package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
-import it.polimi.ingsw.Model.GameTable;
-import it.polimi.ingsw.Model.News;
-import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Model.TurnState;
+import it.polimi.ingsw.Model.*;
+import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
+import it.polimi.ingsw.Model.Exceptions.WinnerException;
+import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -48,9 +48,26 @@ public class MainController implements PropertyChangeListener {
             catch(IllegalTurnStateException e){ // player isn't in a legal state for the move
                 gameTable.setNews(news, "ILLEGALSTATE");
             }
+            catch (WinnerException e){
+                SocketClientConnection winner = gameTable.getPlayerConnections().get(0);
+                for (SocketClientConnection c : gameTable.getPlayerConnections()){
+                    if (c.getPlayer() == e.getPlayer()) {
+                        winner = c;
+                        break;
+                    }
+                }
+                News n = new News(null, winner);
+                n.setRecipients(gameTable.getPlayerConnections());
+                gameTable.setNews(n,"WIN");
+                gameTable.closeGame();
+            }
+            catch (NoMoreMovesException e){
+                gameTable.removePlayer(e.getPlayer());
+            }
         }
 
     }
+
 
     private void setNews(News news){
         this.news = news;

@@ -39,29 +39,37 @@ public abstract class Builder implements Serializable {
      * @param position position to move the builder to
      * @throws InvalidMoveException if the move isn't allowed
      */
-    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException, PrometeusException {
+    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException, PrometeusException, WinnerException {
         try {
             isValidMove(position); // check validity of move
             this.position.setBuilder(null);
             this.position = position; // sets position if no exceptions are thrown
             position.setBuilder(this);
+            if (isWinner()) throw new WinnerException(this.player);
         } catch (NullPointerException e) {
             e.printStackTrace(); // unhandled error
         }
         catch (ApolloException e) { // swap position cause it's Apollo TODO: do not make someone win if they win by being forced to move
             swapPosition(this,position.getBuilder());
             //todo?
+            if (isWinner()) throw new WinnerException(this.player);
         }
         catch (MinotaurException e) { // change position cause it's Minotaurrr TODO: do not make someone win if they win by being forced to move
             //todo
+            if (isWinner()) throw new WinnerException(this.player);
         }
         catch (ArtemisException e){
            // throw new ArtemisException(); // TEMP PER TEST
             this.position.setBuilder(null);
             this.position = position; // sets position if no exceptions are thrown
             position.setBuilder(this);
+            if (isWinner()) throw new WinnerException(this.player);
             throw new ArtemisException();
         }
+    }
+
+    private boolean isWinner(){
+        return this.position.getHeight() == BuildingType.TOP;
     }
 
     /**
@@ -145,6 +153,21 @@ public abstract class Builder implements Serializable {
      */
     protected Player getPlayer(){
         return this.player;
+    }
+
+    boolean hasAvailableMoves() {
+       return this.position.getNear().stream().anyMatch(c -> {
+           try{
+               isValidMove(c);
+               return true;
+           }
+           catch (InvalidMoveException e){
+               return false;
+           }
+           catch (Exception e) {
+               return true;
+           }
+       });
     }
 
 

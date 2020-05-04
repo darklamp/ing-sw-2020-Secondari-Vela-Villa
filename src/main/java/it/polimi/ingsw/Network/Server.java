@@ -37,15 +37,10 @@ public class Server {
     }
 
     //Deregister connection
-  /*  public synchronized void deregisterConnection(SocketClientConnection c) {
-        SocketClientConnection opponent = playingConnection.get(c);
-        if(opponent != null) {
-            opponent.closeConnection();
-        }
-        playingConnection.remove(c);
-        playingConnection.remove(opponent);
-        waitingConnection.keySet().removeIf(s -> waitingConnection.get(s) == c);
-    }*/
+    public static void deregisterConnection(int gameIndex, SocketClientConnection c) {
+        ArrayList<SocketClientConnection> playingConnections = gameList.get(gameIndex);
+        playingConnections.remove(c);
+    }
 
     //Wait for another player
     public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException, InvalidCoordinateException {
