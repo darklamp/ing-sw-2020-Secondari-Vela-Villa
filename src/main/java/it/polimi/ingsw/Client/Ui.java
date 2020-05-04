@@ -21,5 +21,9 @@ public interface Ui {
      */
     void showTable(CellView[][] table);
 
+    /**
+     * Reacts to new state by printing something to screen
+     * @param newState state to be processed
+     */
     void processTurnChange(ClientState newState);
 }

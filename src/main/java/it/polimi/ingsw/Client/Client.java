@@ -34,6 +34,9 @@ public class Client implements Runnable {
         Client.ui = ui;
     }
 
+    /**
+     * Reads news from socket connection and calls Ui method on it
+     */
     public Thread asyncReadFromSocket(final ObjectInputStream socketIn){
         Thread t = new Thread(() -> {
             try {
@@ -70,6 +73,9 @@ public class Client implements Runnable {
         this.active = active;
     }
 
+    /**
+     * Ask for input -> verify it -> send it to server via socket
+     */
     public Thread asyncWriteToSocket(final Scanner stdin, final PrintWriter socketOut){
         Thread t = new Thread(() -> {
             try {

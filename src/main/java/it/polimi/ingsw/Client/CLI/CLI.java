@@ -13,7 +13,7 @@ public class CLI implements Ui {
     private int playerIndex,playersNumber;
     @Override
     public void process(String input) {
-        if (input.contains("[INIT]")) {
+        if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
             String[] inputs = input.split("@@@");
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);
@@ -21,6 +21,9 @@ public class CLI implements Ui {
         else System.out.println(input);
     }
 
+    /**
+     * Flow: Get input ip -> verify it -> if valid, try to connect, else ask again
+     */
     @Override
     public void waitForIP(Client client) throws IOException {
         /*Scanner stdin  = new Scanner(System.in);
@@ -34,6 +37,9 @@ public class CLI implements Ui {
         client.run(s);
     }
 
+    /**
+     * @see Ui
+     */
     @Override
     public void showTable(CellView[][] table){
         int r,c;
@@ -80,6 +86,9 @@ public class CLI implements Ui {
         System.out.print("\n  └───┴───┴───┴───┴───┘\n");
     }
 
+    /**
+     * @see Ui
+     */
     public void processTurnChange(ClientState newState){
         String s = "";
         switch (newState){
@@ -95,6 +104,9 @@ public class CLI implements Ui {
 
 }
 
+/**
+ * Basic class for printing constructions levels
+ */
 class Dice {
     private static final String[] DICE_FACES = {"#","1", "2", "3","4", "\u2684", "\u2685"};
 

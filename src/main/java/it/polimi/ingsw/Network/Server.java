@@ -36,13 +36,11 @@ public class Server {
         return currentGameIndex;
     }
 
-    //Deregister connection
     public static void deregisterConnection(int gameIndex, SocketClientConnection c) {
         ArrayList<SocketClientConnection> playingConnections = gameList.get(gameIndex);
         playingConnections.remove(c);
     }
 
-    //Wait for another player
     public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException, InvalidCoordinateException {
         if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n")) throw new NickAlreadyTakenException();
         System.out.println("nome è "+name);

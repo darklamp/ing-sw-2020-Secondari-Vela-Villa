@@ -8,6 +8,9 @@ import it.polimi.ingsw.Model.News;
 
 import static it.polimi.ingsw.Client.ClientState.*;
 
+/**
+ * Controller responsible for handling builds
+ */
 public class BuildController {
 
     private final GameTable gameTable;

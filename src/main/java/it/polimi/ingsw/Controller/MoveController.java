@@ -7,6 +7,9 @@ import it.polimi.ingsw.Model.News;
 import static it.polimi.ingsw.Client.ClientState.BUILD;
 import static it.polimi.ingsw.Client.ClientState.MOVEORBUILD;
 
+/**
+ * Controller responsible for handling move
+ */
 public class MoveController {
     private final GameTable gameTable;
 

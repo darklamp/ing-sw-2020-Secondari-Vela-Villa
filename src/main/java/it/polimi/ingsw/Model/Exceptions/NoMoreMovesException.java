@@ -2,6 +2,9 @@ package it.polimi.ingsw.Model.Exceptions;
 
 import it.polimi.ingsw.Model.Player;
 
+/**
+ * Thrown when a player has no feasible moves left.
+ */
 public class NoMoreMovesException extends  Exception{
     private Player player;
     private NoMoreMovesException(){

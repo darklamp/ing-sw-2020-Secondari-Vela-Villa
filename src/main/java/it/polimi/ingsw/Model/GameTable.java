@@ -17,28 +17,25 @@ import java.util.List;
 
 public class GameTable {
 
-    private final Cell[][] Table;
-
-    public int getGameIndex() {
-        return gameIndex;
-    }
-
-    /** 5x5 matrix representing game table **/
-    private int gameIndex;
+    private final Cell[][] Table;    /** 5x5 matrix representing game table **/
+    private int gameIndex; /** index of current game **/
     private ArrayList<Player> players; /** arraylist filled with players **/
     private static ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
     private static GameTable instance; /** Singleton instance for GameTable **/ //TODO remove!!
     private int currentPlayer = 1; /** current player index **/
     private final int playersNumber; /** number of players in game **/
     public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATHENA","ATLAS","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS"); /* list containing all the basic gods */
-    private ArrayList<String> godChoices; /* list of gods chosen by the first player to be available in the game */
-    private Builder currentBuilder = null; /* variable which holds the current builder being used by the player */
-    private static boolean athenaMove = false;
+    private ArrayList<String> godChoices; /** list of gods chosen by the first player to be available in the game **/
+    private Builder currentBuilder = null; /** variable which holds the current builder being used by the player **/
+    private static boolean athenaMove = false; /** support boolean for Athena **/
 
     public Player getCurrentPlayer() {
         return players.get(currentPlayer);
     }
 
+    public int getGameIndex() {
+        return gameIndex;
+    }
 
     /**
      * The purpose of this function is going to the next turn;
@@ -46,6 +43,8 @@ public class GameTable {
      * - reset the boolean firstTime in currentPlayer to true
      * - reset the currentBuilder attribute to a default null value
      * - increase the currentPlayer index, so as to effectively skip to next player
+     * - check for preConditions -> if the player can't move, throw
+     * - change client state
      */
     public void nextTurn() throws NoMoreMovesException {
         getCurrentPlayer().setFirstTime(true);
@@ -61,6 +60,9 @@ public class GameTable {
         return completeGodList;
     }
 
+    /**
+     * Takes a Player argument and determines its "player number", aka its index in the players list.
+     */
     public int getPlayerIndex(Player player){
         if (players.get(0).equals(player)) return 0;
         else if (players.get(1).equals(player)) return 1;
@@ -88,6 +90,10 @@ public class GameTable {
     }
 
 
+    /**
+     * Checks for available feasible moves
+     * @see NoMoreMovesException
+     */
     public final void checkMovePreConditions() throws NoMoreMovesException {
         ArrayList<Builder> builderList = players.get(currentPlayer).getBuilderList();
         int movableBuilders = 2;
@@ -97,6 +103,10 @@ public class GameTable {
         if (movableBuilders == 0)  throw new NoMoreMovesException(players.get(currentPlayer));
     }
 
+    /**
+     * Handles player removing after win / loss
+     * @param player to be removed
+     */
     public void removePlayer(Player player){
         this.players.remove(player);
         player.removeBuilders();
@@ -104,6 +114,9 @@ public class GameTable {
         //TODO handle new player number etc..
     }
 
+    /**
+     * Clears up game instance.
+     */
     public void closeGame(){
         for (Player p : players){
             removePlayer(p);
@@ -131,6 +144,9 @@ public class GameTable {
 
     /* end observable pattern */
 
+    /**
+     * @return 5x5 matrix containing CellViews, to be sent to clients
+     */
     public CellView[][] getBoardCopy(){
         CellView[][] out = new CellView[5][5];
         for (int i = 0; i < 5; i++){
@@ -141,7 +157,7 @@ public class GameTable {
         return out;
     }
 
-
+    @Deprecated
     public static GameTable getInstance(int playersNumber){
         return new GameTable(playersNumber);
     }
@@ -151,6 +167,7 @@ public class GameTable {
      * this method exists just to unit test w/ the singleton
      * TODO: delete in deploy
      */
+    @Deprecated
     public static GameTable getDebugInstance(int playersNumber){
         return new GameTable(playersNumber);
     }
@@ -158,17 +175,15 @@ public class GameTable {
      * this method exists just to unit test w/ the singleton
      * TODO: delete in deploy
      */
+    @Deprecated
     public void setDebugInstance(){
         instance = this;
     }
 
 
-
-   /* public static GameTable getInstance(){
-        if (instance == null) throw new NullPointerException();
-        else return instance;
-    }*/
-
+    /**
+     * Constructor for GameTable. Takes number of players as argument.
+     */
     public GameTable(int playersNumber) {   //contructor method for GameTable
 
         Table = new Cell[5][5]; //create new Table
@@ -206,6 +221,9 @@ public class GameTable {
 
     }
 
+    /**
+     * Sets table's gods.
+     */
     public void setGods(ArrayList<Integer> godChoices){
         ArrayList<String> gods = new ArrayList<>();
         for (Integer godChoice : godChoices) {
@@ -235,16 +253,13 @@ public class GameTable {
             isInvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
     }
+
+    /**
+     * @return Cell on which the first builder connected to the passed SocketClientConnection stands
+     */
     public Cell getCell(SocketClientConnection c){
         return c.getPlayer().getBuilderList().get(0).getPosition();
     }
-    /*
-    public boolean checkGameover(){
-        //return true if there is just one player in game
-    }
-    public int getPlayerIn(){
-        //ritorna il numero di player ancora in gioco
-    }*/
 
     /**
      * @param nickname contains nickname to be checked
