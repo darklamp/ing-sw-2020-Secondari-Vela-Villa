@@ -153,7 +153,12 @@ public class InitController implements Runnable{
         if (c3 != null){
             c3.setReady();
         }
-       c1.asyncSend(gameTable.getBoardCopy());
+        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + players.size());
+        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + players.size());
+        if (c3 != null){
+            c3.send("[INIT]@@@"  + gameTable.getPlayerIndex(player3) + "@@@" + players.size());
+        }
+        c1.asyncSend(gameTable.getBoardCopy());
        c2.asyncSend(gameTable.getBoardCopy());
        if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
        c2.setState(ClientState.MOVE);
