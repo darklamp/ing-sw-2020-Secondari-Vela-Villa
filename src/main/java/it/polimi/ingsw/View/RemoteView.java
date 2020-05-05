@@ -32,7 +32,10 @@ public class RemoteView extends View {
             Object obj = propertyChangeEvent.getNewValue();
             setNews((News) obj);
             System.out.println("Received message from: " + news.getSender().getPlayer().getNickname() +"\n");
-            isValidNews(news);
+            if (propertyChangeEvent.getPropertyName().equals("PLAYERTIMEOUT")){
+                setControllerNews(news,"PLAYERTIMEOUT");
+            }
+            else isValidNews(news);
         }
 
 
@@ -162,8 +165,8 @@ public class RemoteView extends View {
                     this.socketClientConnection.send(this.player.getState());
                 }
                 case "WIN" -> {
-                    this.socketClientConnection.asyncSend(gameTable.getBoardCopy());
                     if (news.getSender() == this.socketClientConnection) {
+                        this.socketClientConnection.asyncSend(gameTable.getBoardCopy());
                         this.socketClientConnection.send(ClientState.WIN);
                     }
                     else this.socketClientConnection.send(ClientState.LOSE);

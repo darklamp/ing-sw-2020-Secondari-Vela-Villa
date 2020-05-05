@@ -30,7 +30,8 @@ public class MainController implements PropertyChangeListener {
         else if (currentPlayer != news.getSender().getPlayer()) gameTable.setNews(news, "NOTYOURTURN");
         else {
             try {
-                switch (state){
+                if (name.equals("PLAYERTIMEOUT")) throw new NoMoreMovesException(news.getSender().getPlayer());
+                else switch (state){
                     case PLAY -> {
                         isLegalState(name,currentPlayer.getState());
                         switch (name) {

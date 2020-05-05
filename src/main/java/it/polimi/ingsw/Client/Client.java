@@ -49,6 +49,9 @@ public class Client implements Runnable {
                     } else if (inputObject instanceof ClientState c){
                         state = c;
                         ui.processTurnChange(c);
+                        if (c == ClientState.WIN || c == ClientState.LOSE){
+                            System.exit(0);
+                        }
                     }
                     else {
                         throw new IllegalArgumentException();

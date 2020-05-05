@@ -163,6 +163,6 @@ public class Player {
     }
 
     void kick() {
-        this.connection.closeConnection(gameTable.getGameIndex());
+        this.connection.closeConnection();
     }
 }
