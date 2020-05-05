@@ -111,56 +111,64 @@ public class InitController implements Runnable{
 
     @Override
     public void run() {
-        ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
-        player1.setGod(choices.get(0));
-        player2.setGod(choices.get(1));
-        if(c3 != null) player3.setGod(choices.get(2));
-        ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
-        try {
-            player1.initBuilderList(gameTable.getCell(startPos.get(0).getFirst(), startPos.get(0).getSecond()));
-            player1.initBuilderList(gameTable.getCell(startPos.get(1).getFirst(), startPos.get(1).getSecond()));
-            player2.initBuilderList(gameTable.getCell(startPos.get(2).getFirst(), startPos.get(2).getSecond()));
-            player2.initBuilderList(gameTable.getCell(startPos.get(3).getFirst(), startPos.get(3).getSecond()));
-            if (c3 != null) {
-                player3.initBuilderList(gameTable.getCell(startPos.get(4).getFirst(), startPos.get(4).getSecond()));
-                player3.initBuilderList(gameTable.getCell(startPos.get(5).getFirst(), startPos.get(5).getSecond()));
+        try{
+            ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
+            player1.setGod(choices.get(0));
+            player2.setGod(choices.get(1));
+            if(c3 != null) player3.setGod(choices.get(2));
+            ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
+            try {
+                player1.initBuilderList(gameTable.getCell(startPos.get(0).getFirst(), startPos.get(0).getSecond()));
+                player1.initBuilderList(gameTable.getCell(startPos.get(1).getFirst(), startPos.get(1).getSecond()));
+                player2.initBuilderList(gameTable.getCell(startPos.get(2).getFirst(), startPos.get(2).getSecond()));
+                player2.initBuilderList(gameTable.getCell(startPos.get(3).getFirst(), startPos.get(3).getSecond()));
+                if (c3 != null) {
+                    player3.initBuilderList(gameTable.getCell(startPos.get(4).getFirst(), startPos.get(4).getSecond()));
+                    player3.initBuilderList(gameTable.getCell(startPos.get(5).getFirst(), startPos.get(5).getSecond()));
+                }
+            } catch (InvalidBuildException | InvalidCoordinateException e) {
+                e.printStackTrace();
             }
-        } catch (InvalidBuildException | InvalidCoordinateException e) {
-            e.printStackTrace();
+            View player1View = new RemoteView(player1, c1, gameTable);
+            View player2View = new RemoteView(player2, c2, gameTable);
+            View player3View = null;
+            if (c3 != null) {
+                player3View = new RemoteView(player3, c3, gameTable);
+            }
+            ArrayList<Player> players = new ArrayList<>();
+            players.add(player1); players.add(player2);
+            if (player3 != null) players.add(player3);
+            gameTable.setPlayers(players);
+            gameTable.setGods(choices);
+            gameTable.addPropertyChangeListener(player1View);
+            gameTable.addPropertyChangeListener(player2View);
+            if (c3 != null){
+                gameTable.addPropertyChangeListener(player3View);
+            }
+            player1View.addPropertyChangeListener(mainController);
+            player2View.addPropertyChangeListener(mainController);
+            if (c3 != null){
+                player3View.addPropertyChangeListener(mainController);
+            }
+            c1.setReady(); c2.setReady();
+            if (c3 != null){
+                c3.setReady();
+            }
+            c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + players.size());
+            c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + players.size());
+            if (c3 != null){
+                c3.send("[INIT]@@@"  + gameTable.getPlayerIndex(player3) + "@@@" + players.size());
+            }
+            c1.asyncSend(gameTable.getBoardCopy());
+            c2.asyncSend(gameTable.getBoardCopy());
+            if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
+            c2.setState(ClientState.MOVE);
         }
-        View player1View = new RemoteView(player1, c1, gameTable);
-        View player2View = new RemoteView(player2, c2, gameTable);
-        View player3View = null;
-        if (c3 != null) {
-            player3View = new RemoteView(player3, c3, gameTable);
+        catch (Exception e){
+            c1.closeConnection();
+            c2.closeConnection();
+            if (c3 != null) c3.closeConnection();
         }
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(player1); players.add(player2);
-        if (player3 != null) players.add(player3);
-        gameTable.setPlayers(players);
-        gameTable.setGods(choices);
-        gameTable.addPropertyChangeListener(player1View);
-        gameTable.addPropertyChangeListener(player2View);
-        if (c3 != null){
-            gameTable.addPropertyChangeListener(player3View);
-        }
-        player1View.addPropertyChangeListener(mainController);
-        player2View.addPropertyChangeListener(mainController);
-        if (c3 != null){
-            player3View.addPropertyChangeListener(mainController);
-        }
-        c1.setReady(); c2.setReady();
-        if (c3 != null){
-            c3.setReady();
-        }
-        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + players.size());
-        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + players.size());
-        if (c3 != null){
-            c3.send("[INIT]@@@"  + gameTable.getPlayerIndex(player3) + "@@@" + players.size());
-        }
-        c1.asyncSend(gameTable.getBoardCopy());
-       c2.asyncSend(gameTable.getBoardCopy());
-       if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
-       c2.setState(ClientState.MOVE);
+
     }
 }
