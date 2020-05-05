@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
@@ -44,6 +45,9 @@ public class Client implements Runnable {
                     Object inputObject = socketIn.readObject();
                     if(inputObject instanceof String){
                         ui.process((String) inputObject);
+                        if (((String) inputObject).equalsIgnoreCase(ServerMessage.abortMessage)){
+                            System.exit(0);
+                        }
                     } else if (inputObject instanceof CellView[][]){
                         ui.showTable((CellView[][])inputObject);
                     } else if (inputObject instanceof ClientState c){

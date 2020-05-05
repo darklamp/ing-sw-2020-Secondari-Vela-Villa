@@ -47,7 +47,7 @@ public class Server {
         }
     }
 
-    public synchronized void lobby(SocketClientConnection c, String name) throws InvalidGodException, NickAlreadyTakenException, InvalidCoordinateException {
+    public synchronized void lobby(SocketClientConnection c, String name) throws Exception {
         if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n")) throw new NickAlreadyTakenException();
         System.out.println("nome è "+name);
         waitingConnection.put(name, c);
@@ -87,7 +87,8 @@ public class Server {
                 }
                 InitController initController = new InitController(c1,c2,c3,gods,player1,player2,player3,gameTable,controller);
                 controller.setInitController(initController);
-                new Thread(initController).start();
+                Thread thread = new Thread(initController);
+                thread.start();
                 gameControllers.put(getCurrentGameIndex(),controller);
                 ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
                 playingConnections.add(c1);
@@ -95,6 +96,7 @@ public class Server {
                 if (c3 != null) playingConnections.add(c3);
                 gameList.put(getCurrentGameIndex(), playingConnections);
                 waitingConnection.clear();
+                thread.join();
             }  finally {
                 currentGameIndex += 1;
             }
@@ -117,6 +119,10 @@ public class Server {
                 System.out.println("Connection Error!");
             }
         }
+    }
+
+    synchronized void clearWaiting(){
+        waitingConnection.clear();
     }
 
 }

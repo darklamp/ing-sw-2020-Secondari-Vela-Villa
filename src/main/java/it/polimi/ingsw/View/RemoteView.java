@@ -17,9 +17,6 @@ import java.util.List;
 
 public class RemoteView extends View {
 
-    private ClientState state = ClientState.WAIT;
-
-
     private class MessageReceiver implements PropertyChangeListener {
 
         private News news;
@@ -32,8 +29,12 @@ public class RemoteView extends View {
             Object obj = propertyChangeEvent.getNewValue();
             setNews((News) obj);
             System.out.println("Received message from: " + news.getSender().getPlayer().getNickname() +"\n");
-            if (propertyChangeEvent.getPropertyName().equals("PLAYERTIMEOUT")){
+            String name = propertyChangeEvent.getPropertyName();
+            if (name.equals("PLAYERTIMEOUT")){
                 setControllerNews(news,"PLAYERTIMEOUT");
+            }
+            else if (name.equals("ABORT")){
+                setControllerNews(news,"ABORT");
             }
             else isValidNews(news);
         }
@@ -161,9 +162,7 @@ public class RemoteView extends View {
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                     this.socketClientConnection.send(ClientState.WAIT);
                 }
-                case "YOURTURN" -> {
-                    this.socketClientConnection.send(this.player.getState());
-                }
+                case "YOURTURN" -> this.socketClientConnection.send(this.player.getState());
                 case "WIN" -> {
                     if (news.getSender() == this.socketClientConnection) {
                         this.socketClientConnection.asyncSend(gameTable.getBoardCopy());
@@ -171,6 +170,7 @@ public class RemoteView extends View {
                     }
                     else this.socketClientConnection.send(ClientState.LOSE);
                 }
+                case "ABORT" -> this.socketClientConnection.send(ServerMessage.abortMessage);
                 default -> this.socketClientConnection.asyncSend(ServerMessage.genericErrorMessage);
             }
         }

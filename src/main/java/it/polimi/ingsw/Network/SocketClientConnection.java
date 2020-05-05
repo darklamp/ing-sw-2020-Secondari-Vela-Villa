@@ -2,6 +2,7 @@ package it.polimi.ingsw.Network;
 
 
 import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Pair;
@@ -111,23 +112,36 @@ public class SocketClientConnection implements Runnable {
             assert in != null;
             send("Insert a row number >= 0 and < 5: ");
             while(true) {
-                r = in.nextInt();
-                if(r >= 0 && r < 5){
-                    break;
+                try{
+                    r = in.nextInt();
+                    if(r >= 0 && r < 5){
+                        break;
+                    }
+                    else{
+                        send(ServerMessage.wrongNumber);
+                    }
                 }
-                else{
+                catch (InputMismatchException e){
                     send(ServerMessage.wrongNumber);
+                    in.nextLine();
                 }
             }
             send("Insert a column >= 0 and < 5: ");
             while(true) {
-                c = in.nextInt();
-                if(c >= 0 && c < 5){
-                    break;
+                try{
+                    c = in.nextInt();
+                    if(c >= 0 && c < 5){
+                        break;
+                    }
+                    else{
+                        send(ServerMessage.wrongNumber);
+                    }
                 }
-                else{
+                catch (InputMismatchException e){
                     send(ServerMessage.wrongNumber);
+                    in.nextLine();
                 }
+
             }
             out = new Pair(r,c);
             for (Pair pair : choices){
@@ -157,16 +171,23 @@ public class SocketClientConnection implements Runnable {
         }
         assert in != null;
         send("Please choose one: ");
-        int choice = in.nextInt(); //possibile bug qua
+        int choice = -1;
+
         while(true){
-            if (choice < 10 && choice >= 0 && gods.contains(choice)){
-                gods.remove(Integer.valueOf(choice));
-                send("You choose: " + GameTable.getCompleteGodList().get(choice));
-                return choice;
-            }
-            else{
-                send("Wrong number. Try again: ");
+            try{
                 choice = in.nextInt();
+                if (choice < 10 && choice >= 0 && gods.contains(choice)){
+                    gods.remove(Integer.valueOf(choice));
+                    send("You choose: " + GameTable.getCompleteGodList().get(choice));
+                    return choice;
+                }
+                else{
+                    send("Wrong number. Try again: ");
+                }
+            }
+            catch (InputMismatchException e){
+                send("Wrong number. Try again: ");
+                in.nextLine();
             }
         }
 
@@ -185,10 +206,18 @@ public class SocketClientConnection implements Runnable {
             e.printStackTrace();
         }
         assert in != null;
-        int playersNumber = in.nextInt();
-        while (playersNumber != 2 && playersNumber != 3){
-            send(ServerMessage.firstPlayer);
-            playersNumber = in.nextInt();
+        int playersNumber;
+        while(true){
+            try {
+                playersNumber = in.nextInt();
+                if (playersNumber == 2 || playersNumber == 3){
+                    break;
+                }
+            }
+            catch (InputMismatchException e){
+                send("Wrong input. Please try again: ");
+                in.nextLine();
+            }
         }
         send("Nice! Now you need to choose " + playersNumber + " gods to be used in the game.\n");
         AtomicInteger counter = new AtomicInteger(0);
@@ -228,10 +257,13 @@ public class SocketClientConnection implements Runnable {
                     server.lobby(this, name);
                     break;
                 }
-                catch (Exception ee){
+                catch (NickAlreadyTakenException ee){
                     send(ServerMessage.userAlreadyTaken);
                     read = in.nextLine();
                     name = read;
+                }
+                catch (Exception e){
+                    throw new Exception();
                 }
             }
             while(isActive()){
@@ -245,21 +277,19 @@ public class SocketClientConnection implements Runnable {
                         f.get(5, TimeUnit.MINUTES);
                         setNews(new News(read1.toString(),this),"INPUT");
                     }
-                    catch (final InterruptedException | ExecutionException ignored) {
-                    }
-                    catch (final TimeoutException e) {
-                        this.send("Disconnecting for inactivity ...");
-                        setNews(new News(null,this),"PLAYERTIMEOUT");
-                    }
-                    finally {
+                    catch (final InterruptedException | ExecutionException | TimeoutException e) {
+                        throw new Exception();
+                    } finally {
                         service.shutdown();
                     }
                 }
             }
-        } catch (IOException | NoSuchElementException e) {
-            System.err.println("Error!" + e.getMessage());
-        }finally{
-            close();
+        } catch (Exception e) {
+            System.err.println("Exception thrown in SocketClientConnection.");
+            setNews(new News(null,this),"ABORT");
+        }
+        finally {
+            closeConnection();
         }
     }
 
