@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 import java.io.Serializable;
@@ -168,6 +170,13 @@ public abstract class Builder implements Serializable {
                return true;
            }
        });
+    }
+
+    /**
+     * @return State from which the player starts.
+     */
+    ClientState getFirstState(){
+        return ClientState.MOVE;
     }
 
 

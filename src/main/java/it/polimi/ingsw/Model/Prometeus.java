@@ -26,10 +26,12 @@ public class Prometeus extends Builder {
             getPlayer().Build(cell);
         }
     }*/
+
     @Override
-    void resetState(){
-        this.getPlayer().setState(ClientState.MOVEORBUILD);
+    ClientState getFirstState(){
+        return ClientState.MOVEORBUILD;
     }
-}
+
+    }
 
 

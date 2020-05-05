@@ -75,9 +75,9 @@ public class CLI implements Ui {
                 dice.Stamp();
 
                 if (c == 4){
-                    if (r == 0) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 0 ? "  YOU  " : (playersNumber == 3 ? "  P3   " : "  P2   ")) + Color.ANSI_BLUE + "    █ 1 █ " + Color.ANSI_YELLOW +"█ 2 █" + Color.RESET);
-                    else if (r == 1) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 1 ? "  YOU  " : "  P1   ") + Color.ANSI_RED + "    █ 1 █ " + Color.ANSI_CYAN +"█ 2 █" + Color.RESET);
-                    else if (r == 2 && playersNumber == 3) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 2 ? "  YOU  " : "  P2   ") + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE +"█ 2 █" + Color.RESET);
+                    if (r == 0) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 0 ? "  YOU" : (playersNumber == 3 ? "  P3 " : "  P2 ")) + Color.ANSI_BLUE + "    █ 1 █ " + Color.ANSI_YELLOW +"█ 2 █" + Color.RESET);
+                    else if (r == 1) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 1 ? "  YOU" : "  P1 ") + Color.ANSI_RED + "    █ 1 █ " + Color.ANSI_CYAN +"█ 2 █" + Color.RESET);
+                    else if (r == 2 && playersNumber == 3) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 2 ? "  YOU" : "  P2 ") + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE +"█ 2 █" + Color.RESET);
                     else if (r == 3) System.out.print(Color.RESET + Color.BOLD + Color.ANSI_WHITE+ "  ███  NO PLAYER     ███" + Color.RESET);
                 }
 

@@ -53,7 +53,7 @@ public class GameTable {
         if (currentPlayer == playersNumber - 1) currentPlayer = 0;
         else currentPlayer++;
         checkMovePreConditions();
-        getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0) instanceof Prometeus ? ClientState.MOVEORBUILD : ClientState.MOVE);
+        getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
     }
 
     public static List<String> getCompleteGodList() {
