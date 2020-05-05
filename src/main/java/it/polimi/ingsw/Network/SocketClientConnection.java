@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SocketClientConnection implements Runnable {
 
@@ -24,7 +26,6 @@ public class SocketClientConnection implements Runnable {
     private News news;
     private Player player;
     private boolean ready = false;
-    private int gameIndex;
 
     private boolean active = true;
 
@@ -70,20 +71,20 @@ public class SocketClientConnection implements Runnable {
 
     }
 
-    public synchronized void closeConnection(int gameIndex) {
+    public synchronized void closeConnection() {
         send("Connection closed!");
         try {
             socket.close();
+            this.close();
         } catch (IOException e) {
             System.err.println("Error when closing socket!");
         }
-        this.gameIndex = gameIndex;
         active = false;
     }
 
     private void close() {
         System.out.println("Deregistering client...");
-        Server.deregisterConnection(gameIndex, this);
+        Server.deregisterConnection(this);
         System.out.println("Done!");
     }
 
@@ -234,9 +235,25 @@ public class SocketClientConnection implements Runnable {
                 }
             }
             while(isActive()){
-                if (ready){
-                    read = in.nextLine();
-                    setNews(new News(read,this),"INPUT");
+                if (ready && player.getState() != ClientState.WAIT){
+                    ExecutorService service = Executors.newSingleThreadExecutor();
+
+                    try {
+                        AtomicReference<String> read1 = new AtomicReference<>();
+                        Runnable r = () -> read1.set(in.nextLine());
+                        Future<?> f = service.submit(r);
+                        f.get(5, TimeUnit.MINUTES);
+                        setNews(new News(read1.toString(),this),"INPUT");
+                    }
+                    catch (final InterruptedException | ExecutionException ignored) {
+                    }
+                    catch (final TimeoutException e) {
+                        this.send("Disconnecting for inactivity ...");
+                        setNews(new News(null,this),"PLAYERTIMEOUT");
+                    }
+                    finally {
+                        service.shutdown();
+                    }
                 }
             }
         } catch (IOException | NoSuchElementException e) {
