@@ -24,7 +24,7 @@ public class Minotaur extends Builder{
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
                 try{
-                    if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new MinotaurException();
+                    if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new MinotaurException(getCellBehind(finalPoint));
                     else throw new InvalidMoveException();
                 }
                 catch (InvalidCoordinateException e){
@@ -39,39 +39,76 @@ public class Minotaur extends Builder{
      * @return true if the cell behind the occupied one is empty and valid; else false
      */
     private boolean checkEmptyCellBehind(Cell finalPoint) throws InvalidCoordinateException {
-            int diffX = finalPoint.getX() - this.getPosition().getX();
-            int diffY = finalPoint.getY() - this.getPosition().getY();
-            if(diffX == 1) {
-                if (diffY == 1) {
-                    return finalPoint.getX() != 4 && finalPoint.getY() != 4 && finalPoint.movableCell(finalPoint.getX() + 1, finalPoint.getY() + 1); //OK
+        /* Warn : X is the row, so it really is Y, and viceversa */
+            int diffY = finalPoint.getRow() - this.getPosition().getRow();
+            int diffX = finalPoint.getColumn() - this.getPosition().getColumn();
+            if(diffY == 1) {
+                if (diffX == 1) {
+                    return finalPoint.getRow() != 4 && finalPoint.getColumn() != 4 && finalPoint.movableCell(finalPoint.getRow() + 1, finalPoint.getColumn() + 1); //OK
                 }
-                else if (diffY == -1) {
-                    return finalPoint.getX() != 4 && finalPoint.getY() != 0 && finalPoint.movableCell(finalPoint.getX() + 1, finalPoint.getY() - 1); //OK
+                else if (diffX == -1) {
+                    return finalPoint.getRow() != 4 && finalPoint.getColumn() != 0 && finalPoint.movableCell(finalPoint.getRow() + 1, finalPoint.getColumn() - 1); //OK
                 }
                 else {
-                    return finalPoint.getX() != 4 && finalPoint.movableCell(finalPoint.getX() + 1, finalPoint.getY()); //OK
+                    return finalPoint.getRow() != 4 && finalPoint.movableCell(finalPoint.getRow() + 1, finalPoint.getColumn()); //OK
                 }
             }
-            else if (diffX == -1){
-                if (diffY == 1) {
-                    return finalPoint.getX() != 0 && finalPoint.getY() != 4 && finalPoint.movableCell(finalPoint.getX() - 1, finalPoint.getY() + 1); //OK
+            else if (diffY == -1){
+                if (diffX == 1) {
+                    return finalPoint.getRow() != 0 && finalPoint.getColumn() != 4 && finalPoint.movableCell(finalPoint.getRow() - 1, finalPoint.getColumn() + 1); //OK
                 }
-                else if (diffY == -1) {
-                    return finalPoint.getX() != 0 && finalPoint.getY() != 0 && finalPoint.movableCell(finalPoint.getX() - 1, finalPoint.getY() - 1); //OK
+                else if (diffX == -1) {
+                    return finalPoint.getRow() != 0 && finalPoint.getColumn() != 0 && finalPoint.movableCell(finalPoint.getRow() - 1, finalPoint.getColumn() - 1); //OK
                 }
                 else {
-                    return finalPoint.getX() != 0 && finalPoint.movableCell(finalPoint.getX() - 1, finalPoint.getY()); //OK
+                    return finalPoint.getRow() != 0 && finalPoint.movableCell(finalPoint.getRow() - 1, finalPoint.getColumn()); //OK
                 }
             }
             else {
-                if (diffY == 1) {
-                    return finalPoint.getY() != 4 && finalPoint.movableCell(finalPoint.getX(), finalPoint.getY() + 1); //OK
+                if (diffX == 1) {
+                    return finalPoint.getColumn() != 4 && finalPoint.movableCell(finalPoint.getRow(), finalPoint.getColumn() + 1); //OK
                 }
-                else if (diffY == -1) {
-                    return finalPoint.getY() != 0 && finalPoint.movableCell(finalPoint.getX(), finalPoint.getY() - 1); //OK
+                else if (diffX == -1) {
+                    return finalPoint.getColumn() != 0 && finalPoint.movableCell(finalPoint.getRow(), finalPoint.getColumn() - 1); //OK
                 }
                 return false;
             }
+    }
+
+    private Pair getCellBehind(Cell finalPoint){
+        int diffY = finalPoint.getRow() - this.getPosition().getRow();
+        int diffX = finalPoint.getColumn() - this.getPosition().getColumn();
+        if(diffY == 1) {
+            if (diffX == 1) {
+                return new Pair(finalPoint.getRow() + 1, finalPoint.getColumn() + 1);
+            }
+            else if (diffX == -1) {
+                return new Pair(finalPoint.getRow() + 1, finalPoint.getColumn() - 1);
+            }
+            else {
+                return new Pair(finalPoint.getRow() + 1, finalPoint.getColumn());
+            }
+        }
+        else if (diffY == -1){
+            if (diffX == 1) {
+                return new Pair(finalPoint.getRow() - 1, finalPoint.getColumn() + 1);
+            }
+            else if (diffX == -1) {
+                return new Pair(finalPoint.getRow() - 1, finalPoint.getColumn() - 1);
+            }
+            else {
+                return new Pair(finalPoint.getRow() - 1, finalPoint.getColumn());
+            }
+        }
+        else {
+            if (diffX == 1) {
+                return new Pair(finalPoint.getRow(), finalPoint.getColumn() + 1);
+            }
+            else if (diffX == -1) {
+                return new Pair(finalPoint.getRow(), finalPoint.getColumn() - 1);
+            }
+        }
+        return new Pair(0,0);
     }
 
 }

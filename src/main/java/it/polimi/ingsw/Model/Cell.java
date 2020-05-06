@@ -87,11 +87,11 @@ public class Cell implements Serializable {
      * @return true if near, false otherwise
      */
     private boolean isNear(Cell other){
-        if (this.getX() == other.getX() - 1 || this.getX() == other.getX() + 1){
-            return this.getY() - other.getY() <= 1 && this.getY() - other.getY() >= -1;
+        if (this.getRow() == other.getRow() - 1 || this.getRow() == other.getRow() + 1){
+            return this.getColumn() - other.getColumn() <= 1 && this.getColumn() - other.getColumn() >= -1;
         }
-        else if (this.getY() == other.getY() -1 || this.getY() == other.getY() + 1){
-            return this.getX() - other.getX() <= 1 && this.getX() - other.getX() >= -1;
+        else if (this.getColumn() == other.getColumn() -1 || this.getColumn() == other.getColumn() + 1){
+            return this.getRow() - other.getRow() <= 1 && this.getRow() - other.getRow() >= -1;
         }
         return false;
     }
@@ -114,15 +114,15 @@ public class Cell implements Serializable {
         this.builder = builder;
     }
 
-    protected Builder getBuilder() {
+    public Builder getBuilder() {
         return this.builder;
     }
 
-    public int getX() {
+    public int getRow() {
         return coordinates.getFirst();
     }
 
-    public int getY() {
+    public int getColumn() {
         return coordinates.getSecond();
     }
 

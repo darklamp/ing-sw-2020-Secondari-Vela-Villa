@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.*;
 
@@ -41,7 +40,7 @@ public abstract class Builder implements Serializable {
      * @param position position to move the builder to
      * @throws InvalidMoveException if the move isn't allowed
      */
-    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException, PrometeusException, WinnerException {
+    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException, PrometeusException, WinnerException, MinotaurException {
         try {
             isValidMove(position); // check validity of move
             this.position.setBuilder(null);
@@ -56,10 +55,6 @@ public abstract class Builder implements Serializable {
             //todo?
             if (isWinner()) throw new WinnerException(this.player);
         }
-        catch (MinotaurException e) { // change position cause it's Minotaurrr TODO: do not make someone win if they win by being forced to move
-            //todo
-            if (isWinner()) throw new WinnerException(this.player);
-        }
         catch (ArtemisException e){
            // throw new ArtemisException(); // TEMP PER TEST
             this.position.setBuilder(null);
@@ -70,7 +65,7 @@ public abstract class Builder implements Serializable {
         }
     }
 
-    private boolean isWinner(){
+    public boolean isWinner(){
         return this.position.getHeight() == BuildingType.TOP;
     }
 
@@ -113,7 +108,7 @@ public abstract class Builder implements Serializable {
      */
     void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, ArtemisException, MinotaurException, PrometeusException, PanException {
 
-        if(finalPoint == null || finalPoint.getX() < 0 || finalPoint.getX() > 4 || finalPoint.getY() < 0 || finalPoint.getY() > 4) throw new InvalidMoveException(); //out of bounds
+        if(finalPoint == null || finalPoint.getRow() < 0 || finalPoint.getRow() > 4 || finalPoint.getColumn() < 0 || finalPoint.getColumn() > 4) throw new InvalidMoveException(); //out of bounds
         else if (GameTable.getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1) throw new InvalidMoveException(); // Athena moved up last turn, so this player can't go up
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
         else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2) throw new InvalidMoveException(); // check if I'm moving up more than one level
@@ -135,7 +130,7 @@ public abstract class Builder implements Serializable {
     /**
      * @param position specifies position where to force-move the builder
      */
-    private void forceMove(Cell position){
+    public void forceMove(Cell position){
         position.setBuilder(this);
         this.position = position;
     }
