@@ -49,6 +49,8 @@ public class MoveController {
                 cellOnWhichMinotaurIsToBeMoved.getBuilder().forceMove(cellBehind);
                 news.getBuilder(gameTable).forceMove(cellOnWhichMinotaurIsToBeMoved);
                 if (news.getBuilder(gameTable).isWinner()) throw new WinnerException(gameTable.getCurrentPlayer());
+                gameTable.getCurrentPlayer().setState(BUILD);
+                gameTable.setCurrentBuilder(news.getBuilder(gameTable));
                 moveResult = "MOVEOK";
             } catch (Exception ee) {
                 moveResult = "MOVEKO";
