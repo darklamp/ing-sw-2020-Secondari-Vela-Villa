@@ -43,14 +43,16 @@ public class MoveController {
         catch (MinotaurException e){
             Cell cellBehind, cellOnWhichMinotaurIsToBeMoved;
             try {
+                news.getBuilder(gameTable).getPosition().setBuilder(null);
                 cellBehind = gameTable.getCell(e.getPair().getFirst(),e.getPair().getSecond());
                 cellOnWhichMinotaurIsToBeMoved = news.getCell(gameTable);
-                cellBehind.getBuilder().forceMove(cellBehind);
+                cellOnWhichMinotaurIsToBeMoved.getBuilder().forceMove(cellBehind);
                 news.getBuilder(gameTable).forceMove(cellOnWhichMinotaurIsToBeMoved);
-            } catch (InvalidCoordinateException ignored) {
+                if (news.getBuilder(gameTable).isWinner()) throw new WinnerException(gameTable.getCurrentPlayer());
+                moveResult = "MOVEOK";
+            } catch (Exception ee) {
+                moveResult = "MOVEKO";
             }
-            if (news.getBuilder(gameTable).isWinner()) throw new WinnerException(gameTable.getCurrentPlayer());
-            moveResult = "MOVEOK";
         }
         finally {
             gameTable.setNews(news,moveResult);
