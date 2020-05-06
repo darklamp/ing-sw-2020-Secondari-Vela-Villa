@@ -28,7 +28,7 @@ public class MoveController {
             moveResult = "MOVEOK";
         }
         catch (PanException e){
-//TODO 1
+            throw new WinnerException(gameTable.getCurrentPlayer());
         }
         catch (ArtemisException e){
             gameTable.getCurrentPlayer().setState(MOVEORBUILD);
