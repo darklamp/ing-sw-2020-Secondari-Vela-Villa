@@ -9,6 +9,7 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
 import it.polimi.ingsw.View.RemoteView;
 import it.polimi.ingsw.View.View;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
@@ -48,59 +49,65 @@ public class Server {
     }
 
     public synchronized void lobby(SocketClientConnection c, String name) throws Exception {
-        if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n")) throw new NickAlreadyTakenException();
-        System.out.println("nome è "+name);
-        waitingConnection.put(name, c);
-        if (waitingConnection.size() == 1){
-            ArrayList<Integer> gameProps = c.firstPlayer();
-            ArrayList<SocketClientConnection> temp= new ArrayList<>();
-            temp.add(c);
-            gameList.put(getCurrentGameIndex(),temp);
-            gameProperties.put(getCurrentGameIndex(),gameProps);
+     try{
+         if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n")) throw new NickAlreadyTakenException();
+         System.out.println("nome è "+name);
+         waitingConnection.put(name, c);
+         if (waitingConnection.size() == 1){
+             ArrayList<Integer> gameProps = c.firstPlayer();
+             ArrayList<SocketClientConnection> temp= new ArrayList<>();
+             temp.add(c);
+             gameList.put(getCurrentGameIndex(),temp);
+             gameProperties.put(getCurrentGameIndex(),gameProps);
 
-        }
-        else if (! (waitingConnection.size() == gameProperties.get(getCurrentGameIndex()).get(0))){
-            ArrayList<SocketClientConnection> temp =  gameList.get(getCurrentGameIndex());
-            temp.add(c);
-        }
-        else { // start game
-            try{
-                List<String> keys = new ArrayList<>(waitingConnection.keySet());
-                SocketClientConnection c1 = waitingConnection.get(keys.get(0));
-                SocketClientConnection c2 = waitingConnection.get(keys.get(1));
-                SocketClientConnection c3 = null;
-                if (waitingConnection.size() == 3) c3 = waitingConnection.get(keys.get(2));
-                ArrayList<Integer> gods = new ArrayList<>();
-                for (int i = 1; i <= gameProperties.get(getCurrentGameIndex()).get(0); i++){
-                    gods.add(gameProperties.get(getCurrentGameIndex()).get(i));
-                }
-                GameTable gameTable = new GameTable(keys.size());
-                MainController controller = new MainController(gameTable);
-                Player player1 = new Player(keys.get(0), gameTable, c1);
-                c1.setPlayer(player1);
-                Player player2 = new Player(keys.get(1), gameTable, c2);
-                c2.setPlayer(player2);
-                Player player3 = null;
-                if (c3 != null) {
-                    player3 = new Player(keys.get(2), gameTable, c3);
-                    c3.setPlayer(player3);
-                }
-                InitController initController = new InitController(c1,c2,c3,gods,player1,player2,player3,gameTable,controller);
-                controller.setInitController(initController);
-                Thread thread = new Thread(initController);
-                thread.start();
-                gameControllers.put(getCurrentGameIndex(),controller);
-                ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
-                playingConnections.add(c1);
-                playingConnections.add(c2);
-                if (c3 != null) playingConnections.add(c3);
-                gameList.put(getCurrentGameIndex(), playingConnections);
-                waitingConnection.clear();
-                thread.join();
-            }  finally {
-                currentGameIndex += 1;
-            }
-        }
+         }
+         else if (! (waitingConnection.size() == gameProperties.get(getCurrentGameIndex()).get(0))){
+             ArrayList<SocketClientConnection> temp =  gameList.get(getCurrentGameIndex());
+             temp.add(c);
+         }
+         else { // start game
+                 List<String> keys = new ArrayList<>(waitingConnection.keySet());
+                 SocketClientConnection c1 = waitingConnection.get(keys.get(0));
+                 SocketClientConnection c2 = waitingConnection.get(keys.get(1));
+                 SocketClientConnection c3 = null;
+                 if (waitingConnection.size() == 3) c3 = waitingConnection.get(keys.get(2));
+                 ArrayList<Integer> gods = new ArrayList<>();
+                 for (int i = 1; i <= gameProperties.get(getCurrentGameIndex()).get(0); i++){
+                     gods.add(gameProperties.get(getCurrentGameIndex()).get(i));
+                 }
+                 GameTable gameTable = new GameTable(keys.size());
+                 MainController controller = new MainController(gameTable);
+                 Player player1 = new Player(keys.get(0), gameTable, c1);
+                 c1.setPlayer(player1);
+                 Player player2 = new Player(keys.get(1), gameTable, c2);
+                 c2.setPlayer(player2);
+                 Player player3 = null;
+                 if (c3 != null) {
+                     player3 = new Player(keys.get(2), gameTable, c3);
+                     c3.setPlayer(player3);
+                 }
+                 InitController initController = new InitController(c1,c2,c3,gods,player1,player2,player3,gameTable,controller);
+                 controller.setInitController(initController);
+                 Thread thread = new Thread(initController);
+                 thread.start();
+                 gameControllers.put(getCurrentGameIndex(),controller);
+                 ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
+                 playingConnections.add(c1);
+                 playingConnections.add(c2);
+                 if (c3 != null) playingConnections.add(c3);
+                 gameList.put(getCurrentGameIndex(), playingConnections);
+                 waitingConnection.clear();
+           //      thread.join();
+                 currentGameIndex += 1;
+         }
+     }
+     catch (Exception e){
+         waitingConnection.clear();
+         if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();
+         if (gameProperties.size() > 0) gameProperties.get(getCurrentGameIndex()).clear();
+         throw new BrokenLobbyException();
+     }
+
     }
 
 

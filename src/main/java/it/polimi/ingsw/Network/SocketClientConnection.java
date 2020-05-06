@@ -209,14 +209,13 @@ public class SocketClientConnection implements Runnable {
         int playersNumber;
         while(true){
             try {
-                playersNumber = in.nextInt();
+                playersNumber = Integer.parseInt(in.nextLine());
                 if (playersNumber == 2 || playersNumber == 3){
                     break;
                 }
             }
-            catch (InputMismatchException e){
+            catch (NumberFormatException e){
                 send("Wrong input. Please try again: ");
-                in.nextLine();
             }
         }
         send("Nice! Now you need to choose " + playersNumber + " gods to be used in the game.\n");
@@ -226,10 +225,14 @@ public class SocketClientConnection implements Runnable {
         ArrayList<Integer> gods =  new ArrayList<>();
         while(count < playersNumber){
             send(ServerMessage.nextNumber);
-            int i = in.nextInt();
-            if (i < 10 && i >= 0 && !gods.contains(i)) {
-                gods.add(count,i);
-                count += 1;
+            try{
+                int i = Integer.parseInt(in.nextLine());
+                if (i < 10 && i >= 0 && !gods.contains(i)) {
+                    gods.add(count,i);
+                    count += 1;
+                }
+            }
+            catch (NumberFormatException ignored){
             }
         }
         gods.add(0,playersNumber);
@@ -263,6 +266,7 @@ public class SocketClientConnection implements Runnable {
                     name = read;
                 }
                 catch (Exception e){
+                    e.printStackTrace();
                     throw new Exception();
                 }
             }
@@ -286,6 +290,7 @@ public class SocketClientConnection implements Runnable {
             }
         } catch (Exception e) {
             System.err.println("Exception thrown in SocketClientConnection.");
+            e.printStackTrace();
             setNews(new News(null,this),"ABORT");
         }
         finally {
