@@ -8,7 +8,7 @@ public class Minotaur extends Builder{
     }
 
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
+    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell,newheight);
     }
@@ -20,7 +20,7 @@ public class Minotaur extends Builder{
      * @throws InvalidMoveException see super
      */
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometeusException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometheusException, ArtemisException, PanException {
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
                 try{

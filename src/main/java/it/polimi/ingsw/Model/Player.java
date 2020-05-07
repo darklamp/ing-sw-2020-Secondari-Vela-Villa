@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
@@ -128,6 +129,9 @@ public class Player {
     public void setState(ClientState state){
         this.turnState = state;
     }
+    public ClientState getFirstState(){
+        return this.builderList.get(0).getFirstState();
+    }
 
     /**
      * This function gets called twice per player by the controller, to initialize the player's builders
@@ -145,7 +149,7 @@ public class Player {
             case "HEPHAESTUS" -> this.builderList.add(new Hephaestus(position, this));
             case "MINOTAUR" -> this.builderList.add(new Minotaur(position, this));
             case "PAN" -> this.builderList.add(new Pan(position, this));
-            case "PROMETEUS" -> this.builderList.add(new Prometeus(position, this));
+            case "PROMETEUS" -> this.builderList.add(new Prometheus(position, this));
             default -> throw new InvalidBuildException();
         }
     }

@@ -8,7 +8,7 @@ public class Pan extends Builder{
         super(position, player);
     }
 
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
+    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell,newheight);
     }
@@ -19,12 +19,12 @@ public class Pan extends Builder{
      * @throws MinotaurException n/a
      * @throws ApolloException n/a
      * @throws InvalidMoveException see super
-     * @throws PrometeusException n/a
+     * @throws PrometheusException n/a
      * @throws ArtemisException n/a
      * @throws PanException when builder goes down by two or more levels --> players wins game
      */
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometeusException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometheusException, ArtemisException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
         if (this.getPosition().getHeight().compareTo(finalPoint.getHeight()) >= 2){

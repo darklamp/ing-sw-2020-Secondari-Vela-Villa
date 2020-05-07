@@ -12,7 +12,7 @@ public class Hephaestus extends Builder{
 
 
     @Override
-    protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, HephaestusException, InvalidBuildException, DemeterException {
+    protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, HephaestusException, InvalidBuildException, DemeterException, PrometheusException {
         if(firsttime) {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
@@ -31,7 +31,7 @@ public class Hephaestus extends Builder{
         }
     }
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException, PanException {
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometheusException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

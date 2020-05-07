@@ -4,7 +4,7 @@ import it.polimi.ingsw.Model.Exceptions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class PrometeusTest {
+class PrometheusTest {
 
     @Test
     void isValidMoveTest() throws Exception {
@@ -16,8 +16,8 @@ class PrometeusTest {
         Cell c3 = g.getCell(4, 2);
         Cell c4 = g.getCell(3, 3);
         Cell c5 = g.getCell(2, 3);
-        Builder b1 = new Prometeus(c3, p1);
-            Assertions.assertThrows(PrometeusException.class, () -> {
+        Builder b1 = new Prometheus(c3, p1);
+            Assertions.assertThrows(PrometheusException.class, () -> {
                 c1.mustSetHeight(BuildingType.BASE);
                 b1.setPosition(c1);
             });

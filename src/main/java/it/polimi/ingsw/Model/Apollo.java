@@ -12,7 +12,7 @@ public class Apollo extends Builder{
      * combines pre + postconditions
      */
     @Override
-    protected void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
+    protected void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell, newheight);
     }
@@ -23,7 +23,7 @@ public class Apollo extends Builder{
      * @throws ApolloException gets thrown if the builder tries to move to a cell occupied by an enemy builder
      */
     @Override
-    void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometeusException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, PrometheusException, ArtemisException, PanException {
             super.isValidMove(finalPoint);
             if (finalPoint.getBuilder() != null && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new ApolloException();
             else verifyMove(finalPoint);

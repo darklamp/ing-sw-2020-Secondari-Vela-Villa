@@ -153,14 +153,9 @@ public class RemoteView extends View {
             switch (name){
                 case "NOTYOURTURN" -> this.socketClientConnection.asyncSend(ServerMessage.notYourTurn);
                 case "ILLEGALSTATE","INVALIDNEWS","MOVEKO" -> this.socketClientConnection.asyncSend(ServerMessage.invalidMove);
-               // case "NEXTPLAYER" -> this.socketClientConnection.asyncSend(this.player.getState()); //TODO verificare vada bene con Prometheus
-                case "MOVEOK" -> {
+                case "MOVEOK","BUILDOK" -> {
                     this.socketClientConnection.send(gameTable.getBoardCopy());
-                    this.socketClientConnection.send(ClientState.BUILD);
-                }
-                case "BUILDOK" -> {
-                    this.socketClientConnection.send(gameTable.getBoardCopy());
-                    this.socketClientConnection.send(ClientState.WAIT);
+                    this.socketClientConnection.send(this.player.getState());
                 }
                 case "YOURTURN" -> this.socketClientConnection.send(this.player.getState());
                 case "WIN" -> {

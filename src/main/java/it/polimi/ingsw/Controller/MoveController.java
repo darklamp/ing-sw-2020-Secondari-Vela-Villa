@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Model.Builder;
 import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.GameTable;
@@ -27,6 +26,8 @@ public class MoveController {
             gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             moveResult = "MOVEOK";
         }
+        catch (InvalidMoveException ignored){ /* finally executes */
+        }
         catch (PanException e){
             throw new WinnerException(gameTable.getCurrentPlayer());
         }
@@ -35,10 +36,8 @@ public class MoveController {
             gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             moveResult = "MOVEOK";
         }
-        catch (PrometeusException e) {
+        catch (PrometheusException e) {
             //TODO
-        }
-        catch (InvalidMoveException ignored){ /* finally executes */
         }
         catch (MinotaurException e){
             Cell cellBehind, cellOnWhichMinotaurIsToBeMoved;

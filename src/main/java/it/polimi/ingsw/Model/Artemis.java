@@ -10,7 +10,7 @@ public class Artemis extends Builder {
     private Cell previous;
 
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
+    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell,newheight);
     }
@@ -21,10 +21,10 @@ public class Artemis extends Builder {
      * @throws ApolloException n/a
      * @throws InvalidMoveException when super method throws it or when I'm trying to move on the same cell as before
      * @throws ArtemisException when moving for the first time on a valid cell
-     * @throws PrometeusException n/a
+     * @throws PrometheusException n/a
      */
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometeusException, PanException {
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometheusException, PanException {
         boolean firstTime = this.getPlayer().isFirstTime();
         if (firstTime) {
             super.isValidMove(finalPoint);

@@ -39,7 +39,7 @@ public class Cell implements Serializable {
      * @throws InvalidBuildException if the cell is occupied by another builder OR if the cell is not adjacent
      * @throws DemeterException --> {@link Demeter}
      */
-    public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, DemeterException {
+    public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, DemeterException, PrometheusException {
             try {
 
                 if (height == null){

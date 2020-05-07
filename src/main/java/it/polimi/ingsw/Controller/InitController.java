@@ -162,7 +162,7 @@ public class InitController implements Runnable{
             c1.asyncSend(gameTable.getBoardCopy());
             c2.asyncSend(gameTable.getBoardCopy());
             if (c3 != null) c3.asyncSend(gameTable.getBoardCopy());
-            c2.setState(ClientState.MOVE);
+            c2.setState(gameTable.getCurrentPlayer().getFirstState());
         }
         catch (Exception e){
             c1.closeConnection();

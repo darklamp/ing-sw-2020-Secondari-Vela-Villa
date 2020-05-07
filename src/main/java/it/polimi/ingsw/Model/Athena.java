@@ -7,7 +7,7 @@ public class Athena extends Builder{
         super(position,player);
     }
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException {
+    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell,newheight);
     }
