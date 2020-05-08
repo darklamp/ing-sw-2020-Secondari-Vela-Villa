@@ -2,24 +2,18 @@ package it.polimi.ingsw.Network;
 
 import it.polimi.ingsw.Controller.InitController;
 import it.polimi.ingsw.Controller.MainController;
-import it.polimi.ingsw.Model.Builder;
-import it.polimi.ingsw.Model.Cell;
-import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
-import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
-import it.polimi.ingsw.View.RemoteView;
-import it.polimi.ingsw.View.View;
-import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
-import it.polimi.ingsw.Model.Exceptions.InvalidPlayersNumberException;
-import it.polimi.ingsw.View.CellView;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
