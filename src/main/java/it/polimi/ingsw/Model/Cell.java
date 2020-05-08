@@ -64,6 +64,10 @@ public class Cell implements Serializable {
             catch (HephaestusException e) { //TODO notify controller
                 this.height = height; //OK
             }
+            catch (PrometheusException e){
+                this.height = height;
+                throw new PrometheusException();
+            }
             catch (DemeterException e){
                 this.height = height;
                 throw new DemeterException();

@@ -50,9 +50,8 @@ public abstract class Builder implements Serializable {
         } catch (NullPointerException e) {
             e.printStackTrace(); // unhandled error
         }
-        catch (ApolloException e) { // swap position cause it's Apollo TODO: do not make someone win if they win by being forced to move
+        catch (ApolloException e) { // swap position cause it's Apollo
             swapPosition(this,position.getBuilder());
-            //todo?
             if (isWinner()) throw new WinnerException(this.player);
         }
         catch (ArtemisException e){

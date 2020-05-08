@@ -25,8 +25,8 @@ public class BuildController {
             news.setRecipients(gameTable.getPlayerConnections());
             gameTable.setNews(news,"BUILDOK");
             gameTable.nextTurn();
-            News news1 = new News();
-            news1.setRecipients(gameTable.getCurrentPlayer());
+            news = new News();
+            news.setRecipients(gameTable.getCurrentPlayer());
             s = "YOURTURN";
         } catch (InvalidBuildException ignored) {
         } catch (DemeterException e) {
