@@ -60,7 +60,7 @@ public class RemoteView extends View {
                 }
                 else{
                     switch (args[0]){
-                        case "PASS" -> setControllerNews(news, "WAIT");
+                        case "PASS" -> setControllerNews(news, "PASS");
                         case "MOVE" -> {
                             if (args[1] != null && args[2] != null && args[3] != null){
                                 int i; //xCoord

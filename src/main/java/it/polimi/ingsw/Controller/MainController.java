@@ -43,7 +43,8 @@ public class MainController implements PropertyChangeListener {
                         switch (name) {
                             case "PASS" -> {
                                 gameTable.nextTurn();
-                                currentPlayer = gameTable.getCurrentPlayer(); // se il giocatore ha passato il turno e non ha vinto
+                                currentPlayer = gameTable.getCurrentPlayer();
+                                news.setRecipients(currentPlayer);
                                 gameTable.setNews(news, "PASSOK");
                             }
                             case "BUILD" -> buildController.handleBuild(news);
@@ -109,14 +110,14 @@ public class MainController implements PropertyChangeListener {
                 if (!name.equals("MOVE")) throw new IllegalTurnStateException();
                 break;
             case MOVEORBUILD:
-                if (name.equals("WAIT")) throw new IllegalTurnStateException();
+                if (name.equals("PASS")) throw new IllegalTurnStateException();
                 gameTable.setCurrentBuilder(news.getBuilder(gameTable));
                 break;
             case BUILDORPASS:
                 if (name.equals("MOVE")) throw new IllegalTurnStateException();
                 break;
             case WAIT:
-                if (!name.equals("WAIT")) throw new IllegalTurnStateException();
+                if (!name.equals("PASS")) throw new IllegalTurnStateException();
                 break;
             default:
                 throw new IllegalTurnStateException();

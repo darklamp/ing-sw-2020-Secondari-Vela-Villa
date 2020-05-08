@@ -91,23 +91,23 @@ public class Client implements Runnable {
                         case INIT -> socketOut.println(inputLine);
                         case BUILDORPASS -> {
                             try {
-                                String choice = "PASS";
-                                if (inputLine.toUpperCase().contains("B")) choice = "BUILD";
-                                if (choice.equals("BUILD")) {
+                                boolean pass = true;
+                                if (inputLine.toUpperCase().contains("B")) pass = false;
+                                if (!pass) {
                                     state = BUILD;
                                     ui.processTurnChange(BUILD);
                                 } else {
                                     state = WAIT;
-                                    socketOut.println("PASS@@@");
+                                    socketOut.println("PASS");
                                 }
                             } catch (Exception ignored) {
                             }
                         }
                         case MOVEORBUILD -> {
                             try {
-                                String choice = "MOVE";
-                                if (inputLine.toUpperCase().contains("B")) choice = "BUILD";
-                                if (choice.equals("MOVE")) {
+                                boolean move = true;
+                                if (inputLine.toUpperCase().contains("B")) move = false;
+                                if (move) {
                                     state = MOVE;
                                     ui.processTurnChange(MOVE);
                                 } else {

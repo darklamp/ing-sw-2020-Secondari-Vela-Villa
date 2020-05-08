@@ -101,6 +101,9 @@ public class Server {
                  currentGameIndex += 1;
          }
      }
+     catch (NickAlreadyTakenException e){
+         throw new NickAlreadyTakenException();
+     }
      catch (Exception e){
          waitingConnection.clear();
          if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();

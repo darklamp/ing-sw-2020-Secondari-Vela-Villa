@@ -1,10 +1,8 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Model.Exceptions.DemeterException;
-import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
-import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
-import it.polimi.ingsw.Model.Exceptions.PrometheusException;
+import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.GameTable;
+import it.polimi.ingsw.Model.Hephaestus;
 import it.polimi.ingsw.Model.News;
 
 import static it.polimi.ingsw.Client.ClientState.*;
@@ -29,10 +27,10 @@ public class BuildController {
             news.setRecipients(gameTable.getCurrentPlayer());
             s = "YOURTURN";
         } catch (InvalidBuildException ignored) {
-        } catch (DemeterException e) {
+        } catch (DemeterException | HephaestusException e) {
             gameTable.getCurrentPlayer().setState(BUILDORPASS);
             s = "BUILDOK";
-        }  catch (PrometheusException e){
+        } catch (PrometheusException e){
             gameTable.getCurrentPlayer().setState(MOVE);
             s = "BUILDOK";
         }

@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Hephaestus extends Builder{
-    private boolean firsttime=true; //mi dice se è la prima o la seconda costruzione che fa
+    private boolean firstTime = this.getPlayer().isFirstTime(); //mi dice se è la prima o la seconda costruzione che fa
     private Cell previous;  //ci salvo la cella dove costruisco la prima volta
     Hephaestus(Cell position, Player player) {
         super(position,player);
@@ -13,10 +13,10 @@ public class Hephaestus extends Builder{
 
     @Override
     protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, HephaestusException, InvalidBuildException, DemeterException, PrometheusException {
-        if(firsttime) {
+        if(firstTime) {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
-            firsttime=false;
+            firstTime=false;
             previous=cell; //mi salvo il valore della cella su cui voglio costruire
             throw new HephaestusException();  //lancio l'eccezione che dice al controller di far costruire di nuovo
         }
@@ -25,9 +25,9 @@ public class Hephaestus extends Builder{
             verifyBuild(cell, newheight);
             if(newheight.equals(BuildingType.DOME)){throw new InvalidBuildException();} //non posso costruire una cupola come seconda costruzione ci va il new o no?
             else if(!cell.equals(previous)){throw new InvalidBuildException();}// non posso costruire su una cella diversa da quella precedente
-            else {
+          /*  else {
                 firsttime = true;  //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if
-            }
+            }*/
         }
     }
     @Override
