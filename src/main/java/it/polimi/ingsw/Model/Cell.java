@@ -58,8 +58,6 @@ public class Cell implements Serializable {
                 e.printStackTrace(); // unhandled error
             }  catch (AtlasException e) { // the player is trying to build dome
                 this.height = BuildingType.DOME;
-                //TODO verificare correttezza
-                // notify caller ?
             }
             catch (HephaestusException e) { //TODO notify controller
                 this.height = height; //OK

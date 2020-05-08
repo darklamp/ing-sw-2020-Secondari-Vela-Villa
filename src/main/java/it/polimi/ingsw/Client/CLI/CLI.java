@@ -98,6 +98,7 @@ public class CLI implements Ui {
             case BUILD -> s = "Please choose a cell to build on and which builder to use (x,y,b): ";
             case WIN -> s = "Hurray! You won the game!";
             case LOSE -> s = "Looks like you've lost the game.";
+            case BUILDORPASS -> s = "You can choose whether to build(b) or pass(p). Please choose: ";
         }
         System.out.println(s);
     }

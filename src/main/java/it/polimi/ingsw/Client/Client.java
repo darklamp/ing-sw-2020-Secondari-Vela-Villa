@@ -12,8 +12,7 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import static it.polimi.ingsw.Client.ClientState.BUILD;
-import static it.polimi.ingsw.Client.ClientState.MOVE;
+import static it.polimi.ingsw.Client.ClientState.*;
 import static it.polimi.ingsw.Model.BuildingType.NONE;
 
 public class Client implements Runnable {
@@ -88,42 +87,54 @@ public class Client implements Runnable {
             try {
                 while (isActive()) {
                     String inputLine = stdin.nextLine();
-                    if (state == ClientState.INIT)  socketOut.println(inputLine);
-                    else if (state == ClientState.MOVEORBUILD) {
-                        try{
-                            String choice = "MOVE";
-                            if (inputLine.toUpperCase().contains("B")) choice = "BUILD";
-                            if (choice.equals("MOVE")){
-                                state = MOVE;
-                                ui.processTurnChange(MOVE);
+                    switch (state) {
+                        case INIT -> socketOut.println(inputLine);
+                        case BUILDORPASS -> {
+                            try {
+                                String choice = "PASS";
+                                if (inputLine.toUpperCase().contains("B")) choice = "BUILD";
+                                if (choice.equals("BUILD")) {
+                                    state = BUILD;
+                                    ui.processTurnChange(BUILD);
+                                } else {
+                                    state = WAIT;
+                                    socketOut.println("PASS@@@");
+                                }
+                            } catch (Exception ignored) {
                             }
-                            else {
-                                state = BUILD;
-                                ui.processTurnChange(BUILD);
+                        }
+                        case MOVEORBUILD -> {
+                            try {
+                                String choice = "MOVE";
+                                if (inputLine.toUpperCase().contains("B")) choice = "BUILD";
+                                if (choice.equals("MOVE")) {
+                                    state = MOVE;
+                                    ui.processTurnChange(MOVE);
+                                } else {
+                                    state = BUILD;
+                                    ui.processTurnChange(BUILD);
+                                }
+                            } catch (Exception ignored) {
                             }
                         }
-                        catch (Exception ignored){
-                        }
-                    }
-                    else if (state == MOVE) {
-                        try{
-                            String[] s = inputLine.split(",");
-                            socketOut.println("MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
-                        }
-                        catch (Exception ignored){
-                        }
-                    }
-                    else if(state == BUILD){
-                        try{
-                            String[] s = inputLine.split(",");
-                            String out = "BUILD" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2];
-                            if (s.length == 4) {
-                                out += "@@@";
-                                out += s[3];
+                        case MOVE -> {
+                            try {
+                                String[] s = inputLine.split(",");
+                                socketOut.println("MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
+                            } catch (Exception ignored) {
                             }
-                            socketOut.println(out);
                         }
-                        catch (Exception ignored){
+                        case BUILD -> {
+                            try {
+                                String[] s = inputLine.split(",");
+                                String out = "BUILD" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2];
+                                if (s.length == 4) {
+                                    out += "@@@";
+                                    out += s[3];
+                                }
+                                socketOut.println(out);
+                            } catch (Exception ignored) {
+                            }
                         }
                     }
                     socketOut.flush();

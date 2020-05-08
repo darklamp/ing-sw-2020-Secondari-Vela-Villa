@@ -31,7 +31,7 @@ public class Demeter extends Builder {
         } else {
             if (cell.equals(previous)) {
                 throw new InvalidBuildException();
-            }// non posso costruire su una cella uguale a quella precedente
+            }
             else {
                 super.isValidBuild(cell, newheight);
                 verifyBuild(cell, newheight);

@@ -60,12 +60,12 @@ public class RemoteView extends View {
                 }
                 else{
                     switch (args[0]){
-                        case "PASS" -> setControllerNews(news, "NOOP");
+                        case "PASS" -> setControllerNews(news, "WAIT");
                         case "MOVE" -> {
                             if (args[1] != null && args[2] != null && args[3] != null){
-                                int i = -1; //xCoord
-                                int j = -1; //yCoord
-                                int k = -1; //builder number (1/2)
+                                int i; //xCoord
+                                int j; //yCoord
+                                int k; //builder number (1/2)
                                 try{
                                     i = Integer.parseInt(args[1]);
                                     if (i < 5 && i >= 0){
@@ -88,9 +88,9 @@ public class RemoteView extends View {
                         }
                         case "BUILD" -> {
                             if (args[1] != null && args[2] != null && args[3] != null){
-                                int i = -1; //xCoord
-                                int j = -1; //yCoord
-                                int k = -1; //builder number (1/2)
+                                int i; //xCoord
+                                int j; //yCoord
+                                int k; //builder number (1/2)
                                 try{
                                     i = Integer.parseInt(args[1]);
                                     if (i < 5 && i >= 0){
@@ -153,7 +153,7 @@ public class RemoteView extends View {
             switch (name){
                 case "NOTYOURTURN" -> this.socketClientConnection.asyncSend(ServerMessage.notYourTurn);
                 case "ILLEGALSTATE","INVALIDNEWS","MOVEKO" -> this.socketClientConnection.asyncSend(ServerMessage.invalidMove);
-                case "MOVEOK","BUILDOK" -> {
+                case "MOVEOK","BUILDOK", "PASSOK" -> {
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                     this.socketClientConnection.send(this.player.getState());
                 }
