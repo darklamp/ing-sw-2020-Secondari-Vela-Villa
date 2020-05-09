@@ -13,7 +13,10 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -279,21 +282,22 @@ public class SocketClientConnection implements Runnable {
                         Runnable r = () -> read1.set(in.nextLine());
                         Future<?> f = service.submit(r);
                         f.get(5, TimeUnit.MINUTES);
-                        setNews(new News(read1.toString(),this),"INPUT");
-                    }
-                    catch (final InterruptedException | ExecutionException | TimeoutException e) {
+                        setNews(new News(read1.toString(), this), "INPUT");
+                    } catch (final InterruptedException | ExecutionException | TimeoutException e) {
                         throw new Exception();
                     } finally {
                         service.shutdown();
                     }
                 }
             }
+        } catch (NoSuchElementException e) {
+            System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game... ");
+            setNews(new News(null, this), "ABORT");
         } catch (Exception e) {
-            System.err.println("Exception thrown in SocketClientConnection.");
+            System.err.println("Unknown exception thrown in SocketClientConnection.");
             e.printStackTrace();
-            setNews(new News(null,this),"ABORT");
-        }
-        finally {
+            setNews(new News(null, this), "ABORT");
+        } finally {
             closeConnection();
         }
     }
