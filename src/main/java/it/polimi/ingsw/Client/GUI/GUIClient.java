@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.GUI;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,10 +31,16 @@ public class GUIClient extends Application {
         Parent root = loader.load();
         controller = loader.getController();
         primaryStage.setTitle("Santorini Client");
-        primaryStage.setScene(new Scene(root,400,150));
+        primaryStage.setScene(new Scene(root, 400, 150));
         primaryStage.show();
         stage = primaryStage;
         gui.setReady(true);
+        stage.setOnCloseRequest(we -> {
+            System.out.println("Exiting...");
+            stage.close();
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
 
