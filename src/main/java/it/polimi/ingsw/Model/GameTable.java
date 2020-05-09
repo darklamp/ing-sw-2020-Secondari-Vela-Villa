@@ -1,16 +1,13 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
-import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.View.CellView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +53,10 @@ public class GameTable {
         getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
     }
 
+    void setCurrentPlayer(int player) {
+        this.currentPlayer = player;
+    }
+
     public static List<String> getCompleteGodList() {
         return completeGodList;
     }
@@ -63,7 +64,7 @@ public class GameTable {
     /**
      * Takes a Player argument and determines its "player number", aka its index in the players list.
      */
-    public int getPlayerIndex(Player player){
+    public int getPlayerIndex(Player player) {
         if (players.get(0).equals(player)) return 0;
         else if (players.get(1).equals(player)) return 1;
         else return playersNumber == 3 ? 2 : -1; // -1 is error case

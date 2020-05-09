@@ -78,7 +78,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>3.2.1</version>
+          <version>3.2.3</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -95,7 +95,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.3</version>
         <executions>
           <execution>
             <id>build-first</id>
@@ -104,8 +104,6 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>project-server</shadedClassifierName>
               <transformers>
                 <transformer
                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
@@ -122,9 +120,18 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <!--<minimizeJar>true</minimizeJar>-->
-              <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>project-client</shadedClassifierName>
+              <!-- <filters>
+                 <filter>
+                   <artifact>it.polimi.ingsw:GC46</artifact>
+                   <excludes>
+                     <exclude>it.polimi.ingsw.App</exclude>
+                     <exclude>it.polimi.ingsw.View.View</exclude>
+                     <exclude>it.polimi.ingsw.View.RemoteView</exclude>
+                     <exclude>it.polimi.ingsw.Controller/**</exclude>
+                   </excludes>
+                 </filter>
+               </filters>-->
+              <minimizeJar>true</minimizeJar>
               <transformers>
                 <transformer
                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
