@@ -6,12 +6,9 @@ import java.io.IOException;
 
 /**
  * Hello world!
- *
  */
-public class App
-{
-    public static void main( String[] args )
-    {
+public class ServerMain {
+    public static void main(String[] args) {
         Server server;
         try {
             server = new Server();

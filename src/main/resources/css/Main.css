@@ -1,8 +1,24 @@
 #mainGrid {
-    -fx-background-image:url('../images/test.jpeg');  
-    -fx-opacity: 90%; 
+    -fx-opacity: 90%;
     -fx-background-size: cover;
 }
+
 #anchorPane {
     -fx-background-color: #f08080;
+    -fx-background-image: url('../images/SantoriniBoard.png');
+    -fx-opacity: 90%;
+    -fx-background-size: cover;
+}
+
+#textArea1 {
+    -fx-text-fill: black;
+    -fx-font-weight: bolder;
+    -fx-control-inner-background: #4ee3e3;
+    -fx-background-color: transparent;
+    -fx-font-size: 30px;
+    -fx-alignment: center;
+}
+
+.text-area, .text-area .viewport, .text-area .content {
+    -fx-background-color: transparent;
 }

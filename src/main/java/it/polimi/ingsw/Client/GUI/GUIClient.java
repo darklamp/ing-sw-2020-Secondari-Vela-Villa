@@ -6,8 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 
 public class GUIClient extends Application {
 
@@ -37,7 +35,6 @@ public class GUIClient extends Application {
         stage = primaryStage;
         gui.setReady(true);
     }
-
 
 
     public static void setGUI(GUI gui){

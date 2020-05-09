@@ -1,15 +1,17 @@
 package it.polimi.ingsw.Client.GUI;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.stage.Stage;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
 
-import java.io.IOException;
-
-public class MainWindowController {
+public class MainWindowController extends WindowController {
     @FXML
     Parent mainViewPane;
+    @FXML
+    TextArea textArea1;
+    @FXML
+    GridPane gridPaneMain;
 
     private static final MainWindowController instance = new MainWindowController();
 
@@ -17,11 +19,5 @@ public class MainWindowController {
         return instance;
     }
 
-    void changeScene() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Main.fxml"));
-        Parent pane = loader.load();
-        Stage stage = GUIClient.getStage();
-        stage.getScene().setRoot(pane);
-        stage.show();
-    }
+
 }
