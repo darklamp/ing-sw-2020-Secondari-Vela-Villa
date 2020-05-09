@@ -53,7 +53,10 @@ public class GameTable {
         getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
     }
 
-    void setCurrentPlayer(int player) {
+    /**
+     * Only used for tests.
+     */
+    private void setCurrentPlayer(int player) {
         this.currentPlayer = player;
     }
 
