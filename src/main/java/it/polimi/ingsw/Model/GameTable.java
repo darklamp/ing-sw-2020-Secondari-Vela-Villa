@@ -14,17 +14,48 @@ import java.util.List;
 
 public class GameTable {
 
-    private final Cell[][] Table;    /** 5x5 matrix representing game table **/
-    private int gameIndex; /** index of current game **/
-    private ArrayList<Player> players; /** arraylist filled with players **/
-    private static ArrayList<Cell> arrayTable; /** simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects */
-    private static GameTable instance; /** Singleton instance for GameTable **/ //TODO remove!!
-    private int currentPlayer = 1; /** current player index **/
-    private final int playersNumber; /** number of players in game **/
-    public static final List<String> completeGodList = Arrays.asList("APOLLO","ARTEMIS","ATHENA","ATLAS","DEMETER","HEPHAESTUS","MINOTAUR","PAN","PROMETEUS"); /* list containing all the basic gods */
-    private ArrayList<String> godChoices; /** list of gods chosen by the first player to be available in the game **/
-    private Builder currentBuilder = null; /** variable which holds the current builder being used by the player **/
-    private static boolean athenaMove = false; /** support boolean for Athena **/
+    private final Cell[][] Table;
+    /**
+     * 5x5 matrix representing game table
+     **/
+    private int gameIndex;
+    /**
+     * index of current game
+     **/
+    private ArrayList<Player> players;
+    /**
+     * arraylist filled with players
+     **/
+    private ArrayList<Cell> arrayTable;
+    /**
+     * simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects
+     */
+    private static GameTable instance;
+    /**
+     * Singleton instance for GameTable
+     **/ //TODO remove!!
+    private int currentPlayer = 1;
+    /**
+     * current player index
+     **/
+    private final int playersNumber;
+    /**
+     * number of players in game
+     **/
+    public static final List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETEUS"); /* list containing all the basic gods */
+    private ArrayList<String> godChoices;
+    /**
+     * list of gods chosen by the first player to be available in the game
+     **/
+    private Builder currentBuilder = null;
+    /**
+     * variable which holds the current builder being used by the player
+     **/
+    private static boolean athenaMove = false;
+
+    /**
+     * support boolean for Athena
+     **/
 
     public Player getCurrentPlayer() {
         return players.get(currentPlayer);
@@ -236,7 +267,7 @@ public class GameTable {
         this.godChoices = gods;
     }
 
-    public void setPlayers(ArrayList<Player> players){
+    public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 
@@ -246,14 +277,16 @@ public class GameTable {
      * @throws InvalidCoordinateException if coordinate is OOB
      */
     private static void isInvalidCoordinate(int x, int y) throws InvalidCoordinateException {
-        if(x>4 || x<0 || y>4 || y<0) {
+        if (x > 4 || x < 0 || y > 4 || y < 0) {
             throw new InvalidCoordinateException();
         }
     }
-    protected static ArrayList<Cell> toArrayList(){
+
+    protected ArrayList<Cell> toArrayList() {
         return arrayTable;
     }
-    public Cell getCell(int x,int y) throws InvalidCoordinateException{
+
+    public Cell getCell(int x, int y) throws InvalidCoordinateException{
             isInvalidCoordinate(x,y);
             return Table[x][y]; //ritorna la cella con righa x e colonna y
     }
