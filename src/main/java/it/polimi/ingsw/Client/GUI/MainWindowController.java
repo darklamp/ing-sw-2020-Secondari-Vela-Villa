@@ -15,7 +15,11 @@ public class MainWindowController extends WindowController {
     @FXML
     GridPane gridPaneMain;
     @FXML
-    Button grid00;
+    Button cell00, cell01, cell02, cell03, cell04, cell10, cell11, cell12, cell13;
+    @FXML
+    Button cell14, cell20, cell21, cell22, cell23, cell24, cell30, cell31, cell32;
+    @FXML
+    Button cell33, cell34, cell40, cell41, cell42, cell43, cell44;
 
     private static final MainWindowController instance = new MainWindowController();
 
@@ -26,7 +30,10 @@ public class MainWindowController extends WindowController {
     @FXML
     void printProva(ActionEvent event) {
         event.consume();
-        grid00.setText("PROVA");
+        Button b = (Button) event.getSource();
+        if (b.getText().equals("PROVA")) {
+            b.setText("ASD");
+        } else b.setText("PROVA");
     }
 
 

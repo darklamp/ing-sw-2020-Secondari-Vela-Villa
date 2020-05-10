@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <AnchorPane id="anchorPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@css/Main.css"
             xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
@@ -26,8 +25,56 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <Button fx:id="grid00" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
-                        prefWidth="159.0" text="Button"/>
+                <Button fx:id="cell00" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00"/>
+                <Button fx:id="cell01" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell01" GridPane.columnIndex="1"/>
+                <Button fx:id="cell02" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell02" GridPane.columnIndex="2"/>
+                <Button fx:id="cell03" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell03" GridPane.columnIndex="3"/>
+                <Button fx:id="cell04" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell04" GridPane.columnIndex="4"/>
+                <Button fx:id="cell10" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell10" GridPane.rowIndex="1"/>
+                <Button fx:id="cell11" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell11" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Button fx:id="cell12" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell12" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <Button fx:id="cell13" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell13" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                <Button fx:id="cell14" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell14" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+                <Button fx:id="cell20" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell20" GridPane.rowIndex="2"/>
+                <Button fx:id="cell21" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Button fx:id="cell22" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                <Button fx:id="cell23" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                <Button fx:id="cell24" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+                <Button fx:id="cell30" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.rowIndex="3"/>
+                <Button fx:id="cell31" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Button fx:id="cell32" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                <Button fx:id="cell33" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+                <Button fx:id="cell34" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="4" GridPane.rowIndex="3"/>
+                <Button fx:id="cell40" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.rowIndex="4"/>
+                <Button fx:id="cell41" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Button fx:id="cell42" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                <Button fx:id="cell43" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+                <Button fx:id="cell44" mnemonicParsing="false" onAction="#printProva" prefHeight="145.0"
+                        prefWidth="159.0" text="Cell00" GridPane.columnIndex="4" GridPane.rowIndex="4"/>
             </children>
         </GridPane>
    </children>
