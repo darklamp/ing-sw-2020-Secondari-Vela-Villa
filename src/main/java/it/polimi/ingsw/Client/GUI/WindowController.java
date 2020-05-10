@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import java.io.IOException;
 
 public abstract class WindowController {
-    void switchScene(String fxml) {
+    void switchScene(@SuppressWarnings("SameParameterValue") String fxml) {
         {
 
             FXMLLoader loader = new FXMLLoader(getClass()
@@ -15,11 +15,8 @@ public abstract class WindowController {
             Parent root;
             try {
                 root = loader.load();
-                if (fxml.equals("/Login.fxml")) {
-                    LoginWindowController controller = loader.getController();
-                } else if (fxml.equals("/Main.fxml")) {
-                    MainWindowController controller = loader.getController();
-                }
+                WindowController controller = loader.getController();
+                GUIClient.setController(controller);
                 GUIClient.getStage().setScene(new Scene(root));
                 GUIClient.getStage().setFullScreen(true);
             } catch (IOException e) {
@@ -28,4 +25,6 @@ public abstract class WindowController {
 
         }
     }
+
+    abstract void setText(String s);
 }

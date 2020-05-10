@@ -19,6 +19,15 @@
     -fx-alignment: center;
 }
 
+#textArea2 {
+    -fx-text-fill: black;
+    -fx-font-weight: normal;
+    -fx-control-inner-background: #4ee3e3;
+    -fx-background-color: transparent;
+    -fx-font-size: 25px;
+    -fx-alignment: center;
+}
+
 .text-area, .text-area .viewport, .text-area .content {
     -fx-background-color: transparent;
 }

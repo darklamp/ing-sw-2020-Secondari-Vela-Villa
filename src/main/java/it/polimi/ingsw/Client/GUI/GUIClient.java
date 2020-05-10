@@ -13,11 +13,15 @@ public class GUIClient extends Application {
 
     private static GUI gui = null;
 
-    static LoginWindowController getController() {
+    static WindowController getController() {
         return controller;
     }
 
-    private static LoginWindowController controller;
+    static void setController(WindowController controller) {
+        GUIClient.controller = controller;
+    }
+
+    private static WindowController controller;
 
     public static Stage getStage() {
         return stage;

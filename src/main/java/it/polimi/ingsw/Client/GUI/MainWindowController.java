@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -36,5 +37,13 @@ public class MainWindowController extends WindowController {
         } else b.setText("PROVA");
     }
 
+    void setText(String s) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Message");
+        alert.setHeaderText("ASD");
+        alert.setContentText(s);
+        alert.setResizable(false);
+        alert.showAndWait();
+    }
 
 }

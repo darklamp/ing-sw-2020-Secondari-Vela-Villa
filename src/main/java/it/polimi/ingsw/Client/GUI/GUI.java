@@ -9,7 +9,7 @@ import javafx.application.Platform;
 
 public class GUI implements Ui,Runnable {
     private static boolean isReady = false;
-    private static LoginWindowController controller;
+    private static WindowController controller;
     
     @Override
     public void run() {
