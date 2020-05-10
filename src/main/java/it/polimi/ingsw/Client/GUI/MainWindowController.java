@@ -5,8 +5,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class MainWindowController extends WindowController {
     @FXML
@@ -44,6 +49,27 @@ public class MainWindowController extends WindowController {
         alert.setContentText(s);
         alert.setResizable(false);
         alert.showAndWait();
+    }
+
+    void chooseGod() {
+        List<String> choices = new ArrayList<>();
+        choices.add("a");
+        choices.add("b");
+        choices.add("c");
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("b", choices);
+        dialog.setTitle("Initializing game");
+        dialog.setHeaderText("God choice");
+        dialog.setContentText("Please choose a god:");
+        Optional<String> result = dialog.showAndWait();
+        while (true) {
+            if (result.isPresent()) {
+                System.out.println("Your choice: " + result.get());
+                break;
+            } else {
+                result = dialog.showAndWait();
+            }
+        }
     }
 
 }

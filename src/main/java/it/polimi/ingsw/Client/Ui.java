@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public interface Ui {
     /**
@@ -23,7 +24,10 @@ public interface Ui {
 
     /**
      * Reacts to new state by printing something to screen
+     *
      * @param newState state to be processed
      */
     void processTurnChange(ClientState newState);
+
+    String nextLine(Scanner in);
 }

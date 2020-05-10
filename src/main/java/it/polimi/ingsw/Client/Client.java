@@ -4,7 +4,6 @@ import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ConnectException;
@@ -13,7 +12,6 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static it.polimi.ingsw.Client.ClientState.*;
-import static it.polimi.ingsw.Model.BuildingType.NONE;
 
 public class Client implements Runnable {
     private static String ip;
@@ -43,10 +41,10 @@ public class Client implements Runnable {
                 while (isActive()) {
                     Object inputObject = socketIn.readObject();
                     if(inputObject instanceof String){
-                        ui.process((String) inputObject);
-                        if (((String) inputObject).equalsIgnoreCase(ServerMessage.abortMessage)){
+                        if (inputObject.equals(ServerMessage.abortMessage)) {
                             System.exit(0);
                         }
+                        ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]){
                         ui.showTable((CellView[][])inputObject);
                     } else if (inputObject instanceof ClientState c){
@@ -86,7 +84,7 @@ public class Client implements Runnable {
         Thread t = new Thread(() -> {
             try {
                 while (isActive()) {
-                    String inputLine = stdin.nextLine();
+                    String inputLine = ui.nextLine(stdin);
                     switch (state) {
                         case INIT -> socketOut.println(inputLine);
                         case BUILDORPASS -> {

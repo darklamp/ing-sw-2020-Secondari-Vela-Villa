@@ -7,15 +7,27 @@ import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
 import javafx.application.Platform;
 
-public class GUI implements Ui,Runnable {
+import java.util.Scanner;
+
+public class GUI implements Ui, Runnable {
     private static boolean isReady = false;
     private static WindowController controller;
-    
+    private static volatile boolean newValue = false;
+
+    void setOut(String s) {
+        out = s;
+        newValue = true;
+    }
+
+    private static String out;
+
+
     @Override
     public void run() {
         Application.launch(GUIClient.class);
     }
-    protected synchronized void setReady(boolean b){
+
+    protected synchronized void setReady(boolean b) {
         isReady = b;
         controller = GUIClient.getController();
     }
@@ -41,5 +53,14 @@ public class GUI implements Ui,Runnable {
     @Override
     public void processTurnChange(ClientState newState) {
 
+    }
+
+    @Override
+    public String nextLine(Scanner in) {
+        while (!newValue) {
+            Thread.onSpinWait();
+        }
+        newValue = false;
+        return out + "\n";
     }
 }

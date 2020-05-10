@@ -7,18 +7,24 @@ import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class CLI implements Ui {
 
-    private int playerIndex,playersNumber;
+    private int playerIndex, playersNumber;
+
+    @Override
+    public String nextLine(Scanner in) {
+        return in.nextLine();
+    }
+
     @Override
     public void process(String input) {
         if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
             String[] inputs = input.split("@@@");
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);
-        }
-        else System.out.println(input);
+        } else System.out.println(input);
     }
 
     /**
