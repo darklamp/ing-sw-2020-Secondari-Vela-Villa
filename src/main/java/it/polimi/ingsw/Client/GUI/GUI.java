@@ -13,6 +13,9 @@ public class GUI implements Ui, Runnable {
     private static boolean isReady = false;
     private static WindowController controller;
     private static volatile boolean newValue = false;
+    private static boolean guiInitialized = false;
+    private static int playerIndex, playersNumber;
+
 
     void setOut(String s) {
         out = s;
@@ -37,7 +40,11 @@ public class GUI implements Ui, Runnable {
 
     @Override
     public void process(String input) {
-        Platform.runLater(() -> controller.setText(input));
+        if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
+            String[] inputs = input.split("@@@");
+            playerIndex = Integer.parseInt(inputs[1]);
+            playersNumber = Integer.parseInt(inputs[2]);
+        } else Platform.runLater(() -> controller.setText(input));
     }
 
     @Override
@@ -52,7 +59,13 @@ public class GUI implements Ui, Runnable {
 
     @Override
     public void processTurnChange(ClientState newState) {
-
+        if (!guiInitialized) {
+            Platform.runLater(() -> controller.switchScene("/Main.fxml"));
+            guiInitialized = true;
+        }
+        switch (newState) {
+            case MOVE -> Platform.runLater(() -> controller.setText("asd"));
+        }
     }
 
     @Override
@@ -61,6 +74,6 @@ public class GUI implements Ui, Runnable {
             Thread.onSpinWait();
         }
         newValue = false;
-        return out + "\n";
+        return out;
     }
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public interface Ui {
+
     /**
      * Processes input string
      */
