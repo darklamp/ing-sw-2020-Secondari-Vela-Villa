@@ -64,6 +64,10 @@ class MainControllerTest {
         stringa = (String) b.get(gameTable);
         Assertions.assertEquals(stringa,"PLAYERTIMEOUT");
 
+        controller.propertyChange(new PropertyChangeEvent(new Object(),"PASS",null,news4));
+        stringa = (String) b.get(gameTable);
+        Assertions.assertEquals(stringa,"PASS");
+
 
 
 
