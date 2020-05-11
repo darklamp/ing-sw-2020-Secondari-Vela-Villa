@@ -14,6 +14,8 @@ import java.util.List;
 
 public class GameTable {
 
+    private String type; //we need for maincontrollertest
+
     private final Cell[][] Table;
     /**
      * 5x5 matrix representing game table
@@ -175,6 +177,7 @@ public class GameTable {
     public void setNews(News news, String type) {
         support.firePropertyChange(type, this.news, news);
         this.news = news;
+        this.type = type;
     }
 
     /* end observable pattern */
