@@ -5,11 +5,13 @@ import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Network.SocketClientConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.beans.PropertyChangeEvent;
 import java.lang.reflect.Field;
+import java.net.Socket;
 import java.util.ArrayList;
 
 class MainControllerTest {
@@ -18,7 +20,9 @@ class MainControllerTest {
     void propertyChangeTest() throws Exception{
 
         Field a = GameTable.class.getDeclaredField("news");
+        Field b = GameTable.class.getDeclaredField("type");
         a.setAccessible(true);
+        b.setAccessible(true);
         GameTable gameTable = new GameTable(2);
         MainController controller= new MainController(gameTable);
         News news = new News();
@@ -46,6 +50,22 @@ class MainControllerTest {
         controller.propertyChange(new PropertyChangeEvent(new Object(),"ciao",null,news));
         News news2 = (News) a.get(gameTable);
         Assertions.assertEquals(news2.isValid(),false);
+        String stringa = (String) b.get(gameTable);
+        Assertions.assertEquals(stringa,"INVALIDNEWS");
+        News news4 = new News();  //da controllare
+        controller.propertyChange(new PropertyChangeEvent(new Object(),"ABORT",null,news4));
+        stringa = (String) b.get(gameTable);
+        Assertions.assertEquals(stringa,"ABORT");
+        News news3= new News("abc", new SocketClientConnection(new Socket(), null));
+        controller.propertyChange(new PropertyChangeEvent(new Object(),"ciao",null,news3));
+        Assertions.assertEquals(stringa,"NOTYOURTURN");
+
+        controller.propertyChange(new PropertyChangeEvent(new Object(),"PLAYERTIMEOUT",null,news4));
+        stringa = (String) b.get(gameTable);
+        Assertions.assertEquals(stringa,"PLAYERTIMEOUT");
+
+
+
 
         /*news.setCoords(4, 4, 0);
         a.set(gameTable, news);
