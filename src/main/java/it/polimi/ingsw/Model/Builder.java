@@ -142,7 +142,7 @@ public abstract class Builder implements Serializable {
      * @param firstBuilder builder which wants to swap position
      * @param otherBuilder builder whose position gets swapped
      */
-    protected void swapPosition(Builder firstBuilder, Builder otherBuilder) { // TODO verificare che funzioni
+    protected void swapPosition(Builder firstBuilder, Builder otherBuilder) {
         CellPointer temp = new CellPointer(firstBuilder.getPosition());
         firstBuilder.forceMove(otherBuilder.getPosition());
         otherBuilder.forceMove(temp.getPointer());

@@ -203,7 +203,6 @@ public class GameTable {
 
     /**
      * this method exists just to unit test w/ the singleton
-     * TODO: delete in deploy
      */
     @Deprecated
     public static GameTable getDebugInstance(int playersNumber){
@@ -211,7 +210,6 @@ public class GameTable {
     }
     /**
      * this method exists just to unit test w/ the singleton
-     * TODO: delete in deploy
      */
     @Deprecated
     public void setDebugInstance(){

@@ -5,8 +5,8 @@ import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -43,9 +43,9 @@ public class RemoteView extends View {
         /**
          * Parses client input
          * Input is formatted as such:
-         * if TYPE == PASS --> PASS //TODO define if pass should even be a command
+         * if TYPE == PASS --> PASS
          * else  (MOVE||BUILD)$$COORD1$$COORD2$$BUILDERNUMBER
-         *
+         * <p>
          * if input is invalid, news is set to invalid, so controller returns an error message tot the client
          *
          * @param news to be parsed

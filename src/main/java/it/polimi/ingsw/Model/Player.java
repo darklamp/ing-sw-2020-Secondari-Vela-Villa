@@ -93,7 +93,9 @@ public class Player {
         this.getBuilderList().get(1).getPosition().setBuilder(null);
     }
 
-    /** DEBUG package-private constructor TODO remove in deploy **/
+    /**
+     * DEBUG package-private constructor only used in tests
+     **/
     Player(String nickname, GameTable g, String god) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
         if (g == null) throw new NullPointerException();
         else if (!g.isValidPlayer(nickname)) throw new NickAlreadyTakenException();

@@ -28,7 +28,9 @@ public class Cell implements Serializable {
     }
 
 
-    // DEBUG function TODO remove in deploy
+    /**
+     * used in tests only
+     **/
     void mustSetHeight(BuildingType height) {
         this.height = height; //mette per forza quella costruzione
     }
@@ -56,23 +58,18 @@ public class Cell implements Serializable {
 
             } catch (NullPointerException e) {
                 e.printStackTrace(); // unhandled error
-            }  catch (AtlasException e) { // the player is trying to build dome
+            } catch (AtlasException e) { // the player is trying to build dome
                 this.height = BuildingType.DOME;
-            }
-            catch (HephaestusException e) { //TODO notify controller
+            } catch (HephaestusException e) {
                 this.height = height; //OK
                 throw new HephaestusException();
-            }
-            catch (PrometheusException e){
+            } catch (PrometheusException e) {
                 this.height = height;
                 throw new PrometheusException();
             }
             catch (DemeterException e){
                 this.height = height;
                 throw new DemeterException();
-            }
-            catch (InvalidBuildException e){
-                throw new InvalidBuildException(); //this is here just for tests TODO remove
             }
     }
 
