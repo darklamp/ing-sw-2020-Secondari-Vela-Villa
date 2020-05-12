@@ -15,8 +15,8 @@ class PrometheusTest {
     void isValidBuildTest() throws Exception {
         Field a = Player.class.getDeclaredField("turnState");
         a.setAccessible(true);
-        GameTable g = GameTable.getDebugInstance(2);
-        g.setDebugInstance();
+        GameTable g = new GameTable(2);
+
         Player p1 = new Player("Giggino", g, "PROMETEUS");
         Player p2 = new Player("Matte", g, "PROMETEUS");
         a.set(p1, ClientState.MOVEORBUILD);
@@ -33,8 +33,8 @@ class PrometheusTest {
 
     @Test
     void isValidMoveTest() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2);
-        g.setDebugInstance();
+        GameTable g = new GameTable(2);
+
         Player p1 = new Player("Giggino", g, "PROMETHEUS");
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(3, 1);

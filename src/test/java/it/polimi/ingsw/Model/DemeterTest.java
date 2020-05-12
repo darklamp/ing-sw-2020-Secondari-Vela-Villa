@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Model.Exceptions.DemeterException;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ class DemeterTest {
 
     @Test
     void isValidBuildTest() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
+        GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "DEMETER");
         Cell c1 = g.getCell(4,3);
         Cell c2 = g.getCell(4,4);

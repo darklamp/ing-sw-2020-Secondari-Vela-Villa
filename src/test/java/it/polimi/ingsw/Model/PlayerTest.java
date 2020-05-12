@@ -17,7 +17,7 @@ class  PlayerTest {
 
     @Test
     void initBuilderList() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
+        GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "MINOTAUR");
         Player p2 = new Player("Giggino2", g, "ATLAS");
         Cell c1 = g.getCell(4,3);

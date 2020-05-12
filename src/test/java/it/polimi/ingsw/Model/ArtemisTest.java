@@ -10,7 +10,7 @@ class ArtemisTest {
 
     @Test
     void isValidMoveTest() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2); g.setDebugInstance();
+        GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "ARTEMIS");
         Player p2 = new Player("Giggino2", g, "ATLAS");
         Cell c0 = g.getCell(4,2);
@@ -33,8 +33,8 @@ class ArtemisTest {
 
     @Test
     void isValidBuildTest() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2);
-        g.setDebugInstance();
+        GameTable g = new GameTable(2);
+
         Player p1 = new Player("Giggino", g, "ARTEMIS");
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);

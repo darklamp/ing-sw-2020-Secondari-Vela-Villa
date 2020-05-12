@@ -190,14 +190,10 @@ class CellPointer {
         return pointer;
     }
 
-    public void setPointer(Cell pointer) {
-        this.pointer = pointer;
-    }
-
     public CellPointer(Cell pointer) {
         this.pointer = pointer;
     }
 
-    private Cell pointer;
+    private final Cell pointer;
 
 }

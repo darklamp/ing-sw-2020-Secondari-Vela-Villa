@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 public class PanTest {
     @Test
     void isValidMoveTest() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2);
-        g.setDebugInstance();
+        GameTable g = new GameTable(2);
+
         Player p1 = new Player("Giggino", g, "PAN");
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
@@ -22,8 +22,8 @@ public class PanTest {
 
     @Test
     void isValidBuildTest() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2);
-        g.setDebugInstance();
+        GameTable g = new GameTable(2);
+
         Player p1 = new Player("Giggino", g, "PAN");
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);

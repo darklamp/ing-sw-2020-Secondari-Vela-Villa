@@ -15,8 +15,8 @@ class BuilderTest {
      */
     @BeforeAll
     static void init() throws Exception {
-        GameTable g = GameTable.getDebugInstance(2);
-        g.setDebugInstance();
+        GameTable g = new GameTable(2);
+
         c1 = g.getCell(4, 4);
         c2 = g.getCell(4, 3);
         c3 = g.getCell(3, 4);

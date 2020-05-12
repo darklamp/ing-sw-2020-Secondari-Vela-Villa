@@ -20,13 +20,13 @@ class CellTest {
      */
     @BeforeAll
     static void init() throws Exception{
-        g = GameTable.getDebugInstance(2); g.setDebugInstance();
-        c1 = g.getCell(4,4);
-        c2 = g.getCell(2,0);
-        p1 = new Player("Giggino", g, "MINOTAUR" );
+        g = new GameTable(2);
+        c1 = g.getCell(4, 4);
+        c2 = g.getCell(2, 0);
+        p1 = new Player("Giggino", g, "MINOTAUR");
         p2 = new Player("Giggino2", g, "ATLAS");
-        b1 = new Minotaur(c1,p1);
-        b2 = new Atlas(c2,p2);
+        b1 = new Minotaur(c1, p1);
+        b2 = new Atlas(c2, p2);
     }
 
     /**

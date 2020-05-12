@@ -63,10 +63,6 @@ public class GameTable {
         return players.get(currentPlayer);
     }
 
-    public int getGameIndex() {
-        return gameIndex;
-    }
-
     /**
      * The purpose of this function is going to the next turn;
      * specifically, what this function does is:
@@ -170,10 +166,6 @@ public class GameTable {
         support.addPropertyChangeListener(pcl);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
-    }
-
     public void setNews(News news, String type) {
         support.firePropertyChange(type, this.news, news);
         this.news = news;
@@ -194,28 +186,6 @@ public class GameTable {
         }
         return out;
     }
-
-    @Deprecated
-    public static GameTable getInstance(int playersNumber){
-        return new GameTable(playersNumber);
-    }
-
-
-    /**
-     * this method exists just to unit test w/ the singleton
-     */
-    @Deprecated
-    public static GameTable getDebugInstance(int playersNumber){
-        return new GameTable(playersNumber);
-    }
-    /**
-     * this method exists just to unit test w/ the singleton
-     */
-    @Deprecated
-    public void setDebugInstance(){
-        instance = this;
-    }
-
 
     /**
      * Constructor for GameTable. Takes number of players as argument.

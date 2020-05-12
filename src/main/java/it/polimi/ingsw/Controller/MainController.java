@@ -2,9 +2,11 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
-import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Model.Exceptions.WinnerException;
+import it.polimi.ingsw.Model.GameTable;
+import it.polimi.ingsw.Model.News;
+import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.beans.PropertyChangeEvent;
@@ -122,15 +124,6 @@ public class MainController implements PropertyChangeListener {
             default:
                 throw new IllegalTurnStateException();
         }
-    }
-
-    @Deprecated
-    public MainController(int playersNumber){
-        this.currentPlayer = null;
-        this.news = null;
-        this.gameTable = GameTable.getInstance(playersNumber);
-        this.buildController = new BuildController(gameTable);
-        this.moveController = new MoveController(gameTable);
     }
 
     public MainController(GameTable gameTable){
