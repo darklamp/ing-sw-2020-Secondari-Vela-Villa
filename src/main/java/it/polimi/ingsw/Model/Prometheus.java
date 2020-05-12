@@ -16,10 +16,10 @@ public class Prometheus extends Builder {
     }
 
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometheusException, PanException {
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
-        if (this.getPlayer().getState() == ClientState.MOVE){
+        if (this.getPlayer().getState() == ClientState.MOVE) {
             if (getPosition().getHeight().compareTo(finalPoint.getHeight()) < 0) throw new InvalidMoveException();
         }
     }

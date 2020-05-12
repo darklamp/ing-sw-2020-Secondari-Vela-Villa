@@ -15,22 +15,22 @@ public class Minotaur extends Builder{
 
     /**
      * @param finalPoint represents the cell to which the builder wants to move
-     * @throws MinotaurException when the move is a minotaur-only move and it's valid
-     * @throws ApolloException see super
+     * @throws MinotaurException    when the move is a minotaur-only move and it's valid
+     * @throws ApolloException      see super
      * @throws InvalidMoveException see super
      */
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometheusException, ArtemisException, PanException {
-            super.isValidMove(finalPoint);
-            if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
-                try{
-                    if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer()) throw new MinotaurException(getCellBehind(finalPoint));
-                    else throw new InvalidMoveException();
-                }
-                catch (InvalidCoordinateException e){
-                    throw new InvalidMoveException();
-                }
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
+        super.isValidMove(finalPoint);
+        if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
+            try {
+                if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer())
+                    throw new MinotaurException(getCellBehind(finalPoint));
+                else throw new InvalidMoveException();
+            } catch (InvalidCoordinateException e) {
+                throw new InvalidMoveException();
             }
+        }
             else super.verifyMove(finalPoint);
     }
 

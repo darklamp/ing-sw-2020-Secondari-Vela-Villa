@@ -23,15 +23,20 @@ public class Hephaestus extends Builder{
         else{
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
-            if(newheight.equals(BuildingType.DOME)){throw new InvalidBuildException();} //non posso costruire una cupola come seconda costruzione ci va il new o no?
-            else if(!cell.equals(previous)){throw new InvalidBuildException();}// non posso costruire su una cella diversa da quella precedente
+            if (newheight.equals(BuildingType.DOME)) {
+                throw new InvalidBuildException();
+            } //non posso costruire una cupola come seconda costruzione ci va il new o no?
+            else if (!cell.equals(previous)) {
+                throw new InvalidBuildException();
+            }// non posso costruire su una cella diversa da quella precedente
           /*  else {
                 firsttime = true;  //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if
             }*/
         }
     }
+
     @Override
-    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PrometheusException, PanException {
+    public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

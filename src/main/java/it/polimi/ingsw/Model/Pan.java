@@ -16,18 +16,18 @@ public class Pan extends Builder{
 
     /**
      * @param finalPoint represents the cell to which the builder wants to move
-     * @throws MinotaurException n/a
-     * @throws ApolloException n/a
+     * @throws MinotaurException    n/a
+     * @throws ApolloException      n/a
      * @throws InvalidMoveException see super
-     * @throws PrometheusException n/a
-     * @throws ArtemisException n/a
-     * @throws PanException when builder goes down by two or more levels --> players wins game
+     * @throws PrometheusException  n/a
+     * @throws ArtemisException     n/a
+     * @throws PanException         when builder goes down by two or more levels --> players wins game
      */
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, PrometheusException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
-        if (this.getPosition().getHeight().compareTo(finalPoint.getHeight()) >= 2){
+        if (this.getPosition().getHeight().compareTo(finalPoint.getHeight()) >= 2) {
             throw new PanException();
         }
     }

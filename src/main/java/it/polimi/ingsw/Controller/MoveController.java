@@ -36,9 +36,6 @@ public class MoveController {
             gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             moveResult = "MOVEOK";
         }
-        catch (PrometheusException e) {
-            //TODO
-        }
         catch (MinotaurException e){
             Cell cellBehind, cellOnWhichMinotaurIsToBeMoved;
             try {

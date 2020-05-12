@@ -77,5 +77,24 @@ class MoveControllerTest {
         moveController.handleMove(news);
         assertSame(bc, gameTable.getCell(4, 4).getBuilder());
 
+        Player player4 = new Player("giggi4", gameTable, null);
+        players.clear();
+        players.add(player1);
+        players.add(player4);
+        gameTable.setPlayers(players);
+        player4.setGod(6); /* tests MinotaurException */
+        gameTable.getCell(3, 3).setBuilder(null);
+        gameTable.getCell(1, 3).setBuilder(null);
+
+        player4.initBuilderList(gameTable.getCell(3, 3));
+        player4.initBuilderList(gameTable.getCell(1, 4));
+
+        ArrayList<Builder> bg = (ArrayList<Builder>) c.get(player4);
+        Builder bk = bg.get(0);
+        gameTable.setCurrentBuilder(bk);
+        news.setCoords(2, 3, 0);
+        moveController.handleMove(news);
+        assertSame(bk, gameTable.getCell(2, 3).getBuilder());
+
     }
 }

@@ -40,7 +40,7 @@ public abstract class Builder implements Serializable {
      * @param position position to move the builder to
      * @throws InvalidMoveException if the move isn't allowed
      */
-    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException, PrometheusException, WinnerException, MinotaurException {
+    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException, WinnerException, MinotaurException {
         try {
             isValidMove(position); // check validity of move
             this.position.setBuilder(null);
@@ -49,8 +49,7 @@ public abstract class Builder implements Serializable {
             if (isWinner()) throw new WinnerException(this.player);
         } catch (NullPointerException e) {
             e.printStackTrace(); // unhandled error
-        }
-        catch (ApolloException e) { // swap position cause it's Apollo
+        } catch (ApolloException e) { // swap position cause it's Apollo
             swapPosition(this,position.getBuilder());
             if (isWinner()) throw new WinnerException(this.player);
         }
@@ -100,18 +99,23 @@ public abstract class Builder implements Serializable {
 
     /**
      * this method checks the basic rules for moving, which are valid for every builder type
+     *
      * @param finalPoint represents the cell to which the builder wants to move
      * @throws InvalidMoveException when the move is illegal
-     * @throws ApolloException when Apollo TODO better javadoc
-     * @throws MinotaurException TODO better javadoc
+     * @throws ApolloException      when Apollo TODO better javadoc
+     * @throws MinotaurException    TODO better javadoc
      */
-    void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, ArtemisException, MinotaurException, PrometheusException, PanException {
+    void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, ArtemisException, MinotaurException, PanException {
 
-        if(finalPoint == null || finalPoint.getRow() < 0 || finalPoint.getRow() > 4 || finalPoint.getColumn() < 0 || finalPoint.getColumn() > 4) throw new InvalidMoveException(); //out of bounds
-        else if (GameTable.getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1) throw new InvalidMoveException(); // Athena moved up last turn, so this player can't go up
+        if (finalPoint == null || finalPoint.getRow() < 0 || finalPoint.getRow() > 4 || finalPoint.getColumn() < 0 || finalPoint.getColumn() > 4)
+            throw new InvalidMoveException(); //out of bounds
+        else if (GameTable.getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1)
+            throw new InvalidMoveException(); // Athena moved up last turn, so this player can't go up
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
-        else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2) throw new InvalidMoveException(); // check if I'm moving up more than one level
-        else if (!(position.getNear().contains(finalPoint))) throw new InvalidMoveException(); // check that the cell I'm moving to is adjacent
+        else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2)
+            throw new InvalidMoveException(); // check if I'm moving up more than one level
+        else if (!(position.getNear().contains(finalPoint)))
+            throw new InvalidMoveException(); // check that the cell I'm moving to is adjacent
 
     }
 
