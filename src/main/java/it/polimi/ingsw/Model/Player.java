@@ -34,26 +34,6 @@ public class Player {
 
     private boolean firstTime = true;
 
-
-    @Deprecated
-    public Player(String nickname, String god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
-            if (gameTable == null) throw new NullPointerException();
-            else if (!gameTable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
-            else if (!isValidGod(god,gameTable)) throw new InvalidGodException();
-            else {
-                this.gameTable = gameTable;
-                this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
-                this.god = god.toUpperCase();
-                this.builderList = new ArrayList<>();
-                gameTable.addPlayer(this);
-            }
-    }
-
-    @Deprecated
-    public Player(String nickname, Integer god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
-        this(nickname, GameTable.getCompleteGodList().get(god), gameTable);
-    }
-
     /**
      * Constructor for player; once the object is built, it gets added to the player list in GameTable.
      *
