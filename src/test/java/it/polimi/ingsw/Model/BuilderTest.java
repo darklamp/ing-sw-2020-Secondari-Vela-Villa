@@ -2,9 +2,12 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.Network.SocketClientConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
 
 class BuilderTest {
     private static Cell c1,c2,c3,c4,c5;
@@ -91,10 +94,21 @@ class BuilderTest {
 
     @Test
     void swapPosition() {
-        Cell temp1=b1.getPosition(); //mi salvo la posizione
-        Cell temp2=b2.getPosition(); //mi salvo la posizione
-        b1.swapPosition(b1,b2); //scambio posizioni builders
-        Assertions.assertEquals(b1.getPosition(),temp2); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
-        Assertions.assertEquals(b2.getPosition(),temp1); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
+        Cell temp1 = b1.getPosition(); //mi salvo la posizione
+        Cell temp2 = b2.getPosition(); //mi salvo la posizione
+        b1.swapPosition(b1, b2); //scambio posizioni builders
+        Assertions.assertEquals(b1.getPosition(), temp2); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
+        Assertions.assertEquals(b2.getPosition(), temp1); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
     }
+
+    @Test
+    void isFirst() throws Exception {
+        GameTable g = new GameTable(2);
+        Builder b = new Prometheus(new Cell(2, 2, g), new Player("g", g, (SocketClientConnection) null));
+        Field c = Builder.class.getDeclaredField("first");
+        c.setAccessible(true);
+        c.set(b, true);
+        Assertions.assertTrue((Boolean) c.get(b));
+    }
+
 }

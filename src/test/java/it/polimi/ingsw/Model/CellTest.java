@@ -1,10 +1,13 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Network.SocketClientConnection;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.Model.BuildingType.BASE;
+import static it.polimi.ingsw.Model.BuildingType.NONE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CellTest {
@@ -69,14 +72,87 @@ class CellTest {
         g.getCell(3,3).setHeight(b1,BuildingType.BASE);
         g.getCell(3,4).setHeight(b1,BuildingType.BASE);
         g.getCell(3,4).setHeight(b1,BuildingType.MIDDLE);
-        g.getCell(3,4).setHeight(b1,BuildingType.TOP);
-        g.getCell(3,4).setHeight(b1,BuildingType.DOME);
+        g.getCell(3, 4).setHeight(b1, BuildingType.TOP);
+        g.getCell(3, 4).setHeight(b1, BuildingType.DOME);
 
-        assertTrue(c1.movableCell(4,3));
-        assertTrue(c1.movableCell(3,3));
-        assertFalse(c1.movableCell(3,4));
-        assertFalse(c1.movableCell(4,4));
-        assertFalse(c1.movableCell(2,0));
+        assertTrue(c1.movableCell(4, 3));
+        assertTrue(c1.movableCell(3, 3));
+        assertFalse(c1.movableCell(3, 4));
+        assertFalse(c1.movableCell(4, 4));
+        assertFalse(c1.movableCell(2, 0));
     }
 
+    @Test
+    void mustSetHeight() {
+        GameTable g = new GameTable(2);
+        Cell c = new Cell(4, 4, g);
+        c.mustSetHeight(BASE);
+        assertEquals(c.getHeight(), BASE);
+    }
+
+    @Test
+    void setHeight() throws Exception {
+        GameTable g = new GameTable(2);
+        Cell c = g.getCell(1, 1);
+        Cell c1 = g.getCell(1, 2);
+
+        Builder b = new Prometheus(c1, new Player("g", g, (SocketClientConnection) null));
+        c.setHeight(b, BASE);
+        assertEquals(c.getHeight(), BASE);
+    }
+
+    @Test
+    void getNear() throws Exception {
+        GameTable g = new GameTable(2);
+        Cell c = new Cell(4, 4, g);
+        ArrayList<Cell> b = c.getNear();
+
+        assertTrue(b.contains(g.getCell(3, 4)));
+        assertTrue(b.contains(g.getCell(3, 3)));
+        assertTrue(b.contains(g.getCell(4, 3)));
+        assertEquals(3, b.size());
+    }
+
+    @Test
+    void movableCell() {
+    }
+
+    @Test
+    void setBuilder() throws Exception {
+        GameTable g = new GameTable(2);
+        Cell c = new Cell(4, 4, g);
+        Builder b = new Prometheus(c, new Player("g", g, (SocketClientConnection) null));
+        c.setBuilder(b);
+        assertEquals(c.getBuilder(), b);
+    }
+
+    @Test
+    void getBuilder() {
+        Cell c = new Cell(4, 4, new GameTable(2));
+        assertNull(c.getBuilder());
+    }
+
+    @Test
+    void getRow() {
+        Cell c = new Cell(4, 4, new GameTable(2));
+        assertEquals(4, c.getRow());
+    }
+
+    @Test
+    void getColumn() {
+        Cell c = new Cell(4, 4, new GameTable(2));
+        assertEquals(4, c.getColumn());
+    }
+
+    @Test
+    void getPosition() {
+        Cell c = new Cell(4, 4, new GameTable(2));
+        assertEquals(new Pair(4, 4), c.getPosition());
+    }
+
+    @Test
+    void getHeight() {
+        Cell c = new Cell(4, 4, new GameTable(2));
+        assertEquals(NONE, c.getHeight());
+    }
 }
