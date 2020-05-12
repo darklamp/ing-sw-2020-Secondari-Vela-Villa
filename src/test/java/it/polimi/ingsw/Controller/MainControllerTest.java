@@ -119,12 +119,14 @@ class MainControllerTest {
         String stringa = (String) b.get(gameTable);
         Assertions.assertEquals(stringa, "NOTYOURTURN");
 
-        controller.propertyChange(new PropertyChangeEvent(new Object(), "PLAYERTIMEOUT", null, news5));
-        stringa = (String) b.get(gameTable);
-        Assertions.assertEquals(stringa, "PLAYERTIMEOUT");
+        News news6 = new News("asd", c2);
 
-        controller.propertyChange(new PropertyChangeEvent(new Object(), "PASS", null, news5));
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "PASS", null, news6));
         stringa = (String) b.get(gameTable);
-        Assertions.assertEquals(stringa, "PASS");
+        Assertions.assertEquals(stringa, "ILLEGALSTATE");
+
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "PLAYERTIMEOUT", null, news6));
+        stringa = (String) b.get(gameTable);
+        Assertions.assertEquals(stringa, "WIN");
     }
 }
