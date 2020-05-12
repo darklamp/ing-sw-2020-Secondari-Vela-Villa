@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
@@ -14,7 +13,7 @@ import static it.polimi.ingsw.Client.ClientState.MOVEORBUILD;
 
 public class Player {
 
-    private ArrayList<Builder> builderList; //array of builders
+    private final ArrayList<Builder> builderList; //array of builders
     
     private GameTable gameTable;
     private SocketClientConnection connection;
@@ -35,14 +34,7 @@ public class Player {
 
     private boolean firstTime = true;
 
-    /**
-     * Constructor for player; once the object is built, it gets added to the player list in GameTable.
-     * @param nickname player's nickname
-     * @param god player's chosen god
-     * @throws NickAlreadyTakenException when nick already taken
-     * @throws NullPointerException when the gametable has not been initialized (shouldn't happen btw)
-     * @throws InvalidGodException if the chosen god is invalid
-     */
+
     @Deprecated
     public Player(String nickname, String god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
             if (gameTable == null) throw new NullPointerException();
@@ -59,9 +51,18 @@ public class Player {
 
     @Deprecated
     public Player(String nickname, Integer god, GameTable gameTable) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
-        this(nickname,GameTable.getCompleteGodList().get(god), gameTable);
+        this(nickname, GameTable.getCompleteGodList().get(god), gameTable);
     }
 
+    /**
+     * Constructor for player; once the object is built, it gets added to the player list in GameTable.
+     *
+     * @param nickname  player's nickname
+     * @param gameTable game-specific table
+     * @param c         player's socket connection
+     * @throws NickAlreadyTakenException when nick already taken
+     * @throws NullPointerException      when the gametable has not been initialized (shouldn't happen btw)
+     */
     public Player(String nickname, GameTable gameTable, SocketClientConnection c) throws NickAlreadyTakenException {
         if (gameTable == null) throw new NullPointerException();
         else if (!gameTable.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
@@ -103,10 +104,6 @@ public class Player {
             this.builderList = new ArrayList<>();
             g.addPlayer(this);
         }
-    }
-
-    String getGod(){
-        return this.god;
     }
 
     /**

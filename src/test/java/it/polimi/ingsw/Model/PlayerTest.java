@@ -1,11 +1,17 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
-import it.polimi.ingsw.Model.Exceptions.MinotaurException;
+import it.polimi.ingsw.Network.SocketClientConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.Socket;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class  PlayerTest {
 
@@ -31,6 +37,24 @@ class  PlayerTest {
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             p2.initBuilderList(c4); // anche se è libera la cella parte l'eccezione perchè p2 ha già due builder posizionati
         });
+
+    }
+
+    @Test
+    void isValidGodTest() throws Exception {
+        Method m = Player.class.getDeclaredMethod("isValidGod", String.class, GameTable.class);
+        m.setAccessible(true);
+        GameTable g = new GameTable(2);
+        SocketClientConnection c = new SocketClientConnection(new Socket(), null);
+        Player p = new Player("gigi", g, c);
+        Field f = GameTable.class.getDeclaredField("godChoices");
+        f.setAccessible(true);
+        ArrayList<String> gods = new ArrayList<>();
+        gods.add("APOLLO");
+        f.set(g, gods);
+        assertFalse((Boolean) m.invoke(p, "OLEG", g));
+        assertTrue((Boolean) m.invoke(p, "APOLLO", g));
+
 
     }
 
