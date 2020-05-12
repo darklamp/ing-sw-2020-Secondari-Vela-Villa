@@ -73,6 +73,7 @@ class MainControllerTest {
 
     }
 
+    @Test
     void propertyChangeTest2() throws Exception {
         Socket socket = new Socket();
 
