@@ -206,27 +206,6 @@ public class GameTable {
 
     }
 
-    @Deprecated
-    public GameTable(int playersNumber, ArrayList<Integer> godChoices) {   //contructor method for GameTable
-
-        Table = new Cell[5][5]; //create new Table
-        arrayTable = new ArrayList<>();
-        for (int i = 0; i < 5; i++){
-            for (int j = 0; j < 5; j++){
-                Table[i][j] = new Cell(i,j,this);
-                arrayTable.add(Table[i][j]);
-            }
-        }
-        players = null;
-        this.playersNumber = playersNumber;
-        ArrayList<String> gods = new ArrayList<>();
-        for (Integer godChoice : godChoices) {
-            gods.add(completeGodList.get(godChoice));
-        }
-        this.godChoices = gods;
-
-    }
-
     /**
      * Sets table's gods.
      */
