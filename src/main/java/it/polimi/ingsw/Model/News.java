@@ -1,10 +1,8 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Controller.BuildController;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -33,15 +31,7 @@ public class News {
     public void setRecipients(ArrayList<SocketClientConnection> list){
         this.recipients = list;
     }
-    public void setRecipients(ArrayList<Player> p, boolean ignored){
-        if (p != null){
-            ArrayList<SocketClientConnection> list = new ArrayList<>();
-            for (Player player : p){
-                list.add(player.getConnection());
-            }
-            this.recipients = list;
-        }
-    }
+
     public void setRecipients(Player p){
         if (p != null){
             ArrayList<SocketClientConnection> list = new ArrayList<>();
