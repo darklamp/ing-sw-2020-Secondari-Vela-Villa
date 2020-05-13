@@ -82,6 +82,68 @@ public class LoginWindowController extends WindowController {
         }
     }
 
+    void firstPlayerGods() {
+        List<String> choices = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            choices.add(Client.completeGodList.get(i));
+        }
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
+        dialog.setTitle("Initializing game");
+        dialog.setHeaderText("Gods choice");
+        dialog.setContentText(ServerMessage.nextChoice);
+        Optional<String> result = dialog.showAndWait();
+        while (true) {
+            if (result.isPresent()) {
+                if (!choices.contains(result.get())) {
+                    result = dialog.showAndWait();
+                } else {
+                    ((GUI) Client.getUi()).setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    break;
+                }
+            } else {
+                result = dialog.showAndWait();
+            }
+        }
+        choices.remove(result.get());
+        dialog = new ChoiceDialog<>(choices.get(0), choices);
+        dialog.setTitle("Initializing game");
+        dialog.setHeaderText("Gods choice");
+        dialog.setContentText(ServerMessage.nextChoice);
+        result = dialog.showAndWait();
+        while (true) {
+            if (result.isPresent()) {
+                if (!choices.contains(result.get())) {
+                    result = dialog.showAndWait();
+                } else {
+                    ((GUI) Client.getUi()).setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    break;
+                }
+            } else {
+                result = dialog.showAndWait();
+            }
+        }
+        if (GUI.getPlayersNumber() == 3) {
+            choices.remove(result.get());
+            dialog = new ChoiceDialog<>(choices.get(0), choices);
+            dialog.setTitle("Initializing game");
+            dialog.setHeaderText("Gods choice");
+            dialog.setContentText(ServerMessage.nextChoice);
+            result = dialog.showAndWait();
+            while (true) {
+                if (result.isPresent()) {
+                    if (!choices.contains(result.get())) {
+                        result = dialog.showAndWait();
+                    } else {
+                        ((GUI) Client.getUi()).setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                        break;
+                    }
+                } else {
+                    result = dialog.showAndWait();
+                }
+            }
+        }
+    }
+
 
     void parseGodChoice(String input) {
         String[] inputs = input.split("@@@");

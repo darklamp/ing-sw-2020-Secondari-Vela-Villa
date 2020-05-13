@@ -54,7 +54,11 @@ public class GUI implements Ui, Runnable {
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);
         } else if (input.contains("[CHOICE]")) {
-            if (input.contains("POS")) {
+            String[] inputs = input.split("@@@");
+            if (inputs[1].equals("GODS")) {
+                playersNumber = Integer.parseInt(inputs[2]);
+                Platform.runLater(() -> loginController.firstPlayerGods());
+            } else if (input.contains("POS")) {
                 if (!guiInitialized) {
                     Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
                     guiInitialized = true;

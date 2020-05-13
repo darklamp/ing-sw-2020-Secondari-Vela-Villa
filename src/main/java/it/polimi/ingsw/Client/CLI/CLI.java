@@ -9,6 +9,7 @@ import it.polimi.ingsw.View.CellView;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CLI implements Ui {
 
@@ -27,7 +28,12 @@ public class CLI implements Ui {
             playersNumber = Integer.parseInt(inputs[2]);
         } else if (input.contains("[CHOICE]")) {
             String[] inputs = input.split("@@@");
-            if (inputs[1].equals("POS")) {
+            if (inputs[1].equals("GODS")) {
+                playersNumber = Integer.parseInt(inputs[2]);
+                AtomicInteger counter = new AtomicInteger(0);
+                Client.completeGodList.forEach(name -> System.out.println(counter.getAndIncrement() + ") " + name));
+                System.out.println(ServerMessage.nextChoice);
+            } else if (inputs[1].equals("POS")) {
             } else {
                 System.out.println(ServerMessage.nextChoice);
                 for (int i = 1; i < inputs.length; i++) {

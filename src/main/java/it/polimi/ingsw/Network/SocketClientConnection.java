@@ -18,7 +18,6 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SocketClientConnection implements Runnable {
@@ -205,13 +204,10 @@ public class SocketClientConnection implements Runnable {
                 send("Wrong input. Please try again: ");
             }
         }
-        send("Nice! Now you need to choose " + playersNumber + " gods to be used in the game.\n");
-        AtomicInteger counter = new AtomicInteger(0);
-        GameTable.getCompleteGodList().forEach(name -> send(counter.getAndIncrement() + ") " + name + "\n"));
+        send("[CHOICE]@@@GODS@@@" + playersNumber);
         int count = 0;
         ArrayList<Integer> gods =  new ArrayList<>();
         while(count < playersNumber){
-            send(ServerMessage.nextNumber);
             try{
                 int i = Integer.parseInt(in.nextLine());
                 if (i < 10 && i >= 0 && !gods.contains(i)) {
