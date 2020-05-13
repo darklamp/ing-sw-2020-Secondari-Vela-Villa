@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
@@ -43,7 +42,6 @@ public class InitController implements Runnable{
      */
      public ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){
         if(c3 == null) {
-            c2.send("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
@@ -52,7 +50,6 @@ public class InitController implements Runnable{
             return out;
         }
         else {
-            c2.send("Here are the available gods:\n");
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);

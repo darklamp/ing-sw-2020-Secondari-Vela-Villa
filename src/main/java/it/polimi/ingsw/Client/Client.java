@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -17,6 +19,8 @@ public class Client implements Runnable {
     private static String ip;
     private static int port;
     private static ClientState state = ClientState.INIT;
+    public static final List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETEUS"); /* list containing all the basic gods */
+
 
     public static Ui getUi() {
         return ui;
@@ -24,7 +28,7 @@ public class Client implements Runnable {
 
     private static Ui ui;
 
-    public Client(int port){
+    public Client(int port) {
         Client.port = port;
     }
 

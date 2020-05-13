@@ -18,5 +18,6 @@ public final class ServerMessage implements Serializable {
     public static String invalidMove = "Invalid move. Please try again.";
     public static String genericErrorMessage = "Richiesta no buena.";
     public static String abortMessage = "Game interrupted abruptly";
+    public static String nextChoice = "Please choose: ";
 
 }

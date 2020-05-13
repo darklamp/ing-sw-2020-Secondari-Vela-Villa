@@ -163,9 +163,13 @@ public class SocketClientConnection implements Runnable {
     }
 
     public synchronized int getGodChoice(ArrayList<Integer> gods){
+        StringBuilder s = new StringBuilder();
+        s.append("[CHOICE]@@@");
         for (Integer god : gods) {
-            send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
+            s.append(god).append("@@@");
+            //send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
         }
+        send(s.toString());
         Scanner in = null;
         try {
             in = new Scanner(socket.getInputStream());
@@ -173,7 +177,6 @@ public class SocketClientConnection implements Runnable {
             e.printStackTrace();
         }
         assert in != null;
-        send("Please choose one: ");
         int choice = -1;
 
         while(true){

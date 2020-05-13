@@ -1,12 +1,18 @@
 package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Utility.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class LoginWindowController extends WindowController {
     private boolean connected = false;
@@ -48,8 +54,79 @@ public class LoginWindowController extends WindowController {
     }
 
 
-    static void waitForIP(Client client){
+    static void waitForIP(Client client) {
         LoginWindowController.client = client;
+    }
+
+    void firstPlayer() {
+        List<Integer> choices = new ArrayList<>();
+        choices.add(2);
+        choices.add(3);
+
+        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(2, choices);
+        dialog.setTitle("Initializing game");
+        dialog.setHeaderText("Player number choice");
+        dialog.setContentText(ServerMessage.firstPlayer);
+        Optional<Integer> result = dialog.showAndWait();
+        while (true) {
+            if (result.isPresent()) {
+                if (result.get() < 2 || result.get() > 3) {
+                    result = dialog.showAndWait();
+                } else {
+                    ((GUI) Client.getUi()).setOut(String.valueOf(result.get()));
+                    break;
+                }
+            } else {
+                result = dialog.showAndWait();
+            }
+        }
+    }
+
+    void parseChoice(String input) {
+        String[] inputs = input.split("@@@");
+        List<String> choices = new ArrayList<>();
+        for (int i = 1; i < inputs.length; i++) {
+            choices.add(Client.completeGodList.get(Integer.parseInt(inputs[i])));
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
+        dialog.setTitle("Initializing game");
+        dialog.setHeaderText("God choice");
+        dialog.setContentText(ServerMessage.nextChoice);
+        Optional<String> result = dialog.showAndWait();
+        while (true) {
+            if (result.isPresent()) {
+                if (!choices.contains(result.get())) {
+                    result = dialog.showAndWait();
+                } else {
+                    ((GUI) Client.getUi()).setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    break;
+                }
+            } else {
+                result = dialog.showAndWait();
+            }
+        }
+    }
+
+    void chooseGod() {
+        List<String> choices = new ArrayList<>();
+        choices.add("a");
+        choices.add("b");
+        choices.add("c");
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("b", choices);
+        dialog.setTitle("Initializing game");
+        dialog.setHeaderText("God choice");
+        dialog.setContentText("Please choose a god:");
+        Optional<String> result = dialog.showAndWait();
+        while (true) {
+            if (result.isPresent()) {
+                System.out.println("Your choice: " + result.get());
+                break;
+            } else {
+                result = dialog.showAndWait();
+            }
+        }
     }
 
 }

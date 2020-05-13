@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.GUI;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
+import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 
 public class GUI implements Ui, Runnable {
     private static boolean isReady = false;
-    private static WindowController controller;
+    private static LoginWindowController loginController;
     private static volatile boolean newValue = false;
     private static boolean guiInitialized = false;
     private static int playerIndex, playersNumber;
@@ -40,7 +41,7 @@ public class GUI implements Ui, Runnable {
 
     protected synchronized void setReady(boolean b) {
         isReady = b;
-        controller = GUIClient.getController();
+        loginController = (LoginWindowController) GUIClient.getController();
     }
     public synchronized boolean isReady(){
         return isReady;
@@ -52,7 +53,9 @@ public class GUI implements Ui, Runnable {
             String[] inputs = input.split("@@@");
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);
-        } else Platform.runLater(() -> controller.setText(input));
+        } else if (input.contains("[CHOICE]")) Platform.runLater(() -> loginController.parseChoice(input));
+        else if (input.contains(ServerMessage.firstPlayer)) Platform.runLater(() -> loginController.firstPlayer());
+        else Platform.runLater(() -> loginController.setText(input));
     }
 
     @Override
@@ -68,11 +71,11 @@ public class GUI implements Ui, Runnable {
     @Override
     public void processTurnChange(ClientState newState) {
         if (!guiInitialized) {
-            Platform.runLater(() -> controller.switchScene("/Main.fxml"));
+            Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
             guiInitialized = true;
         }
         switch (newState) {
-            case MOVE -> Platform.runLater(() -> controller.setText("asd"));
+            case MOVE -> Platform.runLater(() -> GUIClient.getController().setText("asd"));
         }
     }
 

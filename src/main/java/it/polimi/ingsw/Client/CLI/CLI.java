@@ -24,6 +24,12 @@ public class CLI implements Ui {
             String[] inputs = input.split("@@@");
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);
+        } else if (input.contains("[CHOICE]")) {
+            String[] inputs = input.split("@@@");
+            System.out.println("Please choose: ");
+            for (int i = 1; i < inputs.length; i++) {
+                System.out.println(inputs[i] + ") " + Client.completeGodList.get(Integer.parseInt(inputs[i])));
+            }
         } else System.out.println(input);
     }
 
