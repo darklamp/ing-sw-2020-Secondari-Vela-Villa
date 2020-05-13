@@ -82,7 +82,7 @@ public class LoginWindowController extends WindowController {
         }
     }
 
-    void parseChoice(String input) {
+    void parseGodChoice(String input) {
         String[] inputs = input.split("@@@");
         List<String> choices = new ArrayList<>();
         for (int i = 1; i < inputs.length; i++) {
@@ -102,27 +102,6 @@ public class LoginWindowController extends WindowController {
                     ((GUI) Client.getUi()).setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
                     break;
                 }
-            } else {
-                result = dialog.showAndWait();
-            }
-        }
-    }
-
-    void chooseGod() {
-        List<String> choices = new ArrayList<>();
-        choices.add("a");
-        choices.add("b");
-        choices.add("c");
-
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("b", choices);
-        dialog.setTitle("Initializing game");
-        dialog.setHeaderText("God choice");
-        dialog.setContentText("Please choose a god:");
-        Optional<String> result = dialog.showAndWait();
-        while (true) {
-            if (result.isPresent()) {
-                System.out.println("Your choice: " + result.get());
-                break;
             } else {
                 result = dialog.showAndWait();
             }

@@ -53,7 +53,7 @@ public class GUI implements Ui, Runnable {
             String[] inputs = input.split("@@@");
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);
-        } else if (input.contains("[CHOICE]")) Platform.runLater(() -> loginController.parseChoice(input));
+        } else if (input.contains("[CHOICE]")) Platform.runLater(() -> loginController.parseGodChoice(input));
         else if (input.contains(ServerMessage.firstPlayer)) Platform.runLater(() -> loginController.firstPlayer());
         else Platform.runLater(() -> loginController.setText(input));
     }
