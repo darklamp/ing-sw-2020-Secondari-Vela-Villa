@@ -16,6 +16,14 @@ public class GUI implements Ui, Runnable {
     private static boolean guiInitialized = false;
     private static int playerIndex, playersNumber;
 
+    static int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    static int getPlayersNumber() {
+        return playersNumber;
+    }
+
 
     void setOut(String s) {
         out = s;
@@ -54,7 +62,7 @@ public class GUI implements Ui, Runnable {
 
     @Override
     public void showTable(CellView[][] table) {
-
+        Platform.runLater(() -> GUIClient.getController().updateTable(table));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.GUI;
 
+import it.polimi.ingsw.View.CellView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,4 +28,9 @@ public abstract class WindowController {
     }
 
     abstract void setText(String s);
+
+    void updateTable(CellView[][] table) {
+    }
+
+    ;
 }
