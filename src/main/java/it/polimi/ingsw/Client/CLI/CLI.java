@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.CLI;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
+import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
@@ -26,9 +27,12 @@ public class CLI implements Ui {
             playersNumber = Integer.parseInt(inputs[2]);
         } else if (input.contains("[CHOICE]")) {
             String[] inputs = input.split("@@@");
-            System.out.println("Please choose: ");
-            for (int i = 1; i < inputs.length; i++) {
-                System.out.println(inputs[i] + ") " + Client.completeGodList.get(Integer.parseInt(inputs[i])));
+            if (inputs[1].equals("POS")) {
+            } else {
+                System.out.println(ServerMessage.nextChoice);
+                for (int i = 1; i < inputs.length; i++) {
+                    System.out.println(inputs[i] + ") " + Client.completeGodList.get(Integer.parseInt(inputs[i])));
+                }
             }
         } else System.out.println(input);
     }

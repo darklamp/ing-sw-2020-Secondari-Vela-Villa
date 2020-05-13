@@ -53,8 +53,15 @@ public class GUI implements Ui, Runnable {
             String[] inputs = input.split("@@@");
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);
-        } else if (input.contains("[CHOICE]")) Platform.runLater(() -> loginController.parseGodChoice(input));
-        else if (input.contains(ServerMessage.firstPlayer)) Platform.runLater(() -> loginController.firstPlayer());
+        } else if (input.contains("[CHOICE]")) {
+            if (input.contains("POS")) {
+                if (!guiInitialized) {
+                    Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
+                    guiInitialized = true;
+                }
+                Platform.runLater(() -> GUIClient.getController().getStartingPositions());
+            } else Platform.runLater(() -> loginController.parseGodChoice(input));
+        } else if (input.contains(ServerMessage.firstPlayer)) Platform.runLater(() -> loginController.firstPlayer());
         else Platform.runLater(() -> loginController.setText(input));
     }
 
@@ -70,10 +77,6 @@ public class GUI implements Ui, Runnable {
 
     @Override
     public void processTurnChange(ClientState newState) {
-        if (!guiInitialized) {
-            Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
-            guiInitialized = true;
-        }
         switch (newState) {
             case MOVE -> Platform.runLater(() -> GUIClient.getController().setText("asd"));
         }

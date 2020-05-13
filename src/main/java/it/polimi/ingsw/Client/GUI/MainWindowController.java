@@ -87,6 +87,10 @@ public class MainWindowController extends WindowController {
         }
     }
 
+    @Override
+    void getStartingPositions() {
+
+    }
 
 
     @FXML

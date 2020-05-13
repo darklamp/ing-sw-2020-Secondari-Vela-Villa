@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.View.RemoteView;
 import it.polimi.ingsw.View.View;
@@ -75,11 +76,11 @@ public class InitController implements Runnable{
             c1.send("Wait for the other player to choose his starting position...");
         }
         ArrayList<Pair> choices = new ArrayList<Pair>(); //array che conterrà tutte le coppie delle posizioni iniziali
-        c2.send("Insert the starting positions of your first worker");
+        c2.send(ServerMessage.firstBuilderPos);
         Pair c2b1 = c2.getBuilderChoice(choices); //nomenclatura è NomeConnessione+NumeroWorker
        // System.out.println("Il giocatore 1 per il lavoratore 1 ha inserito riga "+c2b1.getFirst()+" e colonna "+c2b1.getSecond());
         choices.add(c2b1); //aggiungo man mano ogni coppia all'array choices. Il controllo dell'input avviene nel metodo getBuilderChoice.
-        c2.send("Insert the starting positions of your second worker");
+        c2.send(ServerMessage.secondBuilderPos);
         Pair c2b2 = c2.getBuilderChoice(choices);
         choices.add(c2b2);
         if (c3 != null){

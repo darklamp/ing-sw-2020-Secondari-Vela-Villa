@@ -82,6 +82,7 @@ public class LoginWindowController extends WindowController {
         }
     }
 
+
     void parseGodChoice(String input) {
         String[] inputs = input.split("@@@");
         List<String> choices = new ArrayList<>();
@@ -107,5 +108,6 @@ public class LoginWindowController extends WindowController {
             }
         }
     }
+
 
 }

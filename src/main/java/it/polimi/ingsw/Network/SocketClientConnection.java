@@ -113,49 +113,30 @@ public class SocketClientConnection implements Runnable {
         while(true){
             int x=0;
             assert in != null;
-            send("Insert a row number >= 0 and < 5: ");
+            send("[CHOICE]@@@POS");
             while(true) {
-                try{
-                    r = in.nextInt();
-                    if(r >= 0 && r < 5){
-                        break;
-                    }
-                    else{
+                try {
+                    String s = in.nextLine();
+                    s = s.replace("\n", "");
+                    String[] inputs = s.split(",");
+                    if (inputs.length != 2) throw new InputMismatchException();
+                    r = Integer.parseInt(inputs[0]);
+                    c = Integer.parseInt(inputs[1]);
+                    if (r >= 0 && r < 5) {
+                        if (c >= 0 && c < 5) break;
+                        else send(ServerMessage.wrongNumber);
+                    } else {
                         send(ServerMessage.wrongNumber);
                     }
                 }
                 catch (InputMismatchException e){
                     send(ServerMessage.wrongNumber);
-                    in.nextLine();
                 }
-            }
-            send("Insert a column >= 0 and < 5: ");
-            while(true) {
-                try{
-                    c = in.nextInt();
-                    if(c >= 0 && c < 5){
-                        break;
-                    }
-                    else{
-                        send(ServerMessage.wrongNumber);
-                    }
-                }
-                catch (InputMismatchException e){
-                    send(ServerMessage.wrongNumber);
-                    in.nextLine();
-                }
-
             }
             out = new Pair(r,c);
-            for (Pair pair : choices){
-                if (out.equals(pair)){
-                    x++;
-                }
-            }
-            if(x==0){
+            if (!choices.contains(out)) {
                 break;
-            }
-            else{
+            } else {
                 send("This cell is not available, try another one");
             }
         }
