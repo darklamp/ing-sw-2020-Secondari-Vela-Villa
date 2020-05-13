@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.View.CellView;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -34,10 +35,6 @@ public class MainWindowController extends WindowController {
 
     public static MainWindowController getInstance() {
         return instance;
-    }*/
-
-  /*  public MainWindowController(){
-
     }*/
 
     @FXML
@@ -114,6 +111,20 @@ public class MainWindowController extends WindowController {
                 result = dialog.showAndWait();
             }
         }
+    }
+
+    @FXML
+    void setHovered(Event event) {
+        event.consume();
+        Button b = (Button) event.getSource();
+        b.setOpacity(0.6);
+    }
+
+    @FXML
+    void unsetHovered(Event event) {
+        event.consume();
+        Button b = (Button) event.getSource();
+        b.setOpacity(1);
     }
 
 }
