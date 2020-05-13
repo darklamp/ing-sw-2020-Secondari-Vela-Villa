@@ -19,7 +19,6 @@ public class Pan extends Builder{
      * @throws MinotaurException    n/a
      * @throws ApolloException      n/a
      * @throws InvalidMoveException see super
-     * @throws PrometheusException  n/a
      * @throws ArtemisException     n/a
      * @throws PanException         when builder goes down by two or more levels --> players wins game
      */
