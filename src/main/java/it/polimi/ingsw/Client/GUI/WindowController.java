@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.GUI;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.View.CellView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,5 +36,8 @@ public abstract class WindowController {
     void getStartingPositions(boolean cellOccupied) {
     }
 
-    ;
+    void setMove(ClientState newState) {
+    }
+
+    ;;
 }

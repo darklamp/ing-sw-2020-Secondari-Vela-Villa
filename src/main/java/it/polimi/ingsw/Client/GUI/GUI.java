@@ -83,9 +83,7 @@ public class GUI implements Ui, Runnable {
 
     @Override
     public void processTurnChange(ClientState newState) {
-        switch (newState) {
-            case MOVE -> Platform.runLater(() -> GUIClient.getController().setText("Your turn: MOVE"));
-        }
+        Platform.runLater(() -> GUIClient.getController().setMove(newState));
     }
 
     @Override

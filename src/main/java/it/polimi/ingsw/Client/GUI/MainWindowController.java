@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.GUI;
 
+import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.View.CellView;
@@ -11,6 +12,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.MeshView;
+
+import java.io.File;
 
 public class MainWindowController extends WindowController {
     @FXML
@@ -20,6 +24,8 @@ public class MainWindowController extends WindowController {
     @FXML
     GridPane gridPaneMain;
     @FXML
+    MeshView testMeshView;
+    @FXML
     Button cell00, cell01, cell02, cell03, cell04, cell10, cell11, cell12, cell13;
     @FXML
     Button cell14, cell20, cell21, cell22, cell23, cell24, cell30, cell31, cell32;
@@ -27,12 +33,6 @@ public class MainWindowController extends WindowController {
     Button cell33, cell34, cell40, cell41, cell42, cell43, cell44;
 
     private Button[][] cells = null;
-
-   /* private static final MainWindowController instance = new MainWindowController();
-
-    public static MainWindowController getInstance() {
-        return instance;
-    }*/
 
     @FXML
     void buttonClicked(ActionEvent event) {
@@ -65,6 +65,12 @@ public class MainWindowController extends WindowController {
             cells[4][2] = cell42;
             cells[4][3] = cell43;
             cells[4][4] = cell44;
+            // File file = new File("resources/Mesh/MaleBuilder.obj");
+            File file = new File("/home/ale/Desktop/MaleBuilder.obj");
+            ObjModelImporter importer = new ObjModelImporter();
+            importer.read(file);
+            testMeshView = importer.getImport()[0];
+
         }
         int i, j = 0;
         boolean flag = false;
@@ -80,6 +86,15 @@ public class MainWindowController extends WindowController {
         if (Client.getState() == ClientState.INIT) {
             GUI.setOut(i + "," + j);
         }
+    }
+
+    @Override
+    void setMove(ClientState s) {
+        String s1 = "";
+        switch (s) {
+            case MOVE -> s1 = "It's your turn! Please make a move.";
+        }
+        textArea1.setText(s1);
     }
 
     void setText(String s) {

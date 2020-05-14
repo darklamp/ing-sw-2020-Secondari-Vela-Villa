@@ -11,20 +11,12 @@
 }
 
 #textArea1 {
-    -fx-text-fill: black;
-    -fx-font-weight: bolder;
+    -fx-text-fill: papayawhip;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
     -fx-control-inner-background: #4ee3e3;
     -fx-background-color: transparent;
     -fx-font-size: 30px;
-    -fx-alignment: center;
-}
-
-#textArea2 {
-    -fx-text-fill: black;
-    -fx-font-weight: normal;
-    -fx-control-inner-background: #4ee3e3;
-    -fx-background-color: transparent;
-    -fx-font-size: 25px;
     -fx-alignment: center;
 }
 
