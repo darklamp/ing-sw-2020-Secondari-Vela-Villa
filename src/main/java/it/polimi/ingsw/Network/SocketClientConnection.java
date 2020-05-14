@@ -136,7 +136,7 @@ public class SocketClientConnection implements Runnable {
             if (!choices.contains(out)) {
                 break;
             } else {
-                send("This cell is not available, try another one");
+                send(ServerMessage.cellNotAvailable);
             }
         }
         return out;

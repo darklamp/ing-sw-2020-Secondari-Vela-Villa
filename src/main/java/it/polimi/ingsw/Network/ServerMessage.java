@@ -20,6 +20,7 @@ public final class ServerMessage implements Serializable {
     public static String nextChoice = "Please choose: ";
     public static String firstBuilderPos = "Insert the starting position of your first worker (row,col):";
     public static String secondBuilderPos = "Insert the starting position of your second worker (row,col):";
+    public static String cellNotAvailable = "This cell is not available, try another one";
 
 
 }
