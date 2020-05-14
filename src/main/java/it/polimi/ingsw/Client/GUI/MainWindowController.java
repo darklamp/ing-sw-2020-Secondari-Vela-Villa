@@ -110,7 +110,8 @@ public class MainWindowController extends WindowController {
         }
     }
 
-    int positionedBuilders = 0;
+    private int positionedBuilders = -1;
+    private boolean flagInvalidPos = false;
 
     @Override
     void getStartingPositions(boolean cellOccupied) {
@@ -119,10 +120,17 @@ public class MainWindowController extends WindowController {
             return;
         }
         if (!cellOccupied) {
-            s = "Please select a cell on which to position your " + (positionedBuilders == 0 ? "first" : "second") + " builder.";
-            positionedBuilders += 1;
-        } else s = "Position already taken. Please choose a different one.";
-        setText("Message", "Builders starting positions choice", s);
+            if (!flagInvalidPos) {
+                s = "Please select a cell on which to position your " + (positionedBuilders == -1 ? "first" : "second") + " builder.";
+                positionedBuilders += 1;
+                setText("Message", "Builders starting positions choice", s);
+            }
+            flagInvalidPos = false;
+        } else {
+            s = "Position already taken. Please choose a different one.";
+            flagInvalidPos = true;
+            setText("Message", "Builders starting positions choice", s);
+        }
 
     }
 

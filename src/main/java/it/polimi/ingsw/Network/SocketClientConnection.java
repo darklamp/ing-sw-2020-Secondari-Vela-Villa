@@ -110,7 +110,6 @@ public class SocketClientConnection implements Runnable {
             e.printStackTrace();
         }
         while(true){
-            int x=0;
             assert in != null;
             send("[CHOICE]@@@POS");
             while(true) {
