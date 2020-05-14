@@ -26,7 +26,7 @@ public class GUI implements Ui, Runnable {
     }
 
 
-    void setOut(String s) {
+    static void setOut(String s) {
         out = s;
         newValue = true;
     }
@@ -63,9 +63,11 @@ public class GUI implements Ui, Runnable {
                     Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
                     guiInitialized = true;
                 }
-                Platform.runLater(() -> GUIClient.getController().getStartingPositions());
+                Platform.runLater(() -> GUIClient.getController().getStartingPositions(false));
             } else Platform.runLater(() -> loginController.parseGodChoice(input));
         } else if (input.contains(ServerMessage.firstPlayer)) Platform.runLater(() -> loginController.firstPlayer());
+        else if (input.equals(ServerMessage.cellNotAvailable))
+            Platform.runLater(() -> GUIClient.getController().getStartingPositions(true));
         else Platform.runLater(() -> loginController.setText(input));
     }
 
@@ -82,7 +84,7 @@ public class GUI implements Ui, Runnable {
     @Override
     public void processTurnChange(ClientState newState) {
         switch (newState) {
-            case MOVE -> Platform.runLater(() -> GUIClient.getController().setText("asd"));
+            case MOVE -> Platform.runLater(() -> GUIClient.getController().setText("Your turn: MOVE"));
         }
     }
 

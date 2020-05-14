@@ -32,7 +32,7 @@ public abstract class WindowController {
     void updateTable(CellView[][] table) {
     }
 
-    void getStartingPositions() {
+    void getStartingPositions(boolean cellOccupied) {
     }
 
     ;

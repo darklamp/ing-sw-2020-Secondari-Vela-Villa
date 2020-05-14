@@ -78,29 +78,27 @@ public class InitController implements Runnable{
         ArrayList<Pair> choices = new ArrayList<Pair>(); //array che conterrà tutte le coppie delle posizioni iniziali
         c2.send(ServerMessage.firstBuilderPos);
         Pair c2b1 = c2.getBuilderChoice(choices); //nomenclatura è NomeConnessione+NumeroWorker
-       // System.out.println("Il giocatore 1 per il lavoratore 1 ha inserito riga "+c2b1.getFirst()+" e colonna "+c2b1.getSecond());
         choices.add(c2b1); //aggiungo man mano ogni coppia all'array choices. Il controllo dell'input avviene nel metodo getBuilderChoice.
         c2.send(ServerMessage.secondBuilderPos);
         Pair c2b2 = c2.getBuilderChoice(choices);
         choices.add(c2b2);
         if (c3 != null){
             c2.send("Wait for the other players to choose their starting position...");
-            c3.send("Insert the starting positions of your first worker");
+            c3.send(ServerMessage.firstBuilderPos);
             Pair c3b1 = c3.getBuilderChoice(choices);
             choices.add(c3b1);
-            c3.send("Insert the starting positions of your second worker");
+            c3.send(ServerMessage.secondBuilderPos);
             Pair c3b2 = c3.getBuilderChoice(choices);
             choices.add(c3b2);
             c3.send("Wait for the other player to choose his starting positions...");
-            //this comment is for a commit test
         }
         else {
             c2.send("Wait for the other player to choose his starting positions...");
         }
-        c1.send("Insert the starting positions of your first worker");
+        c1.send(ServerMessage.firstBuilderPos);
         Pair c1b1 = c1.getBuilderChoice(choices);
-        choices.add(0,c1b1);
-        c1.send("Insert the starting positions of your second worker");
+        choices.add(0, c1b1);
+        c1.send(ServerMessage.secondBuilderPos);
         Pair c1b2 = c1.getBuilderChoice(choices);
         choices.add(1,c1b2);
         return choices;

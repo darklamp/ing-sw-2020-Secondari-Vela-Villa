@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Client.GUI;
 
+import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.View.CellView;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -33,25 +35,9 @@ public class MainWindowController extends WindowController {
     }*/
 
     @FXML
-    void printProva(ActionEvent event) {
+    void buttonClicked(ActionEvent event) {
         event.consume();
         Button b = (Button) event.getSource();
-        if (b.getText().equals("PROVA")) {
-            b.setText("ASD");
-        } else b.setText("PROVA");
-    }
-
-    void setText(String s) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Message");
-        alert.setHeaderText("ASD");
-        alert.setContentText(s);
-        alert.setResizable(false);
-        alert.showAndWait();
-    }
-
-    @Override
-    void updateTable(CellView[][] table) {
         if (cells == null) {
             cells = new Button[5][5];
             cells[0][0] = cell00;
@@ -80,6 +66,43 @@ public class MainWindowController extends WindowController {
             cells[4][3] = cell43;
             cells[4][4] = cell44;
         }
+        int i, j = 0;
+        boolean flag = false;
+        for (i = 0; i < 5; i++) {
+            for (j = 0; j < 5; j++) {
+                if (b == cells[i][j]) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) break;
+        }
+        if (Client.getState() == ClientState.INIT) {
+            GUI.setOut(i + "," + j);
+        }
+    }
+
+    void setText(String s) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Message");
+        alert.setHeaderText("Message");
+        alert.setContentText(s);
+        alert.setResizable(false);
+        alert.showAndWait();
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    void setText(String title, String header, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        alert.setResizable(false);
+        alert.showAndWait();
+    }
+
+    @Override
+    void updateTable(CellView[][] table) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 cells[i][j].setText(table[i][j].getHeight().toString());
@@ -87,8 +110,19 @@ public class MainWindowController extends WindowController {
         }
     }
 
+    int positionedBuilders = 0;
+
     @Override
-    void getStartingPositions() {
+    void getStartingPositions(boolean cellOccupied) {
+        String s;
+        if (positionedBuilders == 2) {
+            return;
+        }
+        if (!cellOccupied) {
+            s = "Please select a cell on which to position your " + (positionedBuilders == 0 ? "first" : "second") + " builder.";
+            positionedBuilders += 1;
+        } else s = "Position already taken. Please choose a different one.";
+        setText("Message", "Builders starting positions choice", s);
 
     }
 

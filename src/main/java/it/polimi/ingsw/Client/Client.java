@@ -18,6 +18,11 @@ import static it.polimi.ingsw.Client.ClientState.*;
 public class Client implements Runnable {
     private static String ip;
     private static int port;
+
+    public static ClientState getState() {
+        return state;
+    }
+
     private static ClientState state = ClientState.INIT;
     public static final List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETEUS"); /* list containing all the basic gods */
 
