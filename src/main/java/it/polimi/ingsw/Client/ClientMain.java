@@ -4,6 +4,7 @@ import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.GUIClient;
 import it.polimi.ingsw.Utility.Color;
+import it.polimi.ingsw.Utility.Utils;
 
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ public class ClientMain {
     public static void main(String[] args){
         int port = 1337;
         boolean useCli = true;
+        String ip = null;
         for (String a : args) {
             if (a.toLowerCase().contains("cli")) {
                 if (!a.toLowerCase().contains("true")) useCli = false;
@@ -22,6 +24,21 @@ public class ClientMain {
                     port = Integer.parseInt(a.split("=")[1]);
                 } catch (Exception e) {
                     System.out.println("Invalid port!");
+                    System.exit(0);
+                }
+            } else if (a.toLowerCase().contains("ip")) {
+                try {
+                    ip = a.split("=")[1];
+                    if (!ip.contains("'")) {
+                        StringBuilder s = new StringBuilder();
+                        s.append("'");
+                        s.append(ip);
+                        s.append("'");
+                        ip = s.toString();
+                    }
+                    if (Utils.isValidIP(ip)) throw new Exception();
+                } catch (Exception e) {
+                    System.out.println("Invalid IP" + ip + "!");
                     System.exit(0);
                 }
             }

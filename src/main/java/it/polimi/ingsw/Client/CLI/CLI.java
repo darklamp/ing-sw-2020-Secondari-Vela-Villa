@@ -7,7 +7,6 @@ import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -47,16 +46,8 @@ public class CLI implements Ui {
      * Flow: Get input ip -> verify it -> if valid, try to connect, else ask again
      */
     @Override
-    public void waitForIP(Client client) throws IOException {
-        /*Scanner stdin  = new Scanner(System.in);
-        System.out.println("Insert IP address: ");
-        String s = stdin.nextLine();
-        while (!Utils.isValidIP(s)){
-            System.out.println("Insert IP address: ");
-            s = stdin.nextLine();
-        }*/
-        String s = "127.0.0.1";
-        client.run(s);
+    public void waitForIP(Client client) {
+        client.run();
     }
 
     /**

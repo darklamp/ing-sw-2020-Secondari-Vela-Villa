@@ -16,7 +16,15 @@ import java.util.Scanner;
 import static it.polimi.ingsw.Client.ClientState.*;
 
 public class Client implements Runnable {
-    private static String ip;
+    public static void setIp(String ip) {
+        Client.ip = ip;
+    }
+
+    public static String getIP() {
+        return ip;
+    }
+
+    private static String ip = "127.0.0.1";
     private static int port;
 
     public static ClientState getState() {
@@ -185,11 +193,6 @@ public class Client implements Runnable {
         catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    public void run(String s)  {
-        ip = s;
-        new Thread(this).start();
     }
 
 }

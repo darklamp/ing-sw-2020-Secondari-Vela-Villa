@@ -2,7 +2,6 @@ package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Network.ServerMessage;
-import it.polimi.ingsw.Utility.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -34,23 +33,31 @@ public class LoginWindowController extends WindowController {
     @FXML
     private void print(ActionEvent event) {
         event.consume();
-        if (!connected) {
+       /* if (!connected) {
             String ipAddress = ipInput.getText();
             String s;
             if (!Utils.isValidIP(ipAddress)) {
                 s = "Invalid IP. Please enter a valid IP address then click Connect.";
                 textAreaMain.setText(s);
+
             } else {
                 s = "Connecting to: " + ipAddress + "...";
                 textAreaMain.setText(s);
-                client.run(ipAddress);
+                client.run();
                 connected = true;
                 ipSubmitBTN.setText("Submit");
                 //  MainWindowController.getInstance().switchScene("/Main.fxml");
             }
-        } else {
-            ((GUI) Client.getUi()).setOut(ipInput.getText());
-        }
+        } else {*/
+        if (!connected) {
+            String ipAddress = Client.getIP();
+            String s;
+            s = "Connecting to: " + ipAddress + "...";
+            textAreaMain.setText(s);
+            new Thread(client).start();
+            connected = true;
+        } else GUI.setOut(ipInput.getText());
+        // }
     }
 
 
@@ -73,7 +80,7 @@ public class LoginWindowController extends WindowController {
                 if (result.get() < 2 || result.get() > 3) {
                     result = dialog.showAndWait();
                 } else {
-                    ((GUI) Client.getUi()).setOut(String.valueOf(result.get()));
+                    GUI.setOut(String.valueOf(result.get()));
                     break;
                 }
             } else {
@@ -97,7 +104,7 @@ public class LoginWindowController extends WindowController {
                 if (!choices.contains(result.get())) {
                     result = dialog.showAndWait();
                 } else {
-                    ((GUI) Client.getUi()).setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    GUI.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
                     break;
                 }
             } else {
