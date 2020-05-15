@@ -5,20 +5,30 @@ import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.GUIClient;
 import it.polimi.ingsw.Utility.Color;
 
-
 import java.io.IOException;
-import java.net.ConnectException;
-import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Thread.sleep;
 
 public class ClientMain {
 
     public static void main(String[] args){
-        Client client = new Client(1337);
+        int port = 1337;
+        boolean useCli = true;
+        for (String a : args) {
+            if (a.toLowerCase().contains("cli")) {
+                if (!a.toLowerCase().contains("true")) useCli = false;
+            } else if (a.toLowerCase().contains("port")) {
+                try {
+                    port = Integer.parseInt(a.split("=")[1]);
+                } catch (Exception e) {
+                    System.out.println("Invalid port!");
+                    System.exit(0);
+                }
+            }
+        }
+        Client client = new Client(port);
         Ui ui;
-        Scanner stdin = new Scanner(System.in);
+        //Scanner stdin = new Scanner(System.in);
         System.out.println(Color.ANSI_BLUE);
 
         String s = """
@@ -32,10 +42,9 @@ public class ClientMain {
                  \\______/ \\__|  \\__|\\__|  \\__|   \\__|    \\______/ \\__|  \\__|\\______|\\__|  \\__|\\______|
                 """;
 
-        System.out.println(Color.ANSI_BLUE + s + Color.RESET);
-        System.out.println("Would you like to use a fancy GUI? (y/N)");
-        String choice = stdin.nextLine().toUpperCase();
-        if (choice.equals("Y") || choice.equals("YES") || choice.equals("SI") || choice.equals("OUI")){
+        //System.out.println("Would you like to use a fancy GUI? (y/N)");
+        // String choice = stdin.nextLine().toUpperCase();
+        if (!useCli) {
             GUI gui = new GUI();
             new Thread(gui).start();
             GUIClient.setGUI(gui);
@@ -55,6 +64,7 @@ public class ClientMain {
             ui = gui;
         }
         else {
+            System.out.println(Color.ANSI_BLUE + s + Color.RESET);
             CLI cli = new CLI();
             Client.setUi(cli);
             System.out.print("Starting CLI..\n");
