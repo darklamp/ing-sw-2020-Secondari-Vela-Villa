@@ -1,30 +1,41 @@
 package it.polimi.ingsw.Client.GUI;
 
-import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.View.CellView;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.AmbientLight;
+import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.MeshView;
 
-import java.io.File;
+import static it.polimi.ingsw.Client.ClientState.INIT;
 
 public class MainWindowController extends WindowController {
     @FXML
     Parent mainViewPane;
     @FXML
+    PerspectiveCamera perspectiveCamera;
+    @FXML
     TextArea textArea1;
     @FXML
     GridPane gridPaneMain;
     @FXML
+    AmbientLight ambientLight;
+    @FXML
     MeshView testMeshView;
+    @FXML
+    Box testBox1;
+    @FXML
+    Group testGroup;
     @FXML
     Button cell00, cell01, cell02, cell03, cell04, cell10, cell11, cell12, cell13;
     @FXML
@@ -37,6 +48,7 @@ public class MainWindowController extends WindowController {
     @FXML
     void buttonClicked(ActionEvent event) {
         event.consume();
+        if (Client.getState() != INIT) return;
         Button b = (Button) event.getSource();
         if (cells == null) {
             cells = new Button[5][5];
@@ -65,27 +77,22 @@ public class MainWindowController extends WindowController {
             cells[4][2] = cell42;
             cells[4][3] = cell43;
             cells[4][4] = cell44;
-            // File file = new File("resources/Mesh/MaleBuilder.obj");
-            File file = new File("/home/ale/Desktop/MaleBuilder.obj");
-            ObjModelImporter importer = new ObjModelImporter();
-            importer.read(file);
-            testMeshView = importer.getImport()[0];
 
         }
-        int i, j = 0;
-        boolean flag = false;
-        for (i = 0; i < 5; i++) {
-            for (j = 0; j < 5; j++) {
-                if (b == cells[i][j]) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (flag) break;
+        int i;
+        try {
+            i = GridPane.getRowIndex(b);
+        } catch (Exception e) {
+            i = 0;
         }
-        if (Client.getState() == ClientState.INIT) {
-            GUI.setOut(i + "," + j);
+        int j;
+        try {
+            j = GridPane.getColumnIndex(b);
+        } catch (Exception e) {
+            j = 0;
         }
+        System.out.println(i + "   " + j);
+        GUI.setOut(i + "," + j);
     }
 
     @Override

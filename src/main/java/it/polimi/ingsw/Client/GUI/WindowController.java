@@ -5,16 +5,15 @@ import it.polimi.ingsw.View.CellView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 
 public abstract class WindowController {
     void switchScene(@SuppressWarnings("SameParameterValue") String fxml) {
-        {
-
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource(fxml));
-            Parent root;
+        FXMLLoader loader = new FXMLLoader(getClass()
+                .getResource(fxml));
+        Parent root;
             try {
                 root = loader.load();
                 WindowController controller = loader.getController();
@@ -24,8 +23,6 @@ public abstract class WindowController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-        }
     }
 
     abstract void setText(String s);
@@ -39,5 +36,12 @@ public abstract class WindowController {
     void setMove(ClientState newState) {
     }
 
-    ;;
+    void setError(String input) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Message");
+        alert.setHeaderText("Error");
+        alert.setContentText(input);
+        alert.setResizable(false);
+        alert.showAndWait();
+    }
 }
