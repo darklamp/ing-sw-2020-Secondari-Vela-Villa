@@ -16,8 +16,7 @@ public class BuildController {
     public void handleBuild(News news) throws NoMoreMovesException {
         String s = "BUILDKO";
         try{
-            if (gameTable.getCurrentBuilder() == null) gameTable.setCurrentBuilder(news.getBuilder(gameTable));
-            else if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder())
+            if (gameTable.getCurrentBuilder() != null && news.getBuilder(gameTable) != gameTable.getCurrentBuilder())
                 throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
             news.getCell(gameTable).setHeight(news.getBuilder(gameTable), news.getHeight());
             gameTable.getCurrentPlayer().setState(WAIT);
@@ -36,7 +35,10 @@ public class BuildController {
             s = "BUILDOK";
         }
         finally {
-            gameTable.setNews(news,s);
+            if (s.equals("BUILDOK") && gameTable.getCurrentBuilder() == null) {
+                gameTable.setCurrentBuilder(news.getBuilder(gameTable));
+            }
+            gameTable.setNews(news, s);
         }
     }
 
