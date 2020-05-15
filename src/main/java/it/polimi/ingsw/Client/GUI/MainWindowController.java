@@ -6,16 +6,19 @@ import it.polimi.ingsw.View.CellView;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.AmbientLight;
-import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.MeshView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import static it.polimi.ingsw.Client.ClientState.INIT;
 
@@ -23,25 +26,50 @@ public class MainWindowController extends WindowController {
     @FXML
     Parent mainViewPane;
     @FXML
-    PerspectiveCamera perspectiveCamera;
-    @FXML
     TextArea textArea1;
     @FXML
     GridPane gridPaneMain;
     @FXML
-    AmbientLight ambientLight;
-    @FXML
-    MeshView testMeshView;
-    @FXML
     Box testBox1;
     @FXML
-    Group testGroup;
+    ImageView buttonImage00;
     @FXML
     Button cell00, cell01, cell02, cell03, cell04, cell10, cell11, cell12, cell13;
     @FXML
     Button cell14, cell20, cell21, cell22, cell23, cell24, cell30, cell31, cell32;
     @FXML
     Button cell33, cell34, cell40, cell41, cell42, cell43, cell44;
+
+    private static Image builder1;
+
+    {
+        try {
+            builder1 = new Image(new FileInputStream(new File("./").getAbsolutePath().replace(".", "") + "src/main/resources/images/builder1.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Image builder2;
+
+    {
+        try {
+            builder2 = new Image(new FileInputStream(new File("./").getAbsolutePath().replace(".", "") + "src/main/resources/images/builder2.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Image builder3;
+
+    {
+        try {
+            builder3 = new Image(new FileInputStream(new File("./").getAbsolutePath().replace(".", "") + "src/main/resources/images/builder3.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private Button[][] cells = null;
 
@@ -104,6 +132,30 @@ public class MainWindowController extends WindowController {
         textArea1.setText(s1);
     }
 
+    private double startX, startY;
+
+    @FXML
+    void builderGrab(MouseEvent event) {
+        event.consume();
+        System.out.println("[DEBUG]" + event.getSource() + " Entered drag");
+        startX = event.getSceneX();
+        startY = event.getSceneY();
+    }
+
+    @FXML
+    void builderRelease(MouseEvent event) {
+        event.consume();
+        System.out.println("[DEBUG]" + event.getSource() + " Released from drag");
+    }
+
+    @FXML
+    void builderMove(MouseEvent event) {
+        event.consume();
+        Button b = (Button) event.getSource();
+        b.setTranslateX(event.getSceneX() - startX);
+        b.setTranslateY(event.getSceneY() - startY);
+    }
+
     void setText(String s) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Message");
@@ -125,12 +177,19 @@ public class MainWindowController extends WindowController {
 
     @Override
     void updateTable(CellView[][] table) {
+        buttonImage00.setImage(builder1);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 cells[i][j].setText(table[i][j].getHeight().toString());
+                /*switch (table[i][j].getPlayer()){
+                    case 0 -> cells[i][j].get;
+                    case 1 -> cells[i][j].setStyle("-fx-background-image: url('../images/builder2.png'");
+                    case 2 -> cells[i][j].setStyle("-fx-background-image: url('../images/builder3.png'");
+                }*/
             }
         }
     }
+
 
     private int positionedBuilders = -1;
     private boolean flagInvalidPos = false;
