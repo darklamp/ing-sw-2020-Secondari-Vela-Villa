@@ -113,7 +113,6 @@ public class MainController implements PropertyChangeListener {
                 break;
             case MOVEORBUILD:
                 if (name.equals("PASS")) throw new IllegalTurnStateException();
-                gameTable.setCurrentBuilder(news.getBuilder(gameTable));
                 break;
             case BUILDORPASS:
                 if (name.equals("MOVE")) throw new IllegalTurnStateException();

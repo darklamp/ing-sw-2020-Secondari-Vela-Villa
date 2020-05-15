@@ -21,9 +21,14 @@ public class MoveController {
     void handleMove(News news) throws WinnerException {
         String moveResult = "MOVEKO";
         try{
+            if (gameTable.getCurrentBuilder() != null) {
+                if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder()) throw new InvalidMoveException();
+            }
             news.getBuilder(gameTable).setPosition(news.getCell(gameTable));
             gameTable.getCurrentPlayer().setState(BUILD);
-            gameTable.setCurrentBuilder(news.getBuilder(gameTable));
+            if (gameTable.getCurrentBuilder() == null) {
+                gameTable.setCurrentBuilder(news.getBuilder(gameTable));
+            }
             moveResult = "MOVEOK";
         }
         catch (InvalidMoveException ignored){ /* finally executes */

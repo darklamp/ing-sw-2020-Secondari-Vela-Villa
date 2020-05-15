@@ -54,7 +54,6 @@ public abstract class Builder implements Serializable {
             if (isWinner()) throw new WinnerException(this.player);
         }
         catch (ArtemisException e){
-           // throw new ArtemisException(); // TEMP PER TEST
             this.position.setBuilder(null);
             this.position = position; // sets position if no exceptions are thrown
             position.setBuilder(this);
