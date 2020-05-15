@@ -118,10 +118,10 @@ public class GameTable {
         this.currentBuilder = currentBuilder;
     }
 
-    ArrayList<String> getGodChoices(){
+  /*  ArrayList<String> getGodChoices(){
         return godChoices;
     }
-
+*/
 
     /**
      * Checks for available feasible moves

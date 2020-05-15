@@ -93,14 +93,14 @@ public class Player {
      * it removes the god from the selectable pool, so other player(s) can't pick it
      * @return true if valid and selectable, false otherwise
      */
-    private boolean isValidGod(String god, GameTable gameTable){
+  /*  private boolean isValidGod(String god, GameTable gameTable){
         ArrayList<String> godChoices = gameTable.getGodChoices();
         if (godChoices.contains(god.toUpperCase())) {
             godChoices.remove(god);
             return true;
         }
         else return false;
-    }
+    }*/
 
     public ClientState getState(){
         return this.turnState;
