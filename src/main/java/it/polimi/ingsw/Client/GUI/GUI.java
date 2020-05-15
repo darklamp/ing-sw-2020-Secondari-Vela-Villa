@@ -49,7 +49,10 @@ public class GUI implements Ui, Runnable {
 
     @Override
     public void process(String input) {
-        if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
+        if (input.contains("[ERROR]")) {
+            String[] inputs = input.split("@@@");
+            Platform.runLater(() -> GUIClient.getController().setError(inputs[1]));
+        } else if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
             String[] inputs = input.split("@@@");
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);

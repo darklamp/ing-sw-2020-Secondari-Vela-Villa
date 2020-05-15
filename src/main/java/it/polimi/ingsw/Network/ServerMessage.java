@@ -13,7 +13,7 @@ public final class ServerMessage implements Serializable {
             "Please input a natural lower than 4 and higher than 1: ";
     public static String wrongNumber = "Wrong number. Please try again.";
     public static String makeYourMove = "It's your turn. Please make a move: ";
-    public static String notYourTurn = "Wait for your turn you heathen";
+    public static String notYourTurn = "[ERROR]@@@Wait for your turn you heathen";
     public static String invalidMove = "Invalid move. Please try again.";
     public static String genericErrorMessage = "Richiesta no buena.";
     public static String abortMessage = "Game interrupted abruptly";
