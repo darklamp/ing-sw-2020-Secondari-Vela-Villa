@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Network;
 
-import it.polimi.ingsw.Controller.InitController;
 import it.polimi.ingsw.Controller.MainController;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
@@ -70,29 +69,29 @@ public class Server {
                      gods.add(gameProperties.get(getCurrentGameIndex()).get(i));
                  }
                  GameTable gameTable = new GameTable(keys.size());
-                 MainController controller = new MainController(gameTable);
-                 Player player1 = new Player(keys.get(0), gameTable, c1);
-                 c1.setPlayer(player1);
-                 Player player2 = new Player(keys.get(1), gameTable, c2);
-                 c2.setPlayer(player2);
-                 Player player3 = null;
-                 if (c3 != null) {
-                     player3 = new Player(keys.get(2), gameTable, c3);
-                     c3.setPlayer(player3);
-                 }
-                 InitController initController = new InitController(c1,c2,c3,gods,player1,player2,player3,gameTable,controller);
-                 controller.setInitController(initController);
-                 Thread thread = new Thread(initController);
-                 thread.start();
-                 gameControllers.put(getCurrentGameIndex(),controller);
-                 ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
-                 playingConnections.add(c1);
-                 playingConnections.add(c2);
-                 if (c3 != null) playingConnections.add(c3);
-                 gameList.put(getCurrentGameIndex(), playingConnections);
-                 waitingConnection.clear();
-           //      thread.join();
-                 currentGameIndex += 1;
+             MainController controller = new MainController(gameTable);
+             Player player1 = new Player(keys.get(0), gameTable, c1);
+             c1.setPlayer(player1);
+             Player player2 = new Player(keys.get(1), gameTable, c2);
+             c2.setPlayer(player2);
+             Player player3 = null;
+             if (c3 != null) {
+                 player3 = new Player(keys.get(2), gameTable, c3);
+                 c3.setPlayer(player3);
+             }
+             GameInitializer gameInitializer = new GameInitializer(c1, c2, c3, gods, player1, player2, player3, gameTable, controller);
+             controller.setGameInitializer(gameInitializer);
+             Thread thread = new Thread(gameInitializer);
+             thread.start();
+             gameControllers.put(getCurrentGameIndex(), controller);
+             ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
+             playingConnections.add(c1);
+             playingConnections.add(c2);
+             if (c3 != null) playingConnections.add(c3);
+             gameList.put(getCurrentGameIndex(), playingConnections);
+             waitingConnection.clear();
+             //      thread.join();
+             currentGameIndex += 1;
          }
      }
      catch (NickAlreadyTakenException e){

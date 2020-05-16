@@ -1,11 +1,10 @@
-package it.polimi.ingsw.Controller;
+package it.polimi.ingsw.Network;
 
+import it.polimi.ingsw.Controller.MainController;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Network.ServerMessage;
-import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.RemoteView;
 import it.polimi.ingsw.View.View;
@@ -15,15 +14,15 @@ import java.util.ArrayList;
 /**
  * Responsible for initiating a match; gets called asynchronously by {@link it.polimi.ingsw.Network.Server}
  */
-public class InitController implements Runnable{
+public class GameInitializer implements Runnable {
 
-    private final SocketClientConnection c1,c2,c3;
+    private final SocketClientConnection c1, c2, c3;
     private final ArrayList<Integer> gods;
-    private final Player player1,player2,player3;
+    private final Player player1, player2, player3;
     private final GameTable gameTable;
     private final MainController mainController;
 
-    public InitController(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods, Player player1, Player player2, Player player3, GameTable gameTable, MainController mainController){
+    public GameInitializer(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods, Player player1, Player player2, Player player3, GameTable gameTable, MainController mainController) {
         this.c1 = c1;
         this.c2 = c2;
         this.c3 = c3;

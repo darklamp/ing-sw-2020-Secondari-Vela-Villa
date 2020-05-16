@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Network.GameInitializer;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.beans.PropertyChangeEvent;
@@ -18,7 +19,7 @@ public class MainController implements PropertyChangeListener {
     private final BuildController buildController;
     private final MoveController moveController;
     private final GameTable gameTable;
-    private InitController initController;
+    private GameInitializer gameInitializer;
     private News news;
     private ControllerState state = ControllerState.PLAY;
 
@@ -125,7 +126,7 @@ public class MainController implements PropertyChangeListener {
         }
     }
 
-    public MainController(GameTable gameTable){
+    public MainController(GameTable gameTable) {
         this.currentPlayer = null;
         this.news = null;
         this.gameTable = gameTable;
@@ -133,8 +134,8 @@ public class MainController implements PropertyChangeListener {
         this.moveController = new MoveController(gameTable);
     }
 
-    public void setInitController(InitController initController){
-        if (this.initController == null) this.initController = initController;
+    public void setGameInitializer(GameInitializer gameInitializer) {
+        if (this.gameInitializer == null) this.gameInitializer = gameInitializer;
     }
 
 
