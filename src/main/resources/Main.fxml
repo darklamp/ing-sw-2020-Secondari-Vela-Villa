@@ -3,7 +3,7 @@
 <?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.Reflection?>
-<?import javafx.scene.*?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Box?>
 <AnchorPane id="anchorPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@css/Main.css"
@@ -27,56 +27,56 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <Group fx:id="cell00" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER"
-                       GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell01" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell02" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell03" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell04" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell10" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1"
-                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell11" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell12" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell13" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell14" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell20" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2"
-                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell21" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell22" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell23" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell24" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell30" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3"
-                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell31" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell32" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell33" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell34" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell40" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4"
-                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell41" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell42" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell43" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <Group fx:id="cell44" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                       GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell00" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell01" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell02" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell03" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell04" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell10" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell11" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell12" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell13" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell14" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell20" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell21" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell22" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell23" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell24" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell30" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell31" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell32" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell33" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell34" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell40" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4"
+                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell41" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell42" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell43" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <StackPane fx:id="cell44" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                           GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
             </children>
         </GridPane>
         <TextArea id="textArea1" fx:id="textArea1" editable="false" layoutX="17.0" layoutY="560.0" prefHeight="394.0"

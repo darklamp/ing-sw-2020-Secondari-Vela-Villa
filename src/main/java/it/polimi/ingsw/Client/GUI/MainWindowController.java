@@ -8,7 +8,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -19,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Box;
 
 import java.io.File;
@@ -27,7 +27,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static it.polimi.ingsw.Client.ClientState.INIT;
+import static it.polimi.ingsw.Client.ClientState.*;
 
 public class MainWindowController extends WindowController implements Initializable {
     @FXML
@@ -41,11 +41,11 @@ public class MainWindowController extends WindowController implements Initializa
     @FXML
     Box testBox1;
     @FXML
-    Group cell00, cell01, cell02, cell03, cell04, cell10, cell11, cell12, cell13;
+    StackPane cell00, cell01, cell02, cell03, cell04, cell10, cell11, cell12, cell13;
     @FXML
-    Group cell14, cell20, cell21, cell22, cell23, cell24, cell30, cell31, cell32;
+    StackPane cell14, cell20, cell21, cell22, cell23, cell24, cell30, cell31, cell32;
     @FXML
-    Group cell33, cell34, cell40, cell41, cell42, cell43, cell44;
+    StackPane cell33, cell34, cell40, cell41, cell42, cell43, cell44;
 
 
     private static final DataFormat builder = new DataFormat("builder");
@@ -105,7 +105,7 @@ public class MainWindowController extends WindowController implements Initializa
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (Node n : gridPaneMain.getChildren()) {
-            initGroup((Group) n);
+            initStackPane((StackPane) n);
         }
     }
 
@@ -114,7 +114,7 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
         if (Client.getState() != INIT) return;
         Button b = (Button) event.getSource();
-        Group g = (Group) b.getParent();
+        StackPane g = (StackPane) b.getParent();
         int i = getRow(g);
         int j = getColumn(g);
         System.out.println(i + "   " + j);
@@ -123,21 +123,25 @@ public class MainWindowController extends WindowController implements Initializa
 
     @Override
     void setMove(ClientState s) {
-        String s1 = "";
+        StringBuilder s1 = new StringBuilder();
         if (!initialized) {
             for (Node n : gridPaneMain.getChildren()) {
-                ((Button) ((Group) n).getChildren().get(0)).setOnAction(null);
+                ((Button) ((StackPane) n).getChildren().get(0)).setOnAction(null);
             }
             if (GUI.getPlayersNumber() == 2) {
 
             }
             initialized = true;
         }
+        s1.append("You have to: ");
         switch (s) {
-            case MOVE -> s1 = "It's your turn! Please make a move.";
-            case BUILD -> s1 = "You have to: BUILD";
+            case MOVE -> s1.append("MOVE");
+            case BUILD -> s1.append("BUILD");
+            case MOVEORBUILD -> s1.append("either MOVE or BUILD");
+            case WAIT -> s1.append("wait for your turn");
+            case BUILDORPASS -> s1.append("either PASS or BUILD");
         }
-        textArea1.setText(s1);
+        textArea1.setText(s1.toString());
     }
 
     @FXML
@@ -188,16 +192,16 @@ public class MainWindowController extends WindowController implements Initializa
         event.setDropCompleted(success);
 
         Pair pair = (Pair) db.getContent(isBuilding ? building : builder);
-        Group target = null;
-        try {
-            target = (Group) ((Button) event.getTarget()).getParent();
+        StackPane target = null;
+        try { //TODO understand why if this happens the player can't move anymore
+            target = (StackPane) ((Button) event.getTarget()).getParent();
         } catch (ClassCastException e) { // should only happen when event.getTarget() is an ImageView and not a button, aka when there's a builder on the cell I'm trying to move to
             if (!(event.getTarget() instanceof ImageView)) e.printStackTrace();
-            else target = (Group) ((ImageView) event.getTarget()).getParent();
+            else target = (StackPane) ((ImageView) event.getTarget()).getParent();
         }
         int i = getRow(target);
         int j = getColumn(target);
-        ImageView source = (ImageView) ((Group) gridPaneMain.getChildren().get(pair.getFirst() * 5 + pair.getSecond())).getChildren().get(1);
+        ImageView source = (ImageView) ((StackPane) gridPaneMain.getChildren().get(pair.getFirst() * 5 + pair.getSecond())).getChildren().get(1);
         switch (Client.getState()) {
             case MOVE -> GUI.setOut(i + "," + j + "," + ((Integer.parseInt(source.getId()) % 2) + 1));
         }
@@ -225,13 +229,6 @@ public class MainWindowController extends WindowController implements Initializa
 
     @Override
     void updateTable(CellView[][] table) {
-        // gridPaneMain.getChildren().clear();
-        ImageView a = new ImageView(builderImage1);
-        a.setPreserveRatio(true);
-        a.setFitHeight(155);
-        buildingPartsPane.add(a, 0, 0);
-        a.toFront();
-        a.setOnDragDetected(this::builderGrab);
         int fb1 = 0, fb2 = 2, fb3 = 4;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -261,11 +258,40 @@ public class MainWindowController extends WindowController implements Initializa
                 }
             }
         }
+        if (Client.getState() == BUILD) {
+            addAvailablePart(baseBuildingImage, 0);
+            addAvailablePart(middleBuildingImage, 1);
+            addAvailablePart(baseBuildingImage, 2); //TODO cambiare immagine
+        } else {
+            buildingPartsPane.getChildren().clear();
+        }
+    }
+
+    private void addAvailablePart(Image image, int i) {
+        ImageView b = new ImageView(image);
+        b.setFitHeight(155);
+        b.setFitWidth(155);
+        b.setScaleX(0.9);
+        b.setScaleY(0.9);
+        b.setOnMouseEntered(e -> {
+            b.setEffect(new Glow(1.3));
+            b.setScaleX(1.1);
+            b.setScaleY(1.1);
+        });
+        b.setOnMouseExited(e -> {
+            b.setEffect(null);
+            b.setScaleX(0.9);
+            b.setScaleY(0.9);
+        });
+
+        buildingPartsPane.add(b, 0, i);
+        b.toFront();
+        b.setOnDragDetected(this::builderGrab);
     }
 
     private void addBuildingToCell(Image image, int row, int column) {
         if (image == null) {
-            Group g = (Group) gridPaneMain.getChildren().get(row * 5 + column);
+            StackPane g = (StackPane) gridPaneMain.getChildren().get(row * 5 + column);
             ((Button) g.getChildren().get(0)).setGraphic(null);
         } else {
             ImageView b = new ImageView(image);
@@ -274,21 +300,21 @@ public class MainWindowController extends WindowController implements Initializa
             b.setScaleX(0.9);
             b.setScaleY(0.9);
             b.setOpacity(0.8);
-            ((Button) ((Group) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().get(0)).setGraphic(b);
+            ((Button) ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().get(0)).setGraphic(b);
             b.toBack();
         }
     }
 
     private void addBuilderToCell(Image image, int row, int column, int firstBuilder) {
         if (image == null) {
-            Group g = (Group) gridPaneMain.getChildren().get(row * 5 + column);
+            StackPane g = (StackPane) gridPaneMain.getChildren().get(row * 5 + column);
             g.getChildren().removeIf(i -> i instanceof ImageView);
         } else {
             ImageView b = new ImageView(image);
             b.setId(String.valueOf(firstBuilder));
             b.setFitHeight(155);
             b.setFitWidth(155);
-            if (firstBuilder / (GUI.getPlayerIndex() + 1) == 1 || (GUI.getPlayerIndex() == 0 && firstBuilder == 1)) {
+            if (Client.getState() == MOVE && firstBuilder / (GUI.getPlayerIndex() + 1) == 1 || (GUI.getPlayerIndex() == 0 && firstBuilder == 1)) {
                 b.setOnDragDetected(this::builderGrab);
                 b.setOnMouseEntered(this::setHovered);
                 b.setOnMouseExited(this::unsetHovered);
@@ -296,7 +322,7 @@ public class MainWindowController extends WindowController implements Initializa
             b.setScaleX(1.65);
             b.setScaleY(1.65);
             b.setScaleZ(1.65);
-            ((Group) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().add(b);
+            ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().add(b);
             b.toFront();
         }
 
@@ -354,9 +380,9 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
 
-    void initGroup(Group g) {
-        g.setOnDragDropped(this::dragReleased);
+    void initStackPane(StackPane g) {
         g.setOnDragOver(this::dragOver);
+        g.setOnDragDropped(this::dragReleased);
         Button b = new Button();
         b.setAlignment(Pos.CENTER);
         b.setOnAction(this::buttonClicked);
