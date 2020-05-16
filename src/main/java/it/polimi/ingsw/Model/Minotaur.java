@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Utility.Pair;
 
 public class Minotaur extends Builder{
     Minotaur(Cell position, Player player) {

@@ -1,15 +1,17 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.Utility;
 
-public class Pair
-{
+import java.io.Serializable;
+
+public class Pair implements Serializable {
     public int getFirst() {
         return num1;
     }
+
     public int getSecond() {
         return num2;
     }
 
-    private final int num1,num2;
+    private final int num1, num2;
 
     public Pair(int num1, int num2)
     {

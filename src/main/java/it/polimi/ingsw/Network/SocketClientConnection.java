@@ -5,8 +5,8 @@ import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
-import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Utility.Pair;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Model.Exceptions;
 
-import it.polimi.ingsw.Model.Pair;
+import it.polimi.ingsw.Utility.Pair;
 
 public class MinotaurException extends Exception {
     private Pair pair;

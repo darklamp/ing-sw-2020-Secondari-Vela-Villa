@@ -3,10 +3,10 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
-import it.polimi.ingsw.Model.Pair;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.RemoteView;
 import it.polimi.ingsw.View.View;
 

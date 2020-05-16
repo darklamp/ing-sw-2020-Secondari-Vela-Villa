@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.Utility.Pair;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.Serializable;

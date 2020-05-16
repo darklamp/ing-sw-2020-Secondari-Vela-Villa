@@ -136,6 +136,7 @@ public class Client implements Runnable {
                             try {
                                 String[] s = inputLine.split(",");
                                 socketOut.println("MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
+                                System.out.println("SENT: " + "MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
                             } catch (Exception ignored) {
                             }
                         }
