@@ -4,3 +4,5 @@ jar options:
 * -port : specifies Server port (default: 1337)
 * -cli  : cli true/false (defaults to true up until GUI is finished)
 * -ip   : defines server IP (default: localhost)
+
+example: java -jar client.jar -port=1337 -cli=true -ip=127.0.0.1
