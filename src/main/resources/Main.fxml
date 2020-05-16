@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Point3D?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.Reflection?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Box?>
 <AnchorPane id="anchorPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@css/Main.css"
@@ -28,87 +27,56 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <Button fx:id="cell00" ellipsisString="" mnemonicParsing="false" onAction="#buttonClicked"
-                        onDragDetected="#builderGrab" onMouseDragReleased="#builderRelease"
-                        onMouseDragged="#builderMove" onMouseEntered="#setHovered" onMouseExited="#unsetHovered"
-                        prefHeight="155.0" prefWidth="155.0" text="Cell00">
-                    <graphic>
-                        <ImageView fx:id="buttonImage00" fitHeight="155.0" fitWidth="155.0"
-                                   onMouseClicked="#builderGrab" pickOnBounds="true" preserveRatio="true" scaleX="1.9"
-                                   scaleY="1.9" scaleZ="1.9"/>
-                    </graphic>
-                </Button>
-                <Button fx:id="cell01" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" GridPane.columnIndex="1"/>
-                <Button fx:id="cell02" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell02"
-                        GridPane.columnIndex="2"/>
-                <Button fx:id="cell03" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell03"
-                        GridPane.columnIndex="3"/>
-                <Button fx:id="cell04" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell04"
-                        GridPane.columnIndex="4"/>
-                <Button fx:id="cell10" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell10"
-                        GridPane.rowIndex="1"/>
-                <Button fx:id="cell11" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell11"
-                        GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <Button fx:id="cell12" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell12"
-                        GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <Button fx:id="cell13" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell13"
-                        GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-                <Button fx:id="cell14" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell14"
-                        GridPane.columnIndex="4" GridPane.rowIndex="1"/>
-                <Button fx:id="cell20" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell20"
-                        GridPane.rowIndex="2"/>
-                <Button fx:id="cell21" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                <Button fx:id="cell22" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                <Button fx:id="cell23" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-                <Button fx:id="cell24" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="4" GridPane.rowIndex="2"/>
-                <Button fx:id="cell30" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.rowIndex="3"/>
-                <Button fx:id="cell31" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                <Button fx:id="cell32" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-                <Button fx:id="cell33" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-                <Button fx:id="cell34" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="4" GridPane.rowIndex="3"/>
-                <Button fx:id="cell40" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.rowIndex="4"/>
-                <Button fx:id="cell41" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-                <Button fx:id="cell42" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-                <Button fx:id="cell43" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="3" GridPane.rowIndex="4"/>
-                <Button fx:id="cell44" mnemonicParsing="false" onAction="#buttonClicked" onMouseEntered="#setHovered"
-                        onMouseExited="#unsetHovered" prefHeight="155.0" prefWidth="155.0" text="Cell00"
-                        GridPane.columnIndex="4" GridPane.rowIndex="4"/>
+                <Group fx:id="cell00" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER"
+                       GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell01" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell02" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell03" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell04" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell10" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1"
+                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell11" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell12" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell13" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell14" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell20" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2"
+                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell21" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell22" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell23" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell24" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell30" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3"
+                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell31" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell32" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell33" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell34" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell40" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4"
+                       GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell41" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell42" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell43" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <Group fx:id="cell44" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                       GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
             </children>
         </GridPane>
         <TextArea id="textArea1" fx:id="textArea1" editable="false" layoutX="17.0" layoutY="560.0" prefHeight="394.0"
