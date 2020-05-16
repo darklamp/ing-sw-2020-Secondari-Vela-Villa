@@ -26,6 +26,8 @@ public class MainWindowController extends WindowController {
     @FXML
     Parent mainViewPane;
     @FXML
+    GridPane buildingPartsPane;
+    @FXML
     TextArea textArea1;
     @FXML
     GridPane gridPaneMain;
@@ -146,12 +148,14 @@ public class MainWindowController extends WindowController {
     void builderRelease(MouseEvent event) {
         event.consume();
         System.out.println("[DEBUG]" + event.getSource() + " Released from drag");
+        //button.toFront();
     }
 
     @FXML
     void builderMove(MouseEvent event) {
         event.consume();
-        Button b = (Button) event.getSource();
+        //Button b = (Button) event.getSource();
+        ImageView b = (ImageView) event.getSource();
         b.setTranslateX(event.getSceneX() - startX);
         b.setTranslateY(event.getSceneY() - startY);
     }
@@ -177,19 +181,30 @@ public class MainWindowController extends WindowController {
 
     @Override
     void updateTable(CellView[][] table) {
-        buttonImage00.setImage(builder1);
+        //   buttonImage00.setImage(builder1);
+        ImageView a = new ImageView(builder1);
+        a.setPreserveRatio(true);
+        a.setFitHeight(155);
+        buildingPartsPane.add(a, 0, 0);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 cells[i][j].setText(table[i][j].getHeight().toString());
-                /*switch (table[i][j].getPlayer()){
-                    case 0 -> cells[i][j].get;
-                    case 1 -> cells[i][j].setStyle("-fx-background-image: url('../images/builder2.png'");
-                    case 2 -> cells[i][j].setStyle("-fx-background-image: url('../images/builder3.png'");
-                }*/
+                switch (table[i][j].getPlayer()) {
+                    case 0 -> addImageToCell(builder1, i, j);
+                    case 1 -> addImageToCell(builder2, i, j);
+                    case 2 -> addImageToCell(builder3, i, j);
+                }
             }
         }
     }
 
+
+    private void addImageToCell(Image image, int row, int column) {
+        ImageView b = new ImageView(image);
+        b.setPreserveRatio(true);
+        b.setFitHeight(165);
+        gridPaneMain.add(b, column, row);
+    }
 
     private int positionedBuilders = -1;
     private boolean flagInvalidPos = false;
