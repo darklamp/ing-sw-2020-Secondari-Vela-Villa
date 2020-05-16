@@ -192,12 +192,22 @@ public class MainWindowController extends WindowController implements Initializa
         event.setDropCompleted(success);
 
         Pair pair = (Pair) db.getContent(isBuilding ? building : builder);
-        StackPane target = null;
-        try { //TODO understand why if this happens the player can't move anymore
+        StackPane target;
+        try {
             target = (StackPane) ((Button) event.getTarget()).getParent();
         } catch (ClassCastException e) { // should only happen when event.getTarget() is an ImageView and not a button, aka when there's a builder on the cell I'm trying to move to
-            if (!(event.getTarget() instanceof ImageView)) e.printStackTrace();
-            else target = (StackPane) ((ImageView) event.getTarget()).getParent();
+            if (!(event.getTarget() instanceof ImageView i1)) {
+                setError("Invalid move!");
+                event.consume();
+                return;
+            } else {
+                if (!(Integer.parseInt(i1.getId()) / 2 == GUI.getPlayerIndex())) target = (StackPane) i1.getParent();
+                else {
+                    setError("Invalid move!");
+                    event.consume();
+                    return;
+                }
+            }
         }
         int i = getRow(target);
         int j = getColumn(target);
