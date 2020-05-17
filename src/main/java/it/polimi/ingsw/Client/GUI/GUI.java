@@ -8,14 +8,16 @@ import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
 import javafx.application.Platform;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Scanner;
 
-public class GUI implements Ui, Runnable {
+public class GUI implements Ui, Runnable, PropertyChangeListener {
     private static boolean isReady = false;
     private static LoginWindowController loginController;
-    private static volatile boolean newValue = false;
     private static boolean guiInitialized = false;
     private static int playerIndex, playersNumber;
+
 
     static int getPlayerIndex() {
         return playerIndex;
@@ -26,14 +28,6 @@ public class GUI implements Ui, Runnable {
     }
 
 
-    static void setOut(String s) {
-        out = s;
-        newValue = true;
-    }
-
-    private static String out;
-
-
     @Override
     public void run() {
         Application.launch(GUIClient.class);
@@ -41,6 +35,7 @@ public class GUI implements Ui, Runnable {
 
     protected synchronized void setReady(boolean b) {
         isReady = b;
+        GUIClient.addPropertyChangeListener(this);
         loginController = (LoginWindowController) GUIClient.getController();
     }
     public synchronized boolean isReady(){
@@ -96,5 +91,14 @@ public class GUI implements Ui, Runnable {
         }
         newValue = false;
         return out;
+    }
+
+    private volatile boolean newValue = false;
+    private static String out;
+
+    @Override
+    public synchronized void propertyChange(PropertyChangeEvent evt) {
+        out = (String) evt.getNewValue();
+        newValue = true;
     }
 }

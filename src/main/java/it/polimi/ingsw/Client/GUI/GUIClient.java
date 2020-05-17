@@ -7,6 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 
 public class GUIClient extends Application {
 
@@ -28,10 +31,27 @@ public class GUIClient extends Application {
     }
 
     private static Stage stage;
+    private static String news;
+    private static PropertyChangeSupport support;
+
+    /**
+     * Listener helper object
+     **/
+
+
+    static synchronized void setOut(String s) {
+        support.firePropertyChange("", news, s);
+        news = s;
+    }
+
+    static void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+        support = new PropertyChangeSupport(this);
         Parent root = loader.load();
         controller = loader.getController();
         primaryStage.setTitle("Santorini Client");
