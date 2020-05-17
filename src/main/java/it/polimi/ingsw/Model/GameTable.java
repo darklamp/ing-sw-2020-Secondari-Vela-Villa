@@ -82,6 +82,13 @@ public class GameTable {
         getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
     }
 
+    /**
+     * Only used for tests.
+     */
+    private void setCurrentPlayer(int player) {
+        this.currentPlayer = player;
+    }
+
     public static List<String> getCompleteGodList() {
         return completeGodList;
     }
