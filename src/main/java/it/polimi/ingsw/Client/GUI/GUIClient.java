@@ -39,7 +39,7 @@ public class GUIClient extends Application {
      **/
 
 
-    static synchronized void setOut(String s) {
+    static void setOut(String s) {
         support.firePropertyChange("", news, s);
         news = s;
     }
@@ -65,6 +65,7 @@ public class GUIClient extends Application {
             Platform.exit();
             System.exit(0);
         });
+        stage.setFullScreenExitHint("Please don't exit fullscreen it is not safe outside!");
     }
 
 

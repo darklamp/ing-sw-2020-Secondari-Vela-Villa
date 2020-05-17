@@ -97,7 +97,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
     private static String out;
 
     @Override
-    public synchronized void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(PropertyChangeEvent evt) {
         out = (String) evt.getNewValue();
         newValue = true;
     }

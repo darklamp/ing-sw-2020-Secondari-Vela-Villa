@@ -135,9 +135,9 @@ public class MainWindowController extends WindowController implements Initializa
             for (Node n : gridPaneMain.getChildren()) {
                 ((Button) ((StackPane) n).getChildren().get(0)).setOnAction(null);
             }
-            if (GUI.getPlayersNumber() == 2) {
+         /*   if (GUI.getPlayersNumber() == 2) {
 
-            }
+            }*/ //TODO ??
             initialized = true;
         }
         s1.append("You have to: ");
@@ -213,12 +213,16 @@ public class MainWindowController extends WindowController implements Initializa
         Pair pair = (Pair) db.getContent(isBuilding ? building : builder);
         StackPane target;
         try {
-            target = (StackPane) ((Button) event.getTarget()).getParent();
+            target = (StackPane) ((Button) event.getTarget()).getParent(); //TODO handle case where target is stackpane !!
         } catch (ClassCastException e) { // should only happen when event.getTarget() is an ImageView and not a button, aka when there's a builder on the cell I'm trying to move to
             if (!(event.getTarget() instanceof ImageView i1)) {
-                setError("Invalid move/build!");
-                event.consume();
-                return;
+                if ((event.getTarget() instanceof StackPane)) {
+                    target = (StackPane) event.getTarget();
+                } else {
+                    setError("Invalid move/build!");
+                    event.consume();
+                    return;
+                }
             } else {
                 if (!(Integer.parseInt(i1.getId()) / 2 == GUI.getPlayerIndex())) target = (StackPane) i1.getParent();
                 else {
@@ -239,7 +243,8 @@ public class MainWindowController extends WindowController implements Initializa
             case BUILD -> {
                 if (selected == null) {
                     setError("Please click on the builder you want to use.");
-                    //TODO reiterate
+                    event.consume();
+                    return;
                 }
                 int buildingType = pair.getFirst();
                 GUIClient.setOut(i + "," + j + "," + ((Integer.parseInt(selected.getId()) % 2) + 1) + "," + buildingType);
@@ -277,7 +282,7 @@ public class MainWindowController extends WindowController implements Initializa
                     case NONE -> addBuildingToCell(null, i, j);
                     case BASE -> addBuildingToCell(baseBuildingImage, i, j);
                     case MIDDLE -> addBuildingToCell(middleBuildingImage, i, j);
-                    case TOP -> addBuildingToCell(middleBuildingImage, i, j); //TODO add image
+                    case TOP -> addBuildingToCell(middleBuildingImage, i, j);  //TODO add image
                     case DOME -> addBuildingToCell(middleBuildingImage, i, j); //TODO add image
                 }
                 switch (table[i][j].getPlayer()) {
@@ -293,9 +298,7 @@ public class MainWindowController extends WindowController implements Initializa
                         addBuilderToCell(builderImage3, i, j, fb3);
                         fb3 = 5;
                     }
-                    case -1 -> {
-                        addBuilderToCell(null, i, j, 0);
-                    }
+                    case -1 -> addBuilderToCell(null, i, j, 0);
                 }
             }
         }
