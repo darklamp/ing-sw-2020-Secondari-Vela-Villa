@@ -363,7 +363,7 @@ public class MainWindowController extends WindowController implements Initializa
             b.setId(String.valueOf(firstBuilder));
             b.setFitHeight(155);
             b.setFitWidth(155);
-            if (firstBuilder / (GUI.getPlayerIndex() + 1) == 1 || (GUI.getPlayerIndex() == 0 && firstBuilder == 1)) {
+            if (2 * GUI.getPlayerIndex() == firstBuilder || 2 * GUI.getPlayerIndex() + 1 == firstBuilder) {
                 if (Client.getState() == MOVE) {
                     b.setOnDragDetected(this::builderGrab);
                     b.setOnMouseEntered(this::setHovered);

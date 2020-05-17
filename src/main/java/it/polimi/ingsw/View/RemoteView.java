@@ -139,7 +139,7 @@ public class RemoteView extends View {
 
     @Override
     protected void showMessage(Object message) {
-        socketClientConnection.asyncSend(message);
+        socketClientConnection.send(message);
     }
 
     /** this method gets called when the model sends a news; its purpose is to update the view.
@@ -150,23 +150,23 @@ public class RemoteView extends View {
         String name = propertyChangeEvent.getPropertyName();
         ArrayList<SocketClientConnection> c = news.getRecipients();
         if (c == null || c.contains(this.socketClientConnection)) {
-            switch (name){
-                case "NOTYOURTURN" -> this.socketClientConnection.asyncSend(ServerMessage.notYourTurn);
-                case "ILLEGALSTATE","INVALIDNEWS","MOVEKO" -> this.socketClientConnection.asyncSend(ServerMessage.invalidMove);
-                case "MOVEOK","BUILDOK", "PASSOK" -> {
+            switch (name) {
+                case "NOTYOURTURN" -> this.socketClientConnection.send(ServerMessage.notYourTurn);
+                case "ILLEGALSTATE", "INVALIDNEWS", "MOVEKO" -> this.socketClientConnection.send(ServerMessage.invalidMove);
+                case "MOVEOK", "BUILDOK", "PASSOK" -> {
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                     this.socketClientConnection.send(this.player.getState());
                 }
                 case "YOURTURN" -> this.socketClientConnection.send(this.player.getState());
                 case "WIN" -> {
                     if (news.getSender() == this.socketClientConnection) {
-                        this.socketClientConnection.asyncSend(gameTable.getBoardCopy());
+                        this.socketClientConnection.send(gameTable.getBoardCopy());
                         this.socketClientConnection.send(ClientState.WIN);
                     }
                     else this.socketClientConnection.send(ClientState.LOSE);
                 }
                 case "ABORT" -> this.socketClientConnection.send(ServerMessage.abortMessage);
-                default -> this.socketClientConnection.asyncSend(ServerMessage.genericErrorMessage);
+                default -> this.socketClientConnection.send(ServerMessage.genericErrorMessage);
             }
         }
     }

@@ -91,10 +91,10 @@ public class SocketClientConnection implements Runnable {
         System.out.println("Done!");
     }
 
-    public void asyncSend(final Object message){
+  /*  public void asyncSend(final Object message){
         new Thread(() -> send(message)).start();
     }
-
+*/
     /**
      * Asks for builder coordinates
      * @param choices list of previously chosen coordinates
