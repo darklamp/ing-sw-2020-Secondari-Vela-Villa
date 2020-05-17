@@ -56,7 +56,7 @@ public class LoginWindowController extends WindowController {
             textAreaMain.setText(s);
             new Thread(client).start();
             connected = true;
-        } else GUI.setOut(ipInput.getText());
+        } else GUIClient.setOut(ipInput.getText());
         // }
     }
 
@@ -80,7 +80,7 @@ public class LoginWindowController extends WindowController {
                 if (result.get() < 2 || result.get() > 3) {
                     result = dialog.showAndWait();
                 } else {
-                    GUI.setOut(String.valueOf(result.get()));
+                    GUIClient.setOut(String.valueOf(result.get()));
                     break;
                 }
             } else {
@@ -104,7 +104,7 @@ public class LoginWindowController extends WindowController {
                 if (!choices.contains(result.get())) {
                     result = dialog.showAndWait();
                 } else {
-                    GUI.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
                     break;
                 }
             } else {
@@ -122,7 +122,7 @@ public class LoginWindowController extends WindowController {
                 if (!choices.contains(result.get())) {
                     result = dialog.showAndWait();
                 } else {
-                    GUI.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
                     break;
                 }
             } else {
@@ -141,7 +141,7 @@ public class LoginWindowController extends WindowController {
                     if (!choices.contains(result.get())) {
                         result = dialog.showAndWait();
                     } else {
-                        GUI.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                        GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
                         break;
                     }
                 } else {
@@ -169,7 +169,7 @@ public class LoginWindowController extends WindowController {
                 if (!choices.contains(result.get())) {
                     result = dialog.showAndWait();
                 } else {
-                    GUI.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
                     break;
                 }
             } else {

@@ -8,6 +8,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -50,6 +51,12 @@ public class MainWindowController extends WindowController implements Initializa
 
     private static final DataFormat builder = new DataFormat("builder");
     private static final DataFormat building = new DataFormat("building");
+
+    private static ImageView selected = null;
+    /**
+     * keeps track of selected builder
+     **/
+
     private boolean initialized = false;
     private static Image builderImage1;
 
@@ -118,7 +125,7 @@ public class MainWindowController extends WindowController implements Initializa
         int i = getRow(g);
         int j = getColumn(g);
         System.out.println(i + "   " + j);
-        GUI.setOut(i + "," + j);
+        GUIClient.setOut(i + "," + j);
     }
 
     @Override
@@ -137,7 +144,7 @@ public class MainWindowController extends WindowController implements Initializa
         switch (s) {
             case MOVE -> s1.append("MOVE");
             case BUILD -> s1.append("BUILD");
-            case MOVEORBUILD -> s1.append("either MOVE or BUILD");
+            case MOVEORBUILD -> s1.append("either MOVE or BUILD"); //TODO prompt for choice (?)
             case WAIT -> s1.append("wait for your turn");
             case BUILDORPASS -> s1.append("either PASS or BUILD");
         }
@@ -146,15 +153,26 @@ public class MainWindowController extends WindowController implements Initializa
 
     @FXML
     void builderGrab(MouseEvent event) {
+        grabDetected(event, builder);
+    }
+
+
+    @FXML
+    void buildingGrab(MouseEvent event) {
+        grabDetected(event, building);
+    }
+
+    private void grabDetected(MouseEvent event, DataFormat type) {
         System.out.println("[DEBUG]" + new Throwable().getStackTrace()[0].getMethodName() + event.getSource() + " Entered drag");
+        GUIClient.getStage().getScene().setCursor(Cursor.HAND);
         ImageView i = (ImageView) event.getSource();
         Dragboard db = i.startDragAndDrop(TransferMode.ANY);
-        Image image = (GUI.getPlayerIndex() == 0 ? builderImage2 : (GUI.getPlayerIndex() == 1 ? builderImage1 : builderImage3)); //TODO capire perchè sono invertiti
+        Image image = (i.getImage());
         db.setDragView(image, 155, 155);
         ClipboardContent content = new ClipboardContent();
         int row = getRow(i.getParent());
         int col = getColumn(i.getParent());
-        content.put(builder, new Pair(row, col));
+        content.put(type, new Pair(row, col));
         db.setContent(content);
         event.consume();
     }
@@ -182,6 +200,7 @@ public class MainWindowController extends WindowController implements Initializa
     @FXML
     void dragReleased(DragEvent event) {
         System.out.println("[DEBUG]" + new Throwable().getStackTrace()[0].getMethodName() + event.getTarget() + " Targeted from drag");
+        GUIClient.getStage().getScene().setCursor(Cursor.DEFAULT);
         Dragboard db = event.getDragboard();
         boolean success = false;
         boolean isBuilding = false;
@@ -197,13 +216,13 @@ public class MainWindowController extends WindowController implements Initializa
             target = (StackPane) ((Button) event.getTarget()).getParent();
         } catch (ClassCastException e) { // should only happen when event.getTarget() is an ImageView and not a button, aka when there's a builder on the cell I'm trying to move to
             if (!(event.getTarget() instanceof ImageView i1)) {
-                setError("Invalid move!");
+                setError("Invalid move/build!");
                 event.consume();
                 return;
             } else {
                 if (!(Integer.parseInt(i1.getId()) / 2 == GUI.getPlayerIndex())) target = (StackPane) i1.getParent();
                 else {
-                    setError("Invalid move!");
+                    setError("Invalid move/build!");
                     event.consume();
                     return;
                 }
@@ -211,9 +230,20 @@ public class MainWindowController extends WindowController implements Initializa
         }
         int i = getRow(target);
         int j = getColumn(target);
-        ImageView source = (ImageView) ((StackPane) gridPaneMain.getChildren().get(pair.getFirst() * 5 + pair.getSecond())).getChildren().get(1);
-        switch (Client.getState()) {
-            case MOVE -> GUI.setOut(i + "," + j + "," + ((Integer.parseInt(source.getId()) % 2) + 1));
+        ImageView source;
+        if (!isBuilding)
+            source = (ImageView) ((StackPane) gridPaneMain.getChildren().get(pair.getFirst() * 5 + pair.getSecond())).getChildren().get(1);
+        else source = (ImageView) (buildingPartsPane.getChildren().get(pair.getFirst()));
+        switch (Client.getState()) { //TODO handle moveorbuild ,.. (?)
+            case MOVE -> GUIClient.setOut(i + "," + j + "," + ((Integer.parseInt(source.getId()) % 2) + 1));
+            case BUILD -> {
+                if (selected == null) {
+                    setError("Please click on the builder you want to use.");
+                    //TODO reiterate
+                }
+                int buildingType = pair.getFirst();
+                GUIClient.setOut(i + "," + j + "," + ((Integer.parseInt(selected.getId()) % 2) + 1) + "," + buildingType);
+            }
         }
         event.consume();
     }
@@ -240,6 +270,7 @@ public class MainWindowController extends WindowController implements Initializa
     @Override
     void updateTable(CellView[][] table) {
         int fb1 = 0, fb2 = 2, fb3 = 4;
+        selected = null;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 switch (table[i][j].getHeight()) {
@@ -281,6 +312,11 @@ public class MainWindowController extends WindowController implements Initializa
         ImageView b = new ImageView(image);
         b.setFitHeight(155);
         b.setFitWidth(155);
+        if (image == baseBuildingImage) {
+            b.setUserData("baseBuilding");
+        } else if (image == middleBuildingImage) {
+            b.setUserData("middleBuilding");
+        }//TODO aggiungere altri
         b.setScaleX(0.9);
         b.setScaleY(0.9);
         b.setOnMouseEntered(e -> {
@@ -296,7 +332,7 @@ public class MainWindowController extends WindowController implements Initializa
 
         buildingPartsPane.add(b, 0, i);
         b.toFront();
-        b.setOnDragDetected(this::builderGrab);
+        b.setOnDragDetected(this::buildingGrab);
     }
 
     private void addBuildingToCell(Image image, int row, int column) {
@@ -324,10 +360,14 @@ public class MainWindowController extends WindowController implements Initializa
             b.setId(String.valueOf(firstBuilder));
             b.setFitHeight(155);
             b.setFitWidth(155);
-            if (Client.getState() == MOVE && firstBuilder / (GUI.getPlayerIndex() + 1) == 1 || (GUI.getPlayerIndex() == 0 && firstBuilder == 1)) {
-                b.setOnDragDetected(this::builderGrab);
-                b.setOnMouseEntered(this::setHovered);
-                b.setOnMouseExited(this::unsetHovered);
+            if (firstBuilder / (GUI.getPlayerIndex() + 1) == 1 || (GUI.getPlayerIndex() == 0 && firstBuilder == 1)) {
+                if (Client.getState() == MOVE) {
+                    b.setOnDragDetected(this::builderGrab);
+                    b.setOnMouseEntered(this::setHovered);
+                    b.setOnMouseExited(this::unsetHovered);
+                } else if (Client.getState() == BUILD) {
+                    b.setOnMouseClicked(this::builderChosen);
+                }
             }
             b.setScaleX(1.65);
             b.setScaleY(1.65);
@@ -387,6 +427,23 @@ public class MainWindowController extends WindowController implements Initializa
         b.setScaleX(1.75);
         b.setScaleY(1.75);
         b.setScaleZ(1.75);
+    }
+
+    @FXML
+    void builderChosen(Event event) {
+        event.consume();
+        if (selected != null) {
+            selected.setEffect(null);
+            selected.setScaleX(1.75);
+            selected.setScaleY(1.75);
+            selected.setScaleZ(1.75);
+        }
+        ImageView b = (ImageView) event.getSource();
+        b.setEffect(new Glow(1.2));
+        b.setScaleX(1.85);
+        b.setScaleY(1.85);
+        b.setScaleZ(1.85);
+        selected = b;
     }
 
 
