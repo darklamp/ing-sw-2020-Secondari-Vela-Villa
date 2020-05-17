@@ -27,7 +27,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <StackPane fx:id="cell00" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                <StackPane fx:id="cell00" maxHeight="160.0" maxWidth="160.0" minHeight="160.0" minWidth="160.0"
+                           prefHeight="160.0" prefWidth="160.0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
                            GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
                 <StackPane fx:id="cell01" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
                            GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>

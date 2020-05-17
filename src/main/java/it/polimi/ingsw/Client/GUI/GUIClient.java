@@ -14,6 +14,10 @@ import java.beans.PropertyChangeSupport;
 public class GUIClient extends Application {
 
 
+    static GUI getGui() {
+        return gui;
+    }
+
     private static GUI gui = null;
 
     static WindowController getController() {

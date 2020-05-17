@@ -129,7 +129,7 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
     @Override
-    void setMove(ClientState s) {
+    synchronized void setMove(ClientState s) {
         StringBuilder s1 = new StringBuilder();
         if (!initialized) {
             for (Node n : gridPaneMain.getChildren()) {
@@ -168,7 +168,7 @@ public class MainWindowController extends WindowController implements Initializa
         ImageView i = (ImageView) event.getSource();
         Dragboard db = i.startDragAndDrop(TransferMode.ANY);
         Image image = (i.getImage());
-        db.setDragView(image, 155, 155);
+        db.setDragView(image, 50, 50);
         ClipboardContent content = new ClipboardContent();
         int row = getRow(i.getParent());
         int col = getColumn(i.getParent());
@@ -224,7 +224,8 @@ public class MainWindowController extends WindowController implements Initializa
                     return;
                 }
             } else {
-                if (!(Integer.parseInt(i1.getId()) / 2 == GUI.getPlayerIndex())) target = (StackPane) i1.getParent();
+                if (!(Integer.parseInt(i1.getId()) / 2 == GUIClient.getGui().getPlayerIndex()))
+                    target = (StackPane) i1.getParent();
                 else {
                     setError("Invalid move/build!");
                     event.consume();
@@ -273,11 +274,12 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
     @Override
-    void updateTable(CellView[][] table) {
-        int fb1 = 0, fb2 = 2, fb3 = 4;
+    synchronized void updateTable(CellView[][] table) {
         selected = null;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
+                StackPane s = (StackPane) (gridPaneMain.getChildren()).get(i * 5 + j);
+                if (s.getChildren().size() == 2) s.getChildren().remove(1);
                 switch (table[i][j].getHeight()) {
                     case NONE -> addBuildingToCell(null, i, j);
                     case BASE -> addBuildingToCell(baseBuildingImage, i, j);
@@ -286,18 +288,9 @@ public class MainWindowController extends WindowController implements Initializa
                     case DOME -> addBuildingToCell(middleBuildingImage, i, j); //TODO add image
                 }
                 switch (table[i][j].getPlayer()) {
-                    case 0 -> {
-                        addBuilderToCell(builderImage1, i, j, fb1);
-                        fb1 = 1;
-                    }
-                    case 1 -> {
-                        addBuilderToCell(builderImage2, i, j, fb2);
-                        fb2 = 3;
-                    }
-                    case 2 -> {
-                        addBuilderToCell(builderImage3, i, j, fb3);
-                        fb3 = 5;
-                    }
+                    case 0 -> addBuilderToCell(builderImage1, i, j, table[i][j].isFirst() ? 0 : 1);
+                    case 1 -> addBuilderToCell(builderImage2, i, j, table[i][j].isFirst() ? 2 : 3);
+                    case 2 -> addBuilderToCell(builderImage3, i, j, table[i][j].isFirst() ? 4 : 5);
                     case -1 -> addBuilderToCell(null, i, j, 0);
                 }
             }
@@ -320,17 +313,17 @@ public class MainWindowController extends WindowController implements Initializa
         } else if (image == middleBuildingImage) {
             b.setUserData("middleBuilding");
         }//TODO aggiungere altri
-        b.setScaleX(0.9);
-        b.setScaleY(0.9);
-        b.setOnMouseEntered(e -> {
-            b.setEffect(new Glow(1.3));
-            b.setScaleX(1.1);
-            b.setScaleY(1.1);
+        b.setScaleX(0.85);
+        b.setScaleY(0.85);
+        b.setOnMouseEntered(e -> b.setEffect(new Glow(1.3)));
+        b.setOnMouseClicked(e -> {
+            b.setScaleX(1);
+            b.setScaleY(1);
         });
         b.setOnMouseExited(e -> {
             b.setEffect(null);
-            b.setScaleX(0.9);
-            b.setScaleY(0.9);
+            b.setScaleX(0.85);
+            b.setScaleY(0.85);
         });
 
         buildingPartsPane.add(b, 0, i);
@@ -346,9 +339,9 @@ public class MainWindowController extends WindowController implements Initializa
             ImageView b = new ImageView(image);
             b.setFitHeight(155);
             b.setFitWidth(155);
-            b.setScaleX(0.9);
-            b.setScaleY(0.9);
-            b.setOpacity(0.8);
+            b.setScaleX(1);
+            b.setScaleY(1);
+            b.setOpacity(0.9);
             ((Button) ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().get(0)).setGraphic(b);
             b.toBack();
         }
@@ -363,7 +356,8 @@ public class MainWindowController extends WindowController implements Initializa
             b.setId(String.valueOf(firstBuilder));
             b.setFitHeight(155);
             b.setFitWidth(155);
-            if (2 * GUI.getPlayerIndex() == firstBuilder || 2 * GUI.getPlayerIndex() + 1 == firstBuilder) {
+            System.out.println("[DEBUG] PlayerIndex: " + GUIClient.getGui().getPlayerIndex());
+            if ((2 * GUIClient.getGui().getPlayerIndex()) == firstBuilder || (2 * GUIClient.getGui().getPlayerIndex() + 1) == firstBuilder) {
                 if (Client.getState() == MOVE) {
                     b.setOnDragDetected(this::builderGrab);
                     b.setOnMouseEntered(this::setHovered);
@@ -372,9 +366,9 @@ public class MainWindowController extends WindowController implements Initializa
                     b.setOnMouseClicked(this::builderChosen);
                 }
             }
-            b.setScaleX(1.65);
-            b.setScaleY(1.65);
-            b.setScaleZ(1.65);
+            b.setScaleX(1.6);
+            b.setScaleY(1.6);
+            b.setScaleZ(1.6);
             ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().add(b);
             b.toFront();
         }
@@ -416,10 +410,10 @@ public class MainWindowController extends WindowController implements Initializa
     void setHovered(Event event) {
         event.consume();
         ImageView b = (ImageView) event.getSource();
-        b.setEffect(new Glow(2.8));
-        b.setScaleX(1.85);
-        b.setScaleY(1.85);
-        b.setScaleZ(1.85);
+        b.setEffect(new Glow(2));
+        b.setScaleX(1.75);
+        b.setScaleY(1.75);
+        b.setScaleZ(1.75);
     }
 
     @FXML
@@ -427,9 +421,9 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
         ImageView b = (ImageView) event.getSource();
         b.setEffect(null);
-        b.setScaleX(1.75);
-        b.setScaleY(1.75);
-        b.setScaleZ(1.75);
+        b.setScaleX(1.6);
+        b.setScaleY(1.6);
+        b.setScaleZ(1.6);
     }
 
     @FXML
@@ -437,15 +431,15 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
         if (selected != null) {
             selected.setEffect(null);
-            selected.setScaleX(1.75);
-            selected.setScaleY(1.75);
-            selected.setScaleZ(1.75);
+            selected.setScaleX(1.6);
+            selected.setScaleY(1.6);
+            selected.setScaleZ(1.6);
         }
         ImageView b = (ImageView) event.getSource();
         b.setEffect(new Glow(1.2));
-        b.setScaleX(1.85);
-        b.setScaleY(1.85);
-        b.setScaleZ(1.85);
+        b.setScaleX(1.75);
+        b.setScaleY(1.75);
+        b.setScaleZ(1.75);
         selected = b;
     }
 
@@ -456,13 +450,11 @@ public class MainWindowController extends WindowController implements Initializa
         Button b = new Button();
         b.setAlignment(Pos.CENTER);
         b.setOnAction(this::buttonClicked);
-        b.setMaxHeight(155);
-        b.setMaxWidth(155);
         g.getChildren().add(b);
         b.setVisible(true);
         b.setGraphic(new ImageView(builderImage1));
-        ((ImageView) (b.getGraphic())).setFitWidth(155);
-        ((ImageView) (b.getGraphic())).setFitHeight(155);
+        ((ImageView) (b.getGraphic())).setFitWidth(160);
+        ((ImageView) (b.getGraphic())).setFitHeight(160);
         b.getGraphic().setVisible(false);
         b.toFront();
     }
