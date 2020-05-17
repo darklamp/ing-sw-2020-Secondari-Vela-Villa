@@ -20,7 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Box;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,13 +39,12 @@ public class MainWindowController extends WindowController implements Initializa
     @FXML
     GridPane gridPaneMain;
     @FXML
-    Box testBox1;
-    @FXML
     StackPane cell00, cell01, cell02, cell03, cell04, cell10, cell11, cell12, cell13;
     @FXML
     StackPane cell14, cell20, cell21, cell22, cell23, cell24, cell30, cell31, cell32;
     @FXML
     StackPane cell33, cell34, cell40, cell41, cell42, cell43, cell44;
+    private boolean hasMoved = false;
 
 
     private static final DataFormat builder = new DataFormat("builder");
@@ -339,8 +337,8 @@ public class MainWindowController extends WindowController implements Initializa
             ImageView b = new ImageView(image);
             b.setFitHeight(155);
             b.setFitWidth(155);
-            b.setScaleX(1);
-            b.setScaleY(1);
+            b.setScaleX(1.34);
+            b.setScaleY(1.34);
             b.setOpacity(0.9);
             ((Button) ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().get(0)).setGraphic(b);
             b.toBack();
@@ -357,7 +355,6 @@ public class MainWindowController extends WindowController implements Initializa
             b.setFitHeight(155);
             b.setFitWidth(155);
             System.out.println("[DEBUG] PlayerIndex: " + GUIClient.getGui().getPlayerIndex());
-            if ((2 * GUIClient.getGui().getPlayerIndex()) == firstBuilder || (2 * GUIClient.getGui().getPlayerIndex() + 1) == firstBuilder) {
                 if (Client.getState() == MOVE) {
                     b.setOnDragDetected(this::builderGrab);
                     b.setOnMouseEntered(this::setHovered);
@@ -365,12 +362,17 @@ public class MainWindowController extends WindowController implements Initializa
                 } else if (Client.getState() == BUILD) {
                     b.setOnMouseClicked(this::builderChosen);
                 }
-            }
             b.setScaleX(1.6);
             b.setScaleY(1.6);
             b.setScaleZ(1.6);
             ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().add(b);
             b.toFront();
+            if (!((2 * GUIClient.getGui().getPlayerIndex()) == firstBuilder || (2 * GUIClient.getGui().getPlayerIndex() + 1) == firstBuilder)) {
+                b.setOnDragDetected(null);
+                b.setOnMouseEntered(null);
+                b.setOnMouseExited(null);
+                b.setOnMouseClicked(null);
+            }
         }
 
     }
