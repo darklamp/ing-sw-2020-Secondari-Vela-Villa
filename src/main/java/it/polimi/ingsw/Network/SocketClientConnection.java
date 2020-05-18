@@ -29,6 +29,7 @@ public class SocketClientConnection implements Runnable {
     private News news;
     private Player player;
     private boolean ready = false;
+    private final static short moveTimer = 2;
 
     private boolean active = true;
 
@@ -253,27 +254,33 @@ public class SocketClientConnection implements Runnable {
                 }
             }
             while(isActive()){
-                if (ready && player.getState() != ClientState.WAIT){
+                if (ready && player.getState() != ClientState.WAIT) {
                     ExecutorService service = Executors.newSingleThreadExecutor();
-
-                    try {
-                        AtomicReference<String> read1 = new AtomicReference<>();
-                        Runnable r = () -> read1.set(in.nextLine());
-                        Future<?> f = service.submit(r);
-                        f.get(5, TimeUnit.MINUTES);
-                        setNews(new News(read1.toString(), this), "INPUT");
-                    } catch (final InterruptedException | ExecutionException | TimeoutException e) {
-                        throw new Exception();
-                    } finally {
-                        service.shutdown();
+                    while (true) {
+                        try {
+                            AtomicReference<String> read1 = new AtomicReference<>();
+                            Runnable r = () -> read1.set(in.nextLine());
+                            Future<?> f = service.submit(r);
+                            f.get(moveTimer, TimeUnit.MINUTES);
+                            setNews(new News(read1.toString(), this), "INPUT");
+                            break;
+                        } catch (final InterruptedException | ExecutionException ignored) {
+                            System.err.println("[ERROR] Thread interrupted / execution error in SocketClientConnection.");
+                        } catch (final TimeoutException e) {
+                            System.err.println("[FATAL] Player " + this.player.getNickname() + "has exceeded the " + moveTimer + " minutes timer. Closing game...");
+                            throw new Exception();
+                        } finally {
+                            service.shutdown();
+                        }
                     }
+
                 }
             }
         } catch (NoSuchElementException e) {
-            System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game... ");
+            System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game...");
             setNews(new News(null, this), "ABORT");
         } catch (Exception e) {
-            System.err.println("Unknown exception thrown in SocketClientConnection.");
+            System.err.println("Unknown exception thrown in SocketClientConnection. Closing game...");
             e.printStackTrace();
             setNews(new News(null, this), "ABORT");
         } finally {

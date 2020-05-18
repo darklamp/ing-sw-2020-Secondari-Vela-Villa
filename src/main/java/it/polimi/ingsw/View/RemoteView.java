@@ -160,8 +160,8 @@ public class RemoteView extends View {
                 case "YOURTURN" -> this.socketClientConnection.send(this.player.getState());
                 case "WIN" -> {
                     if (news.getSender() == this.socketClientConnection) {
-                        this.socketClientConnection.send(gameTable.getBoardCopy());
                         this.socketClientConnection.send(ClientState.WIN);
+                        this.socketClientConnection.send(gameTable.getBoardCopy());
                     }
                     else this.socketClientConnection.send(ClientState.LOSE);
                 }

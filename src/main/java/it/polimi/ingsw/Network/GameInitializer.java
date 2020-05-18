@@ -155,10 +155,10 @@ public class GameInitializer implements Runnable {
             if (c3 != null) {
                 c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + players.size());
             }
+            c2.setState(gameTable.getCurrentPlayer().getFirstState());
             c1.send(gameTable.getBoardCopy());
             c2.send(gameTable.getBoardCopy());
             if (c3 != null) c3.send(gameTable.getBoardCopy());
-            c2.setState(gameTable.getCurrentPlayer().getFirstState());
         }
         catch (Exception e){
             c1.closeConnection();
