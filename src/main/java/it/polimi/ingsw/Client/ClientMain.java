@@ -15,6 +15,7 @@ public class ClientMain {
     public static void main(String[] args){
         int port = 1337;
         boolean useCli = true;
+        boolean debug = false;
         String ip = null;
         for (String a : args) {
             if (a.toLowerCase().contains("cli")) {
@@ -41,9 +42,11 @@ public class ClientMain {
                     System.out.println("Invalid IP" + ip + "!");
                     System.exit(0);
                 }
+            } else if (a.toLowerCase().contains("v")) {
+                debug = true;
             }
         }
-        Client client = new Client(port);
+        Client client = new Client(port, debug);
         Ui ui;
         //Scanner stdin = new Scanner(System.in);
         System.out.println(Color.ANSI_BLUE);

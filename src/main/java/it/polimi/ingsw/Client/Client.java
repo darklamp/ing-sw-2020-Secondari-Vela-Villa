@@ -16,9 +16,12 @@ import java.util.Scanner;
 import static it.polimi.ingsw.Client.ClientState.*;
 
 public class Client implements Runnable {
-    public static void setIp(String ip) {
-        Client.ip = ip;
+
+    public static boolean verbose() {
+        return debug;
     }
+
+    private static boolean debug = false;
 
     public static String getIP() {
         return ip;
@@ -27,7 +30,7 @@ public class Client implements Runnable {
     private static String ip = "127.0.0.1";
     private static int port;
 
-    public static ClientState getState() {
+    public synchronized static ClientState getState() {
         return state;
     }
 
@@ -41,28 +44,33 @@ public class Client implements Runnable {
 
     private static Ui ui;
 
-    public Client(int port) {
+    private Client(int port) {
         Client.port = port;
     }
 
-    static void setUi(Ui ui){
+    public Client(int port, boolean debug) {
+        this(port);
+        Client.debug = debug;
+    }
+
+    static void setUi(Ui ui) {
         Client.ui = ui;
     }
 
     /**
      * Reads news from socket connection and calls Ui method on it
      */
-    public Thread asyncReadFromSocket(final ObjectInputStream socketIn){
+    public synchronized Thread asyncReadFromSocket(final ObjectInputStream socketIn) {
         Thread t = new Thread(() -> {
             try {
                 while (isActive()) {
                     Object inputObject = socketIn.readObject();
-                    if(inputObject instanceof String){
+                    if (inputObject instanceof String) {
                         if (inputObject.equals(ServerMessage.abortMessage)) {
                             System.exit(0);
                         }
                         ui.process((String) inputObject);
-                    } else if (inputObject instanceof CellView[][]){
+                    } else if (inputObject instanceof CellView[][]) {
                         ui.showTable((CellView[][])inputObject);
                     } else if (inputObject instanceof ClientState c){
                         state = c;
@@ -97,7 +105,7 @@ public class Client implements Runnable {
     /**
      * Ask for input -> verify it -> send it to server via socket
      */
-    public Thread asyncWriteToSocket(final Scanner stdin, final PrintWriter socketOut){
+    public synchronized Thread asyncWriteToSocket(final Scanner stdin, final PrintWriter socketOut) {
         Thread t = new Thread(() -> {
             try {
                 while (isActive()) {
@@ -136,7 +144,8 @@ public class Client implements Runnable {
                             try {
                                 String[] s = inputLine.split(",");
                                 socketOut.println("MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
-                                System.out.println("[DEBUG] SENT: " + "outMOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
+                                if (Client.verbose())
+                                    System.out.println("[DEBUG] SENT: " + "outMOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
                             } catch (Exception ignored) {
                             }
                         }
@@ -148,7 +157,7 @@ public class Client implements Runnable {
                                     out += "@@@";
                                     out += s[3];
                                 }
-                                System.out.println("[DEBUG] SENT: " + out);
+                                if (Client.verbose()) System.out.println("[DEBUG] SENT: " + out);
                                 socketOut.println(out);
                             } catch (Exception ignored) {
                             }

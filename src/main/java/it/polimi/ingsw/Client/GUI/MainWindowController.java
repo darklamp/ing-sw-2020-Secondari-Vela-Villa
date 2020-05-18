@@ -126,7 +126,7 @@ public class MainWindowController extends WindowController implements Initializa
 
     @Override
     void setMove(ClientState s) {
-        System.out.println("[DEBUG] Received new state: " + s.toString());
+        if (Client.verbose()) System.out.println("[DEBUG] Received new state: " + s.toString());
         StringBuilder s1 = new StringBuilder();
         if (!initialized) {
             for (Node n : gridPaneMain.getChildren()) {
@@ -160,9 +160,11 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
     private void grabDetected(MouseEvent event, DataFormat type) {
-        System.out.println("[DEBUG]" + new Throwable().getStackTrace()[0].getMethodName() + event.getSource() + " Entered drag");
+        if (Client.verbose())
+            System.out.println("[DEBUG]" + new Throwable().getStackTrace()[0].getMethodName() + event.getSource() + " Entered drag");
         ImageView i = (ImageView) event.getSource();
-        System.out.println("[DEBUG]" + i.getParent() + " Is parent of grabbed imageview; coords of ImageView are: " + getRow(i.getParent()) + "," + getColumn(i.getParent()));
+        if (Client.verbose())
+            System.out.println("[DEBUG]" + i.getParent() + " Is parent of grabbed imageview; coords of ImageView are: " + getRow(i.getParent()) + "," + getColumn(i.getParent()));
         Dragboard db = i.startDragAndDrop(TransferMode.ANY);
         Image image = (i.getImage());
         db.setDragView(image, 50, 50);
@@ -196,7 +198,8 @@ public class MainWindowController extends WindowController implements Initializa
 
     @FXML
     void dragReleased(DragEvent event) {
-        System.out.println("[DEBUG]" + new Throwable().getStackTrace()[0].getMethodName() + event.getTarget() + " Targeted from drag");
+        if (Client.verbose())
+            System.out.println("[DEBUG]" + new Throwable().getStackTrace()[0].getMethodName() + event.getTarget() + " Targeted from drag");
         Dragboard db = event.getDragboard();
         boolean success = false;
         boolean isBuilding = false;
@@ -271,7 +274,7 @@ public class MainWindowController extends WindowController implements Initializa
 
     @Override
     void updateTable(CellView[][] table) {
-        System.out.println("[DEBUG] Received new table.");
+        if (Client.verbose()) System.out.println("[DEBUG] Received new table.");
 
         selected = null;
         for (int i = 0; i < 5; i++) {

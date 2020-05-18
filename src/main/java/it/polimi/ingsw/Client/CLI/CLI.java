@@ -21,12 +21,16 @@ public class CLI implements Ui {
 
     @Override
     public void process(String input) {
-        if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
-            String[] inputs = input.split("@@@");
+        String[] inputs;
+        if (input != null) {
+            inputs = input.split("@@@");
+        } else return;
+        if (inputs[0].equals("[ERR]")) {
+            System.out.println(inputs[1]);
+        } else if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
             playerIndex = Integer.parseInt(inputs[1]);
             playersNumber = Integer.parseInt(inputs[2]);
         } else if (input.contains("[CHOICE]")) {
-            String[] inputs = input.split("@@@");
             if (inputs[1].equals("GODS")) {
                 playersNumber = Integer.parseInt(inputs[2]);
                 AtomicInteger counter = new AtomicInteger(0);
