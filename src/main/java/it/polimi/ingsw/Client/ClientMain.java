@@ -14,12 +14,12 @@ public class ClientMain {
 
     public static void main(String[] args){
         int port = 1337;
-        boolean useCli = true;
+        boolean useGui = true;
         boolean debug = false;
         String ip = null;
         for (String a : args) {
             if (a.toLowerCase().contains("cli")) {
-                if (!a.toLowerCase().contains("true")) useCli = false;
+                useGui = false;
             } else if (a.toLowerCase().contains("port")) {
                 try {
                     port = Integer.parseInt(a.split("=")[1]);
@@ -64,7 +64,7 @@ public class ClientMain {
 
         //System.out.println("Would you like to use a fancy GUI? (y/N)");
         // String choice = stdin.nextLine().toUpperCase();
-        if (!useCli) {
+        if (useGui) {
             GUI gui = new GUI();
             new Thread(gui).start();
             GUIClient.setGUI(gui);
