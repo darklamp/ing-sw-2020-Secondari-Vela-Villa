@@ -62,6 +62,8 @@ class MinotaurTest {
         Assertions.assertFalse(((Minotaur) b1).checkEmptyCellBehind(c1));
         Assertions.assertTrue(((Minotaur) b1).checkEmptyCellBehind(c3));
         Assertions.assertTrue(((Minotaur) b1).checkEmptyCellBehind(c5));
+        Builder b3 = new Atlas(c6, p2);
+        Assertions.assertFalse(((Minotaur) b1).checkEmptyCellBehind(c5));
 
 
     }
@@ -80,10 +82,12 @@ class MinotaurTest {
         Cell c6 = g.getCell(2, 0);
         Builder b1 = new Minotaur(c0, p1);
         Builder b2 = new Atlas(c2, p2);
-        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c1).getFirst(), 0);
-        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c1).getSecond(), 1);
-        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c3).getFirst(), -1);
-        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c3).getSecond(), 0);
+        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c1).getFirst(), 4);
+        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c1).getSecond(), 4);
+        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c3).getFirst(), 2);
+        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c3).getSecond(), 2);
+        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c5).getFirst(), 2);
+        Assertions.assertEquals(((Minotaur) b1).getCellBehind(c5).getSecond(), 0);
 
 
 
