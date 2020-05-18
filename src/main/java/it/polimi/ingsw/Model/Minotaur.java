@@ -39,7 +39,7 @@ public class Minotaur extends Builder{
      * @param finalPoint cell on which builder wants to position
      * @return true if the cell behind the occupied one is empty and valid; else false
      */
-    boolean checkEmptyCellBehind(Cell finalPoint) throws InvalidCoordinateException {
+    public boolean checkEmptyCellBehind(Cell finalPoint) throws InvalidCoordinateException {
         /* Warn : X is the row, so it really is Y, and viceversa */
             int diffY = finalPoint.getRow() - this.getPosition().getRow();
             int diffX = finalPoint.getColumn() - this.getPosition().getColumn();
@@ -76,7 +76,7 @@ public class Minotaur extends Builder{
             }
     }
 
-    Pair getCellBehind(Cell finalPoint){
+    public Pair getCellBehind(Cell finalPoint){
         int diffY = finalPoint.getRow() - this.getPosition().getRow();
         int diffX = finalPoint.getColumn() - this.getPosition().getColumn();
         if(diffY == 1) {
