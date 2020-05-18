@@ -123,6 +123,21 @@
                   <mainClass>it.polimi.ingsw.ServerMain</mainClass>
                 </transformer>
               </transformers>
+              <filters>
+                <filter>
+                  <artifact>*.*</artifact>
+                  <excludes>
+                    <exclude>Gimp/**</exclude>
+                    <exclude>images/**</exclude>
+                    <exclude>css/**</exclude>
+                    <exclude>*.fxml</exclude>
+                    <exclude>javafx/**/**</exclude>
+                    <exclude>**.so</exclude>
+                    <exclude>com/**/**</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <minimizeJar>true</minimizeJar>
               <finalName>server</finalName>
             </configuration>
           </execution>
@@ -133,24 +148,21 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <!-- <filters>
-                 <filter>
-                   <artifact>it.polimi.ingsw:GC46</artifact>
-                   <excludes>
-                     <exclude>it.polimi.ingsw.ServerMainverMain</exclude>
-                     <exclude>it.polimi.ingsw.View.View</exclude>
-                     <exclude>it.polimi.ingsw.View.RemoteView</exclude>
-                     <exclude>it.polimi.ingsw.Controller/**</exclude>
-                   </excludes>
-                 </filter>
-               </filters>-->
-              <minimizeJar>true</minimizeJar>
               <transformers>
                 <transformer
                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>it.polimi.ingsw.Client.ClientMain</mainClass>
                 </transformer>
               </transformers>
+              <filters>
+                <filter>
+                  <artifact>*.*</artifact>
+                  <excludes>
+                    <exclude>Gimp/**</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <minimizeJar>true</minimizeJar>
               <finalName>client</finalName>
             </configuration>
           </execution>
