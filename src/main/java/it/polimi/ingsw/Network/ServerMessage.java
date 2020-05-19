@@ -11,7 +11,7 @@ public final class ServerMessage implements Serializable {
     public static final String userAlreadyTaken = "Username already taken. Please enter a different one: ";
     public static final String firstPlayer = "Looks like you're the first player to connect. You get to decide the number of players.\n" +
             "Please input a natural lower than 4 and higher than 1: ";
-    public static String wrongNumber = "Wrong number. Please try again.";
+    public static String wrongNumber = "[ERROR]@@@Wrong number. Please try again.";
     public static String makeYourMove = "It's your turn. Please make a move: ";
     public static String notYourTurn = "[ERROR]@@@Wait for your turn you heathen";
     public static String invalidNews = "[ERROR]@@@Invalid move. Please try again.";
