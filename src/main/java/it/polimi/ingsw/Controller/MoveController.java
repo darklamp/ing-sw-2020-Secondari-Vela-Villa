@@ -18,6 +18,11 @@ public class MoveController {
         this.gameTable = gameTable;
     }
 
+    /**
+     * @param news contains the cell where the player wants to move.
+     * @throws WinnerException
+     * also catch gods' exceptions about moving powers
+     */
     void handleMove(News news) throws WinnerException {
         String moveResult = "MOVEKO";
         try{

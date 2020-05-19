@@ -13,6 +13,11 @@ public class BuildController {
 
     private final GameTable gameTable;
 
+    /**
+     * @param news contains the cell where the player wants to build
+     * @throws NoMoreMovesException see this exception in Model
+     * also catch gods' exceptions about building powers
+     */
     public void handleBuild(News news) throws NoMoreMovesException {
         String s = "BUILDKO";
         try{
@@ -42,6 +47,9 @@ public class BuildController {
         }
     }
 
+    /**
+     * Constructor for the BuildController.Takes gameTable as argument.
+     */
     public BuildController(GameTable gameTable){
         this.gameTable = gameTable;
     }

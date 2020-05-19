@@ -13,6 +13,10 @@ import it.polimi.ingsw.Network.SocketClientConnection;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Manage the news received.
+ */
+
 public class MainController implements PropertyChangeListener {
 
     private Player currentPlayer;
@@ -104,6 +108,12 @@ public class MainController implements PropertyChangeListener {
         return this.news;
     }
 
+    /**
+     * @param name Turn state from Server side
+     * @param turn Turn state from Client side
+     * Checks they are matching, otherwise
+     * @throws IllegalTurnStateException
+     */
     private static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
         switch (turn) {
             case BUILD:
@@ -126,6 +136,9 @@ public class MainController implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Constructor for the MainController.Takes gameTable as argument.
+     */
     public MainController(GameTable gameTable) {
         this.currentPlayer = null;
         this.news = null;
