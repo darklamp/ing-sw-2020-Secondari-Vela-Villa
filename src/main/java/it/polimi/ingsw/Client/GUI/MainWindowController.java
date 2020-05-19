@@ -20,9 +20,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -54,55 +51,13 @@ public class MainWindowController extends WindowController implements Initializa
      **/
 
     private boolean initialized = false;
-    private static Image builderImage1;
+    private static final Image builderImage1 = new Image("/images/builder1.png");
+    private static final Image builderImage2 = new Image("/images/builder2.png");
+    private static final Image builderImage3 = new Image("/images/builder3.png");
 
-    {
-        try {
-            builderImage1 = new Image(new FileInputStream(new File("./").getAbsolutePath().replace(".", "") + "src/main/resources/images/builder1.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private static Image builderImage2;
-
-    {
-        try {
-            builderImage2 = new Image(new FileInputStream(new File("./").getAbsolutePath().replace(".", "") + "src/main/resources/images/builder2.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static Image builderImage3;
-
-    {
-        try {
-            builderImage3 = new Image(new FileInputStream(new File("./").getAbsolutePath().replace(".", "") + "src/main/resources/images/builder3.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static Image baseBuildingImage;
-
-    {
-        try {
-            baseBuildingImage = new Image(new FileInputStream(new File("./").getAbsolutePath().replace(".", "") + "src/main/resources/images/buildingBase.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static Image middleBuildingImage;
-
-    {
-        try {
-            middleBuildingImage = new Image(new FileInputStream(new File("./").getAbsolutePath().replace(".", "") + "src/main/resources/images/buildingMiddle.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    private final static Image baseBuildingImage = new Image("/images/buildingBase.png");
+    private final static Image middleBuildingImage = new Image("/images/buildingMiddle.png");
 
 
     @Override
