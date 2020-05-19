@@ -110,7 +110,6 @@ public class SocketClientConnection implements Runnable {
             while(true) {
                 try {
                     String s = in.nextLine();
-                    s = s.replace("\n", "");
                     String[] inputs = s.split(",");
                     if (inputs.length != 2) throw new InputMismatchException();
                     r = Integer.parseInt(inputs[0]);
@@ -122,7 +121,7 @@ public class SocketClientConnection implements Runnable {
                         send(ServerMessage.wrongNumber);
                     }
                 }
-                catch (InputMismatchException e){
+                catch (InputMismatchException | NumberFormatException e) {
                     send(ServerMessage.wrongNumber);
                 }
             }
