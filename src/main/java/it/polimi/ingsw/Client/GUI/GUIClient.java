@@ -78,7 +78,7 @@ public class GUIClient extends Application {
             Platform.exit();
             System.exit(0);
         });
-        stage.setFullScreenExitHint("Please don't exit fullscreen it is not safe outside!");
+        stage.setFullScreenExitHint("Mmmmm fullscreen");
     }
 
 
