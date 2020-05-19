@@ -16,24 +16,14 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
     private static boolean isReady = false;
     private static LoginWindowController loginController;
     private static boolean guiInitialized = false;
-    private static int playerIndex = -1, playersNumber;
 
 
-    synchronized int getPlayerIndex() {
-        if (playerIndex == -1) {
-            while (true) {
-                try {
-                    wait();
-                    break;
-                } catch (InterruptedException ignored) {
-                }
-            }
-        }
-        return playerIndex;
+    synchronized static short getPlayerIndex() {
+        return (short) Client.getPlayerIndex();
     }
 
-    static int getPlayersNumber() {
-        return playersNumber;
+    static short getPlayersNumber() {
+        return (short) Client.getPlayersNumber();
     }
 
 
@@ -58,13 +48,12 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
             Platform.runLater(() -> GUIClient.getController().setError(inputs[1]));
         } else if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
             String[] inputs = input.split("@@@");
-            playerIndex = Integer.parseInt(inputs[1]);
-            notify();
-            playersNumber = Integer.parseInt(inputs[2]);
+            Client.setPlayerIndex((short) Integer.parseInt(inputs[1]));
+            Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
         } else if (input.contains("[CHOICE]")) {
             String[] inputs = input.split("@@@");
             if (inputs[1].equals("GODS")) {
-                playersNumber = Integer.parseInt(inputs[2]);
+                Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
                 Platform.runLater(() -> loginController.firstPlayerGods());
             } else if (input.contains("POS")) {
                 if (!guiInitialized) {

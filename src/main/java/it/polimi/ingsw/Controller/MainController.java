@@ -32,26 +32,27 @@ public class MainController implements PropertyChangeListener {
         Object obj = propertyChangeEvent.getNewValue();
         String name = propertyChangeEvent.getPropertyName();
         this.setNews((News) obj);
-        currentPlayer = gameTable.getCurrentPlayer();
-        if (!news.isValid()) gameTable.setNews(news, "INVALIDNEWS");
-        else if (currentPlayer != news.getSender().getPlayer()) gameTable.setNews(news, "NOTYOURTURN");
-        else if (name.equals("ABORT")){
-                News n = new News(null, gameTable.getPlayerConnections().get(0));
-                n.setRecipients(gameTable.getPlayerConnections());
-                gameTable.setNews(n,"ABORT");
-                gameTable.closeGame();
+        if (!news.isValid()) {
+            news.setRecipients(news.getSender().getPlayer());
+            gameTable.setNews(news, "INVALIDNEWS");
+            return;
         }
-        else {
+        currentPlayer = gameTable.getCurrentPlayer();
+        if (currentPlayer != news.getSender().getPlayer()) gameTable.setNews(news, "NOTYOURTURN");
+        else if (name.equals("ABORT")) {
+            News n = new News(null, gameTable.getPlayerConnections().get(0));
+            gameTable.setNews(n, "ABORT");
+            gameTable.closeGame();
+        } else {
             try {
                 if (name.equals("PLAYERTIMEOUT")) throw new NoMoreMovesException(news.getSender().getPlayer());
-                else switch (state){
+                else switch (state) {
                     case PLAY -> {
                         isLegalState(name,currentPlayer.getState());
                         switch (name) {
                             case "PASS" -> {
                                 gameTable.nextTurn();
                                 currentPlayer = gameTable.getCurrentPlayer();
-                                news.setRecipients(currentPlayer);
                                 gameTable.setNews(news, "PASSOK");
                             }
                             case "BUILD" -> buildController.handleBuild(news);
@@ -62,6 +63,7 @@ public class MainController implements PropertyChangeListener {
                 }
             }
             catch(IllegalTurnStateException e){ // player isn't in a legal state for the move
+                news.setRecipients(gameTable.getCurrentPlayer());
                 gameTable.setNews(news, "ILLEGALSTATE");
             }
             catch (WinnerException e){

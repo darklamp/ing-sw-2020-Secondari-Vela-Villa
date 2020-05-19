@@ -43,13 +43,7 @@ public class SocketClientConnection implements Runnable {
     }
 
     public void setReady(){
-        ClientState newState = ClientState.WAIT;
-        this.send(newState);
         this.ready = true;
-    }
-
-    public void setState(ClientState state){
-        this.send(state);
     }
 
     public void setPlayer(Player player) {
@@ -281,7 +275,6 @@ public class SocketClientConnection implements Runnable {
             setNews(new News(null, this), "ABORT");
         } catch (Exception e) {
             System.err.println("Unknown exception thrown in SocketClientConnection. Closing game...");
-            e.printStackTrace();
             setNews(new News(null, this), "ABORT");
         } finally {
             closeConnection();

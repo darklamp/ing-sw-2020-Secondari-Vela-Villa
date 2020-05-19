@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
+import it.polimi.ingsw.Network.GameStateMessage;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.View.CellView;
@@ -270,14 +271,21 @@ public class GameTable {
     /**
      * @param player player to be added
      */
-    protected void addPlayer(Player player){
+    protected void addPlayer(Player player) {
 
         players.add(player);
 
     }
 
-    static void setAthenaMove(boolean newValue){
+    static void setAthenaMove(boolean newValue) {
         athenaMove = newValue;
     }
-    static boolean getAthenaMove(){ return athenaMove; }
+
+    static boolean getAthenaMove() {
+        return athenaMove;
+    }
+
+    public GameStateMessage getGameState() {
+        return new GameStateMessage(players.get(0).getState(), players.get(1).getState(), playersNumber == 3 ? players.get(2).getState() : null);
+    }
 }

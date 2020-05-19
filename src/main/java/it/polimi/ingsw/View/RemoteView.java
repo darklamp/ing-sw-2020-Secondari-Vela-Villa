@@ -17,13 +17,21 @@ import java.util.List;
 
 public class RemoteView extends View {
 
+    /**
+     * Very basic count for error messages. Once a client reaches the threshold it gets kicked
+     **/
+    private int errorMessageCount = 0;
+    private static final int MAX_ERROR_MESSAGE_COUNT = 10000;
+
     private class MessageReceiver implements PropertyChangeListener {
 
         private News news;
 
-        private final List<String> validTypes = Arrays.asList("MOVE","BUILD","PASS");
+        private final List<String> validTypes = Arrays.asList("MOVE", "BUILD", "PASS");
 
-        /** receive message from SocketClientConnection -> parse -> forward to MainController **/
+        /**
+         * receive message from SocketClientConnection -> parse -> forward to MainController
+         **/
         @Override
         public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
             Object obj = propertyChangeEvent.getNewValue();
@@ -57,8 +65,7 @@ public class RemoteView extends View {
                 String[] args = s.split("@@@");
                 if (args[0] == null || !validTypes.contains(args[0])) {
                     news.setInvalid();
-                }
-                else{
+                } else{
                     switch (args[0]){
                         case "PASS" -> setControllerNews(news, "PASS");
                         case "MOVE" -> {
@@ -69,18 +76,17 @@ public class RemoteView extends View {
                                 try{
                                     i = Integer.parseInt(args[1]);
                                     if (i < 5 && i >= 0){
-                                            j = Integer.parseInt(args[2]);
-                                            if (j < 5 && j >= 0){
-                                                k = Integer.parseInt(args[3]);
-                                                if (k == 2 || k == 1){
-                                                    news.setCoords(i,j,k-1);
-                                                    setControllerNews(news, "MOVE");
-                                                    break;
-                                                }
+                                        j = Integer.parseInt(args[2]);
+                                        if (j < 5 && j >= 0){
+                                            k = Integer.parseInt(args[3]);
+                                            if (k == 2 || k == 1){
+                                                news.setCoords(i,j,k-1);
+                                                setControllerNews(news, "MOVE");
+                                                break;
                                             }
+                                        }
                                     }
-                                }
-                                catch (NumberFormatException e){
+                                } catch (NumberFormatException e){
                                     news.setInvalid();
                                 }
                             }
@@ -102,15 +108,13 @@ public class RemoteView extends View {
                                                     int h = Integer.parseInt(args[4]);
                                                     if (h < 0 || h > 3) throw new NumberFormatException();
                                                     else news.setCoords(i,j,k-1,h);
-                                                }
-                                                else news.setCoords(i,j,k-1);
+                                                } else news.setCoords(i,j,k-1);
                                                 setControllerNews(news, "BUILD");
                                                 break;
                                             }
                                         }
                                     }
-                                }
-                                catch (NumberFormatException e){
+                                } catch (NumberFormatException e) {
                                     news.setInvalid();
                                 }
                             }
@@ -119,6 +123,7 @@ public class RemoteView extends View {
                     }
                 }
             }
+            if (!news.isValid()) setControllerNews(news, "INVALID");
         }
 
         private void setNews(News news){
@@ -142,7 +147,8 @@ public class RemoteView extends View {
         socketClientConnection.send(message);
     }
 
-    /** this method gets called when the model sends a news; its purpose is to update the view.
+    /**
+     * this method gets called when the model sends a news; its purpose is to update the view.
      **/
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
@@ -152,21 +158,25 @@ public class RemoteView extends View {
         if (c == null || c.contains(this.socketClientConnection)) {
             switch (name) {
                 case "NOTYOURTURN" -> this.socketClientConnection.send(ServerMessage.notYourTurn);
-                case "ILLEGALSTATE", "INVALIDNEWS", "MOVEKO" -> this.socketClientConnection.send(ServerMessage.invalidMove);
+                case "ILLEGALSTATE", "INVALIDNEWS", "MOVEKO", "BUILDKO" -> this.socketClientConnection.send(ServerMessage.invalidNews);
                 case "MOVEOK", "BUILDOK", "PASSOK" -> {
-                    this.socketClientConnection.send(this.player.getState());
+                    //  this.socketClientConnection.send(this.player.get());
+                    this.socketClientConnection.send(gameTable.getGameState());
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                 }
-                case "YOURTURN" -> this.socketClientConnection.send(this.player.getState());
+                case "TURN" -> this.socketClientConnection.send(gameTable.getGameState());
                 case "WIN" -> {
                     if (news.getSender() == this.socketClientConnection) {
                         this.socketClientConnection.send(ClientState.WIN);
                         this.socketClientConnection.send(gameTable.getBoardCopy());
-                    }
-                    else this.socketClientConnection.send(ClientState.LOSE);
+                    } else this.socketClientConnection.send(ClientState.LOSE);
                 }
                 case "ABORT" -> this.socketClientConnection.send(ServerMessage.abortMessage);
-                default -> this.socketClientConnection.send(ServerMessage.genericErrorMessage);
+                default -> {
+                    this.socketClientConnection.send(ServerMessage.genericErrorMessage);
+                    if (errorMessageCount > MAX_ERROR_MESSAGE_COUNT) this.socketClientConnection.closeConnection();
+                    else errorMessageCount += 1;
+                }
             }
         }
     }

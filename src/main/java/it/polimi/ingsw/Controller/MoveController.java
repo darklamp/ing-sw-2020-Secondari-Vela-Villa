@@ -47,22 +47,22 @@ public class MoveController {
             moveResult = "MOVEOK";
         }
         catch (MinotaurException e){
-            Cell cellBehind, cellOnWhichMinotaurIsToBeMoved;
+            Cell cellBehind = null, cellOnWhichMinotaurIsToBeMoved;
+            news.getBuilder(gameTable).getPosition().setBuilder(null);
             try {
-                news.getBuilder(gameTable).getPosition().setBuilder(null);
-                cellBehind = gameTable.getCell(e.getPair().getFirst(),e.getPair().getSecond());
-                cellOnWhichMinotaurIsToBeMoved = news.getCell(gameTable);
-                cellOnWhichMinotaurIsToBeMoved.getBuilder().forceMove(cellBehind);
-                news.getBuilder(gameTable).forceMove(cellOnWhichMinotaurIsToBeMoved);
-                if (news.getBuilder(gameTable).isWinner()) throw new WinnerException(gameTable.getCurrentPlayer());
-                gameTable.getCurrentPlayer().setState(BUILD);
-                gameTable.setCurrentBuilder(news.getBuilder(gameTable));
-                moveResult = "MOVEOK";
-            } catch (Exception ee) {
-                moveResult = "MOVEKO";
+                cellBehind = gameTable.getCell(e.getPair().getFirst(), e.getPair().getSecond());
+            } catch (InvalidCoordinateException ignored) {
             }
+            cellOnWhichMinotaurIsToBeMoved = news.getCell(gameTable);
+            cellOnWhichMinotaurIsToBeMoved.getBuilder().forceMove(cellBehind);
+            news.getBuilder(gameTable).forceMove(cellOnWhichMinotaurIsToBeMoved);
+            if (news.getBuilder(gameTable).isWinner()) throw new WinnerException(gameTable.getCurrentPlayer());
+            gameTable.getCurrentPlayer().setState(BUILD);
+            gameTable.setCurrentBuilder(news.getBuilder(gameTable));
+            moveResult = "MOVEOK";
         }
         finally {
+            if (moveResult.equals("MOVEKO")) news.setRecipients(news.getSender().getPlayer());
             gameTable.setNews(news,moveResult);
         }
 

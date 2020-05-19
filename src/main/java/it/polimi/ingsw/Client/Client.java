@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Network.GameStateMessage;
 import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
@@ -23,6 +24,24 @@ public class Client implements Runnable {
     }
 
     private static boolean debug = false;
+
+    public static int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public static void setPlayerIndex(short playerIndex) {
+        Client.playerIndex = playerIndex;
+    }
+
+    public static int getPlayersNumber() {
+        return playersNumber;
+    }
+
+    public static void setPlayersNumber(short playersNumber) {
+        Client.playersNumber = playersNumber;
+    }
+
+    private static short playerIndex, playersNumber;
 
     public static InetAddress getIP() {
         return ip;
@@ -67,21 +86,22 @@ public class Client implements Runnable {
             try {
                 while (isActive()) {
                     Object inputObject = socketIn.readObject();
+                    if (verbose()) System.out.println("[DEBUG] Recv input: " + inputObject.getClass());
                     if (inputObject instanceof String) {
                         if (inputObject.equals(ServerMessage.abortMessage)) {
+                            ui.process("[ERROR]@@@Game aborted. Someone probably disconnected or timer ran out.");
                             System.exit(0);
                         }
                         ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {
-                        ui.showTable((CellView[][])inputObject);
-                    } else if (inputObject instanceof ClientState c){
-                        state = c;
-                        ui.processTurnChange(c);
-                        if (c == ClientState.WIN || c == ClientState.LOSE){
+                        ui.showTable((CellView[][]) inputObject);
+                    } else if (inputObject instanceof GameStateMessage c) {
+                        state = parse(c);
+                        ui.processTurnChange(state);
+                        if (state == ClientState.WIN || state == ClientState.LOSE) {
                             System.exit(0);
                         }
-                    }
-                    else {
+                    } else {
                         throw new IllegalArgumentException();
                     }
                 }
@@ -147,7 +167,7 @@ public class Client implements Runnable {
                                 String[] s = inputLine.split(",");
                                 socketOut.println("MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
                                 if (Client.verbose())
-                                    System.out.println("[DEBUG] SENT: " + "outMOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
+                                    System.out.println("[DEBUG] SENT: " + "MOVE" + "@@@" + s[0] + "@@@" + s[1] + "@@@" + s[2]);
                             } catch (Exception ignored) {
                             }
                         }
@@ -196,16 +216,17 @@ public class Client implements Runnable {
                 socketOut.close();
                 socket.close();
             }
-        }
-        catch (ConnectException ee){
+        } catch (ConnectException ee) {
             if (ee.getMessage().contains("Connection refused")) {
                 System.out.println(Color.ANSI_RED + "[CRITICAL] Connection refused. Server probably down or full." + Color.RESET);
-            }
-            else  ee.getMessage();
-        }
-        catch (Exception e){
+            } else ee.getMessage();
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private ClientState parse(GameStateMessage s) {
+        return s.get(playerIndex);
     }
 
 }

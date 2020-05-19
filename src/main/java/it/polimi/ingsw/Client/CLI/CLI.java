@@ -12,8 +12,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CLI implements Ui {
 
-    private int playerIndex, playersNumber;
-
     @Override
     public String nextLine(Scanner in) {
         return in.nextLine();
@@ -25,14 +23,14 @@ public class CLI implements Ui {
         if (input != null) {
             inputs = input.split("@@@");
         } else return;
-        if (inputs[0].equals("[ERR]")) {
-            System.out.println(inputs[1]);
+        if (inputs[0].equals("[ERROR]")) {
+            System.err.println(inputs[1]);
         } else if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
-            playerIndex = Integer.parseInt(inputs[1]);
-            playersNumber = Integer.parseInt(inputs[2]);
+            Client.setPlayerIndex((short) Integer.parseInt(inputs[1]));
+            Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
         } else if (input.contains("[CHOICE]")) {
             if (inputs[1].equals("GODS")) {
-                playersNumber = Integer.parseInt(inputs[2]);
+                Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
                 AtomicInteger counter = new AtomicInteger(0);
                 Client.completeGodList.forEach(name -> System.out.println(counter.getAndIncrement() + ") " + name));
                 System.out.println(ServerMessage.nextChoice);
@@ -91,11 +89,15 @@ public class CLI implements Ui {
                 dice.setColor(color);
                 dice.Stamp();
 
-                if (c == 4){
-                    if (r == 0) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 0 ? "  YOU" : (playersNumber == 3 ? "  P3 " : "  P2 ")) + Color.ANSI_BLUE + "    █ 1 █ " + Color.ANSI_YELLOW +"█ 2 █" + Color.RESET);
-                    else if (r == 1) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 1 ? "  YOU" : "  P1 ") + Color.ANSI_RED + "    █ 1 █ " + Color.ANSI_CYAN +"█ 2 █" + Color.RESET);
-                    else if (r == 2 && playersNumber == 3) System.out.print(Color.RESET + Color.BOLD + (playerIndex == 2 ? "  YOU" : "  P2 ") + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE +"█ 2 █" + Color.RESET);
-                    else if (r == 3) System.out.print(Color.RESET + Color.BOLD + Color.ANSI_WHITE+ "  ███  NO PLAYER     ███" + Color.RESET);
+                if (c == 4) {
+                    if (r == 0)
+                        System.out.print(Color.RESET + Color.BOLD + (Client.getPlayerIndex() == 0 ? "  YOU" : (Client.getPlayersNumber() == 3 ? "  P3 " : "  P2 ")) + Color.ANSI_BLUE + "    █ 1 █ " + Color.ANSI_YELLOW + "█ 2 █" + Color.RESET);
+                    else if (r == 1)
+                        System.out.print(Color.RESET + Color.BOLD + (Client.getPlayerIndex() == 1 ? "  YOU" : "  P1 ") + Color.ANSI_RED + "    █ 1 █ " + Color.ANSI_CYAN + "█ 2 █" + Color.RESET);
+                    else if (r == 2 && Client.getPlayersNumber() == 3)
+                        System.out.print(Color.RESET + Color.BOLD + (Client.getPlayerIndex() == 2 ? "  YOU" : "  P2 ") + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE + "█ 2 █" + Color.RESET);
+                    else if (r == 3)
+                        System.out.print(Color.RESET + Color.BOLD + Color.ANSI_WHITE + "  ███  NO PLAYER     ███" + Color.RESET);
                 }
 
             }

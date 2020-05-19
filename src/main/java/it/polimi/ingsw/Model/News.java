@@ -13,8 +13,6 @@ public class News {
 
     public News() {
         this.height = null;
-        this.builder = null;
-        this.cell = null;
     }
 
     private News(String string) {
@@ -25,8 +23,7 @@ public class News {
     public News(String string, SocketClientConnection sender) {
         this(string);
         this.sender = sender;
-        this.recipients = new ArrayList<>();
-        this.recipients.add(sender);
+        this.recipients = null;
     }
 
     public void setRecipients(ArrayList<SocketClientConnection> list){
@@ -42,8 +39,6 @@ public class News {
     }
 
     private BuildingType height;
-
-    private final Cell cell;
 
     public Pair getCoords() {
         return coords;
@@ -92,8 +87,6 @@ public class News {
     }
 
     private boolean isValid = true;
-
-    private final Builder builder;
 
     public String getString(){ return string; }
 
