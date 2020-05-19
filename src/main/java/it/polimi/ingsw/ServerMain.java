@@ -2,16 +2,28 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.Network.Server;
 
-import java.io.IOException;
-
 public class ServerMain {
     public static void main(String[] args) {
         Server server;
-        try {
-            server = new Server();
-            server.run();
-        } catch (IOException e) {
-            System.err.println("Server init failed: " + e.getMessage() + "!");
+        int port = 1337;
+        String ip = "localhost";
+        String[] a;
+        for (String s : args) {
+            if (s.contains("ip")) {
+                a = s.split("=");
+                ip = a[1];
+            } else if (s.contains("port")) {
+                a = s.split("=");
+                try {
+                    port = Integer.parseInt(a[1]);
+                    if (port < 0 || port > 65535) throw new NumberFormatException();
+                } catch (NumberFormatException e) {
+                    System.err.println("[CRITICAL] Invalid port supplied.");
+                    System.exit(0);
+                }
+            }
         }
+        server = new Server(port, ip);
+        server.run();
     }
 }

@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,8 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-    private static final int PORT = 1337;
-    private final ServerSocket serverSocket;
+    private ServerSocket serverSocket;
     private final ExecutorService executor = Executors.newFixedThreadPool(128); /** Thread pool creator **/
     private static final Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>(); /** contains player connections waiting to be matchmade **/
     private static final Map<Integer, ArrayList<SocketClientConnection>> gameList = new LinkedHashMap<>(); /** Integer contains the game index, ArrayList contains client connections for the respective game **/
@@ -96,8 +96,7 @@ public class Server {
      }
      catch (NickAlreadyTakenException e){
          throw new NickAlreadyTakenException();
-     }
-     catch (Exception e){
+     } catch (Exception e) {
          waitingConnection.clear();
          if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();
          if (gameProperties.size() > 0) gameProperties.get(getCurrentGameIndex()).clear();
@@ -106,14 +105,23 @@ public class Server {
 
     }
 
-
     public Server() throws IOException {
-        this.serverSocket = new ServerSocket(PORT);
     }
 
-    public void run(){
+    ; /* kept for test compatibility */
+
+    public Server(int port, String ip) {
+        try {
+            this.serverSocket = new ServerSocket(port, 1, InetAddress.getByName(ip));
+        } catch (Exception e) {
+            System.err.println("[CRITICAL] Invalid IP address supplied. Please use a valid ipv4/ipv6 address.");
+            System.exit(0);
+        }
+    }
+
+    public void run() {
         //noinspection InfiniteLoopStatement
-        while(true){
+        while (true) {
             try {
                 Socket newSocket = serverSocket.accept();
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
@@ -122,10 +130,6 @@ public class Server {
                 System.out.println("Connection Error!");
             }
         }
-    }
-
-    synchronized void clearWaiting(){
-        waitingConnection.clear();
     }
 
 }
