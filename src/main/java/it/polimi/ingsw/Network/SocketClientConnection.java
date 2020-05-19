@@ -265,7 +265,7 @@ public class SocketClientConnection implements Runnable {
                             setNews(new News(read1.toString(), this), "INPUT");
                             break;
                         } catch (final InterruptedException | ExecutionException ignored) {
-                            System.err.println("[ERROR] Thread interrupted / execution error in SocketClientConnection.");
+                            System.err.println("[INFO] Thread interrupted / execution error in SocketClientConnection.");
                         } catch (final TimeoutException e) {
                             System.err.println("[FATAL] Player " + this.player.getNickname() + "has exceeded the " + moveTimer + " minutes timer. Closing game...");
                             throw new Exception();
