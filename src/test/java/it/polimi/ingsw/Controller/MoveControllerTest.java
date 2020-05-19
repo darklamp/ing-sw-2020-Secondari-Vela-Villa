@@ -6,9 +6,12 @@ import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Network.Server;
+import it.polimi.ingsw.Network.SocketClientConnection;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -20,16 +23,19 @@ class MoveControllerTest {
         Field a = GameTable.class.getDeclaredField("news");
         a.setAccessible(true);
         GameTable gameTable = new GameTable(2);
-        News news = new News();
-        news.setCoords(4, 4, 0);
-        a.set(gameTable, news);
+
         ArrayList<Integer> choices = new ArrayList<>();
         choices.add(1);
         choices.add(2);
-        Player player1 = new Player("gigi", gameTable, null);
+        Player player1 = new Player("gigi", gameTable, new SocketClientConnection(new Socket(), new Server()));
         Player player2 = new Player("gigi2", gameTable, null);
         player1.setGod(choices.get(0));
         player2.setGod(choices.get(1));
+        Field d = Player.class.getDeclaredField("connection");
+        d.setAccessible(true);
+        News news = new News("ASD", (SocketClientConnection) d.get(player1));
+        news.setCoords(4, 4, 0);
+        a.set(gameTable, news);
         try {
             player1.initBuilderList(gameTable.getCell(2, 2));
             player1.initBuilderList(gameTable.getCell(2, 3));

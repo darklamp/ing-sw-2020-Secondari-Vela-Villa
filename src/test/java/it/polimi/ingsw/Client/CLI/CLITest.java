@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.CLI;
 
+import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.View.CellView;
@@ -62,16 +63,16 @@ class CLITest {
         assertEquals(baos.toString(), "[asdasda//111\\\41q1q7INITs]\n");
 
         /* test INIT string */
-        Field b = CLI.class.getDeclaredField("playerIndex");
+        Field b = Client.class.getDeclaredField("playerIndex");
         b.setAccessible(true);
-        Field c = CLI.class.getDeclaredField("playersNumber");
+        Field c = Client.class.getDeclaredField("playersNumber");
         c.setAccessible(true);
         System.setOut(ps);
         a.invoke(cli, "[INIT]@@@2@@@3");
         System.out.flush();
         System.setOut(old);
-        assertEquals(2, b.get(cli));
-        assertEquals(3, c.get(cli));
+        assertEquals((short) 2, b.get(cli));
+        assertEquals((short) 3, c.get(cli));
 
     }
 

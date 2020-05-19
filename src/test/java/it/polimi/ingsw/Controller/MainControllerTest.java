@@ -31,8 +31,6 @@ class MainControllerTest {
         b.setAccessible(true);
         GameTable gameTable = new GameTable(2);
         MainController controller = new MainController(gameTable);
-        News news = new News();
-        news.setInvalid();
         ArrayList<Integer> choices = new ArrayList<>();
         choices.add(1);
         choices.add(2);
@@ -62,10 +60,12 @@ class MainControllerTest {
         players.add(player2);
         gameTable.setPlayers(players);
         gameTable.setGods(choices);
+        News news = new News("ASD", c1);
+        news.setInvalid();
 
-        controller.propertyChange(new PropertyChangeEvent(new Object(),"ciao",null,news));
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "ciao", null, news));
         News news2 = (News) a.get(gameTable);
-        Assertions.assertEquals(news2.isValid(),false);
+        Assertions.assertFalse(news2.isValid());
         String stringa = (String) b.get(gameTable);
         Assertions.assertEquals(stringa, "INVALIDNEWS");
         News news4 = new News("asd", c2);
