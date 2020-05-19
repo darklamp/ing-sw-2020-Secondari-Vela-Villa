@@ -41,6 +41,8 @@ public class MainWindowController extends WindowController implements Initializa
     StackPane cell14, cell20, cell21, cell22, cell23, cell24, cell30, cell31, cell32;
     @FXML
     StackPane cell33, cell34, cell40, cell41, cell42, cell43, cell44;
+    @FXML
+    StackPane parts0, parts1, parts2, parts3;
 
 
     private static final DataFormat builder = new DataFormat("builder");
@@ -59,6 +61,8 @@ public class MainWindowController extends WindowController implements Initializa
 
     private final static Image baseBuildingImage = new Image("/images/buildingBase.png");
     private final static Image middleBuildingImage = new Image("/images/buildingMiddle.png");
+    private final static Image topBuildingImage = new Image("/images/buildingTop.png");
+    private final static Image domeBuildingImage = new Image("/images/buildingDome.png");
 
 
     @Override
@@ -88,9 +92,6 @@ public class MainWindowController extends WindowController implements Initializa
             for (Node n : gridPaneMain.getChildren()) {
                 ((Button) ((StackPane) n).getChildren().get(0)).setOnAction(null);
             }
-         /*   if (GUI.getPlayersNumber() == 2) {
-
-            }*/ //TODO ??
             initialized = true;
         }
         s1.append("You have to: ");
@@ -168,7 +169,7 @@ public class MainWindowController extends WindowController implements Initializa
         Pair pair = (Pair) db.getContent(isBuilding ? building : builder);
         StackPane target;
         try {
-            target = (StackPane) ((Button) event.getTarget()).getParent(); //TODO handle case where target is stackpane !!
+            target = (StackPane) ((Button) event.getTarget()).getParent();
         } catch (ClassCastException e) { // should only happen when event.getTarget() is an ImageView and not a button, aka when there's a builder on the cell I'm trying to move to
             if (!(event.getTarget() instanceof ImageView i1)) {
                 if ((event.getTarget() instanceof StackPane)) {
@@ -179,7 +180,7 @@ public class MainWindowController extends WindowController implements Initializa
                     return;
                 }
             } else {
-                if (!(Integer.parseInt(i1.getId()) / 2 == GUIClient.getGui().getPlayerIndex()))
+                if (!(Integer.parseInt(i1.getId()) / 2 == GUI.getPlayerIndex()))
                     target = (StackPane) i1.getParent();
                 else {
                     setError("Invalid move/build!");
@@ -193,7 +194,13 @@ public class MainWindowController extends WindowController implements Initializa
         ImageView source;
         if (!isBuilding)
             source = (ImageView) ((StackPane) gridPaneMain.getChildren().get(pair.getFirst() * 5 + pair.getSecond())).getChildren().get(1);
-        else source = (ImageView) (buildingPartsPane.getChildren().get(pair.getFirst()));
+        else {
+            try {
+                source = (ImageView) (buildingPartsPane.getChildren().get(pair.getFirst()));
+            } catch (ClassCastException e) {
+                source = (ImageView) ((StackPane) (buildingPartsPane.getChildren().get(pair.getFirst()))).getChildren().get(0);
+            }
+        }
         switch (Client.getState()) { //TODO handle moveorbuild ,.. (?)
             case MOVE -> GUIClient.setOut(i + "," + j + "," + ((Integer.parseInt(source.getId()) % 2) + 1));
             case BUILD -> {
@@ -245,8 +252,8 @@ public class MainWindowController extends WindowController implements Initializa
                     case NONE -> addBuildingToCell(null, i, j);
                     case BASE -> addBuildingToCell(baseBuildingImage, i, j);
                     case MIDDLE -> addBuildingToCell(middleBuildingImage, i, j);
-                    case TOP -> addBuildingToCell(middleBuildingImage, i, j);  //TODO add image
-                    case DOME -> addBuildingToCell(middleBuildingImage, i, j); //TODO add image
+                    case TOP -> addBuildingToCell(topBuildingImage, i, j);
+                    case DOME -> addBuildingToCell(domeBuildingImage, i, j);
                 }
                 switch (table[i][j].getPlayer()) {
                     case 0 -> addBuilderToCell(builderImage1, i, j, table[i][j].isFirst() ? 0 : 1);
@@ -259,9 +266,16 @@ public class MainWindowController extends WindowController implements Initializa
         if (Client.getState() == BUILD) {
             addAvailablePart(baseBuildingImage, 0);
             addAvailablePart(middleBuildingImage, 1);
-            addAvailablePart(baseBuildingImage, 2); //TODO cambiare immagine
+            addAvailablePart(topBuildingImage, 2);
+            addAvailablePart(domeBuildingImage, 3);
         } else {
-            buildingPartsPane.getChildren().clear();
+            for (Node n : buildingPartsPane.getChildren()) {
+                StackPane s = (StackPane) n;
+                for (Node n1 : s.getChildren()) {
+                    s.getChildren().remove(n1);
+                }
+            }
+            for (int i = 0; i < 4; i++) ((StackPane) (buildingPartsPane.getChildren().get(i))).getChildren().remove(0);
         }
     }
 
@@ -273,7 +287,11 @@ public class MainWindowController extends WindowController implements Initializa
             b.setUserData("baseBuilding");
         } else if (image == middleBuildingImage) {
             b.setUserData("middleBuilding");
-        }//TODO aggiungere altri
+        } else if (image == topBuildingImage) {
+            b.setUserData("topBuilding");
+        } else {
+            b.setUserData("domeBuilding");
+        }
         b.setScaleX(0.85);
         b.setScaleY(0.85);
         b.setOnMouseEntered(e -> b.setEffect(new Glow(1.3)));
@@ -287,7 +305,15 @@ public class MainWindowController extends WindowController implements Initializa
             b.setScaleY(0.85);
         });
 
-        buildingPartsPane.add(b, 0, i);
+        StackPane s = switch (i) {
+            case 0 -> parts0;
+            case 1 -> parts1;
+            case 2 -> parts2;
+            case 3 -> parts3;
+            default -> throw new IllegalStateException("Unexpected value: " + i);
+        };
+        if (Client.verbose()) System.out.println("[DEBUG] " + s.getId());
+        s.getChildren().add(b);
         b.toFront();
         b.setOnDragDetected(this::buildingGrab);
     }
@@ -329,7 +355,7 @@ public class MainWindowController extends WindowController implements Initializa
             b.setScaleZ(1.6);
             ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().add(b);
             b.toFront();
-            if (!((2 * GUIClient.getGui().getPlayerIndex()) == firstBuilder || (2 * GUIClient.getGui().getPlayerIndex() + 1) == firstBuilder)) {
+            if (!((2 * GUI.getPlayerIndex()) == firstBuilder || (2 * GUI.getPlayerIndex() + 1) == firstBuilder)) {
                 b.setOnDragDetected(null);
                 b.setOnMouseEntered(null);
                 b.setOnMouseExited(null);
@@ -408,7 +434,7 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
 
-    void initStackPane(StackPane g) {
+    private void initStackPane(StackPane g) {
         g.setOnDragOver(this::dragOver);
         g.setOnDragDropped(this::dragReleased);
         Button b = new Button();
