@@ -64,7 +64,7 @@ public class LoginWindowController extends WindowController {
             }
         } else {*/
         if (!connected) {
-            String ipAddress = Client.getIP();
+            String ipAddress = Client.getIP().toString();
             String s;
             s = "Connecting to: " + ipAddress + "...";
             textAreaMain.setText(s);

@@ -4,19 +4,25 @@ import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.GUIClient;
 import it.polimi.ingsw.Utility.Color;
-import it.polimi.ingsw.Utility.Utils;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import static java.lang.Thread.sleep;
 
 public class ClientMain {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         int port = 1337;
         boolean useGui = true;
         boolean debug = false;
-        String ip = null;
+        InetAddress ip = null;
+        try {
+            ip = InetAddress.getByName("localhost");
+        } catch (UnknownHostException ignored) {
+        }
+        String ipString;
         for (String a : args) {
             if (a.toLowerCase().contains("cli")) {
                 useGui = false;
@@ -28,16 +34,9 @@ public class ClientMain {
                     System.exit(0);
                 }
             } else if (a.toLowerCase().contains("ip")) {
+                ipString = a.split("=")[1];
                 try {
-                    ip = a.split("=")[1];
-                    if (!ip.contains("'")) {
-                        StringBuilder s = new StringBuilder();
-                        s.append("'");
-                        s.append(ip);
-                        s.append("'");
-                        ip = s.toString();
-                    }
-                    if (Utils.isValidIP(ip)) throw new Exception();
+                    ip = InetAddress.getByName(ipString);
                 } catch (Exception e) {
                     System.out.println("Invalid IP" + ip + "!");
                     System.exit(0);
@@ -46,7 +45,7 @@ public class ClientMain {
                 debug = true;
             }
         }
-        Client client = new Client(port, debug);
+        Client client = new Client(ip, port, debug);
         Ui ui;
         //Scanner stdin = new Scanner(System.in);
         System.out.println(Color.ANSI_BLUE);

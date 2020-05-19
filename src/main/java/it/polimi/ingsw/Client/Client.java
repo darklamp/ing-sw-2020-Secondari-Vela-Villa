@@ -7,6 +7,7 @@ import it.polimi.ingsw.View.CellView;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ConnectException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
@@ -23,11 +24,11 @@ public class Client implements Runnable {
 
     private static boolean debug = false;
 
-    public static String getIP() {
+    public static InetAddress getIP() {
         return ip;
     }
 
-    private static String ip = "127.0.0.1";
+    private static InetAddress ip;
     private static int port;
 
     public synchronized static ClientState getState() {
@@ -48,8 +49,9 @@ public class Client implements Runnable {
         Client.port = port;
     }
 
-    public Client(int port, boolean debug) {
+    public Client(InetAddress ip, int port, boolean debug) {
         this(port);
+        Client.ip = ip;
         Client.debug = debug;
     }
 
