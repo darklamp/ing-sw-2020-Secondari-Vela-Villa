@@ -4,10 +4,8 @@ import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Network.ServerMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +20,26 @@ public class LoginWindowController extends WindowController {
     Button ipSubmitBTN;
     @FXML
     TextArea textAreaMain;
+    @FXML
+    Button creditsButton;
 
     @FXML
     void setText(String s) {
         textAreaMain.setText(s);
+    }
+
+    @FXML
+    private void showCredits() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Credits");
+        alert.setHeaderText(null);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(GUIClient.getAppIcon());
+        alert.setContentText("""
+                                Favicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon).
+                """);
+        alert.setResizable(false);
+        alert.showAndWait();
     }
 
     private static Client client;

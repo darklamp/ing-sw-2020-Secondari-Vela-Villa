@@ -6,23 +6,28 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="150.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.LoginWindowController">
    <children>
-      <BorderPane prefHeight="150.0" prefWidth="400.0">
+      <BorderPane prefHeight="250.0" prefWidth="400.0">
          <top>
             <VBox prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
                   <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <TextField fx:id="ipInput" prefHeight="50.0" prefWidth="308.0" promptText="Input" text="Name"/>
-                        <Button fx:id="ipSubmitBTN" alignment="CENTER" mnemonicParsing="false" onAction="#print" prefHeight="50.0" prefWidth="92.0" text="Connect" textAlignment="CENTER" />
+                        <Button fx:id="ipSubmitBTN" alignment="CENTER" mnemonicParsing="false" onAction="#print"
+                                prefHeight="50.0" prefWidth="92.0" text="Connect" textAlignment="CENTER"/>
                      </children>
                   </HBox>
                </children>
             </VBox>
          </top>
          <center>
-            <TextArea fx:id="textAreaMain" editable="false" prefHeight="200.0" prefWidth="200.0" text=" "
+            <TextArea fx:id="textAreaMain" editable="false" prefHeight="400.0" prefWidth="200.0" text=" "
                       BorderPane.alignment="CENTER"/>
          </center>
+         <bottom>
+            <Button fx:id="creditsButton" mnemonicParsing="false" onAction="#showCredits" text="Credits"
+                    BorderPane.alignment="CENTER_RIGHT"/>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

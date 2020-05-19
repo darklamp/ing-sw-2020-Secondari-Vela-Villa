@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -210,6 +211,8 @@ public class MainWindowController extends WindowController implements Initializa
 
     void setText(String s) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(GUIClient.getAppIcon());
         alert.setTitle("Message");
         alert.setHeaderText("Message");
         alert.setContentText(s);
@@ -221,6 +224,8 @@ public class MainWindowController extends WindowController implements Initializa
     void setText(String title, String header, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(GUIClient.getAppIcon());
         alert.setHeaderText(header);
         alert.setContentText(message);
         alert.setResizable(false);

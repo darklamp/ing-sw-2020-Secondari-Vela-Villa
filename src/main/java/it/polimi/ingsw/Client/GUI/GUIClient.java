@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.beans.PropertyChangeListener;
@@ -13,6 +14,11 @@ import java.beans.PropertyChangeSupport;
 
 public class GUIClient extends Application {
 
+    static Image getAppIcon() {
+        return appIcon;
+    }
+
+    private static Image appIcon;
 
     static GUI getGui() {
         return gui;
@@ -59,10 +65,13 @@ public class GUIClient extends Application {
         Parent root = loader.load();
         controller = loader.getController();
         primaryStage.setTitle("Santorini Client");
-        primaryStage.setScene(new Scene(root, 400, 150));
+        primaryStage.setScene(new Scene(root, 400, 250));
         primaryStage.show();
         stage = primaryStage;
+        appIcon = new Image("/images/appIcon.png");
+        stage.getIcons().add(appIcon);
         gui.setReady(true);
+        stage.setAlwaysOnTop(false);
         stage.setOnCloseRequest(we -> {
             System.out.println("Exiting...");
             stage.close();
