@@ -104,8 +104,8 @@ public class MainController implements PropertyChangeListener {
         return this.news;
     }
 
-    private void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
-        switch(turn){
+    private static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
+        switch (turn) {
             case BUILD:
                 if (!name.equals("BUILD")) throw new IllegalTurnStateException();
                 break;
