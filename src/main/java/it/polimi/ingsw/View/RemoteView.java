@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View;
 
 
-import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
@@ -159,16 +158,9 @@ public class RemoteView extends View {
             switch (name) {
                 case "NOTYOURTURN" -> this.socketClientConnection.send(ServerMessage.notYourTurn);
                 case "ILLEGALSTATE", "INVALIDNEWS", "MOVEKO", "BUILDKO" -> this.socketClientConnection.send(ServerMessage.invalidNews);
-                case "MOVEOK", "BUILDOK", "PASSOK" -> {
+                case "MOVEOK", "BUILDOK", "PASSOK", "TURN", "WIN" -> {
                     this.socketClientConnection.send(gameTable.getGameState());
                     this.socketClientConnection.send(gameTable.getBoardCopy());
-                }
-                case "TURN" -> this.socketClientConnection.send(gameTable.getGameState());
-                case "WIN" -> {
-                    if (news.getSender() == this.socketClientConnection) {
-                        this.socketClientConnection.send(ClientState.WIN);
-                        this.socketClientConnection.send(gameTable.getBoardCopy());
-                    } else this.socketClientConnection.send(ClientState.LOSE);
                 }
                 case "ABORT" -> this.socketClientConnection.send(ServerMessage.abortMessage);
                 default -> {

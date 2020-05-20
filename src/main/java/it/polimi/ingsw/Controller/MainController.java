@@ -12,6 +12,7 @@ import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 /**
  * Manage the news received.
@@ -69,14 +70,16 @@ public class MainController implements PropertyChangeListener {
             catch (WinnerException e){
                 SocketClientConnection winner = gameTable.getPlayerConnections().get(0);
                 for (SocketClientConnection c : gameTable.getPlayerConnections()){
+                    c.getPlayer().setState(ClientState.LOSE);
                     if (c.getPlayer() == e.getPlayer()) {
                         winner = c;
                         break;
                     }
                 }
+                winner.getPlayer().setState(ClientState.WIN);
                 News n = new News(null, winner);
-                n.setRecipients(gameTable.getPlayerConnections());
-                gameTable.setNews(n,"WIN");
+                n.setRecipients((ArrayList<SocketClientConnection>) null);
+                gameTable.setNews(n, "WIN");
                 gameTable.closeGame();
             }
             catch (NoMoreMovesException e){

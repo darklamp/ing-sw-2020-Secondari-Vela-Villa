@@ -436,13 +436,13 @@ public class MainWindowController extends WindowController implements Initializa
             b.setId(String.valueOf(firstBuilder));
             b.setFitHeight(155);
             b.setFitWidth(155);
-                if (Client.getState() == MOVE) {
-                    b.setOnDragDetected(this::builderGrab);
-                    b.setOnMouseEntered(this::setHovered);
-                    b.setOnMouseExited(this::unsetHovered);
-                } else if (Client.getState() == BUILD) {
-                    b.setOnMouseClicked(this::builderChosen);
-                }
+            if (Client.getState() == MOVE) {
+                b.setOnDragDetected(this::builderGrab);
+                b.setOnMouseEntered(this::setHovered);
+                b.setOnMouseExited(this::unsetHovered);
+            } else if (Client.getState() == BUILD) {
+                b.setOnMouseClicked(this::builderChosen);
+            }
             b.setScaleX(1.6);
             b.setScaleY(1.6);
             b.setScaleZ(1.6);
