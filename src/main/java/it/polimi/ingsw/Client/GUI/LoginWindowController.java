@@ -47,22 +47,6 @@ public class LoginWindowController extends WindowController {
     @FXML
     private void print(ActionEvent event) {
         event.consume();
-       /* if (!connected) {
-            String ipAddress = ipInput.getText();
-            String s;
-            if (!Utils.isValidIP(ipAddress)) {
-                s = "Invalid IP. Please enter a valid IP address then click Connect.";
-                textAreaMain.setText(s);
-
-            } else {
-                s = "Connecting to: " + ipAddress + "...";
-                textAreaMain.setText(s);
-                client.run();
-                connected = true;
-                ipSubmitBTN.setText("Submit");
-                //  MainWindowController.getInstance().switchScene("/Main.fxml");
-            }
-        } else {*/
         if (!connected) {
             String ipAddress = Client.getIP().toString();
             String s;
@@ -71,7 +55,6 @@ public class LoginWindowController extends WindowController {
             new Thread(client).start();
             connected = true;
         } else GUIClient.setOut(ipInput.getText());
-        // }
     }
 
 

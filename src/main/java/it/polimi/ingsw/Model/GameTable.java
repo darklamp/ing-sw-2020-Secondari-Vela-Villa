@@ -12,10 +12,37 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.Thread.sleep;
 
 public class GameTable {
 
     private String type; //we need for maincontrollertest
+
+    private volatile boolean exit = false;
+
+    public void resetMoveTimer() {
+        if (timerThread != null) {
+            timerThread.interrupt();
+        } else {
+            timerThread = new Thread(() -> {
+                while (!exit) {
+                    try {
+                        //noinspection BusyWait
+                        sleep(TimeUnit.MINUTES.toMillis(Server.getMoveTimer()));
+                        exit = true;
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+                System.err.println("Player " + players.get(currentPlayer) + " timed out. Closing game...");
+                setNews(new News(), "ABORT");
+            });
+            timerThread.start();
+        }
+    }
+
+    private Thread timerThread = null;
 
     private final Cell[][] Table;
     /**
@@ -81,6 +108,7 @@ public class GameTable {
         else currentPlayer++;
         checkMovePreConditions();
         getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
+        resetMoveTimer();
     }
 
     /**

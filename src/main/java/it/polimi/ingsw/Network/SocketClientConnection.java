@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SocketClientConnection implements Runnable {
@@ -29,7 +28,6 @@ public class SocketClientConnection implements Runnable {
     private News news;
     private Player player;
     private boolean ready = false;
-    private final static short moveTimer = 2;
 
     private boolean active = true;
 
@@ -226,13 +224,15 @@ public class SocketClientConnection implements Runnable {
         Scanner in;
         String name;
         try{
+            socket.setPerformancePreferences(0, 1, 0);
+            socket.setTcpNoDelay(true);
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
             send(ServerMessage.welcome);
             String read = in.nextLine();
             name = read;
-            while(true){
-                try{
+            while (true) {
+                try {
                     server.lobby(this, name);
                     break;
                 }
@@ -248,25 +248,9 @@ public class SocketClientConnection implements Runnable {
             }
             while(isActive()){
                 if (ready && player.getState() != ClientState.WAIT) {
-                    ExecutorService service = Executors.newSingleThreadExecutor();
-                    while (true) {
-                        try {
-                            AtomicReference<String> read1 = new AtomicReference<>();
-                            Runnable r = () -> read1.set(in.nextLine());
-                            Future<?> f = service.submit(r);
-                            f.get(moveTimer, TimeUnit.MINUTES);
-                            setNews(new News(read1.toString(), this), "INPUT");
-                            break;
-                        } catch (final InterruptedException | ExecutionException ignored) {
-                            System.err.println("[INFO] Thread interrupted / execution error in SocketClientConnection.");
-                        } catch (final TimeoutException e) {
-                            System.err.println("[FATAL] Player " + this.player.getNickname() + "has exceeded the " + moveTimer + " minutes timer. Closing game...");
-                            throw new Exception();
-                        } finally {
-                            service.shutdown();
-                        }
-                    }
-
+                    AtomicReference<String> read1 = new AtomicReference<>();
+                    read1.set(in.nextLine());
+                    setNews(new News(read1.toString(), this), "INPUT");
                 }
             }
         } catch (NoSuchElementException e) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.*?>
 <AnchorPane id="anchorPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@css/Main.css"
@@ -95,5 +96,7 @@
                 <StackPane fx:id="parts3" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="3"/>
             </children>
         </GridPane>
+        <ProgressBar id="progressBar" fx:id="timerBar" layoutX="31.0" layoutY="95.0" opacity="0.92" prefHeight="99.0"
+                     prefWidth="376.0" progress="0.0" stylesheets="@css/Main.css"/>
     </children>
 </AnchorPane>

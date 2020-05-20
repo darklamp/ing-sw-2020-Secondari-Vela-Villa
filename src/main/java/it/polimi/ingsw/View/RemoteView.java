@@ -160,7 +160,6 @@ public class RemoteView extends View {
                 case "NOTYOURTURN" -> this.socketClientConnection.send(ServerMessage.notYourTurn);
                 case "ILLEGALSTATE", "INVALIDNEWS", "MOVEKO", "BUILDKO" -> this.socketClientConnection.send(ServerMessage.invalidNews);
                 case "MOVEOK", "BUILDOK", "PASSOK" -> {
-                    //  this.socketClientConnection.send(this.player.get());
                     this.socketClientConnection.send(gameTable.getGameState());
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                 }

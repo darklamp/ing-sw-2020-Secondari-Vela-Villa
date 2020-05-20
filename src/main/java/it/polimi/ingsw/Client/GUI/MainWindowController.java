@@ -4,15 +4,16 @@ import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.CellView;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,8 +21,12 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static it.polimi.ingsw.Client.ClientState.*;
@@ -43,10 +48,14 @@ public class MainWindowController extends WindowController implements Initializa
     StackPane cell33, cell34, cell40, cell41, cell42, cell43, cell44;
     @FXML
     StackPane parts0, parts1, parts2, parts3;
+    @FXML
+    ProgressBar timerBar;
 
+    private static Timeline timeline;
 
     private static final DataFormat builder = new DataFormat("builder");
     private static final DataFormat building = new DataFormat("building");
+    private static boolean newTurn = true;
 
     private static ImageView selected = null;
     /**
@@ -84,9 +93,41 @@ public class MainWindowController extends WindowController implements Initializa
         GUIClient.setOut(i + "," + j);
     }
 
+    private void clearAvailableParts() {
+        if (parts0.getChildren().size() != 0) parts0.getChildren().clear();
+        if (parts1.getChildren().size() != 0) parts1.getChildren().clear();
+        if (parts2.getChildren().size() != 0) parts2.getChildren().clear();
+        if (parts3.getChildren().size() != 0) parts3.getChildren().clear();
+    }
+
+    private void setTimerBar() {
+        newTurn = false;
+        timerBar.setVisible(true);
+        timerBar.setStyle("-fx-background-color: transparent;");
+        timeline = new Timeline(60,
+                new KeyFrame(Duration.ZERO, new KeyValue(timerBar.progressProperty(), 0)),
+                new KeyFrame(Duration.seconds(90), e -> {
+                    textArea1.setText("\nHurry up! Time's about to finish.");
+                    textArea1.setStyle("-fx-text-fill: #FF0000;");
+                    timerBar.setStyle("-fx-accent: red;");
+                }, new KeyValue(timerBar.progressProperty(), 0.75)),
+                new KeyFrame(Duration.seconds(120), e -> {
+                    textArea1.setText("Time's up!");
+                    textArea1.setStyle("-fx-text-fill: #FF0000;");
+                    timerBar.setStyle("-fx-accent: red;");
+                }, new KeyValue(timerBar.progressProperty(), 1))
+        );
+        timeline.setCycleCount(1);
+        timeline.play();
+        timeline.setOnFinished(e -> {
+            timeline.stop();
+        });
+    }
+
     @Override
-    void setMove(ClientState s) {
+    synchronized void setMove(ClientState s) {
         if (Client.verbose()) System.out.println("[DEBUG] Received new state: " + s.toString());
+        clearAvailableParts();
         StringBuilder s1 = new StringBuilder();
         if (!initialized) {
             for (Node n : gridPaneMain.getChildren()) {
@@ -95,14 +136,79 @@ public class MainWindowController extends WindowController implements Initializa
             initialized = true;
         }
         s1.append("You have to: ");
+        if (newTurn) setTimerBar();
         switch (s) {
-            case MOVE -> s1.append("MOVE");
-            case BUILD -> s1.append("BUILD");
-            case MOVEORBUILD -> s1.append("either MOVE or BUILD"); //TODO prompt for choice (?)
-            case WAIT -> s1.append("wait for your turn");
-            case BUILDORPASS -> s1.append("either PASS or BUILD");
+            case MOVE -> {
+                s1.append("MOVE");
+            }
+            case BUILD -> {
+                s1.append("BUILD");
+                addAvailablePart(baseBuildingImage, 0);
+                addAvailablePart(middleBuildingImage, 1);
+                addAvailablePart(topBuildingImage, 2);
+                addAvailablePart(domeBuildingImage, 3);
+            }
+            case MOVEORBUILD -> {
+                boolean move = setStateChoiceDialog("MOVE", "BUILD");
+                if (move) {
+                    Client.setState(MOVE);
+                    GUIClient.getGui().processTurnChange(MOVE);
+                } else {
+                    Client.setState(BUILD);
+                    GUIClient.getGui().processTurnChange(BUILD);
+                }
+            }
+            case WAIT -> {
+                s1.append("wait for your turn");
+                timeline.stop();
+                timerBar.setVisible(false);
+                newTurn = true;
+            }
+            case BUILDORPASS -> {
+                boolean build = setStateChoiceDialog("BUILD", "PASS");
+                if (build) {
+                    Client.setState(BUILD);
+                    GUIClient.getGui().processTurnChange(BUILD);
+                } else {
+                    Client.setState(WAIT);
+                    GUIClient.setOut("PASS");
+                }
+            }
+            case WIN -> {
+                setText("WINNER", null, "Congrats! Looks like you just won.");
+                //TODO improve
+            }
+            case LOSE -> {
+                setText("LOSER", null, "Congrats! Looks like you just lost.");
+            }
+            case INIT -> {
+            }
         }
         textArea1.setText(s1.toString());
+    }
+
+    private boolean setStateChoiceDialog(String opt1, String opt2) {
+        List<String> choices = new ArrayList<>();
+        choices.add(opt1);
+        choices.add(opt2);
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(opt1, choices);
+        dialog.setTitle("Turn choice");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Please choose what you want to do now: ");
+        Optional<String> result = dialog.showAndWait();
+        while (true) {
+            if (result.isPresent()) {
+                if (!result.get().equals(opt1) && !result.get().equals(opt2)) {
+                    result = dialog.showAndWait();
+                } else {
+                    break;
+                }
+            } else {
+                result = dialog.showAndWait();
+            }
+        }
+        return result.get().equals(opt1);
     }
 
     @FXML
@@ -201,7 +307,7 @@ public class MainWindowController extends WindowController implements Initializa
                 source = (ImageView) ((StackPane) (buildingPartsPane.getChildren().get(pair.getFirst()))).getChildren().get(0);
             }
         }
-        switch (Client.getState()) { //TODO handle moveorbuild ,.. (?)
+        switch (Client.getState()) {
             case MOVE -> GUIClient.setOut(i + "," + j + "," + ((Integer.parseInt(source.getId()) % 2) + 1));
             case BUILD -> {
                 if (selected == null) {
@@ -240,7 +346,8 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
     @Override
-    void updateTable(CellView[][] table) {
+    synchronized void updateTable(CellView[][] table) {
+
         if (Client.verbose()) System.out.println("[DEBUG] Received new table.");
 
         selected = null;
@@ -262,20 +369,6 @@ public class MainWindowController extends WindowController implements Initializa
                     case -1 -> addBuilderToCell(null, i, j, 0);
                 }
             }
-        }
-        if (Client.getState() == BUILD) {
-            addAvailablePart(baseBuildingImage, 0);
-            addAvailablePart(middleBuildingImage, 1);
-            addAvailablePart(topBuildingImage, 2);
-            addAvailablePart(domeBuildingImage, 3);
-        } else {
-            for (Node n : buildingPartsPane.getChildren()) {
-                StackPane s = (StackPane) n;
-                for (Node n1 : s.getChildren()) {
-                    s.getChildren().remove(n1);
-                }
-            }
-            for (int i = 0; i < 4; i++) ((StackPane) (buildingPartsPane.getChildren().get(i))).getChildren().remove(0);
         }
     }
 

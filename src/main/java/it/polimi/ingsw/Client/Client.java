@@ -2,7 +2,6 @@ package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Network.GameStateMessage;
 import it.polimi.ingsw.Network.ServerMessage;
-import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.ObjectInputStream;
@@ -52,6 +51,10 @@ public class Client implements Runnable {
 
     public synchronized static ClientState getState() {
         return state;
+    }
+
+    public synchronized static void setState(ClientState state) {
+        Client.state = state;
     }
 
     private static ClientState state = ClientState.INIT;
@@ -218,7 +221,7 @@ public class Client implements Runnable {
             }
         } catch (ConnectException ee) {
             if (ee.getMessage().contains("Connection refused")) {
-                System.out.println(Color.ANSI_RED + "[CRITICAL] Connection refused. Server probably down or full." + Color.RESET);
+                System.err.println("[CRITICAL] Connection refused. Server probably down or full.");
             } else ee.getMessage();
         } catch (Exception e) {
             e.printStackTrace();

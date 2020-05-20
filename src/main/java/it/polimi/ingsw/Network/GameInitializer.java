@@ -163,6 +163,7 @@ public class GameInitializer implements Runnable {
             c1.send(gameTable.getBoardCopy());
             c2.send(gameTable.getBoardCopy());
             if (c3 != null) c3.send(gameTable.getBoardCopy());
+            gameTable.resetMoveTimer();
         }
         catch (Exception e){
             c1.closeConnection();

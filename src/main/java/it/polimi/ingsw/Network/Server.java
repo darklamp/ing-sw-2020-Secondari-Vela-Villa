@@ -19,20 +19,44 @@ import java.util.concurrent.Executors;
 
 public class Server {
     private ServerSocket serverSocket;
-    private final ExecutorService executor = Executors.newFixedThreadPool(128); /** Thread pool creator **/
-    private static final Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>(); /** contains player connections waiting to be matchmade **/
-    private static final Map<Integer, ArrayList<SocketClientConnection>> gameList = new LinkedHashMap<>(); /** Integer contains the game index, ArrayList contains client connections for the respective game **/
-    private static final Map<Integer, ArrayList<Integer>> gameProperties = new LinkedHashMap<>(); /** position [0] contains the number of players for the game; positions [1..2/3] contain the chosen gods**/
-    private static final Map<Integer, MainController> gameControllers = new LinkedHashMap<>(); /** contains main controllers **/
-    private static int currentGameIndex = 0; /** index of game currently in the process of being created; eg: if it's set to 1 it means game 0 is already started / finished, while game 1 is being made **/
+    private final ExecutorService executor = Executors.newFixedThreadPool(128);
+    /**
+     * Thread pool creator
+     **/
+    private static final Map<String, SocketClientConnection> waitingConnection = new LinkedHashMap<>();
+    /**
+     * contains player connections waiting to be matchmade
+     **/
+    private static final Map<Integer, ArrayList<SocketClientConnection>> gameList = new LinkedHashMap<>();
+    /**
+     * Integer contains the game index, ArrayList contains client connections for the respective game
+     **/
+    private static final Map<Integer, ArrayList<Integer>> gameProperties = new LinkedHashMap<>();
+    /**
+     * position [0] contains the number of players for the game; positions [1..2/3] contain the chosen gods
+     **/
+    private static final Map<Integer, MainController> gameControllers = new LinkedHashMap<>();
+    /**
+     * contains main controllers
+     **/
+    private static int currentGameIndex = 0;
+
+    public static short getMoveTimer() {
+        return moveTimer;
+    }
+
+    /**
+     * index of game currently in the process of being created; eg: if it's set to 1 it means game 0 is already started / finished, while game 1 is being made
+     **/
+    private final static short moveTimer = 2;
 
     public synchronized static int getCurrentGameIndex() {
         return currentGameIndex;
     }
 
     public synchronized static void deregisterConnection(SocketClientConnection c) {
-        for (Map.Entry<Integer, ArrayList<SocketClientConnection>> entry : gameList.entrySet()){
-            for (SocketClientConnection connection : entry.getValue()){
+        for (Map.Entry<Integer, ArrayList<SocketClientConnection>> entry : gameList.entrySet()) {
+            for (SocketClientConnection connection : entry.getValue()) {
                 if (c == connection) {
                     entry.getValue().remove(c);
                     break;

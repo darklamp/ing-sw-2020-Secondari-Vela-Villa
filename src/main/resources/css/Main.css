@@ -20,6 +20,14 @@
     -fx-alignment: center;
 }
 
+
+#progressBar {
+    -fx-control-inner-background: #30cafe;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+
 .text-area, .text-area .viewport, .text-area .content {
     -fx-background-color: transparent;
 }
