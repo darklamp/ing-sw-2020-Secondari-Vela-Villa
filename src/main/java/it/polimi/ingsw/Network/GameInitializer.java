@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.RemoteView;
 import it.polimi.ingsw.View.View;
@@ -123,7 +124,7 @@ public class GameInitializer implements Runnable {
                     player3.initBuilderList(gameTable.getCell(startPos.get(5).getFirst(), startPos.get(5).getSecond()));
                 }
             } catch (InvalidBuildException | InvalidCoordinateException e) {
-                e.printStackTrace();
+                if (ServerMain.verbose()) e.printStackTrace();
             }
             View player1View = new RemoteView(player1, c1, gameTable);
             View player2View = new RemoteView(player2, c2, gameTable);

@@ -13,6 +13,7 @@ server jar options:
 * -port : specifies Server port            (default: 1337)
 * -ip   : defines IP to listen on (v4/v6)  (default: localhost)
 * -console : starts debug console on stdin (default: no)
+* -v    : print verbose output  (default: no)
 
 example: java --enable-preview -jar server.jar -port=1337 -ip=::1
 

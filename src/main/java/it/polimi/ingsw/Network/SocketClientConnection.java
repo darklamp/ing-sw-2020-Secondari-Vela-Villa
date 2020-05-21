@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Pair;
 
 import java.beans.PropertyChangeListener;
@@ -99,7 +100,7 @@ public class SocketClientConnection implements Runnable {
         try {
             in = new Scanner(socket.getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            if (ServerMain.verbose()) e.printStackTrace();
         }
         while(true){
             assert in != null;
@@ -144,7 +145,7 @@ public class SocketClientConnection implements Runnable {
         try {
             in = new Scanner(socket.getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            if (ServerMain.verbose()) e.printStackTrace();
         }
         assert in != null;
         int choice = -1;
@@ -179,7 +180,7 @@ public class SocketClientConnection implements Runnable {
         try {
             in = new Scanner(socket.getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            if (ServerMain.verbose()) e.printStackTrace();
         }
         assert in != null;
         int playersNumber;
@@ -240,10 +241,6 @@ public class SocketClientConnection implements Runnable {
                     read = in.nextLine();
                     name = read;
                 }
-                catch (Exception e){
-                    e.printStackTrace();
-                    throw new Exception();
-                }
             }
             while(isActive()){
                 if (ready && player.getState() != ClientState.WAIT) {
@@ -256,7 +253,8 @@ public class SocketClientConnection implements Runnable {
             System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game...");
             setNews(new News(null, this), "ABORT");
         } catch (Exception e) {
-            System.err.println("Unknown exception thrown in SocketClientConnection. Closing game...");
+            System.err.println("Exception thrown in SocketClientConnection. Closing game...");
+            if (ServerMain.verbose()) e.printStackTrace();
             setNews(new News(null, this), "ABORT");
         } finally {
             closeConnection();

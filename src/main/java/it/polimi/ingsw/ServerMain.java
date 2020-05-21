@@ -4,6 +4,12 @@ import it.polimi.ingsw.Network.Server;
 
 
 public class ServerMain {
+    public static boolean verbose() {
+        return verbose;
+    }
+
+    private static boolean verbose = false;
+
     public static void main(String[] args) {
         Server server;
         int port = 1337;
@@ -25,6 +31,8 @@ public class ServerMain {
                 }
             } else if (s.contains("console")) {
                 console = true;
+            } else if (s.contains("v")) {
+                verbose = true;
             }
         }
         server = new Server(port, ip);

@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.ServerMain;
 
 import java.io.Serializable;
 
@@ -48,7 +49,7 @@ public abstract class Builder implements Serializable {
             position.setBuilder(this);
             if (isWinner()) throw new WinnerException(this.player);
         } catch (NullPointerException e) {
-            e.printStackTrace(); // unhandled error
+            if (ServerMain.verbose()) e.printStackTrace(); // unhandled error
         } catch (ApolloException e) { // swap position cause it's Apollo
             swapPosition(this,position.getBuilder());
             if (isWinner()) throw new WinnerException(this.player);
