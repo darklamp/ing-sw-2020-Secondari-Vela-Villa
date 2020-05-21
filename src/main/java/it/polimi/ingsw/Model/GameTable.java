@@ -18,37 +18,13 @@ import static java.lang.Thread.sleep;
 
 public class GameTable {
 
-    private String type; //we need for maincontrollertest
-
-    private volatile boolean exit = false;
-
-    public void resetMoveTimer() {
-        if (timerThread != null) {
-            timerThread.interrupt();
-        } else {
-            timerThread = new Thread(() -> {
-                while (!exit) {
-                    try {
-                        //noinspection BusyWait
-                        sleep(TimeUnit.MINUTES.toMillis(Server.getMoveTimer()));
-                        exit = true;
-                    } catch (InterruptedException ignored) {
-                    }
-                }
-                System.err.println("Player " + players.get(currentPlayer) + " timed out. Closing game...");
-                setNews(new News(), "ABORT");
-            });
-            timerThread.start();
-        }
-    }
-
     private Thread timerThread = null;
 
     private final Cell[][] Table;
     /**
      * 5x5 matrix representing game table
      **/
-    private int gameIndex;
+    private final int gameIndex;
     /**
      * index of current game
      **/
@@ -56,14 +32,10 @@ public class GameTable {
     /**
      * arraylist filled with players
      **/
-    private ArrayList<Cell> arrayTable;
+    private final ArrayList<Cell> arrayTable;
     /**
      * simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects
      */
-    private static GameTable instance;
-    /**
-     * Singleton instance for GameTable
-     **/ //TODO remove!!
     private int currentPlayer = 1;
     /**
      * current player index
@@ -87,10 +59,6 @@ public class GameTable {
      * support boolean for Athena
      **/
 
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayer);
-    }
-
     /**
      * The purpose of this function is going to the next turn;
      * specifically, what this function does is:
@@ -111,15 +79,32 @@ public class GameTable {
         resetMoveTimer();
     }
 
-    /**
-     * Only used for tests.
-     */
-    private void setCurrentPlayer(int player) {
-        this.currentPlayer = player;
-    }
 
-    public static List<String> getCompleteGodList() {
-        return completeGodList;
+    private volatile boolean exit = false;
+
+    /**
+     * When called, this method starts a timer of length {@link Server#getMoveTimer()} (using minutes as timeunit).
+     * If this function gets called while the timer is still running, it interrupts the timer thread, so as to reset the timer.
+     * If the timer runs out, the thread exits the loop by setting {@link #exit} to true, and manages the game ending.
+     */
+    public void resetMoveTimer() {
+        if (timerThread != null) {
+            timerThread.interrupt();
+        } else {
+            timerThread = new Thread(() -> {
+                while (!exit) {
+                    try {
+                        //noinspection BusyWait
+                        sleep(TimeUnit.MINUTES.toMillis(Server.getMoveTimer()));
+                        exit = true;
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+                System.err.println("Player " + players.get(currentPlayer) + " timed out. Closing game...");
+                setNews(new News(), "ABORT");
+            });
+            timerThread.start();
+        }
     }
 
     /**
@@ -130,27 +115,6 @@ public class GameTable {
         else if (players.get(1).equals(player)) return 1;
         else return playersNumber == 3 ? 2 : -1; // -1 is error case
     }
-
-    public ArrayList<SocketClientConnection> getPlayerConnections(){
-        ArrayList<SocketClientConnection> out = new ArrayList<>();
-        for (Player p : players){
-            out.add(p.getConnection());
-        }
-        return out;
-    }
-
-    public Builder getCurrentBuilder() {
-        return currentBuilder;
-    }
-
-    public void setCurrentBuilder(Builder currentBuilder) {
-        this.currentBuilder = currentBuilder;
-    }
-
-  /*  ArrayList<String> getGodChoices(){
-        return godChoices;
-    }
-*/
 
     /**
      * Checks for available feasible moves
@@ -179,17 +143,24 @@ public class GameTable {
     /**
      * Clears up game instance.
      */
-    public void closeGame(){
-        for (Player p : players){
+    public void closeGame() {
+        for (Player p : players) {
             removePlayer(p);
         }
     }
 
 
-    /* initial observable pattern implementation via PropertyChangeSupport */
+    /* start observable pattern objects */
 
-    private PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
-    private News news; /** Listener news **/
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    /**
+     * Listener helper object
+     **/
+    private News news;
+
+    /**
+     * Listener news
+     **/
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
@@ -201,14 +172,17 @@ public class GameTable {
         this.type = type;
     }
 
+    /* end observable pattern objects */
+
+
     /* end observable pattern */
 
     /**
      * @return 5x5 matrix containing CellViews, to be sent to clients
      */
-    public CellView[][] getBoardCopy(){
+    public CellView[][] getBoardCopy() {
         CellView[][] out = new CellView[5][5];
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++){
                 out[i][j] = Table[i][j].getModelView(this);
             }
@@ -236,21 +210,6 @@ public class GameTable {
     }
 
     /**
-     * Sets table's gods.
-     */
-    public void setGods(ArrayList<Integer> godChoices){
-        ArrayList<String> gods = new ArrayList<>();
-        for (Integer godChoice : godChoices) {
-            gods.add(completeGodList.get(godChoice));
-        }
-        this.godChoices = gods;
-    }
-
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
-    }
-
-    /**
      * @param x X coord
      * @param y Y coord
      * @throws InvalidCoordinateException if coordinate is OOB
@@ -259,15 +218,6 @@ public class GameTable {
         if (x > 4 || x < 0 || y > 4 || y < 0) {
             throw new InvalidCoordinateException();
         }
-    }
-
-    protected ArrayList<Cell> toArrayList() {
-        return arrayTable;
-    }
-
-    public Cell getCell(int x, int y) throws InvalidCoordinateException{
-            isInvalidCoordinate(x,y);
-            return Table[x][y]; //ritorna la cella con righa x e colonna y
     }
 
     /**
@@ -281,39 +231,99 @@ public class GameTable {
      * @param nickname contains nickname to be checked
      * @return true if the nickname isn't already in use, false otherwise
      */
-    protected boolean isValidPlayer(String nickname){
-        if(players == null) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean isValidPlayer(String nickname) {
+        if (players == null) {
             players = new ArrayList<Player>();
             return true;
         }
-        return players.stream().noneMatch(player -> sameNickname(player,nickname));
+        return players.stream().noneMatch(player -> sameNickname(player, nickname));
+    }
+
+
+    /* start simple getters / setters */
+
+
+    public Cell getCell(int x, int y) throws InvalidCoordinateException {
+        isInvalidCoordinate(x, y);
+        return Table[x][y];
     }
 
     /**
      * @return true if player's nickname is the same as nickname
      */
-    private boolean sameNickname(Player player,String nickname){
+    private boolean sameNickname(Player player, String nickname) {
         return player.getNickname().equals(nickname);
     }
 
-    /**
-     * @param player player to be added
-     */
-    protected void addPlayer(Player player) {
-
+    void addPlayer(Player player) {
         players.add(player);
+    }
 
+    ArrayList<Cell> toArrayList() {
+        return arrayTable;
     }
 
     static void setAthenaMove(boolean newValue) {
         athenaMove = newValue;
     }
 
+    public void setGods(ArrayList<Integer> godChoices) {
+        ArrayList<String> gods = new ArrayList<>();
+        for (Integer godChoice : godChoices) {
+            gods.add(completeGodList.get(godChoice));
+        }
+        this.godChoices = gods;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
     static boolean getAthenaMove() {
         return athenaMove;
+    }
+
+    public static List<String> getCompleteGodList() {
+        return completeGodList;
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayer);
     }
 
     public GameStateMessage getGameState() {
         return new GameStateMessage(players.get(0).getState(), players.get(1).getState(), playersNumber == 3 ? players.get(2).getState() : null);
     }
+
+    public ArrayList<SocketClientConnection> getPlayerConnections() {
+        ArrayList<SocketClientConnection> out = new ArrayList<>();
+        for (Player p : players) {
+            out.add(p.getConnection());
+        }
+        return out;
+    }
+
+    public Builder getCurrentBuilder() {
+        return currentBuilder;
+    }
+
+    public void setCurrentBuilder(Builder currentBuilder) {
+        this.currentBuilder = currentBuilder;
+    }
+
+
+    /* end simple getters / setters */
+
+
+    /**
+     * Only used for tests.
+     */
+    private void setCurrentPlayer(int player) {
+        this.currentPlayer = player;
+    }
+
+    private String type;
+
+
 }
