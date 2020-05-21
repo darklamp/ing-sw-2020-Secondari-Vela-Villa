@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Network.GameStateMessage;
 import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.ObjectInputStream;
@@ -90,12 +91,21 @@ public class Client implements Runnable {
                 while (isActive()) {
                     Object inputObject = socketIn.readObject();
                     if (verbose()) System.out.println("[DEBUG] Recv input: " + inputObject.getClass());
-                    if (inputObject instanceof String) {
-                        if (inputObject.equals(ServerMessage.abortMessage)) {
+                    if (inputObject instanceof String s) {
+                        if (s.equals(ServerMessage.abortMessage)) {
                             ui.process("[ERROR]@@@Game aborted. Someone probably disconnected or timer ran out.");
                             System.exit(0);
-                        }
-                        ui.process((String) inputObject);
+                        } else if (s.contains(ServerMessage.connClosed)) {
+                            String[] inputs = s.split("@@@");
+                            int pIndex = Integer.parseInt(inputs[1]);
+                            if (pIndex == playerIndex) {
+                                System.err.println(Color.RESET + ServerMessage.connClosed);
+                                System.exit(0);
+                            } else {
+                                if (playerIndex != 0) playerIndex -= 1;
+                                playersNumber -= 1;
+                            }
+                        } else ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {
                         ui.showTable((CellView[][]) inputObject);
                     } else if (inputObject instanceof GameStateMessage c) {

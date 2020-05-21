@@ -97,7 +97,7 @@ public class MainController implements PropertyChangeListener {
                     gameTable.closeGame();
                 }
                 else {
-                    gameTable.removePlayer(e.getPlayer());
+                    gameTable.removePlayer(e.getPlayer(), true);
                 }
             }
         }
@@ -154,6 +154,10 @@ public class MainController implements PropertyChangeListener {
 
     public void setGameInitializer(GameInitializer gameInitializer) {
         if (this.gameInitializer == null) this.gameInitializer = gameInitializer;
+    }
+
+    public void kickPlayer(String playerNick) {
+        gameTable.getPlayers().stream().filter(c -> c.getNickname().equals(playerNick)).findFirst().ifPresent(player -> gameTable.removePlayer(player, true));
     }
 
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.Network.Server;
 
+
 public class ServerMain {
     public static void main(String[] args) {
         Server server;
@@ -21,6 +22,11 @@ public class ServerMain {
                     System.err.println("[CRITICAL] Invalid port supplied.");
                     System.exit(0);
                 }
+            } else if (s.contains("console")) {
+                /*new Thread(() -> {
+                    Scanner stdin  = new Scanner(System.in);
+
+                });*/
             }
         }
         server = new Server(port, ip);

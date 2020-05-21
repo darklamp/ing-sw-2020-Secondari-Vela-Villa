@@ -2,8 +2,8 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
-import it.polimi.ingsw.Model.Exceptions.InvalidGodException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
+import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.util.ArrayList;
@@ -76,10 +76,10 @@ public class Player {
     /**
      * DEBUG package-private constructor only used in tests
      **/
-    Player(String nickname, GameTable g, String god) throws NickAlreadyTakenException, NullPointerException, InvalidGodException {   //contructor method for player
+    Player(String nickname, GameTable g, String god) throws NickAlreadyTakenException, NullPointerException {   //contructor method for player
         if (g == null) throw new NullPointerException();
         else if (!g.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
-       // else if (!isValidGod(god)) throw new InvalidGodException();
+            // else if (!isValidGod(god)) throw new InvalidGodException();
         else {
             this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
             this.god = god.toUpperCase();
@@ -87,20 +87,6 @@ public class Player {
             g.addPlayer(this);
         }
     }
-
-    /**
-     * Checks if the provided god is valid and selectable; if it is, it returns true and
-     * it removes the god from the selectable pool, so other player(s) can't pick it
-     * @return true if valid and selectable, false otherwise
-     */
-  /*  private boolean isValidGod(String god, GameTable gameTable){
-        ArrayList<String> godChoices = gameTable.getGodChoices();
-        if (godChoices.contains(god.toUpperCase())) {
-            godChoices.remove(god);
-            return true;
-        }
-        else return false;
-    }*/
 
     public ClientState getState(){
         return this.turnState;
@@ -137,7 +123,7 @@ public class Player {
         return this.builderList.size() == 0;
     }
 
-    ArrayList<Builder> getBuilderList(){
+    ArrayList<Builder> getBuilderList() {
         return this.builderList;
     }
 
@@ -145,7 +131,8 @@ public class Player {
         return nickname;
     }
 
-    void kick() {
+    synchronized void kick(int pIndex) {
+        gameTable.setNews(new News(ServerMessage.connClosed + "@@@" + pIndex, null), "PLAYERKICKED");
         this.connection.closeConnection();
     }
 }

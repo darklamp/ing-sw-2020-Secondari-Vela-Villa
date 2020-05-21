@@ -163,6 +163,7 @@ public class RemoteView extends View {
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                 }
                 case "ABORT" -> this.socketClientConnection.send(ServerMessage.abortMessage);
+                case "PLAYERKICKED" -> this.socketClientConnection.send(news.getString());
                 default -> {
                     this.socketClientConnection.send(ServerMessage.genericErrorMessage);
                     if (errorMessageCount > MAX_ERROR_MESSAGE_COUNT) this.socketClientConnection.closeConnection();

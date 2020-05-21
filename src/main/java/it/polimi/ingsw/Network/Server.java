@@ -10,10 +10,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -130,9 +127,7 @@ public class Server {
     }
 
     public Server() throws IOException {
-    }
-
-    ; /* kept for test compatibility */
+    }/* kept for test compatibility */
 
     public Server(int port, String ip) {
         try {
@@ -144,6 +139,19 @@ public class Server {
     }
 
     public void run() {
+        new Thread(() -> {
+            Scanner stdin = new Scanner(System.in);
+            while (true) {
+                String s = stdin.nextLine();
+                if (s.contains("kick")) {
+                    String[] input = s.split(" ");
+                    MainController controller = gameControllers.get(Integer.parseInt(input[1]));
+                    if (controller != null) {
+                        controller.kickPlayer(input[2]);
+                    }
+                }
+            }
+        }).start();
         //noinspection InfiniteLoopStatement
         while (true) {
             try {

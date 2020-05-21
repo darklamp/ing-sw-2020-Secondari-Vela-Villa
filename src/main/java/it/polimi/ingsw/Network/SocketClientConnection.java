@@ -68,12 +68,11 @@ public class SocketClientConnection implements Runnable {
     }
 
     public synchronized void closeConnection() {
-        send("Connection closed!");
         try {
             socket.close();
             this.close();
         } catch (IOException e) {
-            System.err.println("Error when closing socket!");
+            System.err.println("Error while closing socket!");
         }
         active = false;
     }

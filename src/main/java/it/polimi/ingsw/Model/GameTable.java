@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Network.GameStateMessage;
@@ -17,8 +18,6 @@ import java.util.concurrent.TimeUnit;
 import static java.lang.Thread.sleep;
 
 public class GameTable {
-
-    private Thread timerThread = null;
 
     private final Cell[][] Table;
     /**
@@ -54,7 +53,6 @@ public class GameTable {
      * variable which holds the current builder being used by the player
      **/
     private static boolean athenaMove = false;
-
     /**
      * support boolean for Athena
      **/
@@ -72,19 +70,23 @@ public class GameTable {
         getCurrentPlayer().setFirstTime(true);
         getCurrentBuilder().resetState();
         setCurrentBuilder(null);
-        if (currentPlayer == playersNumber - 1) currentPlayer = 0;
+        if (currentPlayer == players.size() - 1) currentPlayer = 0;
         else currentPlayer++;
-        checkMovePreConditions();
-        getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
-        resetMoveTimer();
+        try {
+            checkMovePreConditions();
+        } finally {
+            getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
+            resetMoveTimer();
+        }
     }
 
 
     private volatile boolean exit = false;
+    private Thread timerThread = null;
 
     /**
      * When called, this method starts a timer of length {@link Server#getMoveTimer()} (using minutes as timeunit).
-     * If this function gets called while the timer is still running, it interrupts the timer thread, so as to reset the timer.
+     * If this function gets called while the timer is still running, it interrupts the {@link #timerThread}, so as to reset the timer.
      * If the timer runs out, the thread exits the loop by setting {@link #exit} to true, and manages the game ending.
      */
     public void resetMoveTimer() {
@@ -100,7 +102,7 @@ public class GameTable {
                     } catch (InterruptedException ignored) {
                     }
                 }
-                System.err.println("Player " + players.get(currentPlayer) + " timed out. Closing game...");
+                System.err.println("Player timed out. Closing game...");
                 setNews(new News(), "ABORT");
             });
             timerThread.start();
@@ -130,14 +132,24 @@ public class GameTable {
     }
 
     /**
-     * Handles player removing after win / loss
+     * Handles player removal
+     *
      * @param player to be removed
      */
-    public void removePlayer(Player player){
-        this.players.remove(player);
+    public synchronized void removePlayer(Player player, boolean checkWinner) {
+        int pIndex = getPlayerIndex(player);
         player.removeBuilders();
-        player.kick();
-        //TODO handle new player number etc..
+        player.kick(pIndex);
+        this.players.remove(player);
+        if (checkWinner && players.size() == 1) {
+            players.get(0).setState(ClientState.WIN);
+            setNews(new News(null, players.get(0).getConnection()), "WIN");
+            removePlayer(players.get(0), false);
+        } else { //TODO
+           /* if(currentPlayer == pIndex) {
+                currentPlayer = (pIndex == 2)
+            }*/
+        }
     }
 
     /**
@@ -145,7 +157,7 @@ public class GameTable {
      */
     public void closeGame() {
         for (Player p : players) {
-            removePlayer(p);
+            removePlayer(p, false);
         }
     }
 
@@ -293,7 +305,7 @@ public class GameTable {
     }
 
     public GameStateMessage getGameState() {
-        return new GameStateMessage(players.get(0).getState(), players.get(1).getState(), playersNumber == 3 ? players.get(2).getState() : null);
+        return new GameStateMessage(players.get(0).getState(), players.size() == 1 ? ClientState.LOSE : players.get(1).getState(), playersNumber == 3 ? players.get(2).getState() : null);
     }
 
     public ArrayList<SocketClientConnection> getPlayerConnections() {
@@ -312,7 +324,8 @@ public class GameTable {
         this.currentBuilder = currentBuilder;
     }
 
-
+    public ArrayList<Player> getPlayers() {
+        return players; }
     /* end simple getters / setters */
 
 
