@@ -139,6 +139,19 @@ public class Server {
     }
 
     public void run() {
+        //noinspection InfiniteLoopStatement
+        while (true) {
+            try {
+                Socket newSocket = serverSocket.accept();
+                SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
+                executor.submit(socketConnection);
+            } catch (IOException e) {
+                System.out.println("Connection Error!");
+            }
+        }
+    }
+
+    public void startConsole() {
         new Thread(() -> {
             Scanner stdin = new Scanner(System.in);
             while (true) {
@@ -152,16 +165,6 @@ public class Server {
                 }
             }
         }).start();
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            try {
-                Socket newSocket = serverSocket.accept();
-                SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
-                executor.submit(socketConnection);
-            } catch (IOException e) {
-                System.out.println("Connection Error!");
-            }
-        }
     }
 
 }

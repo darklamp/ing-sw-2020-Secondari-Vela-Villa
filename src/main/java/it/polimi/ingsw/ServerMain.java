@@ -9,6 +9,7 @@ public class ServerMain {
         int port = 1337;
         String ip = "localhost";
         String[] a;
+        boolean console = false;
         for (String s : args) {
             if (s.contains("ip")) {
                 a = s.split("=");
@@ -23,13 +24,11 @@ public class ServerMain {
                     System.exit(0);
                 }
             } else if (s.contains("console")) {
-                /*new Thread(() -> {
-                    Scanner stdin  = new Scanner(System.in);
-
-                });*/
+                console = true;
             }
         }
         server = new Server(port, ip);
+        if (console) server.startConsole();
         server.run();
     }
 }
