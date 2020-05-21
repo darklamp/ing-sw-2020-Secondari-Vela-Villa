@@ -18,4 +18,5 @@ example: java --enable-preview -jar server.jar -port=1337 -ip=::1
 
 debug console commands:
 
-* kick [gameIndex] [playerName]
+* kick [gameIndex] [playerName]    : kicks player from game
+* players [gameIndex]              : returns list of players for given gameIndex

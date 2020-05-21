@@ -156,7 +156,7 @@ public class MainController implements PropertyChangeListener {
         if (this.gameInitializer == null) this.gameInitializer = gameInitializer;
     }
 
-    public void kickPlayer(String playerNick) {
+    public void consoleKickPlayer(String playerNick) {
         gameTable.getPlayers().stream().filter(c -> c.getNickname().equals(playerNick)).findFirst().ifPresent(player -> gameTable.removePlayer(player, true));
     }
 

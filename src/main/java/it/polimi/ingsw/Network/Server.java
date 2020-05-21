@@ -160,8 +160,15 @@ public class Server {
                     String[] input = s.split(" ");
                     MainController controller = gameControllers.get(Integer.parseInt(input[1]));
                     if (controller != null) {
-                        controller.kickPlayer(input[2]);
+                        controller.consoleKickPlayer(input[2]);
                     }
+                } else if (s.contains("players")) {
+                    String[] input = s.split(" ");
+                    StringBuilder s1 = new StringBuilder();
+                    int index = Integer.parseInt(input[1]);
+                    s1.append("Players of game ").append(index).append(": ");
+                    gameList.get(index).iterator().forEachRemaining(c -> s1.append(c.getPlayer().getNickname()).append(" "));
+                    System.out.println(s1);
                 }
             }
         }).start();
