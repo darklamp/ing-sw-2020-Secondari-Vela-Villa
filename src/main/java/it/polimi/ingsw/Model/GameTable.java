@@ -39,7 +39,7 @@ public class GameTable {
     /**
      * current player index
      **/
-    private final int playersNumber;
+    private int playersNumber;
     /**
      * number of players in game
      **/
@@ -136,19 +136,27 @@ public class GameTable {
      *
      * @param player to be removed
      */
-    public synchronized void removePlayer(Player player, boolean checkWinner) {
+    public synchronized void removePlayer(Player player, boolean checkWinner) throws NoMoreMovesException {
         int pIndex = getPlayerIndex(player);
         player.removeBuilders();
-        player.kick(pIndex);
         this.players.remove(player);
+        player.kick(pIndex);
         if (checkWinner && players.size() == 1) {
             players.get(0).setState(ClientState.WIN);
             setNews(new News(null, players.get(0).getConnection()), "WIN");
             removePlayer(players.get(0), false);
-        } else { //TODO
-           /* if(currentPlayer == pIndex) {
-                currentPlayer = (pIndex == 2)
-            }*/
+        } else if (checkWinner) { //TODO
+            playersNumber = 2;
+            if (currentPlayer == pIndex) {
+                setCurrentBuilder(null);
+                try {
+                    checkMovePreConditions();
+                } finally {
+                    getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
+                    resetMoveTimer();
+                }
+            }
+            setNews(new News(null, null), "TURN");
         }
     }
 
@@ -157,7 +165,10 @@ public class GameTable {
      */
     public void closeGame() {
         for (Player p : players) {
-            removePlayer(p, false);
+            try {
+                removePlayer(p, false);
+            } catch (NoMoreMovesException ignored) {
+            }
         }
     }
 
