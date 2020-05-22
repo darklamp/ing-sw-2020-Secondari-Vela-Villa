@@ -75,6 +75,10 @@ public class Minotaur extends Builder{
             }
     }
 
+    /**
+     * @param finalPoint is the cell where the Minotaur builder wants to move and it's already occupied.
+     * @return the coordinates where the builder from finalPoint is forced to move.
+     */
     Pair getCellBehind(Cell finalPoint) {
         int diffY = finalPoint.getRow() - this.getPosition().getRow();
         int diffX = finalPoint.getColumn() - this.getPosition().getColumn();

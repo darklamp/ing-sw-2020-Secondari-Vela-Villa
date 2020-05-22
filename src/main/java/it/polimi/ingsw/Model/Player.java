@@ -55,11 +55,19 @@ public class Player {
         }
     }
 
+    /**
+     * @param god
+     * Assigned god to the player
+     */
     public void setGod(Integer god){
         this.god = GameTable.getCompleteGodList().get(god);
         this.turnState = gameTable.getPlayerIndex(this) == 1 ? getFirstTurnState(god) : ClientState.WAIT;
     }
 
+    /**
+     * @param god of the player
+     * @return clientstate "MoveOrBuild" if the god is Prometheus, otherwise just clientstate "move"
+     */
     private ClientState getFirstTurnState(Integer god){
         return (god == 8) ? MOVEORBUILD : MOVE; /* if god is prometheus, he can move as well as build at first */
     }
@@ -68,6 +76,9 @@ public class Player {
         return this.connection;
     }
 
+    /**
+     * remove builders from the GameTable
+     */
     void removeBuilders(){
         this.getBuilderList().get(0).getPosition().setBuilder(null);
         this.getBuilderList().get(1).getPosition().setBuilder(null);
