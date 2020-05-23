@@ -14,6 +14,7 @@ server jar options:
 * -ip   : defines IP to listen on (v4/v6)  (default: localhost)
 * -console : starts debug console on stdin (default: no)
 * -v    : print verbose output  (default: no)
+* -disk : on startup, the server tries to load previously saved games (default: no)
 
 example: java --enable-preview -jar server.jar -port=1337 -ip=::1
 
