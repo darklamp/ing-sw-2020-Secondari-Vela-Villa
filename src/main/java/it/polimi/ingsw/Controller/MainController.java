@@ -98,6 +98,7 @@ public class MainController implements PropertyChangeListener {
                     }
                     News n = new News(null, winner);
                     n.setRecipients(gameTable.getPlayerConnections());
+                    winner.getPlayer().setState(ClientState.WIN);
                     gameTable.setNews(n, "WIN");
                     gameTable.closeGame();
                 } else {

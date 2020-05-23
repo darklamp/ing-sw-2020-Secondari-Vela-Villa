@@ -71,9 +71,7 @@ class MainControllerTest {
         News news4 = new News("asd", c2);
         controller.propertyChange(new PropertyChangeEvent(new Object(), "ABORT", null, news4));
         stringa = (String) b.get(gameTable);
-        Assertions.assertEquals("ABORT", stringa);
-
-
+        Assertions.assertEquals("PLAYERKICKED", stringa);
     }
 
     @Test
@@ -130,7 +128,8 @@ class MainControllerTest {
 
         controller.propertyChange(new PropertyChangeEvent(new Object(), "PLAYERTIMEOUT", null, news6));
         stringa = (String) b.get(gameTable);
-        Assertions.assertEquals(stringa, "WIN");
+        Assertions.assertEquals(player1.getState(), ClientState.WIN);
+        Assertions.assertEquals(stringa, "PLAYERKICKED");
     }
 
     @Test
@@ -187,7 +186,9 @@ class MainControllerTest {
         news5.setCoords(0, 0, 1);
         controller.propertyChange(new PropertyChangeEvent(new Object(), "MOVE", null, news5));
         stringa = (String) b.get(gameTable);
-        Assertions.assertEquals(stringa, "WIN");
+        Assertions.assertEquals(player2.getState(), ClientState.WIN);
+        Assertions.assertEquals("PLAYERKICKED", stringa);
+
     }
 
     @Test
