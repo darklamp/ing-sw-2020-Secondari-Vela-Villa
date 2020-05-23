@@ -73,7 +73,6 @@ public class Server {
              temp.add(c);
              gameList.put(getCurrentGameIndex(),temp);
              gameProperties.put(getCurrentGameIndex(),gameProps);
-
          }
          else if (! (waitingConnection.size() == gameProperties.get(getCurrentGameIndex()).get(0))){
              ArrayList<SocketClientConnection> temp =  gameList.get(getCurrentGameIndex());
@@ -139,6 +138,13 @@ public class Server {
     }
 
     public void run() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            for (Map.Entry<Integer, ArrayList<SocketClientConnection>> c : gameList.entrySet()) {
+                for (SocketClientConnection socketClientConnection : c.getValue()) {
+                    socketClientConnection.send(ServerMessage.serverDown);
+                }
+            }
+        }));
         //noinspection InfiniteLoopStatement
         while (true) {
             try {

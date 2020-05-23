@@ -23,5 +23,6 @@ public final class ServerMessage implements Serializable {
     public static String secondBuilderPos = "Insert the starting position of your second worker (row,col):";
     public static String cellNotAvailable = "This cell is not available, try another one";
     public static String connClosed = "Connection closed.";
+    public static String serverDown = "Server interrupted unexpectedly.";
 
 }

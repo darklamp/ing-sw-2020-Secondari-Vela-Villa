@@ -95,6 +95,9 @@ public class Client implements Runnable {
                         if (s.equals(ServerMessage.abortMessage)) {
                             ui.process("[ERROR]@@@Game aborted. Someone probably disconnected or timer ran out.");
                             System.exit(0);
+                        } else if (s.equals(ServerMessage.serverDown)) {
+                            ui.process("[ERROR]@@@" + ServerMessage.serverDown);
+                            System.exit(0);
                         } else if (s.contains(ServerMessage.connClosed)) {
                             String[] inputs = s.split("@@@");
                             int pIndex = Integer.parseInt(inputs[1]);
