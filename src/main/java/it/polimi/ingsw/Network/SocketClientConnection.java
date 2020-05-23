@@ -133,6 +133,11 @@ public class SocketClientConnection implements Runnable {
         return out;
     }
 
+    /**
+     * Asks for god choice
+     * @param gods list of previously choosen by the first player
+     * @return integer index of the choosen god
+     */
     public synchronized int getGodChoice(ArrayList<Integer> gods){
         StringBuilder s = new StringBuilder();
         s.append("[CHOICE]@@@");

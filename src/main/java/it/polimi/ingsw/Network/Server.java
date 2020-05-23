@@ -54,6 +54,9 @@ public class Server {
         return currentGameIndex;
     }
 
+    /**
+     * @param c is the client kicked from server
+     */
     public synchronized static void deregisterConnection(SocketClientConnection c) {
         for (Map.Entry<Integer, ArrayList<SocketClientConnection>> entry : gameList.entrySet()) {
             try {
@@ -68,6 +71,13 @@ public class Server {
         }
     }
 
+    /**
+     * @param c is the client connection
+     * @param name is the Nickname
+     * @throws Exception, in this case the lobby is reset
+     * Handle the interaction with the first player and then wait for the other player(s), once the game
+     * is started the lobby is emptied and ready to "host" another game.
+     */
     public synchronized void lobby(SocketClientConnection c, String name) throws Exception {
      try{
          if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n")) throw new NickAlreadyTakenException();
@@ -206,7 +216,7 @@ public class Server {
     }
 
     /**
-     * simple functions Server side
+     * Simple functions Server side for developers
      */
     public void startConsole() {
         new Thread(() -> {
