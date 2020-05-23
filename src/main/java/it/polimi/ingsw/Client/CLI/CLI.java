@@ -98,7 +98,7 @@ public class CLI implements Ui {
                     else if (r == 1)
                         System.out.print(Color.RESET + Color.BOLD + (Client.getPlayerIndex() == 1 ? "  YOU" : "  P1 ") + Color.ANSI_RED + "    █ 1 █ " + Color.ANSI_CYAN + "█ 2 █" + Color.RESET);
                     else if (r == 2 && Client.getPlayersNumber() == 3)
-                        System.out.print(Color.RESET + Color.BOLD + (Client.getPlayerIndex() == 2 ? "  YOU" : "  P2 ") + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE + "█ 2 █" + Color.RESET);
+                        System.out.print(Color.RESET + Color.BOLD + (Client.getPlayerIndex() == 2 ? "  YOU  " : "  P2   ") + Color.ANSI_GREEN + "  █ 1 █ " + Color.ANSI_PURPLE + "█ 2 █" + Color.RESET);
                     else if (r == 3)
                         System.out.print(Color.RESET + Color.BOLD + Color.ANSI_WHITE + "  ███  NO PLAYER     ███" + Color.RESET);
                 }
