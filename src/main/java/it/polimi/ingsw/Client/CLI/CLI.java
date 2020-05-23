@@ -28,6 +28,9 @@ public class CLI implements Ui {
         } else if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
             Client.setPlayerIndex((short) Integer.parseInt(inputs[1]));
             Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
+            if (inputs.length > 3) {
+                System.out.println("Your game's number is: " + Integer.parseInt(inputs[3]) + ". Keep it in case server goes down.");
+            }
         } else if (input.contains("[CHOICE]")) {
             if (inputs[1].equals("GODS")) {
                 Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));

@@ -51,6 +51,13 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
             String[] inputs = input.split("@@@");
             Client.setPlayerIndex((short) Integer.parseInt(inputs[1]));
             Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
+            if (inputs.length > 3) {
+                if (inputs.length == 5) {
+                    Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
+                    guiInitialized = true;
+                } else
+                    System.out.println("Your game's number is: " + Integer.parseInt(inputs[3]) + ". Keep it in case server goes down.");
+            }
         } else if (input.contains("[CHOICE]")) {
             String[] inputs = input.split("@@@");
             if (inputs[1].equals("GODS")) {

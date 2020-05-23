@@ -242,10 +242,10 @@ public class MainController implements PropertyChangeListener {
             c3.setReady();
         }
         int size = (c3 == null ? 2 : 3);
-        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size);
-        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size);
+        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + 0);
+        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + 0);
         if (c3 != null) {
-            c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size);
+            c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + 0);
         }
         GameStateMessage message = new GameStateMessage(player1.getState(), player2.getState(), (player3 == null ? null : player3.getState()));
         c1.send(message);

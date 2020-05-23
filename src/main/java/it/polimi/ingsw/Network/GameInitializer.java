@@ -144,7 +144,7 @@ public class GameInitializer implements Runnable {
             }
             player1View.addPropertyChangeListener(mainController);
             player2View.addPropertyChangeListener(mainController);
-            if (c3 != null){
+            if (c3 != null) {
                 player3View.addPropertyChangeListener(mainController);
             }
             c1.setReady();
@@ -152,10 +152,10 @@ public class GameInitializer implements Runnable {
             if (c3 != null) {
                 c3.setReady();
             }
-            c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + players.size());
-            c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + players.size());
+            c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + players.size() + "@@@" + gameTable.getGameIndex());
+            c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + players.size() + "@@@" + gameTable.getGameIndex());
             if (c3 != null) {
-                c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + players.size());
+                c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + players.size() + "@@@" + gameTable.getGameIndex());
             }
             GameStateMessage message = new GameStateMessage(ClientState.WAIT, gameTable.getCurrentPlayer().getFirstState(), ClientState.WAIT);
             c1.send(message);
