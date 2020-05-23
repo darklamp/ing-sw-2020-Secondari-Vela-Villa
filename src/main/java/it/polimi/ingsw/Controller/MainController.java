@@ -16,12 +16,8 @@ import it.polimi.ingsw.View.View;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Manage the news received.
@@ -157,7 +153,7 @@ public class MainController implements PropertyChangeListener {
         this.news = null;
         File file = new File("game" + gameTable.getGameIndex());
         if (file.exists()) {
-            file = new File(new Random().nextInt() + "game" + gameTable.getGameIndex());
+            file.delete();
         }
         try {
             this.fileOutputStream = new FileOutputStream(file);
@@ -182,8 +178,14 @@ public class MainController implements PropertyChangeListener {
     }
 
     synchronized private void saveGameState() {
+        ObjectOutputStream outputStream;
         try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+            try {
+                outputStream = new ObjectOutputStream(fileOutputStream);
+            } catch (IOException e) {
+                fileOutputStream = new FileOutputStream("game" + gameTable.getGameIndex());
+                outputStream = new ObjectOutputStream(fileOutputStream);
+            }
             outputStream.writeObject(gameTable);
             outputStream.close();
         } catch (Exception e) {
