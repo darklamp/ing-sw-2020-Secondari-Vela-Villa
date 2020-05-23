@@ -12,21 +12,21 @@ import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Manage the news received.
  */
 
-public class MainController implements PropertyChangeListener {
+public class MainController implements PropertyChangeListener, Serializable {
 
     private Player currentPlayer;
     private final BuildController buildController;
     private final MoveController moveController;
     private final GameTable gameTable;
-    private GameInitializer gameInitializer;
+    private transient GameInitializer gameInitializer;
     private News news;
-    private ControllerState state = ControllerState.PLAY;
 
     @Override
     synchronized public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
@@ -47,29 +47,25 @@ public class MainController implements PropertyChangeListener {
         } else {
             try {
                 if (name.equals("PLAYERTIMEOUT")) throw new NoMoreMovesException(news.getSender().getPlayer());
-                else switch (state) {
-                    case PLAY -> {
-                        isLegalState(name,currentPlayer.getState());
-                        switch (name) {
-                            case "PASS" -> {
-                                gameTable.nextTurn();
-                                currentPlayer = gameTable.getCurrentPlayer();
-                                gameTable.setNews(news, "PASSOK");
-                            }
-                            case "BUILD" -> buildController.handleBuild(news);
-                            case "MOVE" -> moveController.handleMove(news);
-                            default -> throw new IllegalTurnStateException();
+                else {
+                    isLegalState(name, currentPlayer.getState());
+                    switch (name) {
+                        case "PASS" -> {
+                            gameTable.nextTurn();
+                            currentPlayer = gameTable.getCurrentPlayer();
+                            gameTable.setNews(news, "PASSOK");
                         }
+                        case "BUILD" -> buildController.handleBuild(news);
+                        case "MOVE" -> moveController.handleMove(news);
+                        default -> throw new IllegalTurnStateException();
                     }
                 }
-            }
-            catch(IllegalTurnStateException e){ // player isn't in a legal state for the move
+            } catch (IllegalTurnStateException e) { // player isn't in a legal state for the move
                 news.setRecipients(gameTable.getCurrentPlayer());
                 gameTable.setNews(news, "ILLEGALSTATE");
-            }
-            catch (WinnerException e){
+            } catch (WinnerException e) {
                 SocketClientConnection winner = gameTable.getPlayerConnections().get(0);
-                for (SocketClientConnection c : gameTable.getPlayerConnections()){
+                for (SocketClientConnection c : gameTable.getPlayerConnections()) {
                     c.getPlayer().setState(ClientState.LOSE);
                     if (c.getPlayer() == e.getPlayer()) {
                         winner = c;
@@ -81,11 +77,10 @@ public class MainController implements PropertyChangeListener {
                 n.setRecipients((ArrayList<SocketClientConnection>) null);
                 gameTable.setNews(n, "WIN");
                 gameTable.closeGame();
-            }
-            catch (NoMoreMovesException e){
+            } catch (NoMoreMovesException e) {
                 if (gameTable.getPlayerConnections().size() == 2) {
                     SocketClientConnection winner = gameTable.getPlayerConnections().get(0);
-                    for (SocketClientConnection c : gameTable.getPlayerConnections()){
+                    for (SocketClientConnection c : gameTable.getPlayerConnections()) {
                         if (c.getPlayer() != e.getPlayer()) {
                             winner = c;
                             break;
@@ -93,10 +88,9 @@ public class MainController implements PropertyChangeListener {
                     }
                     News n = new News(null, winner);
                     n.setRecipients(gameTable.getPlayerConnections());
-                    gameTable.setNews(n,"WIN");
+                    gameTable.setNews(n, "WIN");
                     gameTable.closeGame();
-                }
-                else {
+                } else {
                     try {
                         gameTable.removePlayer(e.getPlayer(), false);
                     } catch (NoMoreMovesException ignored) {
@@ -108,18 +102,18 @@ public class MainController implements PropertyChangeListener {
     }
 
 
-    private void setNews(News news){
+    private void setNews(News news) {
         this.news = news;
     }
 
-    public News getNews(){
+    public News getNews() {
         return this.news;
     }
 
     /**
      * @param name Turn state from Server side
      * @param turn Turn state from Client side
-     * Checks they are matching, otherwise
+     *             Checks they are matching, otherwise
      * @throws IllegalTurnStateException
      */
     private static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
@@ -168,9 +162,4 @@ public class MainController implements PropertyChangeListener {
         });
     }
 
-
-}
-
-enum ControllerState{
-    PLAY;
 }
