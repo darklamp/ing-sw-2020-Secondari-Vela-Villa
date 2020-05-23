@@ -196,6 +196,9 @@ public class Server {
         System.out.println("Successfully reloaded " + currentGameIndex + " games from disk.");
     }
 
+    /**
+     * simple functions Server side
+     */
     public void startConsole() {
         new Thread(() -> {
             Scanner stdin = new Scanner(System.in);

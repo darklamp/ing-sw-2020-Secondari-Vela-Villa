@@ -2,6 +2,9 @@ package it.polimi.ingsw.Utility;
 
 import java.io.Serializable;
 
+/**
+ * Class to handle cells like pair of int [row,column]
+ */
 public class Pair implements Serializable {
 
     private static final long serialVersionUID = 17756L;

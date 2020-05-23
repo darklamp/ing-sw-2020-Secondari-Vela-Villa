@@ -17,6 +17,9 @@ public class ServerMain {
     private static boolean restartFromDisk = false;
 
 
+    /**
+     * Launch the server
+     */
     public static void main(String[] args) {
         Server server;
         int port = 1337;

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Utility;
 
+/**
+ * Colors for CLI
+ */
 public enum Color {
     ANSI_RED("\u001B[31m"),
     ANSI_GREEN("\u001B[32m"),
