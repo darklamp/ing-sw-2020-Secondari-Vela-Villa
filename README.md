@@ -22,3 +22,4 @@ debug console commands:
 
 * kick [gameIndex] [playerName]    : kicks player from game
 * players [gameIndex]              : returns list of players for given gameIndex
+* save                             : saves current games' state
