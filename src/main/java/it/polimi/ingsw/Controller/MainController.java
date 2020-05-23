@@ -64,7 +64,7 @@ public class MainController implements PropertyChangeListener {
                         case "MOVE" -> moveController.handleMove(news);
                         default -> throw new IllegalTurnStateException();
                     }
-                    saveGameState();
+                    if (ServerMain.persistence()) saveGameState();
                 }
             } catch (IllegalTurnStateException e) { // player isn't in a legal state for the move
                 news.setRecipients(gameTable.getCurrentPlayer());
@@ -151,15 +151,17 @@ public class MainController implements PropertyChangeListener {
     public MainController(GameTable gameTable) {
         this.currentPlayer = null;
         this.news = null;
-        File file = new File("game" + gameTable.getGameIndex());
-        try {
-            this.fileOutputStream = new FileOutputStream(file);
-        } catch (FileNotFoundException ignored) {
+        if (ServerMain.persistence()) {
+            File file = new File("game" + gameTable.getGameIndex());
+            try {
+                this.fileOutputStream = new FileOutputStream(file);
+            } catch (FileNotFoundException ignored) {
+            }
         }
         this.gameTable = gameTable;
         this.buildController = new BuildController(gameTable);
         this.moveController = new MoveController(gameTable);
-        saveGameState();
+        if (ServerMain.persistence()) saveGameState();
     }
 
     public void setGameInitializer(GameInitializer gameInitializer) {

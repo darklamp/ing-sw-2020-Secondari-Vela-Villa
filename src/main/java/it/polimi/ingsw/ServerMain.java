@@ -10,11 +10,11 @@ public class ServerMain {
 
     private static boolean verbose = false;
 
-    public static boolean isRestartFromDisk() {
-        return restartFromDisk;
+    public static boolean persistence() {
+        return persistence;
     }
 
-    private static boolean restartFromDisk = false;
+    private static boolean persistence = false;
 
 
     /**
@@ -44,7 +44,7 @@ public class ServerMain {
             } else if (s.contains("v")) {
                 verbose = true;
             } else if (s.contains("disk")) {
-                restartFromDisk = true;
+                persistence = true;
             }
         }
         server = new Server(port, ip);

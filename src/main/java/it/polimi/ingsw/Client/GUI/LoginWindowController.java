@@ -48,18 +48,19 @@ public class LoginWindowController extends WindowController {
     private void print(ActionEvent event) {
         event.consume();
         if (!connected) {
-            String ipAddress = Client.getIP().toString();
+           /* String ipAddress = Client.getIP().toString();
             String s;
             s = "Connecting to: " + ipAddress + "...";
-            textAreaMain.setText(s);
+            textAreaMain.setText(s);*/
             new Thread(client).start();
             connected = true;
         } else GUIClient.setOut(ipInput.getText());
     }
 
 
-    static void waitForIP(Client client) {
+    void waitForIP(Client client) {
         LoginWindowController.client = client;
+        print(new ActionEvent());
     }
 
     void firstPlayer() {
@@ -82,6 +83,27 @@ public class LoginWindowController extends WindowController {
                 }
             } else {
                 result = dialog.showAndWait();
+            }
+        }
+    }
+
+    void gameReload() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Please choose whether you'd like to load a previous game or join a new one.");
+        ButtonType b1 = new ButtonType("Reload");
+        ButtonType b2 = new ButtonType("Join");
+        alert.getButtonTypes().setAll(b1, b2);
+        while (true) {
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == b1) {
+                    GUIClient.setOut("R");
+                } else {
+                    textAreaMain.setText("Please enter your name and press the button.");
+                }
+                break;
             }
         }
     }

@@ -179,11 +179,10 @@ public class Server {
                         socketClientConnection.send(ServerMessage.serverDown);
                     }
                 }
-            } catch (NullPointerException e) {
-                System.exit(0);
+            } catch (NullPointerException ignored) {
             }
         }));
-        if (ServerMain.isRestartFromDisk()) reloadFromDisk();
+        if (ServerMain.persistence()) reloadFromDisk();
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
@@ -238,7 +237,10 @@ public class Server {
                         gameList.get(index).iterator().forEachRemaining(c -> s1.append(c.getPlayer().getNickname()).append(" "));
                         System.out.println(s1);
                     } else if (s.contains("save")) {
-                        System.out.println("Saving state to disk..");
+                        if (ServerMain.persistence())
+                            System.out.println("Saving state to disk..");
+                        else
+                            System.out.println("[WARNING] Saving state, although current instance was set not to use persistence.");
                         gameControllers.forEach((key, value) -> value.saveGameState());
                         System.out.println("State saved successfully!");
                     }

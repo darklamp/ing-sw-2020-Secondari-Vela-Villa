@@ -234,9 +234,11 @@ public class SocketClientConnection implements Runnable {
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
             send(ServerMessage.welcome);
-            send(ServerMessage.reloadGameChoice);
+            if (ServerMain.persistence()) {
+                send(ServerMessage.reloadGameChoice);
+            } else send(ServerMessage.welcomeNoPersistence);
             String read = in.nextLine();
-            if (read.equals("R")) {
+            if (ServerMain.persistence() && read.equals("R")) {
                 send("Please enter game number: ");
                 int gameNumber = 0;
                 try {

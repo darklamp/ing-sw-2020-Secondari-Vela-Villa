@@ -71,6 +71,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
                 Platform.runLater(() -> GUIClient.getController().getStartingPositions(false));
             } else Platform.runLater(() -> loginController.parseGodChoice(input));
         } else if (input.contains(ServerMessage.firstPlayer)) Platform.runLater(() -> loginController.firstPlayer());
+        else if (input.equals(ServerMessage.reloadGameChoice)) Platform.runLater(() -> loginController.gameReload());
         else if (input.equals(ServerMessage.cellNotAvailable))
             Platform.runLater(() -> GUIClient.getController().getStartingPositions(true));
         else Platform.runLater(() -> loginController.setText(input));
@@ -78,7 +79,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
 
     @Override
     public void waitForIP(Client client) {
-        Platform.runLater(() -> LoginWindowController.waitForIP(client));
+        Platform.runLater(() -> loginController.waitForIP(client));
     }
 
     @Override
