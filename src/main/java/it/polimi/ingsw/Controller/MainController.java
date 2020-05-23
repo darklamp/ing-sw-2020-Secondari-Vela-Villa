@@ -152,9 +152,6 @@ public class MainController implements PropertyChangeListener {
         this.currentPlayer = null;
         this.news = null;
         File file = new File("game" + gameTable.getGameIndex());
-        if (file.exists()) {
-            file.delete();
-        }
         try {
             this.fileOutputStream = new FileOutputStream(file);
         } catch (FileNotFoundException ignored) {
@@ -162,6 +159,7 @@ public class MainController implements PropertyChangeListener {
         this.gameTable = gameTable;
         this.buildController = new BuildController(gameTable);
         this.moveController = new MoveController(gameTable);
+        saveGameState();
     }
 
     public void setGameInitializer(GameInitializer gameInitializer) {
@@ -177,7 +175,7 @@ public class MainController implements PropertyChangeListener {
         });
     }
 
-    synchronized private void saveGameState() {
+    synchronized public void saveGameState() {
         ObjectOutputStream outputStream;
         try {
             try {

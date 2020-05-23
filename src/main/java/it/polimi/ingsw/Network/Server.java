@@ -8,7 +8,6 @@ import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
 import it.polimi.ingsw.ServerMain;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
@@ -57,11 +56,14 @@ public class Server {
 
     public synchronized static void deregisterConnection(SocketClientConnection c) {
         for (Map.Entry<Integer, ArrayList<SocketClientConnection>> entry : gameList.entrySet()) {
-            for (SocketClientConnection connection : entry.getValue()) {
-                if (c == connection) {
-                    entry.getValue().remove(c);
-                    break;
+            try {
+                for (SocketClientConnection connection : entry.getValue()) {
+                    if (c == connection) {
+                        entry.getValue().remove(c);
+                        break;
+                    }
                 }
+            } catch (NullPointerException ignored) {
             }
         }
     }
@@ -128,11 +130,18 @@ public class Server {
 
     }
 
+    private static final Map<Integer, ArrayList<String>> gameFromDiskList = new LinkedHashMap<>();
+
     public synchronized void lobbyFromDisk(SocketClientConnection c, String name, int gameIndex) throws NickAlreadyTakenException {
         if (!gameControllers.get(gameIndex).containsPlayer(name)) throw new NickAlreadyTakenException();
         else {
             ArrayList<SocketClientConnection> list = gameList.computeIfAbsent(gameIndex, k -> new ArrayList<>());
+            ArrayList<String> list2 = gameFromDiskList.computeIfAbsent(gameIndex, k -> new ArrayList<>());
+            if (list2.size() > 0) {
+                if (list2.stream().anyMatch(c1 -> c1.equals(name))) throw new NickAlreadyTakenException();
+            }
             list.add(c);
+            list2.add(name);
             gameControllers.get(gameIndex).setPlayerFromDisk(name, c);
             if (gameControllers.get(gameIndex).getPlayersNumber() == gameList.get(gameIndex).size())
                 gameControllers.get(gameIndex).restartFromDisk(gameList.get(gameIndex));
@@ -154,10 +163,14 @@ public class Server {
 
     public void run() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            for (Map.Entry<Integer, ArrayList<SocketClientConnection>> c : gameList.entrySet()) {
-                for (SocketClientConnection socketClientConnection : c.getValue()) {
-                    socketClientConnection.send(ServerMessage.serverDown);
+            try {
+                for (Map.Entry<Integer, ArrayList<SocketClientConnection>> c : gameList.entrySet()) {
+                    for (SocketClientConnection socketClientConnection : c.getValue()) {
+                        socketClientConnection.send(ServerMessage.serverDown);
+                    }
                 }
+            } catch (NullPointerException e) {
+                System.exit(0);
             }
         }));
         if (ServerMain.isRestartFromDisk()) reloadFromDisk();
@@ -184,13 +197,9 @@ public class Server {
                 gameControllers.put(i, mainController);
                 gameList.put(i, null);
                 gameProperties.put(i, null);
-            } catch (FileNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 currentGameIndex = i;
                 break;
-            } catch (IOException | ClassNotFoundException e) {
-                if (ServerMain.verbose()) e.printStackTrace();
-                System.err.println("[CRITICAL] Error while loading from disk.");
-                System.exit(0);
             }
         }
         System.out.println("Successfully reloaded " + currentGameIndex + " games from disk.");
@@ -218,6 +227,10 @@ public class Server {
                         s1.append("Players of game ").append(index).append(": ");
                         gameList.get(index).iterator().forEachRemaining(c -> s1.append(c.getPlayer().getNickname()).append(" "));
                         System.out.println(s1);
+                    } else if (s.contains("save")) {
+                        System.out.println("Saving state to disk..");
+                        gameControllers.forEach((key, value) -> value.saveGameState());
+                        System.out.println("State saved successfully!");
                     }
                 } catch (Exception e) {
                     if (ServerMain.verbose()) e.printStackTrace();
