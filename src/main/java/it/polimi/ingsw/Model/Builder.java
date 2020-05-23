@@ -10,6 +10,8 @@ import static it.polimi.ingsw.Client.ClientState.WAIT;
 
 public abstract class Builder implements Serializable {
 
+    private static final long serialVersionUID = 17756L;
+
     private Cell position;
 
     private final Player player;

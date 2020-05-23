@@ -4,12 +4,15 @@ import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.Utility.Pair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * News object used to move info in observer pattern
  */
-public class News {
+public class News implements Serializable {
+
+    private static final long serialVersionUID = 17756L;
 
     public News() {
         this.height = null;

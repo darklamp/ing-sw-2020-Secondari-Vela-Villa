@@ -157,6 +157,7 @@ public class Server {
         }
     }
 
+
     public void startConsole() {
         new Thread(() -> {
             Scanner stdin = new Scanner(System.in);

@@ -10,6 +10,7 @@ import it.polimi.ingsw.View.CellView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +18,12 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 
-public class GameTable {
+public class GameTable implements Serializable {
+
+    private static final long serialVersionUID = 17756L;
 
     private final Cell[][] Table;
+
     /**
      * 5x5 matrix representing game table
      **/
@@ -57,6 +61,9 @@ public class GameTable {
      * support boolean for Athena
      **/
 
+    private volatile boolean exit = false;
+    private Thread timerThread = null;
+
     /**
      * The purpose of this function is going to the next turn;
      * specifically, what this function does is:
@@ -80,9 +87,6 @@ public class GameTable {
         }
     }
 
-
-    private volatile boolean exit = false;
-    private Thread timerThread = null;
 
     /**
      * When called, this method starts a timer of length {@link Server#getMoveTimer()} (using minutes as timeunit).
@@ -313,6 +317,10 @@ public class GameTable {
 
     public Player getCurrentPlayer() {
         return players.get(currentPlayer);
+    }
+
+    public int getGameIndex() {
+        return gameIndex;
     }
 
     public GameStateMessage getGameState() {

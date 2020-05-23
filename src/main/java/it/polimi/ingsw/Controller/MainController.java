@@ -9,23 +9,27 @@ import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.GameInitializer;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.ServerMain;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.Serializable;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
  * Manage the news received.
  */
 
-public class MainController implements PropertyChangeListener, Serializable {
+public class MainController implements PropertyChangeListener {
 
     private Player currentPlayer;
     private final BuildController buildController;
     private final MoveController moveController;
     private final GameTable gameTable;
-    private transient GameInitializer gameInitializer;
+    private GameInitializer gameInitializer;
+    private FileOutputStream fileOutputStream;
     private News news;
 
     @Override
@@ -59,6 +63,7 @@ public class MainController implements PropertyChangeListener, Serializable {
                         case "MOVE" -> moveController.handleMove(news);
                         default -> throw new IllegalTurnStateException();
                     }
+                    saveGameState();
                 }
             } catch (IllegalTurnStateException e) { // player isn't in a legal state for the move
                 news.setRecipients(gameTable.getCurrentPlayer());
@@ -144,6 +149,12 @@ public class MainController implements PropertyChangeListener, Serializable {
     public MainController(GameTable gameTable) {
         this.currentPlayer = null;
         this.news = null;
+        try {
+            this.fileOutputStream = new FileOutputStream("game" + gameTable.getGameIndex());
+        } catch (FileNotFoundException e) {
+            if (ServerMain.verbose()) e.printStackTrace();
+            this.fileOutputStream = null;
+        }
         this.gameTable = gameTable;
         this.buildController = new BuildController(gameTable);
         this.moveController = new MoveController(gameTable);
@@ -160,6 +171,16 @@ public class MainController implements PropertyChangeListener, Serializable {
             } catch (NoMoreMovesException ignored) {
             }
         });
+    }
+
+    synchronized private void saveGameState() {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+            outputStream.writeObject(gameTable);
+            outputStream.close();
+        } catch (Exception e) {
+            if (ServerMain.verbose()) e.printStackTrace();
+        }
     }
 
 }

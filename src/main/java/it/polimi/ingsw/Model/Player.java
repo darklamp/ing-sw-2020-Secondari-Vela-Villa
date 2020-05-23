@@ -6,17 +6,20 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static it.polimi.ingsw.Client.ClientState.MOVE;
 import static it.polimi.ingsw.Client.ClientState.MOVEORBUILD;
 
-public class Player {
+public class Player implements Serializable {
+
+    private static final long serialVersionUID = 17756L;
 
     private final ArrayList<Builder> builderList; //array of builders
-    
+
     private GameTable gameTable;
-    private SocketClientConnection connection;
+    private transient SocketClientConnection connection;
 
     private final String nickname; //private attribute for the Player's ID
 

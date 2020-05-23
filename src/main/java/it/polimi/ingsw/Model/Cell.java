@@ -12,6 +12,8 @@ import static java.util.stream.Collectors.toCollection;
 
 public class Cell implements Serializable {
 
+    private static final long serialVersionUID = 17756L;
+
     private Builder builder = null;
 
     private final Pair coordinates;

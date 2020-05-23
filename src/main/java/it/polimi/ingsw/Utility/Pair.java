@@ -3,6 +3,9 @@ package it.polimi.ingsw.Utility;
 import java.io.Serializable;
 
 public class Pair implements Serializable {
+
+    private static final long serialVersionUID = 17756L;
+
     public int getFirst() {
         return num1;
     }

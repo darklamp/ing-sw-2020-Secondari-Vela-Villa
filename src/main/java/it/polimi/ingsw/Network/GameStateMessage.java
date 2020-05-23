@@ -8,6 +8,9 @@ import java.io.Serializable;
  * Message sent to all clients everytime a state change happens.
  */
 public class GameStateMessage implements Serializable {
+
+    private static final long serialVersionUID = 17756L;
+
     private final ClientState p1, p2, p3;
 
     public GameStateMessage(ClientState p1, ClientState p2, ClientState p3) {

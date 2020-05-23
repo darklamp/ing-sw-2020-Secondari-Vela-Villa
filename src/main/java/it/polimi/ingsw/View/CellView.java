@@ -5,6 +5,9 @@ import it.polimi.ingsw.Model.BuildingType;
 import java.io.Serializable;
 
 public class CellView implements Serializable {
+
+    private static final long serialVersionUID = 17756L;
+
     public int getPlayer() {
         return player;
     }
