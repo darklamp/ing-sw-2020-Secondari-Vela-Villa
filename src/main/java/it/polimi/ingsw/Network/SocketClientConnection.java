@@ -229,20 +229,39 @@ public class SocketClientConnection implements Runnable {
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
             send(ServerMessage.welcome);
+            send(ServerMessage.reloadGameChoice);
             String read = in.nextLine();
-            name = read;
-            while (true) {
+            if (read.equals("R")) {
+                send("Please enter game number: ");
+                int gameNumber = 0;
                 try {
-                    server.lobby(this, name);
-                    break;
+                    gameNumber = Integer.parseInt(in.nextLine());
+                } catch (NumberFormatException e) {
+                    send("Invalid number!");
+                    close();
                 }
-                catch (NickAlreadyTakenException ee){
-                    send(ServerMessage.userAlreadyTaken);
-                    read = in.nextLine();
-                    name = read;
+                send("Please enter your previous nickname: ");
+                String nick = in.nextLine();
+                try {
+                    server.lobbyFromDisk(this, nick, gameNumber);
+                } catch (Exception e) {
+                    send("Invalid game index / nickname.");
+                    closeConnection();
+                }
+            } else {
+                name = read;
+                while (true) {
+                    try {
+                        server.lobby(this, name);
+                        break;
+                    } catch (NickAlreadyTakenException ee) {
+                        send(ServerMessage.userAlreadyTaken);
+                        read = in.nextLine();
+                        name = read;
+                    }
                 }
             }
-            while(isActive()){
+            while (isActive()) {
                 if (ready && player.getState() != ClientState.WAIT) {
                     AtomicReference<String> read1 = new AtomicReference<>();
                     read1.set(in.nextLine());

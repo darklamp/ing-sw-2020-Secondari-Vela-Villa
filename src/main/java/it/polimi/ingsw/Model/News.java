@@ -69,7 +69,7 @@ public class News implements Serializable {
         return sender;
     }
 
-    private SocketClientConnection sender;
+    private transient SocketClientConnection sender;
 
     /**
      *  This arraylist contains the news' recipients, aka the people to whom the news is to be sent to

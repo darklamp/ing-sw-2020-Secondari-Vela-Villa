@@ -145,6 +145,10 @@ public class Player implements Serializable {
         return nickname;
     }
 
+    public void setConnection(SocketClientConnection connection) {
+        this.connection = connection;
+    }
+
     synchronized void kick(int pIndex) {
         gameTable.setNews(new News(ServerMessage.connClosed + "@@@" + pIndex, null), "PLAYERKICKED");
         this.connection.closeConnection();

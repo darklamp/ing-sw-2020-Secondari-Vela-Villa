@@ -62,7 +62,7 @@ public class GameTable implements Serializable {
      **/
 
     private volatile boolean exit = false;
-    private Thread timerThread = null;
+    private transient Thread timerThread = null;
 
     /**
      * The purpose of this function is going to the next turn;
@@ -183,7 +183,7 @@ public class GameTable implements Serializable {
     /**
      * Listener helper object
      **/
-    private News news;
+    private transient News news;
 
     /**
      * Listener news

@@ -8,15 +8,20 @@ import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.GameInitializer;
+import it.polimi.ingsw.Network.GameStateMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.ServerMain;
+import it.polimi.ingsw.View.RemoteView;
+import it.polimi.ingsw.View.View;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Manage the news received.
@@ -149,11 +154,13 @@ public class MainController implements PropertyChangeListener {
     public MainController(GameTable gameTable) {
         this.currentPlayer = null;
         this.news = null;
+        File file = new File("game" + gameTable.getGameIndex());
+        if (file.exists()) {
+            file = new File(new Random().nextInt() + "game" + gameTable.getGameIndex());
+        }
         try {
-            this.fileOutputStream = new FileOutputStream("game" + gameTable.getGameIndex());
-        } catch (FileNotFoundException e) {
-            if (ServerMain.verbose()) e.printStackTrace();
-            this.fileOutputStream = null;
+            this.fileOutputStream = new FileOutputStream(file);
+        } catch (FileNotFoundException ignored) {
         }
         this.gameTable = gameTable;
         this.buildController = new BuildController(gameTable);
@@ -181,6 +188,73 @@ public class MainController implements PropertyChangeListener {
         } catch (Exception e) {
             if (ServerMain.verbose()) e.printStackTrace();
         }
+    }
+
+    synchronized public boolean containsPlayer(String playerNick) {
+        for (Player p : gameTable.getPlayers()) {
+            if (p.getNickname().equals(playerNick)) return true;
+        }
+        return false;
+    }
+
+    synchronized public void setPlayerFromDisk(String name, SocketClientConnection c) {
+        Player p = null;
+        for (Player p1 : gameTable.getPlayers()) if (p1.getNickname().equals(name)) p = p1;
+        assert p != null;
+        p.setConnection(c);
+    }
+
+    synchronized public int getPlayersNumber() {
+        return gameTable.getPlayers().size();
+    }
+
+    synchronized public void restartFromDisk(ArrayList<SocketClientConnection> connections) {
+        SocketClientConnection c1 = connections.get(0);
+        SocketClientConnection c2 = connections.get(1);
+        SocketClientConnection c3 = null;
+        if (connections.size() == 3) c3 = connections.get(2);
+        Player player1 = gameTable.getPlayers().get(0);
+        Player player2 = gameTable.getPlayers().get(1);
+        Player player3 = null;
+        if (c3 != null) player3 = gameTable.getPlayers().get(2);
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        if (c3 != null) c3.setPlayer(player3);
+        View player1View = new RemoteView(player1, c1, gameTable);
+        View player2View = new RemoteView(player2, c2, gameTable);
+        View player3View = null;
+        if (c3 != null) {
+            player3View = new RemoteView(player3, c3, gameTable);
+        }
+        gameTable.addPropertyChangeListener(player1View);
+        gameTable.addPropertyChangeListener(player2View);
+        if (c3 != null) {
+            gameTable.addPropertyChangeListener(player3View);
+        }
+        player1View.addPropertyChangeListener(this);
+        player2View.addPropertyChangeListener(this);
+        if (c3 != null) {
+            player3View.addPropertyChangeListener(this);
+        }
+        c1.setReady();
+        c2.setReady();
+        if (c3 != null) {
+            c3.setReady();
+        }
+        int size = (c3 == null ? 2 : 3);
+        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size);
+        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size);
+        if (c3 != null) {
+            c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size);
+        }
+        GameStateMessage message = new GameStateMessage(player1.getState(), player2.getState(), (player3 == null ? null : player3.getState()));
+        c1.send(message);
+        c2.send(message);
+        if (c3 != null) c3.send(message);
+        c1.send(gameTable.getBoardCopy());
+        c2.send(gameTable.getBoardCopy());
+        if (c3 != null) c3.send(gameTable.getBoardCopy());
+        gameTable.resetMoveTimer();
     }
 
 }

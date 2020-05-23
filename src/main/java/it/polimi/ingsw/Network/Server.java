@@ -5,8 +5,12 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
+import it.polimi.ingsw.ServerMain;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -113,8 +117,7 @@ public class Server {
              //      thread.join();
              currentGameIndex += 1;
          }
-     }
-     catch (NickAlreadyTakenException e){
+     } catch (NickAlreadyTakenException e) {
          throw new NickAlreadyTakenException();
      } catch (Exception e) {
          waitingConnection.clear();
@@ -124,6 +127,18 @@ public class Server {
      }
 
     }
+
+    public synchronized void lobbyFromDisk(SocketClientConnection c, String name, int gameIndex) throws NickAlreadyTakenException {
+        if (!gameControllers.get(gameIndex).containsPlayer(name)) throw new NickAlreadyTakenException();
+        else {
+            ArrayList<SocketClientConnection> list = gameList.computeIfAbsent(gameIndex, k -> new ArrayList<>());
+            list.add(c);
+            gameControllers.get(gameIndex).setPlayerFromDisk(name, c);
+            if (gameControllers.get(gameIndex).getPlayersNumber() == gameList.get(gameIndex).size())
+                gameControllers.get(gameIndex).restartFromDisk(gameList.get(gameIndex));
+        }
+    }
+
 
     public Server() throws IOException {
     }/* kept for test compatibility */
@@ -145,6 +160,7 @@ public class Server {
                 }
             }
         }));
+        if (ServerMain.isRestartFromDisk()) reloadFromDisk();
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
@@ -157,6 +173,28 @@ public class Server {
         }
     }
 
+    synchronized public void reloadFromDisk() {
+        FileInputStream fileInputStream;
+        for (int i = 0; ; i++) {
+            try {
+                fileInputStream = new FileInputStream("game" + i);
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+                GameTable g = (GameTable) objectInputStream.readObject();
+                MainController mainController = new MainController(g);
+                gameControllers.put(i, mainController);
+                gameList.put(i, null);
+                gameProperties.put(i, null);
+            } catch (FileNotFoundException e) {
+                currentGameIndex = i;
+                break;
+            } catch (IOException | ClassNotFoundException e) {
+                if (ServerMain.verbose()) e.printStackTrace();
+                System.err.println("[CRITICAL] Error while loading from disk.");
+                System.exit(0);
+            }
+        }
+        System.out.println("Successfully reloaded " + currentGameIndex + " games from disk.");
+    }
 
     public void startConsole() {
         new Thread(() -> {

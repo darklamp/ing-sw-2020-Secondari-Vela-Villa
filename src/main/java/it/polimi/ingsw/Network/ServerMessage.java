@@ -9,7 +9,8 @@ public final class ServerMessage implements Serializable {
 
     private static final long serialVersionUID = 17756L;
 
-    public static final String welcome = "Welcome!\nWhat's your name?";
+    public static final String welcome = "Welcome!";
+    public static final String reloadGameChoice = "Please enter your name if you want to start a new game, or enter \"R\" if you want to rejoin a saved game: ";
     public static final String userAlreadyTaken = "Username already taken. Please enter a different one: ";
     public static final String firstPlayer = "Looks like you're the first player to connect. You get to decide the number of players.\n" +
             "Please input a natural lower than 4 and higher than 1: ";

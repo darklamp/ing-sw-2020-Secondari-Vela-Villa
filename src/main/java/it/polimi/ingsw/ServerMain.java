@@ -10,6 +10,13 @@ public class ServerMain {
 
     private static boolean verbose = false;
 
+    public static boolean isRestartFromDisk() {
+        return restartFromDisk;
+    }
+
+    private static boolean restartFromDisk = false;
+
+
     public static void main(String[] args) {
         Server server;
         int port = 1337;
@@ -33,6 +40,8 @@ public class ServerMain {
                 console = true;
             } else if (s.contains("v")) {
                 verbose = true;
+            } else if (s.contains("disk")) {
+                restartFromDisk = true;
             }
         }
         server = new Server(port, ip);
