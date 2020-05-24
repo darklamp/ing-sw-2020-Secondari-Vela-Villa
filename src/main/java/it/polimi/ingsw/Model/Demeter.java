@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Network.SocketClientConnection;
 
 public class Demeter extends Builder {
     private boolean firstTime;
@@ -8,6 +9,10 @@ public class Demeter extends Builder {
 
     Demeter(Cell position, Player player) {
         super(position, player);
+    }
+
+    public Demeter(SocketClientConnection c1, Player player1) {
+        super();
     }
 
 
