@@ -229,7 +229,10 @@ public class MainWindowController extends WindowController implements Initializa
         if (Client.verbose())
             System.out.println("[DEBUG]" + i.getParent() + " Is parent of grabbed imageview; coords of ImageView are: " + getRow(i.getParent()) + "," + getColumn(i.getParent()));
         Dragboard db = i.startDragAndDrop(TransferMode.ANY);
-        Image image = (i.getImage());
+        Image image;
+        if (i.getImage() == builderImage1) image = builderImage2;
+        else if (i.getImage() == builderImage2) image = builderImage1;
+        else image = i.getImage();
         db.setDragView(image, 50, 50);
         ClipboardContent content = new ClipboardContent();
         int row = getRow(i.getParent());
