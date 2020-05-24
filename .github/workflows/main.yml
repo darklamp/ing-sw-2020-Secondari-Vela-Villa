@@ -22,9 +22,7 @@ jobs:
       - run: cp target/*.jar staging
       - uses: actions/upload-artifact@v2
         with:
-          name: client
           path: staging/client.jar
       - uses: actions/upload-artifact@v2
         with:
-          name: server
           path: staging/server.jar
