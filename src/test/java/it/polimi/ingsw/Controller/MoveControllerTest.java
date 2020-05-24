@@ -1,11 +1,10 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Model.Builder;
+import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
-import it.polimi.ingsw.Model.GameTable;
-import it.polimi.ingsw.Model.News;
-import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MoveControllerTest {
 
@@ -102,5 +101,81 @@ class MoveControllerTest {
         moveController.handleMove(news);
         assertSame(bk, gameTable.getCell(2, 3).getBuilder());
 
+    }
+
+    @Test
+    void panExcTest() throws Exception {
+        GameTable gameTable = new GameTable(2);
+
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(7);
+        Player player1 = new Player("gigi", gameTable, new SocketClientConnection(new Socket(), new Server()));
+        Player player2 = new Player("gigi2", gameTable, new SocketClientConnection(new Socket(), new Server()));
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        Field d = Player.class.getDeclaredField("connection");
+        d.setAccessible(true);
+        News news = new News("ASD", (SocketClientConnection) d.get(player2));
+        news.setCoords(0, 0, 1);
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        gameTable.setGods(choices);
+        Field ff = Cell.class.getDeclaredField("height");
+        ff.setAccessible(true);
+        ff.set(gameTable.getCell(0, 0), BuildingType.NONE);
+        ff.set(gameTable.getCell(1, 1), BuildingType.TOP);
+        MoveController moveController = new MoveController(gameTable);
+
+        assertThrows(WinnerException.class, () -> moveController.handleMove(news));
+    }
+
+    @Test
+    void artemisExcTest() throws Exception {
+        GameTable gameTable = new GameTable(2);
+
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(0);
+        choices.add(1);
+        Player player1 = new Player("gigi", gameTable, new SocketClientConnection(new Socket(), new Server()));
+        Player player2 = new Player("gigi2", gameTable, new SocketClientConnection(new Socket(), new Server()));
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        Field d = Player.class.getDeclaredField("connection");
+        d.setAccessible(true);
+        News news = new News("ASD", (SocketClientConnection) d.get(player2));
+        news.setCoords(0, 0, 1);
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        gameTable.setGods(choices);
+        Field ff = Cell.class.getDeclaredField("height");
+        ff.setAccessible(true);
+        ff.set(gameTable.getCell(0, 0), BuildingType.NONE);
+        ff.set(gameTable.getCell(1, 1), BuildingType.TOP);
+        MoveController moveController = new MoveController(gameTable);
+        player1.setFirstTime(true);
+        player2.setFirstTime(true);
+        moveController.handleMove(news);
+        assertEquals(ClientState.MOVEORBUILD, gameTable.getCurrentPlayer().getState());
     }
 }

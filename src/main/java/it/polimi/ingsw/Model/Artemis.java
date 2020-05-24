@@ -21,7 +21,6 @@ public class Artemis extends Builder {
      * @throws ApolloException      n/a
      * @throws InvalidMoveException when super method throws it or when I'm trying to move on the same cell as before
      * @throws ArtemisException     when moving for the first time on a valid cell
-     * @throws PrometheusException  n/a
      */
     @Override
     void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
