@@ -86,6 +86,7 @@ public class MainController implements PropertyChangeListener {
             } catch (NoMoreMovesException e) {
                 if (gameTable.getPlayerConnections().size() == 2) {
                     SocketClientConnection winner = gameTable.getPlayerConnections().get(0);
+                    Player loser = e.getPlayer();
                     for (SocketClientConnection c : gameTable.getPlayerConnections()) {
                         if (c.getPlayer() != e.getPlayer()) {
                             winner = c;
@@ -93,8 +94,9 @@ public class MainController implements PropertyChangeListener {
                         }
                     }
                     News n = new News(null, winner);
-                    n.setRecipients(gameTable.getPlayerConnections());
+                    n.setRecipients((ArrayList<SocketClientConnection>) null);
                     winner.getPlayer().setState(ClientState.WIN);
+                    loser.setState(ClientState.LOSE);
                     gameTable.setNews(n, "WIN");
                     gameTable.closeGame();
                 } else {
@@ -118,10 +120,9 @@ public class MainController implements PropertyChangeListener {
     }
 
     /**
-     * @param name Turn state from Server side
-     * @param turn Turn state from Client side
-     *             Checks they are matching, otherwise
-     * @throws IllegalTurnStateException
+     * @param name Turn state from Client side
+     * @param turn Turn state from Server side
+     * @throws IllegalTurnStateException if not matching
      */
     private static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
         switch (turn) {

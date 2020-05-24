@@ -5,6 +5,7 @@ import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ConnectException;
@@ -215,16 +216,24 @@ public class Client implements Runnable {
     public void run() {
         try {
             Socket socket = new Socket(ip, port);
+            socket.setPerformancePreferences(0, 1, 0);
+            socket.setTcpNoDelay(true);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    socket.close();
+                } catch (IOException ignored) {
+                }
+            }));
             ui.process("Connection established");
             Scanner stdin = new Scanner(System.in);
             PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
             ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
-            try{
+            try {
                 Thread t0 = asyncReadFromSocket(socketIn);
                 Thread t1 = asyncWriteToSocket(stdin, socketOut);
                 t0.join();
                 t1.join();
-            } catch(InterruptedException | NoSuchElementException e){
+            } catch (InterruptedException | NoSuchElementException e) {
                 System.out.println("Connection closed from the client side");
             } finally {
                 stdin.close();

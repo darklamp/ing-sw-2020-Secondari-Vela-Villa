@@ -162,20 +162,31 @@ public abstract class Builder implements Serializable {
            try{
                isValidMove(c);
                return true;
-           }
-           catch (InvalidMoveException e){
+           } catch (InvalidMoveException e) {
                return false;
-           }
-           catch (Exception e) {
+           } catch (Exception e) {
                return true;
            }
        });
     }
 
+    boolean hasAvailableBuilds() {
+        return this.position.getNear().stream().anyMatch(c -> {
+            try {
+                isValidBuild(c, c.getHeight().getNext());
+                return true;
+            } catch (InvalidBuildException e) {
+                return false;
+            } catch (Exception e) {
+                return true;
+            }
+        });
+    }
+
     /**
      * @return State from which the player starts.
      */
-    public ClientState getFirstState(){
+    public ClientState getFirstState() {
         return ClientState.MOVE;
     }
 

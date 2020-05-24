@@ -20,15 +20,15 @@ public class MoveController {
 
     /**
      * @param news contains the cell where the player wants to move.
-     * @throws WinnerException
-     * also catch gods' exceptions about moving powers
+     * @throws WinnerException also catch gods' exceptions about moving powers
      */
-    void handleMove(News news) throws WinnerException {
+    void handleMove(News news) throws WinnerException, NoMoreMovesException {
         String moveResult = "MOVEKO";
-        try{
+        try {
             if (gameTable.getCurrentBuilder() != null) {
                 if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder()) throw new InvalidMoveException();
             }
+            gameTable.checkMovePreConditions();
             news.getBuilder(gameTable).setPosition(news.getCell(gameTable));
             gameTable.getCurrentPlayer().setState(BUILD);
             if (gameTable.getCurrentBuilder() == null) {
