@@ -10,7 +10,6 @@ import java.lang.reflect.Field;
 import java.net.Socket;
 
 import static it.polimi.ingsw.Model.BuildingType.MIDDLE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NewsTest {
     static Socket socket = new Socket();
@@ -18,12 +17,12 @@ class NewsTest {
     static Field b;
     static GameTable gameTable = new GameTable(2);
     static SocketClientConnection c1 = new SocketClientConnection(socket, null);
+    static SocketClientConnection c2 = new SocketClientConnection(socket, null);
     News news = new News("ASD", c1);
     static Cell cell1;
     static Cell cell2;
     static Player player1;
-    Builder b1 = new Demeter(cell1, player1);
-    Builder b2 = new Demeter(cell2, player1);
+    static Player player2;
 
     @BeforeAll
     static void init() throws Exception {
@@ -34,6 +33,14 @@ class NewsTest {
         cell1 = gameTable.getCell(1, 2);
         cell2 = gameTable.getCell(2, 2);
         player1 = new Player("gigi", gameTable, c1);
+        player2 = new Player("gigi2", gameTable, c2);
+        player1.setGod(0);
+        player2.setGod(1);
+        player1.initBuilderList(cell1);
+        player1.initBuilderList(cell2);
+        player2.initBuilderList(gameTable.getCell(3, 3));
+        player2.initBuilderList(gameTable.getCell(3, 4));
+
     }
 
 
@@ -46,14 +53,14 @@ class NewsTest {
 
     @Test
     void setCoords() { //test first function setcoords
-        news.setCoords(1,2,0);
-        Assertions.assertEquals(news.getCoords(), new Pair(1,2));
-        Assertions.assertEquals(news.getBuilder(gameTable), b1);
+        news.setCoords(1, 2, 0, 0);
+        Assertions.assertEquals(news.getCoords(), new Pair(1, 2));
+        Assertions.assertEquals(news.getBuilder(gameTable), player2.getBuilderList().get(0));
         Assertions.assertEquals(news.getHeight(), BuildingType.parse(0));
         //test second function setcoords
         news.setCoords(1,2,0,1);
-        Assertions.assertEquals(news.getCoords(), new Pair(1,2));
-        Assertions.assertEquals(news.getBuilder(gameTable), b1);
+        Assertions.assertEquals(news.getCoords(), new Pair(1, 2));
+        Assertions.assertEquals(news.getBuilder(gameTable), player2.getBuilderList().get(0));
         Assertions.assertEquals(news.getHeight(), BuildingType.parse(1));
 
     }
@@ -95,7 +102,7 @@ class NewsTest {
     @Test
     void getBuilder() {
         news.setCoords(1, 2, 0);
-        Assertions.assertEquals(news.getBuilder(gameTable),b1);
+        Assertions.assertEquals(news.getBuilder(gameTable), player2.getBuilderList().get(0));
     }
 
     @Test
