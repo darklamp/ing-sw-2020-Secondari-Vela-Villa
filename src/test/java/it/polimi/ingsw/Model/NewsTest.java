@@ -30,11 +30,11 @@ class NewsTest {
     a.setAccessible(true);
     GameTable gameTable = new GameTable(2);
     MainController controller = new MainController(gameTable);
-    ArrayList<Integer> choices = new ArrayList<>();
     SocketClientConnection c1 = new SocketClientConnection(socket, null);
     News news = new News("ASD", c1);
+    Cell cell1 = gameTable.getCell(1,2);
     Player player1 = new Player("gigi", gameTable, c1);
-    Builder b1 = new Demeter(c1,player1);
+    Builder b1 = new Demeter(cell1,player1);
 
     NewsTest() throws NoSuchFieldException, NickAlreadyTakenException {
     }
