@@ -46,12 +46,12 @@ class NewsTest {
 
     @Test
     void setCoords() { //test first function setcoords
-        news.setCoords(1,2,1);
+        news.setCoords(1,2,0);
         Assertions.assertEquals(news.getCoords(), new Pair(1,2));
         Assertions.assertEquals(news.getBuilder(gameTable), b1);
         Assertions.assertEquals(news.getHeight(), BuildingType.parse(0));
         //test second function setcoords
-        news.setCoords(1,2,1,1);
+        news.setCoords(1,2,0,1);
         Assertions.assertEquals(news.getCoords(), new Pair(1,2));
         Assertions.assertEquals(news.getBuilder(gameTable), b1);
         Assertions.assertEquals(news.getHeight(), BuildingType.parse(1));
@@ -94,7 +94,7 @@ class NewsTest {
 
     @Test
     void getBuilder() {
-        news.setCoords(1, 2, 1);
+        news.setCoords(1, 2, 0);
         Assertions.assertEquals(news.getBuilder(gameTable),b1);
     }
 
