@@ -11,9 +11,6 @@ public class Demeter extends Builder {
         super(position, player);
     }
 
-    public Demeter(SocketClientConnection c1, Player player1) {
-        super();
-    }
 
 
     /**
