@@ -17,7 +17,7 @@ public final class ServerMessage implements Serializable {
     public static String wrongNumber = "[ERROR]@@@Wrong number. Please try again.";
     public static String notYourTurn = "[ERROR]@@@It's probably not your turn.";
     public static String invalidNews = "[ERROR]@@@Invalid move. Please try again.";
-    public static String genericErrorMessage = "[ERROR]@@@Richiesta no buena.";
+    public static String genericErrorMessage = "[ERROR]@@@Bad request.";
     public static String abortMessage = "[ERROR]@@@Game interrupted abruptly";
     public static String nextChoice = "Please choose: ";
     public static String firstBuilderPos = "Insert the starting position of your first worker (row,col):";
