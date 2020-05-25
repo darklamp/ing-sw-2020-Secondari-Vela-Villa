@@ -62,8 +62,9 @@ public class SocketClientConnection implements Runnable {
             out.reset();
             out.writeObject(message);
             out.flush();
-        } catch(IOException e){
+        } catch (IOException e) {
             System.err.println(e.getMessage());
+        } catch (NullPointerException ignored) {
         }
 
     }
