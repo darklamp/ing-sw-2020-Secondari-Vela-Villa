@@ -70,6 +70,7 @@ public class SocketClientConnection implements Runnable {
 
     public synchronized void closeConnection() {
         try {
+            send(ServerMessage.connClosed);
             socket.close();
             this.close();
         } catch (IOException e) {
@@ -244,8 +245,8 @@ public class SocketClientConnection implements Runnable {
                 try {
                     gameNumber = Integer.parseInt(in.nextLine());
                 } catch (NumberFormatException e) {
-                    send("Invalid number!");
-                    close();
+                    send("[ERROR]@@@Invalid number!");
+                    closeConnection();
                 }
                 send("Please enter your previous nickname: ");
                 String nick = in.nextLine();

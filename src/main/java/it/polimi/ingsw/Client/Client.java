@@ -101,13 +101,18 @@ public class Client implements Runnable {
                             System.exit(0);
                         } else if (s.contains(ServerMessage.connClosed)) {
                             String[] inputs = s.split("@@@");
-                            int pIndex = Integer.parseInt(inputs[1]);
-                            if (pIndex == playerIndex) {
+                            if (inputs.length == 1) {
                                 System.err.println(Color.RESET + ServerMessage.connClosed);
                                 System.exit(0);
                             } else {
-                                if (playerIndex != 0) playerIndex -= 1;
-                                playersNumber -= 1;
+                                int pIndex = Integer.parseInt(inputs[1]);
+                                if (pIndex == playerIndex) {
+                                    System.err.println(Color.RESET + ServerMessage.connClosed);
+                                    System.exit(0);
+                                } else {
+                                    if (playerIndex != 0) playerIndex -= 1;
+                                    playersNumber -= 1;
+                                }
                             }
                         } else ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {

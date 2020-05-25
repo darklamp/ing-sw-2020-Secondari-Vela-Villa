@@ -14,16 +14,32 @@ public abstract class WindowController {
         FXMLLoader loader = new FXMLLoader(getClass()
                 .getResource(fxml));
         Parent root;
-            try {
-                root = loader.load();
-                WindowController controller = loader.getController();
-                GUIClient.setController(controller);
-                GUIClient.getStage().setScene(new Scene(root));
-                GUIClient.getStage().setFullScreen(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            root = loader.load();
+            WindowController controller = loader.getController();
+            GUIClient.setController(controller);
+            GUIClient.getStage().setScene(new Scene(root));
+            GUIClient.getStage().setFullScreen(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    void switchScene(@SuppressWarnings("SameParameterValue") String fxml, boolean fullScreen) {
+        FXMLLoader loader = new FXMLLoader(getClass()
+                .getResource(fxml));
+        Parent root;
+        try {
+            root = loader.load();
+            WindowController controller = loader.getController();
+            GUIClient.setController(controller);
+            GUIClient.getStage().setScene(new Scene(root));
+            GUIClient.getStage().setFullScreen(fullScreen);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     abstract void setText(String s);
 

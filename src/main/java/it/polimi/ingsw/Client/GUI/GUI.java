@@ -69,7 +69,10 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
                     guiInitialized = true;
                 }
                 Platform.runLater(() -> GUIClient.getController().getStartingPositions(false));
-            } else Platform.runLater(() -> loginController.parseGodChoice(input));
+            } else {
+                Platform.runLater(() -> loginController.switchScene("/GodChoice.fxml", false));
+                Platform.runLater(() -> ((GodChoiceController) GUIClient.getController()).parseGodChoice(input));
+            }
         } else if (input.contains(ServerMessage.firstPlayer)) Platform.runLater(() -> loginController.firstPlayer());
         else if (input.equals(ServerMessage.reloadGameChoice)) Platform.runLater(() -> loginController.gameReload());
         else if (input.equals(ServerMessage.cellNotAvailable))
