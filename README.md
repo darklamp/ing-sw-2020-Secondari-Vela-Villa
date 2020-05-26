@@ -4,7 +4,7 @@
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
 | Complete rules | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| GUI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
+| GUI (JavaFX) | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | CLI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | Multiple games | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | Persistence | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
