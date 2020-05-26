@@ -42,13 +42,26 @@ public class Client implements Runnable {
         Client.playersNumber = playersNumber;
     }
 
-    private static short playerIndex, playersNumber;
 
-    public static InetAddress getIP() {
-        return ip;
+    public static String getCurrentPlayer() {
+        return currentPlayer;
     }
 
+    static public int getGod() {
+        return god;
+    }
+
+    static public void setGod(int god) {
+        Client.god = god;
+    }
+
+    private static short playerIndex, playersNumber;
+
+    private static String currentPlayer;
+
     private static InetAddress ip;
+
+    private static int god;
     private static int port;
 
     public synchronized static ClientState getState() {
@@ -61,11 +74,6 @@ public class Client implements Runnable {
 
     private static ClientState state = ClientState.INIT;
     public static final List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETEUS"); /* list containing all the basic gods */
-
-
-    public static Ui getUi() {
-        return ui;
-    }
 
     private static Ui ui;
 
@@ -256,6 +264,7 @@ public class Client implements Runnable {
     }
 
     private ClientState parse(GameStateMessage s) {
+        currentPlayer = s.getCurrentPlayer();
         return s.get(playerIndex);
     }
 

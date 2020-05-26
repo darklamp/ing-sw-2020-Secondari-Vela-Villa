@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <AnchorPane id="anchorPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@css/Main.css"
             xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
@@ -77,7 +78,7 @@
                            GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
             </children>
         </GridPane>
-        <TextArea id="textArea1" fx:id="textArea1" editable="false" layoutX="17.0" layoutY="560.0" prefHeight="394.0"
+        <TextArea id="textArea1" fx:id="textArea1" editable="false" layoutX="17.0" layoutY="560.0" prefHeight="240.0"
                   prefWidth="407.0" stylesheets="@css/Main.css" text="State: WAIT" wrapText="true"/>
         <GridPane fx:id="buildingPartsPane" layoutX="1572.0" layoutY="423.0" prefHeight="620.0" prefWidth="155.0">
             <columnConstraints>
@@ -98,5 +99,7 @@
         </GridPane>
         <ProgressBar id="progressBar" fx:id="timerBar" layoutX="31.0" layoutY="95.0" opacity="0.92" prefHeight="99.0"
                      prefWidth="376.0" progress="0.0" stylesheets="@css/Main.css"/>
+        <ImageView fx:id="godImage" fitHeight="250.0" fitWidth="200.0" layoutX="221.0" layoutY="261.0"
+                   pickOnBounds="true" preserveRatio="true"/>
     </children>
 </AnchorPane>

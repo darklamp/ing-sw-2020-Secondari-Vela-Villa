@@ -251,7 +251,7 @@ public class MainController implements PropertyChangeListener {
         if (c3 != null) {
             c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + 0);
         }
-        GameStateMessage message = new GameStateMessage(player1.getState(), player2.getState(), (player3 == null ? null : player3.getState()));
+        GameStateMessage message = gameTable.getGameState();
         c1.send(message);
         c2.send(message);
         if (c3 != null) c3.send(message);

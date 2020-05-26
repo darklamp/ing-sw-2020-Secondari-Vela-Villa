@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Network;
 
-import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Controller.MainController;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
@@ -157,7 +156,7 @@ public class GameInitializer implements Runnable {
             if (c3 != null) {
                 c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + players.size() + "@@@" + gameTable.getGameIndex());
             }
-            GameStateMessage message = new GameStateMessage(ClientState.WAIT, gameTable.getCurrentPlayer().getFirstState(), ClientState.WAIT);
+            GameStateMessage message = gameTable.getGameState();
             c1.send(message);
             c2.send(message);
             if (c3 != null) c3.send(message);

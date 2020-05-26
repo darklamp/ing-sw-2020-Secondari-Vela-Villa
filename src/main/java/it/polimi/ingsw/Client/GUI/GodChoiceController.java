@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.GUI;
 
+import it.polimi.ingsw.Client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -85,6 +86,7 @@ public class GodChoiceController extends WindowController {
     void submit(ActionEvent event) {
         event.consume();
         int i = (godCard.getImage() == god1 ? i1 : (godCard.getImage() == god2 ? i2 : i3));
+        Client.setGod(i);
         GUIClient.setOut(String.valueOf(i));
         buttonSubmit.setDisable(true);
     }

@@ -350,7 +350,7 @@ public class GameTable implements Serializable {
     }
 
     public GameStateMessage getGameState() {
-        return new GameStateMessage(players.get(0).getState(), players.size() == 1 ? ClientState.LOSE : players.get(1).getState(), playersNumber == 3 ? players.get(2).getState() : null);
+        return new GameStateMessage(players.get(0).getState(), players.size() == 1 ? ClientState.LOSE : players.get(1).getState(), playersNumber == 3 ? players.get(2).getState() : null, players.get(0).getNickname(), players.get(1).getNickname(), players.size() == 2 ? null : players.get(2).getNickname(), currentPlayer);
     }
 
     public ArrayList<SocketClientConnection> getPlayerConnections() {

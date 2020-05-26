@@ -50,6 +50,8 @@ public class MainWindowController extends WindowController implements Initializa
     StackPane parts0, parts1, parts2, parts3;
     @FXML
     ProgressBar timerBar;
+    @FXML
+    ImageView godImage;
 
     private static Timeline timeline;
 
@@ -79,6 +81,7 @@ public class MainWindowController extends WindowController implements Initializa
         for (Node n : gridPaneMain.getChildren()) {
             initStackPane((StackPane) n);
         }
+        godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
     }
 
     @FXML
@@ -135,14 +138,14 @@ public class MainWindowController extends WindowController implements Initializa
             }
             initialized = true;
         }
-        s1.append("You have to: ");
+        s1.append("Current turn: ");
         if (newTurn) setTimerBar();
         switch (s) {
             case MOVE -> {
-                s1.append("MOVE");
+                s1.append("yours! You have to MOVE");
             }
             case BUILD -> {
-                s1.append("BUILD");
+                s1.append("yours! You have to BUILD");
                 addAvailablePart(baseBuildingImage, 0);
                 addAvailablePart(middleBuildingImage, 1);
                 addAvailablePart(topBuildingImage, 2);
@@ -159,7 +162,7 @@ public class MainWindowController extends WindowController implements Initializa
                 }
             }
             case WAIT -> {
-                s1.append("wait for your turn");
+                s1.append(Client.getCurrentPlayer());
                 timeline.stop();
                 timerBar.setVisible(false);
                 newTurn = true;
