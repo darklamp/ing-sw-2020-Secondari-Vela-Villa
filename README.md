@@ -22,7 +22,7 @@ mvn clean package
 ```
 
 ### Server
-Requires java 14 AND the --enable-preview flag (**NOTE**: the only use of this is the "Text Blocks" feature, which makes it easier and cleaner to handle long &&/|| complex string).
+Requires java 14 AND the --enable-preview flag (**NOTE**: the only use of this is the "Text Blocks" feature, which makes it easier and cleaner to handle long &&/|| complex strings).
 
 #### options:
 
