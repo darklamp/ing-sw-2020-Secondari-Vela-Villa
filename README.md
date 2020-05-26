@@ -1,5 +1,4 @@
-# SANTORINI
-# Progetto Ing.SW 2020
+# SANTORINI : Progetto Ing.SW 2020
 
 
 | Functionality | State |
