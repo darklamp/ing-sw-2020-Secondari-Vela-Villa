@@ -17,6 +17,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
     private static LoginWindowController loginController;
     private static boolean guiInitialized = false;
     private static boolean turnChanged = false;
+    private static ClientState oldState = ClientState.WAIT;
 
 
     synchronized static short getPlayerIndex() {
@@ -87,16 +88,13 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
 
     @Override
     synchronized public void showTable(CellView[][] table) {
-        if (turnChanged) Platform.runLater(() -> GUIClient.getController().updateTable(table));
-        else {
-            while (!turnChanged) {
-                try {
-                    wait();
-                } catch (InterruptedException ignored) {
-                }
+        while (!turnChanged) {
+            try {
+                wait();
+            } catch (InterruptedException ignored) {
             }
-            turnChanged = true;
         }
+        Platform.runLater(() -> GUIClient.getController().updateTable(table));
     }
 
     @Override
@@ -104,6 +102,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         turnChanged = true;
         notify();
         Platform.runLater(() -> GUIClient.getController().setMove(newState));
+        oldState = newState;
     }
 
     @Override

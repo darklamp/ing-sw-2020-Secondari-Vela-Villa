@@ -89,6 +89,8 @@ public class GodChoiceController extends WindowController {
         Client.setGod(i);
         GUIClient.setOut(String.valueOf(i));
         buttonSubmit.setDisable(true);
+        buttonBack.setDisable(true);
+        buttonForward.setDisable(true);
     }
 
 

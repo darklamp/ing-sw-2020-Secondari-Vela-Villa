@@ -54,6 +54,7 @@ public class MainWindowController extends WindowController implements Initializa
     ImageView godImage;
 
     private static Timeline timeline;
+    private static CellView[][] lastTable;
 
     private static final DataFormat builder = new DataFormat("builder");
     private static final DataFormat building = new DataFormat("building");
@@ -160,6 +161,7 @@ public class MainWindowController extends WindowController implements Initializa
                     Client.setState(BUILD);
                     GUIClient.getGui().processTurnChange(BUILD);
                 }
+                updateTable(lastTable);
             }
             case WAIT -> {
                 s1.append(Client.getCurrentPlayer());
@@ -176,6 +178,7 @@ public class MainWindowController extends WindowController implements Initializa
                     Client.setState(WAIT);
                     GUIClient.setOut("PASS");
                 }
+                updateTable(lastTable);
             }
             case WIN -> {
                 setText("WINNER", null, "Congrats! Looks like you just won.");
@@ -353,6 +356,8 @@ public class MainWindowController extends WindowController implements Initializa
 
     @Override
     synchronized void updateTable(CellView[][] table) {
+
+        lastTable = table;
 
         if (Client.verbose()) System.out.println("[DEBUG] Received new table.");
 
