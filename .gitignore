@@ -79,5 +79,8 @@ out/
 # Mac
 .DS_Store
 
-#Ale
+# Ale
 Alessandro/*
+
+# Game saves
+game*.save

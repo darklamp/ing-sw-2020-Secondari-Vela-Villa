@@ -153,7 +153,7 @@ public class MainController implements PropertyChangeListener {
         this.currentPlayer = null;
         this.news = null;
         if (ServerMain.persistence()) {
-            File file = new File("game" + gameTable.getGameIndex());
+            File file = new File("game" + gameTable.getGameIndex() + ".save");
             try {
                 this.fileOutputStream = new FileOutputStream(file);
             } catch (FileNotFoundException ignored) {
@@ -184,7 +184,7 @@ public class MainController implements PropertyChangeListener {
             try {
                 outputStream = new ObjectOutputStream(fileOutputStream);
             } catch (IOException e) {
-                fileOutputStream = new FileOutputStream("game" + gameTable.getGameIndex());
+                fileOutputStream = new FileOutputStream("game" + gameTable.getGameIndex() + ".save");
                 outputStream = new ObjectOutputStream(fileOutputStream);
             }
             outputStream.writeObject(gameTable);

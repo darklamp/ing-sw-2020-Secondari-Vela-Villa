@@ -90,6 +90,7 @@ public class Player implements Serializable {
     /**
      * DEBUG package-private constructor only used in tests
      **/
+    @Deprecated
     Player(String nickname, GameTable g, String god) throws NickAlreadyTakenException, NullPointerException {   //contructor method for player
         if (g == null) throw new NullPointerException();
         else if (!g.isValidPlayer(nickname)) throw new NickAlreadyTakenException();

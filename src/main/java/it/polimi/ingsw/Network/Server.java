@@ -199,7 +199,7 @@ public class Server {
         FileInputStream fileInputStream;
         for (int i = 0; ; i++) {
             try {
-                fileInputStream = new FileInputStream("game" + i);
+                fileInputStream = new FileInputStream("game" + i + ".save");
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 GameTable g = (GameTable) objectInputStream.readObject();
                 MainController mainController = new MainController(g);

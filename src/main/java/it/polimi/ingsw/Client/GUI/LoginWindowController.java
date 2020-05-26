@@ -5,9 +5,6 @@ import it.polimi.ingsw.Network.ServerMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -24,13 +21,7 @@ public class LoginWindowController extends WindowController {
     @FXML
     TextArea textAreaMain;
     @FXML
-    Button creditsButton, buttonForward, buttonBack, buttonSubmit;
-    @FXML
-    ImageView godCard;
-    @FXML
-    AnchorPane godChoicePane;
-
-    private static Image god1, god2, god3;
+    Button creditsButton;
 
     @FXML
     void setText(String s) {
@@ -178,40 +169,5 @@ public class LoginWindowController extends WindowController {
             }
         }
     }
-
-
-    void parseGodChoice(String input) {
-        String[] inputs = input.split("@@@");
-        List<Integer> choices = new ArrayList<>();
-        for (int i = 1; i < inputs.length; i++) {
-            choices.add(Integer.parseInt(inputs[i]));
-        }
-        switchScene("/GodChoice.fxml");
-        GUIClient.getStage().setFullScreen(false);
-        god1 = new Image("/images/GodCards/" + choices.get(0) + ".png");
-        god2 = new Image("/images/GodCards/" + choices.get(1) + ".png");
-        god3 = null;
-        if (choices.size() == 3) god3 = new Image("/images/GodCards/" + choices.get(2) + ".png");
-        godCard.setImage(god1);
-        /*
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
-        dialog.setTitle("Initializing game");
-        dialog.setHeaderText("God choice");
-        dialog.setContentText(ServerMessage.nextChoice);
-        Optional<String> result = dialog.showAndWait();
-        while (true) {
-            if (result.isPresent()) {
-                if (!choices.contains(result.get())) {
-                    result = dialog.showAndWait();
-                } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
-                    break;
-                }
-            } else {
-                result = dialog.showAndWait();
-            }
-        }*/
-    }
-
 
 }
