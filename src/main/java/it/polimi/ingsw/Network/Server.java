@@ -172,14 +172,18 @@ public class Server {
     }
 
     public void run() {
+        if (ServerMain.verbose()) System.out.println(ProcessHandle.current().pid());
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                for (Map.Entry<Integer, ArrayList<SocketClientConnection>> c : gameList.entrySet()) {
-                    for (SocketClientConnection socketClientConnection : c.getValue()) {
-                        socketClientConnection.send(ServerMessage.serverDown);
+            int count = 0;
+            while (count < currentGameIndex) {
+                try {
+                    for (SocketClientConnection c : gameList.get(count)) {
+                        c.send(ServerMessage.serverDown);
                     }
+                } catch (NullPointerException ignored) {
+                } finally {
+                    count += 1;
                 }
-            } catch (NullPointerException ignored) {
             }
         }));
         if (ServerMain.persistence()) reloadFromDisk();
