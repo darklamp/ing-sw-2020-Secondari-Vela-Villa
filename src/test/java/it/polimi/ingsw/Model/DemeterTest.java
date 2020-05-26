@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.DemeterException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -40,5 +41,21 @@ class DemeterTest {
         Cell c4 = g.getCell(4,2);
         b1.isValidBuild(c4, BuildingType.BASE);
     }*/
+    }
+    @Test
+    void isValidMoveTest() throws Exception {
+        GameTable g = new GameTable(2);
+
+        Player p1 = new Player("Giggino", g, "DEMETER");
+        Cell c1 = g.getCell(4, 3);
+        Cell c2 = g.getCell(3, 1);
+        Cell c3 = g.getCell(3, 2);
+        Builder b1 = new Demeter(c1, p1);
+
+        Assertions.assertThrows(InvalidMoveException.class, () -> {
+            b1.isValidMove(c2);
+        });
+        b1.setPosition(c3);
+        b1.isValidMove(c2);
     }
 }
