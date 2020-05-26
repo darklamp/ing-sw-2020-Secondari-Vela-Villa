@@ -90,6 +90,8 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
         if (Client.getState() != INIT) return;
         Button b = (Button) event.getSource();
+        b.setStyle("-fx-background-color: orange;");
+        b.setOpacity(0.8);
         StackPane g = (StackPane) b.getParent();
         int i = getRow(g);
         int j = getColumn(g);
@@ -136,6 +138,8 @@ public class MainWindowController extends WindowController implements Initializa
         if (!initialized) {
             for (Node n : gridPaneMain.getChildren()) {
                 ((Button) ((StackPane) n).getChildren().get(0)).setOnAction(null);
+                ((Button) ((StackPane) n).getChildren().get(0)).setStyle(null);
+                ((Button) ((StackPane) n).getChildren().get(0)).setOpacity(1);
             }
             initialized = true;
         }
