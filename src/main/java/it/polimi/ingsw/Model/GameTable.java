@@ -193,7 +193,7 @@ public class GameTable implements Serializable {
     /**
      * Clears up game instance.
      */
-    public void closeGame() {
+    synchronized public void closeGame() {
         for (Player p : players) {
             try {
                 removePlayer(p, false);

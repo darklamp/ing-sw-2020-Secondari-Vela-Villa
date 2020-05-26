@@ -166,6 +166,7 @@ public class Server {
         try {
             this.serverSocket = new ServerSocket(port, 1, InetAddress.getByName(ip));
         } catch (Exception e) {
+            if (ServerMain.verbose()) e.printStackTrace();
             System.err.println("[CRITICAL] Invalid IP address supplied. Please use a valid ipv4/ipv6 address.");
             System.exit(0);
         }

@@ -56,7 +56,7 @@ public abstract class WindowController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error Message");
         alert.setHeaderText("Error");
-        alert.setContentText(input);
+        alert.setContentText(input == null ? "Generic error" : input);
         alert.setResizable(false);
         alert.showAndWait();
     }

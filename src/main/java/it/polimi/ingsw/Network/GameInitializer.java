@@ -165,7 +165,7 @@ public class GameInitializer implements Runnable {
             c2.send(gameTable.getBoardCopy());
             if (c3 != null) c3.send(gameTable.getBoardCopy());
             gameTable.resetMoveTimer();
-            mainController.saveGameState();
+            if (ServerMain.verbose()) mainController.saveGameState();
         }
         catch (Exception e){
             c1.closeConnection();
