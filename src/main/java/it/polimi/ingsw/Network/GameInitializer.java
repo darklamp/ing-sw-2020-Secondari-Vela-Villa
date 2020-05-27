@@ -46,7 +46,7 @@ public class GameInitializer implements Runnable {
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
-            c1.send("You're left with " + GameTable.getCompleteGodList().get(gods.get(0)));
+            c1.send(ServerMessage.lastGod + (gods.get(0)));
             out.add(0,gods.get(0));
             return out;
         }
@@ -57,7 +57,7 @@ public class GameInitializer implements Runnable {
             c3.send("Here are the available gods:\n");
             int p3choice = c3.getGodChoice(gods);
             out.add(p3choice);
-            c1.send("You're left with " + GameTable.getCompleteGodList().get(gods.get(0)));
+            c1.send(ServerMessage.lastGod + (gods.get(0)));
             out.add(0,gods.get(0));
             return out;
         }

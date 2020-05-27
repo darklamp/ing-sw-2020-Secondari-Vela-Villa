@@ -122,7 +122,12 @@ public class Client implements Runnable {
                                     playersNumber -= 1;
                                 }
                             }
-                        } else ui.process((String) inputObject);
+                        }
+                        else if (s.equals(ServerMessage.lastGod)){
+                            String[] inputs = s.split("@@@");
+                            god = Integer.parseInt(inputs[1]);
+                        }
+                                else ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {
                         ui.showTable((CellView[][]) inputObject);
                     } else if (inputObject instanceof GameStateMessage c) {
