@@ -104,6 +104,48 @@ class MoveControllerTest {
     }
 
     @Test
+    void handleMoveTest2() throws Exception {
+        Field a = GameTable.class.getDeclaredField("news");
+        a.setAccessible(true);
+        GameTable gameTable = new GameTable(2);
+
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        Player player1 = new Player("gigi", gameTable, new SocketClientConnection(new Socket(), new Server()));
+        Player player2 = new Player("gigi2", gameTable, null);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        Field d = Player.class.getDeclaredField("connection");
+        d.setAccessible(true);
+        News news = new News("ASD", (SocketClientConnection) d.get(player1));
+        news.setCoords(4, 4, 0);
+        a.set(gameTable, news);
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        gameTable.setGods(choices);
+        Field f1 = Player.class.getDeclaredField("builderList");
+        f1.setAccessible(true);
+        Builder b = (Builder) ((ArrayList<Builder>) f1.get(player2)).get(1);
+        gameTable.setCurrentBuilder(b);
+        MoveController moveController = new MoveController(gameTable);
+        Field f2 = GameTable.class.getDeclaredField("type");
+        f2.setAccessible(true);
+        moveController.handleMove(news);
+        assertEquals("MOVEKO", f2.get(gameTable));
+    }
+
+    @Test
     void panExcTest() throws Exception {
         GameTable gameTable = new GameTable(2);
 
