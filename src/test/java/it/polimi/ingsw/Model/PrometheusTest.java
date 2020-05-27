@@ -46,5 +46,9 @@ class PrometheusTest {
         });
         b1.setPosition(c3);
         b1.isValidMove(c2);
+        p1.setState(ClientState.MOVE);
+        c1.mustSetHeight(BuildingType.BASE);
+        c3.mustSetHeight(BuildingType.NONE);
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c1));
     }
 }

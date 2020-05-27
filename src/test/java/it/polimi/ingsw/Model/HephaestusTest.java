@@ -6,10 +6,12 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
+
 class HephaestusTest {
 
     @Test
-    void isValidBuildTest() throws Exception {
+    void isValidBuildTest1() throws Exception {
         GameTable g = new GameTable(2);
 
         Player p1 = new Player("Giggino", g, "HEPHAESTUS");
@@ -21,6 +23,32 @@ class HephaestusTest {
         });
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             c2.setHeight(b1, BuildingType.DOME);
+        });
+        Assertions.assertThrows(InvalidBuildException.class, () -> {
+            c2.setHeight(b1, BuildingType.DOME);
+        });
+    }
+
+    @Test
+    void isValidBuildTest2() throws Exception {
+        GameTable g = new GameTable(2);
+
+        Player p1 = new Player("Giggino", g, "HEPHAESTUS");
+        p1.setFirstTime(true);
+        Cell c1 = g.getCell(4, 3);
+        Cell c2 = g.getCell(4, 4);
+        Builder b1 = new Hephaestus(c1, p1);
+        c2.mustSetHeight(BuildingType.TOP);
+        Assertions.assertDoesNotThrow(() -> {
+            c2.setHeight(b1, BuildingType.DOME);
+        });
+        Field f = Hephaestus.class.getDeclaredField("previous");
+        f.setAccessible(true);
+        f.set(b1, c1);
+        p1.setFirstTime(false);
+        c2.mustSetHeight(BuildingType.NONE);
+        Assertions.assertThrows(InvalidBuildException.class, () -> {
+            c2.setHeight(b1, BuildingType.BASE);
         });
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             c2.setHeight(b1, BuildingType.DOME);
