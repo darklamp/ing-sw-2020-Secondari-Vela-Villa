@@ -15,21 +15,17 @@ public class Hephaestus extends Builder{
         if (this.getPlayer().isFirstTime()) {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
-            this.getPlayer().setFirstTime(false);
-            previous = cell; //mi salvo il valore della cella su cui voglio costruire
-            throw new HephaestusException();  //lancio l'eccezione che dice al controller di far costruire di nuovo
+            if (!(newheight == BuildingType.DOME)) {
+                this.getPlayer().setFirstTime(false);
+                previous = cell; //mi salvo il valore della cella su cui voglio costruire
+                throw new HephaestusException();  //lancio l'eccezione che dice al controller di far costruire di nuovo
+            }
         } else {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
-            if (newheight.equals(BuildingType.DOME)) {
+            if (!cell.equals(previous)) {
                 throw new InvalidBuildException();
-            } //non posso costruire una cupola come seconda costruzione ci va il new o no?
-            else if (!cell.equals(previous)) {
-                throw new InvalidBuildException();
-            }// non posso costruire su una cella diversa da quella precedente
-          /*  else {
-                firsttime = true;  //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if
-            }*/
+            }
         }
     }
 
