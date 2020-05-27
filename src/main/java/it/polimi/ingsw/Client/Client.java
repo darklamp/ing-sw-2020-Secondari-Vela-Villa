@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Client.CLI.CLI;
 import it.polimi.ingsw.Network.GameStateMessage;
 import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Utility.Color;
@@ -126,6 +127,9 @@ public class Client implements Runnable {
                         else if (s.contains(ServerMessage.lastGod)){
                             String[] inputs = s.split("@@@");
                             god = Integer.parseInt(inputs[1]);
+                            if(ui instanceof CLI){
+                                ui.process("You're left with " +completeGodList.get(god));
+                            }
                         }
                                 else ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {
