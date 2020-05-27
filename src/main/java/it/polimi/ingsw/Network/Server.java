@@ -143,14 +143,26 @@ public class Server {
     private static final Map<Integer, ArrayList<String>> gameFromDiskList = new LinkedHashMap<>();
 
     public synchronized void lobbyFromDisk(SocketClientConnection c, String name, int gameIndex) throws NickAlreadyTakenException {
-        if (!gameControllers.get(gameIndex).containsPlayer(name)) throw new NickAlreadyTakenException();
+        int oldIndex = gameControllers.get(gameIndex).containsPlayer(name);
+        if (oldIndex == -1) throw new NickAlreadyTakenException();
         else {
             ArrayList<SocketClientConnection> list = gameList.computeIfAbsent(gameIndex, k -> new ArrayList<>());
             ArrayList<String> list2 = gameFromDiskList.computeIfAbsent(gameIndex, k -> new ArrayList<>());
             if (list2.size() > 0) {
                 if (list2.stream().anyMatch(c1 -> c1.equals(name))) throw new NickAlreadyTakenException();
             }
-            list.add(c);
+            if (oldIndex == 2) {
+                list.add(c);
+            } else if (oldIndex == 1) {
+                if (list.size() == 0) list.add(c);
+                else if (list.size() == 1) {
+                    if (gameControllers.get(gameIndex).containsPlayer(gameFromDiskList.get(gameIndex).get(0)) == 0)
+                        list.add(c);
+                    else list.add(0, c);
+                } else {
+                    list.add(1, c);
+                }
+            } else list.add(0, c);
             list2.add(name);
             gameControllers.get(gameIndex).setPlayerFromDisk(name, c);
             if (gameControllers.get(gameIndex).getPlayersNumber() == gameList.get(gameIndex).size())

@@ -287,8 +287,8 @@ class MainControllerTest {
         g.setPlayers(p);
         MainController mainController = new MainController(g);
 
-        Assertions.assertTrue(mainController.containsPlayer("gigi"));
-        Assertions.assertFalse(mainController.containsPlayer("gigi4"));
+        Assertions.assertEquals(2, mainController.containsPlayer("gigi"));
+        Assertions.assertEquals(-1, mainController.containsPlayer("gigi4"));
 
     }
 

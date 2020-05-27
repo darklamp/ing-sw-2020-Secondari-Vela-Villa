@@ -194,11 +194,11 @@ public class MainController implements PropertyChangeListener {
         }
     }
 
-    synchronized public boolean containsPlayer(String playerNick) {
+    synchronized public int containsPlayer(String playerNick) {
         for (Player p : gameTable.getPlayers()) {
-            if (p.getNickname().equals(playerNick)) return true;
+            if (p.getNickname().equals(playerNick)) return gameTable.getPlayerIndex(p);
         }
-        return false;
+        return -1;
     }
 
     synchronized public void setPlayerFromDisk(String name, SocketClientConnection c) {
