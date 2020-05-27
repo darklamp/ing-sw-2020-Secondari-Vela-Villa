@@ -184,7 +184,7 @@ public class GameTable implements Serializable {
             players.get(0).setState(ClientState.WIN);
             setNews(new News(null, players.get(0).getConnection()), "WIN");
             removePlayer(players.get(0), false);
-        } else if (checkWinner) { //TODO
+        } else if (checkWinner) {
             playersNumber = 2;
             if (currentPlayer == pIndex) {
                 setCurrentBuilder(null);
@@ -276,7 +276,7 @@ public class GameTable implements Serializable {
      * @param y Y coord
      * @throws InvalidCoordinateException if coordinate is OOB
      */
-    private static void isInvalidCoordinate(int x, int y) throws InvalidCoordinateException {
+    public static void isInvalidCoordinate(int x, int y) throws InvalidCoordinateException {
         if (x > 4 || x < 0 || y > 4 || y < 0) {
             throw new InvalidCoordinateException();
         }
