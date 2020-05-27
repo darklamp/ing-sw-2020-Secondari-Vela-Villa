@@ -1,10 +1,8 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
-import it.polimi.ingsw.Network.SocketClientConnection;
 
 public class Demeter extends Builder {
-    private boolean firstTime;
     private Cell previous;
 
     Demeter(Cell position, Player player) {
@@ -23,8 +21,7 @@ public class Demeter extends Builder {
      */
     @Override
     protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, DemeterException, HephaestusException, InvalidBuildException, PrometheusException {
-        firstTime = this.getPlayer().isFirstTime();
-        if (firstTime) {
+        if (this.getPlayer().isFirstTime()) {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
             this.getPlayer().setFirstTime(false);
@@ -33,8 +30,7 @@ public class Demeter extends Builder {
         } else {
             if (cell.equals(previous)) {
                 throw new InvalidBuildException();
-            }
-            else {
+            } else {
                 super.isValidBuild(cell, newheight);
                 verifyBuild(cell, newheight);
              //   this.getPlayer().setFirstTime(true); //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if

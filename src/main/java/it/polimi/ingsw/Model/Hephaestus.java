@@ -3,7 +3,6 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Hephaestus extends Builder{
-    private boolean firstTime = this.getPlayer().isFirstTime(); //mi dice se è la prima o la seconda costruzione che fa
     private Cell previous;  //ci salvo la cella dove costruisco la prima volta
     Hephaestus(Cell position, Player player) {
         super(position,player);
@@ -13,14 +12,13 @@ public class Hephaestus extends Builder{
 
     @Override
     protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, HephaestusException, InvalidBuildException, DemeterException, PrometheusException {
-        if(firstTime) {
+        if (this.getPlayer().isFirstTime()) {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
             this.getPlayer().setFirstTime(false);
             previous = cell; //mi salvo il valore della cella su cui voglio costruire
             throw new HephaestusException();  //lancio l'eccezione che dice al controller di far costruire di nuovo
-        }
-        else{
+        } else {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
             if (newheight.equals(BuildingType.DOME)) {

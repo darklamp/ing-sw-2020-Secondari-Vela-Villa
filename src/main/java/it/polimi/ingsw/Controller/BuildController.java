@@ -33,6 +33,7 @@ public class BuildController {
         } catch (InvalidBuildException ignored) {
         } catch (DemeterException | HephaestusException e) {
             gameTable.getCurrentPlayer().setState(BUILDORPASS);
+            gameTable.getCurrentPlayer().setFirstTime(false);
             s = "BUILDOK";
         } catch (PrometheusException e){
             gameTable.getCurrentPlayer().setState(MOVE);
