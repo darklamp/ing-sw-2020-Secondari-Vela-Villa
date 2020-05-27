@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
-import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.CellView;
 
@@ -65,8 +64,6 @@ public class Cell implements Serializable {
 
                 this.height = height; //OK
 
-            } catch (NullPointerException e) {
-                if (ServerMain.verbose()) e.printStackTrace(); // unhandled error
             } catch (AtlasException e) { // the player is trying to build dome
                 this.height = BuildingType.DOME;
             } catch (HephaestusException e) {

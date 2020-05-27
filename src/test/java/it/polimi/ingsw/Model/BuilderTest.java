@@ -134,10 +134,10 @@ class BuilderTest {
     @Test
     void constructorTest1() {
         Assertions.assertThrows(NullPointerException.class, () -> {
-            new Apollo(null, null);
+            new Apollo(g.getCell(1, 1), null);
         });
         Assertions.assertThrows(NullPointerException.class, () -> {
-            new Apollo(g.getCell(1, 1), null);
+            new Apollo(null, p1);
         });
     }
 
