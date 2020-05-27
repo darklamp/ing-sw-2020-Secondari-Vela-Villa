@@ -75,7 +75,6 @@ public class MainController implements PropertyChangeListener {
                     c.getPlayer().setState(ClientState.LOSE);
                     if (c.getPlayer() == e.getPlayer()) {
                         winner = c;
-                        break;
                     }
                 }
                 winner.getPlayer().setState(ClientState.WIN);

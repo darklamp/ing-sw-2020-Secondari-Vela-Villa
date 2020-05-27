@@ -100,6 +100,7 @@ public class LoginWindowController extends WindowController {
             if (result.isPresent()) {
                 if (result.get() == b1) {
                     GUIClient.setOut("R");
+                    ipInput.setText(null);
                 } else {
                     textAreaMain.setText("Please enter your name and press the button.");
                 }

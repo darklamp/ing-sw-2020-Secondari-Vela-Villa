@@ -7,6 +7,7 @@ import it.polimi.ingsw.View.CellView;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -187,11 +188,14 @@ public class MainWindowController extends WindowController implements Initializa
                 updateTable(lastTable);
             }
             case WIN -> {
-                setText("WINNER", null, "Congrats! Looks like you just won.");
-                //TODO improve
+                setChoiceDialog("WINNER", null, "Congrats! Looks like you just won.", "Rejoice", "Rejoice");
+                Platform.exit();
+                System.exit(0);
             }
             case LOSE -> {
-                setText("LOSER", null, "Congrats! Looks like you just lost.");
+                setChoiceDialog("LOSER", null, "Looks like you lost.", "Shame", "Shame");
+                Platform.exit();
+                System.exit(0);
             }
             case INIT -> {
             }
@@ -200,14 +204,18 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
     private boolean setStateChoiceDialog(String opt1, String opt2) {
+        return setChoiceDialog("Turn choice", null, "Please choose what you want to do now: ", opt1, opt2);
+    }
+
+    private boolean setChoiceDialog(String title, String header, String text, String opt1, String opt2) {
         List<String> choices = new ArrayList<>();
         choices.add(opt1);
         choices.add(opt2);
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(opt1, choices);
-        dialog.setTitle("Turn choice");
-        dialog.setHeaderText(null);
-        dialog.setContentText("Please choose what you want to do now: ");
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+        dialog.setContentText(text);
         Optional<String> result = dialog.showAndWait();
         while (true) {
             if (result.isPresent()) {

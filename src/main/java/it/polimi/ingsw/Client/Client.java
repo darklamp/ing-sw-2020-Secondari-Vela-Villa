@@ -138,7 +138,9 @@ public class Client implements Runnable {
                         state = parse(c);
                         ui.processTurnChange(state);
                         if (state == ClientState.WIN || state == ClientState.LOSE) {
-                            System.exit(0);
+                            if (ui instanceof CLI) {
+                                System.exit(0);
+                            }
                         }
                     } else {
                         throw new IllegalArgumentException();
