@@ -23,6 +23,10 @@ public class Player implements Serializable {
 
     private final String nickname; //private attribute for the Player's ID
 
+    public String getGod() {
+        return god;
+    }
+
     private String god;
 
     private ClientState turnState;

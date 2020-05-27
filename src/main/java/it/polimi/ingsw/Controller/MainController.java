@@ -245,10 +245,10 @@ public class MainController implements PropertyChangeListener {
             c3.setReady();
         }
         int size = (c3 == null ? 2 : 3);
-        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + 0);
-        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + 0);
+        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + c1.getPlayer().getGod());
+        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + c2.getPlayer().getGod());
         if (c3 != null) {
-            c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + 0);
+            c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + c3.getPlayer().getGod());
         }
         GameStateMessage message = gameTable.getGameState();
         c1.send(message);

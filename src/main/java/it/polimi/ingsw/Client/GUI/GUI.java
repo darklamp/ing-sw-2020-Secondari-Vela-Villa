@@ -54,6 +54,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
             Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
             if (inputs.length > 3) {
                 if (inputs.length == 5) {
+                    Client.setGod(Integer.parseInt(inputs[4]));
                     Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
                     guiInitialized = true;
                 } else
