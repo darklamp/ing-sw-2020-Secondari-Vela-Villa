@@ -188,12 +188,12 @@ public class MainWindowController extends WindowController implements Initializa
                 updateTable(lastTable);
             }
             case WIN -> {
-                setChoiceDialog("WINNER", null, "Congrats! Looks like you just won.", "Rejoice", "Rejoice");
+                setChoiceDialog("WINNER", null, "Congrats! Looks like you just won.", "Rejoice", "Rejoice", WIN);
                 Platform.exit();
                 System.exit(0);
             }
             case LOSE -> {
-                setChoiceDialog("LOSER", null, "Looks like you lost.", "Shame", "Shame");
+                setChoiceDialog("LOSER", null, "Looks like you lost.", "Shame", "Shame", LOSE);
                 Platform.exit();
                 System.exit(0);
             }
@@ -204,15 +204,20 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
     private boolean setStateChoiceDialog(String opt1, String opt2) {
-        return setChoiceDialog("Turn choice", null, "Please choose what you want to do now: ", opt1, opt2);
+        return setChoiceDialog("Turn choice", null, "Please choose what you want to do now: ", opt1, opt2, null);
     }
 
-    private boolean setChoiceDialog(String title, String header, String text, String opt1, String opt2) {
+    private boolean setChoiceDialog(String title, String header, String text, String opt1, String opt2, ClientState c) {
         List<String> choices = new ArrayList<>();
         choices.add(opt1);
         choices.add(opt2);
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(opt1, choices);
+        if (c != null) {
+            if (c == WIN) dialog.setGraphic(new ImageView(new Image("/images/confetti.gif")));
+            else if (c == LOSE) dialog.setGraphic(new ImageView(new Image("/images/loser.gif")));
+        }
+        dialog.setGraphic(new ImageView(new Image("/images/confetti.gif")));
         dialog.setTitle(title);
         dialog.setHeaderText(header);
         dialog.setContentText(text);
