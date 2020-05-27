@@ -15,6 +15,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>14</maven.compiler.release>
     <maven.compiler.target>14</maven.compiler.target>
+    <argLine>--enable-preview</argLine>
   </properties>
 
   <dependencies>
@@ -109,7 +110,6 @@
           <artifactId>maven-surefire-plugin</artifactId>
             <version>3.0.0-M4</version>
           <configuration>
-            <argLine>--enable-preview</argLine>
           </configuration>
         </plugin>
         <plugin>
@@ -137,39 +137,45 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.3</version>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>14</source>
-          <target>14</target>
-          <compilerArgs>--enable-preview</compilerArgs>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+      <plugins>
+          <plugin>
+              <groupId>org.jacoco</groupId>
+              <artifactId>jacoco-maven-plugin</artifactId>
+              <version>0.8.5</version>
+              <executions>
+                  <execution>
+                      <id>default-prepare-agent</id>
+                      <goals>
+                          <goal>prepare-agent</goal>
+                      </goals>
+                  </execution>
+                  <execution>
+                      <id>report</id>
+                      <phase>test</phase>
+                      <goals>
+                          <goal>report</goal>
+                      </goals>
+                      <configuration>
+                          <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+                          <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
+
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>14</source>
+                  <target>14</target>
+                  <compilerArgs>--enable-preview</compilerArgs>
+              </configuration>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.2.3</version>
         <executions>
