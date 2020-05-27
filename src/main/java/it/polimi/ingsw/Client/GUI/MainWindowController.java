@@ -82,7 +82,6 @@ public class MainWindowController extends WindowController implements Initializa
         for (Node n : gridPaneMain.getChildren()) {
             initStackPane((StackPane) n);
         }
-        godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
     }
 
     @FXML
@@ -142,6 +141,7 @@ public class MainWindowController extends WindowController implements Initializa
                 ((Button) ((StackPane) n).getChildren().get(0)).setOpacity(1);
             }
             initialized = true;
+            godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
         }
         s1.append("Current turn: ");
         if (newTurn) setTimerBar();
