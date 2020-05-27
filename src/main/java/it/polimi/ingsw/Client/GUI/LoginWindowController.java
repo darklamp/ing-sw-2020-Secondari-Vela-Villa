@@ -37,6 +37,7 @@ public class LoginWindowController extends WindowController {
         stage.getIcons().add(GUIClient.getAppIcon());
         alert.setContentText("""
                                 Favicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon).
+                                Loser gif made by Dylan Morang (https://giphy.com/angchor).
                 """);
         alert.setResizable(false);
         alert.showAndWait();
