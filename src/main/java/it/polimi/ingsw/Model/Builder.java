@@ -108,7 +108,7 @@ public abstract class Builder implements Serializable {
 
         if (finalPoint == null || finalPoint.getRow() < 0 || finalPoint.getRow() > 4 || finalPoint.getColumn() < 0 || finalPoint.getColumn() > 4)
             throw new InvalidMoveException(); //out of bounds
-        else if (!(this instanceof Athena) && GameTable.getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1)
+        else if (!(this instanceof Athena) && this.position.getGameTable().getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1)
             throw new InvalidMoveException(); // Athena moved up last turn, so this player can't go up
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
         else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2)

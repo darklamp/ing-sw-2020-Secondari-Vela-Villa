@@ -56,7 +56,7 @@ public class GameTable implements Serializable {
     /**
      * variable which holds the current builder being used by the player
      **/
-    private static boolean athenaMove = false;
+    private boolean athenaMove = false;
     /**
      * support boolean for Athena
      **/
@@ -326,7 +326,7 @@ public class GameTable implements Serializable {
         return arrayTable;
     }
 
-    static void setAthenaMove(boolean newValue) {
+    void setAthenaMove(boolean newValue) {
         athenaMove = newValue;
     }
 
@@ -342,7 +342,7 @@ public class GameTable implements Serializable {
         this.players = players;
     }
 
-    static boolean getAthenaMove() {
+    boolean getAthenaMove() {
         return athenaMove;
     }
 

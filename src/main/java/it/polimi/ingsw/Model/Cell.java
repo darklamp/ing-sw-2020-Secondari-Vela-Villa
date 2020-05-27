@@ -24,11 +24,15 @@ public class Cell implements Serializable {
 
     public Cell(int x, int y, GameTable gameTable) { // constructor for Cell
         this.gameTable = gameTable;
-        this.coordinates = new Pair(x,y);
+        this.coordinates = new Pair(x, y);
     }
 
-    CellView getModelView(GameTable table){
-        return new CellView(height,builder == null ? -1 : table.getPlayerIndex(builder.getPlayer()), builder != null && builder.isFirst());
+    CellView getModelView(GameTable table) {
+        return new CellView(height, builder == null ? -1 : table.getPlayerIndex(builder.getPlayer()), builder != null && builder.isFirst());
+    }
+
+    GameTable getGameTable() {
+        return gameTable;
     }
 
 
@@ -38,6 +42,7 @@ public class Cell implements Serializable {
     void mustSetHeight(BuildingType height) {
         this.height = height; //mette per forza quella costruzione
     }
+
     /**
      * This function is responsible for setting a cell's height, which translates to building on a cell.
      * @param builder represents the builder which is trying to build on the cell
