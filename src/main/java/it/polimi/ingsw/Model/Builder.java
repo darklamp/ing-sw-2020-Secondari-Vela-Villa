@@ -2,7 +2,6 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.*;
-import it.polimi.ingsw.ServerMain;
 
 import java.io.Serializable;
 
@@ -50,8 +49,6 @@ public abstract class Builder implements Serializable {
             this.position = position; // sets position if no exceptions are thrown
             position.setBuilder(this);
             if (isWinner()) throw new WinnerException(this.player);
-        } catch (NullPointerException e) {
-            if (ServerMain.verbose()) e.printStackTrace(); // unhandled error
         } catch (ApolloException e) { // swap position cause it's Apollo
             swapPosition(this,position.getBuilder());
             if (isWinner()) throw new WinnerException(this.player);
@@ -111,7 +108,7 @@ public abstract class Builder implements Serializable {
 
         if (finalPoint == null || finalPoint.getRow() < 0 || finalPoint.getRow() > 4 || finalPoint.getColumn() < 0 || finalPoint.getColumn() > 4)
             throw new InvalidMoveException(); //out of bounds
-        else if (GameTable.getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1)
+        else if (!(this instanceof Athena) && GameTable.getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1)
             throw new InvalidMoveException(); // Athena moved up last turn, so this player can't go up
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
         else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2)
