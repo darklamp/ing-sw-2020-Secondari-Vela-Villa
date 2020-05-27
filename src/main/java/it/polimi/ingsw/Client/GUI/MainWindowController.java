@@ -217,7 +217,6 @@ public class MainWindowController extends WindowController implements Initializa
             if (c == WIN) dialog.setGraphic(new ImageView(new Image("/images/confetti.gif")));
             else if (c == LOSE) dialog.setGraphic(new ImageView(new Image("/images/loser.gif")));
         }
-        dialog.setGraphic(new ImageView(new Image("/images/confetti.gif")));
         dialog.setTitle(title);
         dialog.setHeaderText(header);
         dialog.setContentText(text);
