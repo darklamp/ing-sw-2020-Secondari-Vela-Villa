@@ -179,8 +179,8 @@ public class MainWindowController extends WindowController implements Initializa
                     Client.setState(BUILD);
                     GUIClient.getGui().processTurnChange(BUILD);
                 } else {
-                    Client.setState(WAIT);
                     GUIClient.setOut("PASS");
+                    Client.setState(WAIT);
                 }
                 updateTable(lastTable);
             }
