@@ -20,6 +20,11 @@ jobs:
       - run: mvn -B package --file pom.xml
       - run: mkdir staging
       - run: cp target/*.jar staging
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: codecov-santorini
+          fail_ci_if_error: true
       - uses: actions/upload-artifact@v2
         with:
           name: client
