@@ -123,7 +123,7 @@ public class Client implements Runnable {
                                 }
                             }
                         }
-                        else if (s.equals(ServerMessage.lastGod)){
+                        else if (s.contains(ServerMessage.lastGod)){
                             String[] inputs = s.split("@@@");
                             god = Integer.parseInt(inputs[1]);
                         }
