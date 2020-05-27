@@ -47,13 +47,14 @@ public class GUIClient extends Application {
     /**
      * Listener helper object
      **/
-
-
     static void setOut(String s) {
         support.firePropertyChange("", news, s);
         news = s;
     }
 
+    /**
+     * @param pcl PropertyChangeListener to be added
+     */
     static void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
     }

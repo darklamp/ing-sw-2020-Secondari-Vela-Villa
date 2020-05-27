@@ -12,11 +12,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CLI implements Ui {
 
+    /**
+     * @see Ui
+     */
     @Override
     public String nextLine(Scanner in) {
         return in.nextLine();
     }
 
+    /**
+     * @see Ui
+     */
     @Override
     public void process(String input) {
         String[] inputs;

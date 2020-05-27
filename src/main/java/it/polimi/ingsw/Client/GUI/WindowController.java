@@ -10,6 +10,10 @@ import javafx.scene.control.Alert;
 import java.io.IOException;
 
 public abstract class WindowController {
+
+    /**
+     * {@link WindowController#switchScene(String, boolean)} (boolean = true)
+     **/
     void switchScene(@SuppressWarnings("SameParameterValue") String fxml) {
         FXMLLoader loader = new FXMLLoader(getClass()
                 .getResource(fxml));
@@ -25,6 +29,12 @@ public abstract class WindowController {
         }
     }
 
+    /**
+     * Loads fxml file if present, then switches scene
+     *
+     * @param fxml       file to be loaded
+     * @param fullScreen true if scene has to be set to fullscreen
+     */
     void switchScene(@SuppressWarnings("SameParameterValue") String fxml, boolean fullScreen) {
         FXMLLoader loader = new FXMLLoader(getClass()
                 .getResource(fxml));
@@ -52,6 +62,11 @@ public abstract class WindowController {
     void setMove(ClientState newState) {
     }
 
+    /**
+     * Spawns error dialog with content
+     *
+     * @param input
+     */
     void setError(String input) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error Message");

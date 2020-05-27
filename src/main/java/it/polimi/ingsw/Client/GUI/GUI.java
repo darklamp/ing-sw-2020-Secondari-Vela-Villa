@@ -13,12 +13,30 @@ import java.beans.PropertyChangeListener;
 import java.util.Scanner;
 
 public class GUI implements Ui, Runnable, PropertyChangeListener {
+    /**
+     * gui's ready state
+     */
     private static boolean isReady = false;
+    /**
+     * Commodity reference to login controller.
+     */
     private static LoginWindowController loginController;
+    /**
+     * gui's fully initialized state
+     */
     private static boolean guiInitialized = false;
+    /**
+     * variable on which {@link GUI#showTable} and {@link GUI#processTurnChange} synchronize
+     */
     private static boolean turnChanged = false;
-    private static ClientState oldState = ClientState.WAIT;
-
+    /**
+     * variable on which {@link GUI#nextLine} is synchronized
+     */
+    private volatile boolean newValue = false;
+    /**
+     * String to be printed to output socket, via {@link GUI#nextLine}
+     */
+    private static String out;
 
     synchronized static short getPlayerIndex() {
         return (short) Client.getPlayerIndex();
@@ -34,15 +52,22 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         Application.launch(GUIClient.class);
     }
 
+    /**
+     * Sets GUI's ready state
+     */
     protected synchronized void setReady(boolean b) {
         isReady = b;
         GUIClient.addPropertyChangeListener(this);
         loginController = (LoginWindowController) GUIClient.getController();
     }
-    public synchronized boolean isReady(){
+
+    public synchronized boolean isReady() {
         return isReady;
     }
 
+    /**
+     * @see Ui
+     */
     @Override
     synchronized public void process(String input) {
         if (input.contains("[ERROR]")) {
@@ -82,11 +107,17 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         else Platform.runLater(() -> loginController.setText(input));
     }
 
+    /**
+     * @see Ui
+     */
     @Override
     public void waitForIP(Client client) {
         Platform.runLater(() -> loginController.waitForIP(client));
     }
 
+    /**
+     * @see Ui
+     */
     @Override
     synchronized public void showTable(CellView[][] table) {
         while (!turnChanged) {
@@ -98,14 +129,19 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         Platform.runLater(() -> GUIClient.getController().updateTable(table));
     }
 
+    /**
+     * @see Ui
+     */
     @Override
     synchronized public void processTurnChange(ClientState newState) {
         turnChanged = true;
         notify();
         Platform.runLater(() -> GUIClient.getController().setMove(newState));
-        oldState = newState;
     }
 
+    /**
+     * @see Ui
+     */
     @Override
     public String nextLine(Scanner in) {
         while (!newValue) {
@@ -115,9 +151,9 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         return out;
     }
 
-    private volatile boolean newValue = false;
-    private static String out;
-
+    /**
+     * @see Ui
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         out = (String) evt.getNewValue();
