@@ -26,5 +26,5 @@ public final class ServerMessage implements Serializable {
     public static String connClosed = "Connection closed.";
     public static String serverDown = "Server interrupted unexpectedly.";
     public static String welcomeNoPersistence = "Please enter your name.";
-    public static String lastGod = "You're left with ";
+    public static String lastGod = "You're left with @@@";
 }

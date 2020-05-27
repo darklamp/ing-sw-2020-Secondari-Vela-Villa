@@ -183,7 +183,7 @@ public class MainController implements PropertyChangeListener {
         try {
             try {
                 outputStream = new ObjectOutputStream(fileOutputStream);
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 fileOutputStream = new FileOutputStream("game" + gameTable.getGameIndex() + ".save");
                 outputStream = new ObjectOutputStream(fileOutputStream);
             }
