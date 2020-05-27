@@ -1,0 +1,6 @@
+ignore:
+  - "src/main/java/it/polimi/ingsw/Client"
+  - "src/main/java/it/polimi/ingsw/Utility"
+  - "src/main/java/it/polimi/ingsw/View"
+  - "src/main/java/it/polimi/ingsw/ServerMain.java"
+  - "src/main/java/it/polimi/ingsw/Network"
