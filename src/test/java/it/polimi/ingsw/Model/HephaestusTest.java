@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.HephaestusException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
@@ -37,6 +38,7 @@ class HephaestusTest {
         p1.setFirstTime(true);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
+        Cell c3 = g.getCell(4, 2);
         Builder b1 = new Hephaestus(c1, p1);
         c2.mustSetHeight(BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> {
@@ -53,6 +55,9 @@ class HephaestusTest {
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             c2.setHeight(b1, BuildingType.DOME);
         });
+        p1.setState(ClientState.BUILD);
+        f.set(b1, c3);
+        Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c3, BuildingType.BASE));
     }
 
     @Test

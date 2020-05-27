@@ -34,11 +34,16 @@ class ApolloTest {
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
         Cell c3 = g.getCell(4, 0);
+        Cell c4 = g.getCell(4, 2);
         Builder b1 = new Apollo(c1, p1);
-        Builder b2 = new Apollo(c2,p2);
-
+        Builder b2 = new Apollo(c2, p2);
+        Builder b3 = new Apollo(c4, p1);
         Assertions.assertThrows(ApolloException.class, () -> {
             b1.isValidMove(c2);
+        });
+
+        Assertions.assertThrows(InvalidMoveException.class, () -> {
+            b1.isValidMove(c4);
         });
         Assertions.assertThrows(InvalidMoveException.class, () -> {
             b1.setPosition(c1);
@@ -46,7 +51,7 @@ class ApolloTest {
         Assertions.assertThrows(InvalidMoveException.class, () -> {
             b1.setPosition(c3);
         });
-        Cell c0 = g.getCell(3,3);
+        Cell c0 = g.getCell(3, 3);
         b1.setPosition(c0); // shouldn't throw
     }
 }

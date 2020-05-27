@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,13 +13,14 @@ import java.lang.reflect.Field;
 class BuilderTest {
     private static Cell c1,c2,c3,c4,c5;
     private static Builder b1,b2;
-    private static Player p1,p2;
+    private static Player p1, p2;
+    private static GameTable g;
     /**
      * Initiates various support variables.
      */
     @BeforeAll
     static void init() throws Exception {
-        GameTable g = new GameTable(2);
+        g = new GameTable(2);
 
         c1 = g.getCell(4, 4);
         c2 = g.getCell(4, 3);
@@ -30,15 +32,45 @@ class BuilderTest {
         b1 = new Minotaur(c1, p1);
         b2 = new Demeter(c2, p2);
     }
+
+    @Test
+    void setPositionTest() throws Exception {
+        GameTable g = new GameTable(2);
+        Player p1 = new Player("Giggino", g, "APOLLO");
+        Player p2 = new Player("Pippo", g, "APOLLO");
+        Cell c1 = g.getCell(4, 3);
+        Cell c2 = g.getCell(4, 4);
+        Cell c3 = g.getCell(0, 3);
+        Cell c4 = g.getCell(0, 4);
+        Cell c5 = g.getCell(0, 3);
+        Builder b1 = new Apollo(c1, p1);
+        Builder b2 = new Apollo(c2, p2);
+        Builder b3 = new Apollo(c3, p1);
+        Builder b4 = new Apollo(c4, p2);
+        Builder b5 = new Artemis(c5, p1);
+        b1.setPosition(c2);
+        Assertions.assertEquals(b1, c2.getBuilder());
+        Assertions.assertEquals(b2, c1.getBuilder());
+        c3.mustSetHeight(BuildingType.MIDDLE);
+        c4.mustSetHeight(BuildingType.TOP);
+        Assertions.assertThrows(WinnerException.class, () -> {
+            b3.setPosition(c4);
+        });
+        c4.setBuilder(null);
+        Assertions.assertThrows(WinnerException.class, () -> {
+            b5.setPosition(c4);
+        });
+    }
+
     @Test
     void isValidBuild() throws Exception {
-            c3.mustSetHeight(BuildingType.DOME);
-            c4.mustSetHeight(BuildingType.TOP);
+        c3.mustSetHeight(BuildingType.DOME);
+        c4.mustSetHeight(BuildingType.TOP);
         Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b2.isValidBuild(c3,BuildingType.DOME); //dove sta una dome non ci si può mai costruire altro
+            b2.isValidBuild(c3, BuildingType.DOME); //dove sta una dome non ci si può mai costruire altro
         });
         Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b2.isValidBuild(c3,BuildingType.TOP); //dove sta una dome non ci si può mai costruire altro
+            b2.isValidBuild(c3, BuildingType.TOP); //dove sta una dome non ci si può mai costruire altro
         });
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             b2.isValidBuild(c4,BuildingType.MIDDLE); //nella cella c4 c'è una TOP quindi ci si può mettere solo una dome sopra,sennò parte eccezione
@@ -65,7 +97,7 @@ class BuilderTest {
 
 
     @Test
-    void isValidMove() {
+    void isValidMove() throws IllegalAccessException, NoSuchFieldException {
         c4.mustSetHeight(BuildingType.DOME);
         c3.mustSetHeight(BuildingType.TOP);
         c2.mustSetHeight(BuildingType.BASE);
@@ -82,7 +114,31 @@ class BuilderTest {
         Assertions.assertThrows(InvalidMoveException.class, () -> {
             b2.isValidMove(c5); //non è adiacente
         });
+        Assertions.assertThrows(InvalidMoveException.class, () -> {
+            b2.isValidMove(null);
+        });
+        c1.setBuilder(null);
+        c1.mustSetHeight(BuildingType.MIDDLE);
+        c2.setBuilder(null);
+        c2.mustSetHeight(BuildingType.TOP);
+        Builder b4 = new Artemis(c1, p1);
+        Field f = GameTable.class.getDeclaredField("athenaMove");
+        f.setAccessible(true);
+        f.set(g, true);
+        Assertions.assertThrows(InvalidMoveException.class, () -> {
+            b4.isValidMove(c2);
+        });
 
+    }
+
+    @Test
+    void constructorTest1() {
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            new Apollo(null, null);
+        });
+        Assertions.assertThrows(NullPointerException.class, () -> {
+            new Apollo(g.getCell(1, 1), null);
+        });
     }
 
     @Test
