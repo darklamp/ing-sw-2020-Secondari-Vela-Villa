@@ -129,7 +129,7 @@ public class GameTable implements Serializable {
      */
     public final void checkMovePreConditions() throws NoMoreMovesException {
         ArrayList<Builder> builderList = players.get(currentPlayer).getBuilderList();
-        Boolean b1 = players.get(currentPlayer).isFirstTime();
+        boolean b1 = players.get(currentPlayer).isFirstTime();
         int movableBuilders = 2;
         for (Builder b : builderList) {
             if (!b.hasAvailableMoves()) movableBuilders -= 1;
@@ -147,6 +147,7 @@ public class GameTable implements Serializable {
      */
     public final void checkBuildPreConditions(Builder builder) throws NoMoreMovesException {
         int builders = 1;
+        boolean b1 = players.get(currentPlayer).isFirstTime();
         ArrayList<Builder> builderList = new ArrayList<>();
         if (builder == null) { //player is building before moving: must check both builders
             builders = 2;
@@ -157,8 +158,10 @@ public class GameTable implements Serializable {
 
         for (Builder b : builderList) {
             if (!b.hasAvailableBuilds()) builders -= 1;
+            if (b1) players.get(currentPlayer).setFirstTime(true);
         }
         if (builders == 0) throw new NoMoreMovesException(players.get(currentPlayer));
+        if (b1) players.get(currentPlayer).setFirstTime(true);
     }
 
     /**

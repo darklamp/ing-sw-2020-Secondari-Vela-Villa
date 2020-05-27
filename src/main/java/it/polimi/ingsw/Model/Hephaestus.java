@@ -16,8 +16,8 @@ public class Hephaestus extends Builder{
         if(firstTime) {
             super.isValidBuild(cell, newheight);
             verifyBuild(cell, newheight);
-            firstTime=false;
-            previous=cell; //mi salvo il valore della cella su cui voglio costruire
+            this.getPlayer().setFirstTime(false);
+            previous = cell; //mi salvo il valore della cella su cui voglio costruire
             throw new HephaestusException();  //lancio l'eccezione che dice al controller di far costruire di nuovo
         }
         else{

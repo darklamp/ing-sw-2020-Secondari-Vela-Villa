@@ -22,7 +22,6 @@ class HephaestusTest {
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             c2.setHeight(b1, BuildingType.DOME);
         });
-        c2.setHeight(b1, BuildingType.MIDDLE); // no exception
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             c2.setHeight(b1, BuildingType.DOME);
         });
