@@ -180,9 +180,9 @@ public class MainWindowController extends WindowController implements Initializa
                     GUIClient.getGui().processTurnChange(BUILD);
                 } else {
                     GUIClient.setOut("PASS");
-                    Client.setState(WAIT);
-                    newTurn = false;
                     setMove(WAIT);
+                    /// Client.setState(WAIT);
+                    newTurn = false;
                 }
                 updateTable(lastTable);
             }
