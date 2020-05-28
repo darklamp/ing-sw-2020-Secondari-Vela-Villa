@@ -80,7 +80,7 @@ class GameTableTest {
         assertEquals(player3.getFirstState(), player3.getState());
         assertEquals(2, gameTable.getPlayerConnections().size());
         gameTable.removePlayer(player3, true);
-        assertEquals(0, gameTable.getPlayerConnections().size());
+        assertEquals(1, gameTable.getPlayerConnections().size());
     }
 
     @Test
