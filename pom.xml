@@ -232,10 +232,10 @@
                       <excludes>
                           <exclude>Gimp/**</exclude>
                       </excludes>
-                      <artifact>org.openjfx</artifact>
+                    <!--  <artifact>org.openjfx</artifact>
                       <includes>
                           <include>**</include>
-                      </includes>
+                      </includes>-->
                   </filter>
               </filters>
               <finalName>client</finalName>
