@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Network;
 
 
-import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SocketClientConnection implements Runnable {
 
@@ -41,8 +39,9 @@ public class SocketClientConnection implements Runnable {
         this.server = server;
     }
 
-    public void setReady(){
+    synchronized public void setReady() {
         this.ready = true;
+        notify();
     }
 
     public void setPlayer(Player player) {
@@ -271,10 +270,13 @@ public class SocketClientConnection implements Runnable {
                 }
             }
             while (isActive()) {
-                if (ready && player.getState() != ClientState.WAIT) {
-                    AtomicReference<String> read1 = new AtomicReference<>();
-                    read1.set(in.nextLine());
-                    setNews(new News(read1.toString(), this), "INPUT");
+                if (ready) {
+                    read = in.nextLine();
+                    setNews(new News(read, this), "INPUT");
+                } else {
+                    synchronized (this) {
+                        wait();
+                    }
                 }
             }
         } catch (NoSuchElementException e) {

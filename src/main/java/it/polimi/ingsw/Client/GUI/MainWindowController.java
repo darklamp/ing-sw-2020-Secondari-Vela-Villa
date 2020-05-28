@@ -188,11 +188,13 @@ public class MainWindowController extends WindowController implements Initializa
                 updateTable(lastTable);
             }
             case WIN -> {
+                timerBar.setVisible(false);
                 setChoiceDialog("WINNER", null, "Congrats! Looks like you just won.", "Rejoice", "Rejoice", WIN);
                 Platform.exit();
                 System.exit(0);
             }
             case LOSE -> {
+                timerBar.setVisible(false);
                 setChoiceDialog("LOSER", null, "Looks like you lost.", "Shame", "Shame", LOSE);
                 Platform.exit();
                 System.exit(0);

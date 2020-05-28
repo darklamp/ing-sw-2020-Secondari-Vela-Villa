@@ -183,7 +183,6 @@ public class GameTable implements Serializable {
         if (checkWinner && players.size() == 1) {
             players.get(0).setState(ClientState.WIN);
             setNews(new News(null, players.get(0).getConnection()), "WIN");
-            removePlayer(players.get(0), false);
         } else if (checkWinner) {
             playersNumber = 2;
             if (currentPlayer == pIndex) {
@@ -359,7 +358,7 @@ public class GameTable implements Serializable {
     }
 
     public GameStateMessage getGameState() {
-        return new GameStateMessage(players.get(0).getState(), players.size() == 1 ? ClientState.LOSE : players.get(1).getState(), playersNumber == 3 ? players.get(2).getState() : null, players.get(0).getNickname(), players.get(1).getNickname(), players.size() == 2 ? null : players.get(2).getNickname(), currentPlayer);
+        return new GameStateMessage(players.get(0).getState(), players.size() == 1 ? ClientState.LOSE : players.get(1).getState(), players.size() == 3 ? players.get(2).getState() : null, players.get(0).getNickname(), players.size() == 1 ? null : players.get(1).getNickname(), players.size() == 3 ? players.get(2).getNickname() : null, currentPlayer);
     }
 
     public ArrayList<SocketClientConnection> getPlayerConnections() {

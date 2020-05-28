@@ -168,6 +168,11 @@ public class MainController implements PropertyChangeListener {
         if (this.gameInitializer == null) this.gameInitializer = gameInitializer;
     }
 
+    /**
+     * If present, kicks the player from the game and checks whether other players possibly won as a result of that
+     *
+     * @param playerNick player to be kicked from game
+     */
     public void consoleKickPlayer(String playerNick) {
         gameTable.getPlayers().stream().filter(c -> c.getNickname().equals(playerNick)).findFirst().ifPresent(player -> {
             try {
@@ -245,10 +250,10 @@ public class MainController implements PropertyChangeListener {
             c3.setReady();
         }
         int size = (c3 == null ? 2 : 3);
-        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + c1.getPlayer().getGod());
-        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + c2.getPlayer().getGod());
+        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c1.getPlayer().getGod()));
+        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c2.getPlayer().getGod()));
         if (c3 != null) {
-            c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + c3.getPlayer().getGod());
+            c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c3.getPlayer().getGod()));
         }
         GameStateMessage message = gameTable.getGameState();
         c1.send(message);
