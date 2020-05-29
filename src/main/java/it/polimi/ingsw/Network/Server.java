@@ -249,9 +249,33 @@ public class Server {
                     } else if (s.contains("players")) {
                         String[] input = s.split(" ");
                         StringBuilder s1 = new StringBuilder();
-                        int index = Integer.parseInt(input[1]);
-                        s1.append("Players of game ").append(index).append(": ");
-                        gameList.get(index).iterator().forEachRemaining(c -> s1.append(c.getPlayer().getNickname()).append(" "));
+                        if (input.length == 1) {
+                            for (int i = 0; i < currentGameIndex; i++) {
+                                s1.append("Players of game ").append(i).append(": ");
+                                try {
+                                    gameList.get(i).stream().map(c -> c.getPlayer().getNickname()).forEach(s2 -> {
+                                        s1.append(s2);
+                                        s1.append(" ");
+                                    });
+                                    s1.append("\n");
+                                } catch (NullPointerException e) {
+                                    s1.append("empty\n");
+                                }
+
+                            }
+                        } else {
+                            int index = Integer.parseInt(input[1]);
+                            s1.append("Players of game ").append(index).append(": ");
+                            try {
+                                gameList.get(index).stream().map(c -> c.getPlayer().getNickname()).forEach(s2 -> {
+                                    s1.append(s2);
+                                    s1.append(" ");
+                                });
+                            } catch (NullPointerException e) {
+                                s1.append("empty");
+                            }
+                            // gameList.get(index).iterator().forEachRemaining(c -> s1.append(c.getPlayer().getNickname()).append(" "));
+                        }
                         System.out.println(s1);
                     } else if (s.contains("save")) {
                         if (ServerMain.persistence())

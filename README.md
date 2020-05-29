@@ -41,7 +41,7 @@ java --enable-preview -jar server.jar -port=1337 -ip=0.0.0.0
 ##### debug console commands:
 
 * kick [gameIndex] [playerName]    : kicks player from game
-* players [gameIndex]              : returns list of players for given gameIndex
+* players [gameIndex]              : returns list of players for given gameIndex / for all games if index not given
 * save                             : saves current games' state
 
 ### Client
