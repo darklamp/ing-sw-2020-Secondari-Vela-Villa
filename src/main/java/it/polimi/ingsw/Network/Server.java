@@ -260,7 +260,7 @@ public class Server {
                             System.out.println("[WARNING] Saving state, although current instance was set not to use persistence.");
                         gameControllers.forEach((key, value) -> value.saveGameState());
                         System.out.println("State saved successfully!");
-                    }
+                    } else if (s.equalsIgnoreCase("^C")) System.exit(0);
                 } catch (Exception e) {
                     if (ServerMain.verbose()) e.printStackTrace();
                 }
