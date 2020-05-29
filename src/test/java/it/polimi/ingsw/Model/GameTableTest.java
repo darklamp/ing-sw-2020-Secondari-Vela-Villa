@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.Server;
@@ -16,7 +17,47 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTableTest {
 
     @Test
-    void nextTurn() {
+    void getGameStateTest() throws Exception {
+        GameTable g = new GameTable(3);
+        SocketClientConnection c1 = new SocketClientConnection(new Socket(), null);
+        SocketClientConnection c2 = new SocketClientConnection(new Socket(), null);
+        SocketClientConnection c3 = new SocketClientConnection(new Socket(), null);
+
+
+        Player player1 = new Player("gigi", g, c1);
+        Player player2 = new Player("gigi2", g, c2);
+        Player player3 = new Player("gigi3", g, c3);
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        players.add(player3);
+        g.setPlayers(players);
+        player1.setState(ClientState.WAIT);
+        assertEquals(ClientState.WAIT, g.getGameState().get((short) 0));
+        assertNull(g.getGameState().get((short) 1));
+        assertNull(g.getGameState().get((short) 2));
+        player2.setState(ClientState.WAIT);
+        assertEquals(ClientState.WAIT, g.getGameState().get((short) 0));
+        assertEquals(ClientState.WAIT, g.getGameState().get((short) 1));
+        assertEquals(player2.getNickname(), g.getGameState().getCurrentPlayer());
+        assertEquals(player1.getNickname(), g.getGameState().getName(0));
+        assertEquals(player3.getNickname(), g.getGameState().getName(2));
+        assertEquals(player2.getNickname(), g.getGameState().getName(1));
+        Field f = GameTable.class.getDeclaredField("players");
+        f.setAccessible(true);
+        ((ArrayList<Player>) f.get(g)).remove(1);
+        assertEquals(player3.getNickname(), g.getGameState().getName(1));
+        assertNull(g.getGameState().get((short) 2));
+        assertNull(g.getGameState().getName(2));
+        ((ArrayList<Player>) f.get(g)).remove(1);
+        assertEquals(ClientState.LOSE, g.getGameState().get((short) 1));
+        assertNull(g.getGameState().getName(2));
+
+
+        /*public GameStateMessage getGameState() {
+            return new GameStateMessage(players.get(0).getState(), players.size() == 1 ? ClientState.LOSE : players.get(1).getState(), players.size() == 3 ? players.get(2).getState() : null, players.get(0).getNickname(), players.size() == 1 ? null : players.get(1).getNickname(), players.size() == 3 ? players.get(2).getNickname() : null, currentPlayer);
+        }*/
+
     }
 
     @Test
@@ -73,12 +114,17 @@ class GameTableTest {
         players.add(player2);
         players.add(player3);
         gameTable.setPlayers(players);
+        gameTable.setCurrentBuilder(player3.getBuilderList().get(0));
+        gameTable.nextTurn();
 
-        gameTable.removePlayer(player2, true);
-        assertNull(gameTable.getCurrentBuilder());
-        assertEquals(player3.getFirstState(), player3.getState());
-        assertEquals(2, gameTable.getPlayerConnections().size());
         gameTable.removePlayer(player3, true);
+        Field f3 = GameTable.class.getDeclaredField("currentPlayer");
+        f3.setAccessible(true);
+        assertEquals(0, f3.get(gameTable));
+        assertNull(gameTable.getCurrentBuilder());
+        assertEquals(player1.getFirstState(), player1.getState());
+        assertEquals(2, gameTable.getPlayerConnections().size());
+        gameTable.removePlayer(player1, true);
         assertEquals(1, gameTable.getPlayerConnections().size());
     }
 
