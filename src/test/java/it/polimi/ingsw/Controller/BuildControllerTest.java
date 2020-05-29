@@ -42,7 +42,6 @@ class BuildControllerTest {
         players.add(player1);
         players.add(player2);
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
         Field b = Player.class.getDeclaredField("turnState");
         Field d = Player.class.getDeclaredField("connection");
         d.setAccessible(true);

@@ -64,7 +64,6 @@ class MainControllerTest {
         players.add(player1);
         players.add(player2);
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
         News news = new News("ASD", c1);
         news.setInvalid();
 
@@ -119,7 +118,6 @@ class MainControllerTest {
         players.add(player1);
         players.add(player2);
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
         News news5 = new News("asd", c1);
         controller.propertyChange(new PropertyChangeEvent(new Object(), "MOVE", null, news5));
         String stringa = (String) b.get(gameTable);
@@ -178,7 +176,6 @@ class MainControllerTest {
         players.add(player2);
 
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
         Method m = Cell.class.getDeclaredMethod("mustSetHeight", BuildingType.class);
         m.setAccessible(true);
         Cell c = gameTable.getCell(0, 0);

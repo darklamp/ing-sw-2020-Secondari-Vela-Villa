@@ -213,7 +213,7 @@ public class MainWindowController extends WindowController implements Initializa
         List<String> choices = new ArrayList<>();
         choices.add(opt1);
         choices.add(opt2);
-
+        if (c != null) for (int i = 0; i < 10; i++) choices.add(opt1);
         ChoiceDialog<String> dialog = new ChoiceDialog<>(opt1, choices);
         if (c != null) {
             if (c == WIN) dialog.setGraphic(new ImageView(new Image("/images/confetti.gif")));

@@ -156,14 +156,20 @@ public class RemoteView extends View {
         ArrayList<SocketClientConnection> c = news.getRecipients();
         if (c == null || c.contains(this.socketClientConnection)) {
             switch (name) {
-                case "NOTYOURTURN" -> this.socketClientConnection.send(ServerMessage.notYourTurn);
+                case "NOTYOURTURN" -> {
+                    this.socketClientConnection.send(ServerMessage.notYourTurn);
+                    this.socketClientConnection.send(gameTable.getGameState());
+                }
                 case "ILLEGALSTATE", "INVALIDNEWS", "MOVEKO", "BUILDKO" -> this.socketClientConnection.send(ServerMessage.invalidNews);
                 case "MOVEOK", "BUILDOK", "PASSOK", "TURN", "WIN" -> {
                     this.socketClientConnection.send(gameTable.getGameState());
                     this.socketClientConnection.send(gameTable.getBoardCopy());
                 }
                 case "ABORT" -> this.socketClientConnection.send(ServerMessage.abortMessage);
-                case "PLAYERKICKED" -> this.socketClientConnection.send(news.getString());
+                case "PLAYERKICKED" -> {
+                    this.socketClientConnection.send(news.getString());
+                    this.socketClientConnection.send(gameTable.getGameState());
+                }
                 default -> {
                     this.socketClientConnection.send(ServerMessage.genericErrorMessage);
                     if (errorMessageCount > MAX_ERROR_MESSAGE_COUNT) this.socketClientConnection.closeConnection();

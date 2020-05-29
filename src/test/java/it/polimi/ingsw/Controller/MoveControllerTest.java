@@ -47,7 +47,6 @@ class MoveControllerTest {
         players.add(player1);
         players.add(player2);
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
         Field b = Player.class.getDeclaredField("turnState");
 
         b.setAccessible(true);
@@ -133,7 +132,6 @@ class MoveControllerTest {
         players.add(player1);
         players.add(player2);
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
         Field f1 = Player.class.getDeclaredField("builderList");
         f1.setAccessible(true);
         Builder b = (Builder) ((ArrayList<Builder>) f1.get(player2)).get(1);
@@ -172,7 +170,6 @@ class MoveControllerTest {
         players.add(player1);
         players.add(player2);
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
         Field ff = Cell.class.getDeclaredField("height");
         ff.setAccessible(true);
         ff.set(gameTable.getCell(0, 0), BuildingType.NONE);
@@ -209,7 +206,6 @@ class MoveControllerTest {
         players.add(player1);
         players.add(player2);
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
         Field ff = Cell.class.getDeclaredField("height");
         ff.setAccessible(true);
         ff.set(gameTable.getCell(0, 0), BuildingType.NONE);

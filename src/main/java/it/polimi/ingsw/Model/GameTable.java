@@ -22,44 +22,48 @@ public class GameTable implements Serializable {
 
     private static final long serialVersionUID = 17756L;
 
-    private final Cell[][] Table;
-
     /**
      * 5x5 matrix representing game table
      **/
-    private final int gameIndex;
+    private final Cell[][] Table;
+
     /**
      * index of current game
      **/
-    private ArrayList<Player> players;
+    private final int gameIndex;
+
     /**
      * arraylist filled with players
      **/
-    private final ArrayList<Cell> arrayTable;
+    private ArrayList<Player> players;
+
     /**
      * simple object which contains the 25 pairs of coordinates from 0,0 to 4,4 as an arraylist of pair objects
      */
-    private int currentPlayer = 1;
+    private final ArrayList<Cell> arrayTable;
+
     /**
      * current player index
      **/
-    private int playersNumber;
+    private int currentPlayer = 1;
+
     /**
      * number of players in game
      **/
+    private int playersNumber;
+
     public static final List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETEUS"); /* list containing all the basic gods */
-    private ArrayList<String> godChoices;
-    /**
-     * list of gods chosen by the first player to be available in the game
-     **/
-    private Builder currentBuilder = null;
+
     /**
      * variable which holds the current builder being used by the player
      **/
-    private boolean athenaMove = false;
+    private Builder currentBuilder = null;
+
     /**
      * support boolean for Athena
      **/
+    private boolean athenaMove = false;
+
 
     private volatile boolean exit = false;
     private transient Thread timerThread = null;
@@ -186,6 +190,10 @@ public class GameTable implements Serializable {
         } else if (checkWinner) {
             playersNumber = 2;
             if (currentPlayer == pIndex) {
+                if (currentPlayer == 2) {
+                    currentPlayer = 0;
+                }
+                getCurrentPlayer().setFirstTime(true);
                 setCurrentBuilder(null);
                 try {
                     checkMovePreConditions();
@@ -284,7 +292,7 @@ public class GameTable implements Serializable {
     /**
      * @return Cell on which the first builder connected to the passed SocketClientConnection stands
      */
-    public Cell getCell(SocketClientConnection c){
+    public Cell getCell(SocketClientConnection c) {
         return c.getPlayer().getBuilderList().get(0).getPosition();
     }
 
@@ -292,6 +300,9 @@ public class GameTable implements Serializable {
      * @param nickname contains nickname to be checked
      * @return true if the nickname isn't already in use, false otherwise
      */
+    /**
+     * support boolean for Athena
+     **/
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     protected boolean isValidPlayer(String nickname) {
         if (players == null) {
@@ -327,14 +338,6 @@ public class GameTable implements Serializable {
 
     void setAthenaMove(boolean newValue) {
         athenaMove = newValue;
-    }
-
-    public void setGods(ArrayList<Integer> godChoices) {
-        ArrayList<String> gods = new ArrayList<>();
-        for (Integer godChoice : godChoices) {
-            gods.add(completeGodList.get(godChoice));
-        }
-        this.godChoices = gods;
     }
 
     public void setPlayers(ArrayList<Player> players) {

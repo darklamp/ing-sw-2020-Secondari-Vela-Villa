@@ -24,6 +24,7 @@ public class MoveController {
      */
     void handleMove(News news) throws WinnerException, NoMoreMovesException {
         String moveResult = "MOVEKO";
+        boolean winner = false;
         try {
             if (gameTable.getCurrentBuilder() != null) {
                 if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder()) throw new InvalidMoveException();
@@ -35,18 +36,18 @@ public class MoveController {
                 gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             }
             moveResult = "MOVEOK";
-        }
-        catch (InvalidMoveException ignored){ /* finally executes */
-        }
-        catch (PanException e){
+        } catch (InvalidMoveException ignored) { /* finally executes */
+        } catch (PanException e) {
+            winner = true;
             throw new WinnerException(gameTable.getCurrentPlayer());
-        }
-        catch (ArtemisException e){
+        } catch (WinnerException e) {
+            winner = true;
+            throw e;
+        } catch (ArtemisException e) {
             gameTable.getCurrentPlayer().setState(MOVEORBUILD);
             gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             moveResult = "MOVEOK";
-        }
-        catch (MinotaurException e){
+        } catch (MinotaurException e) {
             Cell cellBehind = null, cellOnWhichMinotaurIsToBeMoved;
             news.getBuilder(gameTable).getPosition().setBuilder(null);
             try {
@@ -63,7 +64,7 @@ public class MoveController {
         }
         finally {
             if (moveResult.equals("MOVEKO")) news.setRecipients(news.getSender().getPlayer());
-            gameTable.setNews(news,moveResult);
+            if (!winner) gameTable.setNews(news, moveResult);
         }
 
     }

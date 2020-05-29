@@ -73,7 +73,6 @@ class GameTableTest {
         players.add(player2);
         players.add(player3);
         gameTable.setPlayers(players);
-        gameTable.setGods(choices);
 
         gameTable.removePlayer(player2, true);
         assertNull(gameTable.getCurrentBuilder());

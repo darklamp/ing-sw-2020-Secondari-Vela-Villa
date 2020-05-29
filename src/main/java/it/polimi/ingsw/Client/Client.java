@@ -116,10 +116,12 @@ public class Client implements Runnable {
                             } else {
                                 int pIndex = Integer.parseInt(inputs[1]);
                                 if (pIndex == playerIndex) {
-                                    System.err.println(Color.RESET + ServerMessage.connClosed);
+                                    System.err.println(Color.RESET + ServerMessage.gameLost);
                                     System.exit(0);
                                 } else {
-                                    if (playerIndex != 0) playerIndex -= 1;
+                                    if (pIndex == 1) playerIndex = (short) (playerIndex == 0 ? 0 : 1);
+                                    else if (pIndex == 0) playerIndex -= 1;
+                                    ui.process("Player " + pIndex + " has lost!");
                                     playersNumber -= 1;
                                 }
                             }

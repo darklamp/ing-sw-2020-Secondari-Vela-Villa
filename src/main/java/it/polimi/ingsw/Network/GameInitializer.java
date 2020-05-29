@@ -135,7 +135,6 @@ public class GameInitializer implements Runnable {
             players.add(player1); players.add(player2);
             if (player3 != null) players.add(player3);
             gameTable.setPlayers(players);
-            gameTable.setGods(choices);
             gameTable.addPropertyChangeListener(player1View);
             gameTable.addPropertyChangeListener(player2View);
             if (c3 != null){
