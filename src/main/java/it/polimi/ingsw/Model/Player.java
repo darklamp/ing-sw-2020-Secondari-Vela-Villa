@@ -142,7 +142,7 @@ public class Player implements Serializable {
         return this.builderList.size() == 0;
     }
 
-    ArrayList<Builder> getBuilderList() {
+    public ArrayList<Builder> getBuilderList() {
         return this.builderList;
     }
 

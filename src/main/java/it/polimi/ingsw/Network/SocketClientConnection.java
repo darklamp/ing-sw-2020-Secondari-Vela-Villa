@@ -23,7 +23,10 @@ public class SocketClientConnection implements Runnable {
     private final Socket socket;
     private ObjectOutputStream out;
     private final Server server;
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    /**
+     * Listener helper object
+     **/
     private News news;
     private Player player;
     private boolean ready = false;
@@ -32,6 +35,11 @@ public class SocketClientConnection implements Runnable {
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
+    }
+
+    public SocketClientConnection() {
+        socket = null;
+        server = null;
     }
 
     public SocketClientConnection(Socket socket, Server server) {
@@ -229,7 +237,7 @@ public class SocketClientConnection implements Runnable {
     public void run() {
         Scanner in;
         String name;
-        try{
+        try {
             socket.setPerformancePreferences(0, 1, 0);
             socket.setTcpNoDelay(true);
             in = new Scanner(socket.getInputStream());
@@ -239,7 +247,8 @@ public class SocketClientConnection implements Runnable {
                 send(ServerMessage.reloadGameChoice);
             } else send(ServerMessage.welcomeNoPersistence);
             String read = in.nextLine();
-            if (ServerMain.persistence() && read.equals("R")) {
+            if (read.equals("B")) server.lobbyBot(this, "test");
+            else if (ServerMain.persistence() && read.equals("R")) {
                 send("Please enter game number: ");
                 int gameNumber = 0;
                 try {
