@@ -85,8 +85,11 @@ class MinotaurTest {
         Cell c9 = g.getCell(2, 3);
         Cell c10 = g.getCell(1, 3);
         Cell c11 = g.getCell(4, 4);
+        Cell c12 = g.getCell(4, 1);
+
         Minotaur b1 = new Minotaur(c0, p1);
         Minotaur b2 = new Minotaur(c4, p2);
+        Minotaur b3 = new Minotaur(c, p2);
         Assertions.assertEquals(b1.getCellBehind(c1).getFirst(), 4);
         Assertions.assertEquals(b1.getCellBehind(c1).getSecond(), 4);
         Assertions.assertEquals(b1.getCellBehind(c3).getFirst(), 2);
@@ -115,6 +118,25 @@ class MinotaurTest {
         Assertions.assertTrue(b2.checkEmptyCellBehind(c8));
         Assertions.assertTrue(b2.checkEmptyCellBehind(c9));
         Assertions.assertTrue(b2.checkEmptyCellBehind(c10));
+
+        Assertions.assertFalse(b3.checkEmptyCellBehind(c11));
+        Minotaur b4 = new Minotaur(c12, p2);
+        Assertions.assertFalse(b4.checkEmptyCellBehind(g.getCell(4, 0)));
+        Cell c13 = g.getCell(3, 4);
+        Minotaur b5 = new Minotaur(c13, p2);
+        Assertions.assertFalse(b5.checkEmptyCellBehind(g.getCell(4, 4)));
+        Cell c14 = g.getCell(1, 1);
+        Minotaur b6 = new Minotaur(c14, p2);
+        Assertions.assertFalse(b6.checkEmptyCellBehind(g.getCell(0, 0)));
+        Assertions.assertFalse(b6.checkEmptyCellBehind(g.getCell(0, 1)));
+        Assertions.assertFalse(b6.checkEmptyCellBehind(g.getCell(0, 2)));
+        Cell c15 = g.getCell(0, 1);
+        Minotaur b7 = new Minotaur(c15, p2);
+        Assertions.assertFalse(b7.checkEmptyCellBehind(g.getCell(0, 0)));
+        Cell c16 = g.getCell(0, 3);
+        Minotaur b8 = new Minotaur(c16, p2);
+        Assertions.assertFalse(b8.checkEmptyCellBehind(g.getCell(0, 4)));
+
 
     }
 }
