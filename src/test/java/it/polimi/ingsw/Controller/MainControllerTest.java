@@ -568,5 +568,118 @@ class MainControllerTest {
         Assertions.assertNotEquals(before, after);
     }
 
+    /**
+     * Same as {@link MainControllerTest#propertyChangeTest3()} but with persistence disabled
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void propertyChangeTest4() throws Exception {
+        Socket socket = new Socket();
+
+        Field a = GameTable.class.getDeclaredField("news");
+        Field b = GameTable.class.getDeclaredField("type");
+        a.setAccessible(true);
+        b.setAccessible(true);
+        Field f = ServerMain.class.getDeclaredField("persistence");
+        f.setAccessible(true);
+        f.set(null, false);
+        GameTable gameTable = new GameTable(2);
+        MainController controller = new MainController(gameTable);
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        Field d = SocketClientConnection.class.getDeclaredField("out");
+        d.setAccessible(true);
+        SocketClientConnection c1 = new SocketClientConnection(socket, null);
+        SocketClientConnection c2 = new SocketClientConnection(socket, null);
+        d.set(c1, new ObjectOutputStream(OutputStream.nullOutputStream()));
+        d.set(c2, new ObjectOutputStream(OutputStream.nullOutputStream()));
+
+        Player player1 = new Player("gigi", gameTable, c1);
+        Player player2 = new Player("gigi2", gameTable, c2);
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        Method m = Player.class.getDeclaredMethod("getBuilderList");
+        m.setAccessible(true);
+        gameTable.setCurrentBuilder(((ArrayList<Builder>) m.invoke(player2)).get(0));
+        News news = new News("ASD", c2);
+        player2.setState(BUILDORPASS);
+        Field f5 = MainController.class.getDeclaredField("fileOutputStream");
+        f5.setAccessible(true);
+        Assertions.assertNull(f5.get(controller));
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "PASS", null, news));
+        Assertions.assertEquals(gameTable.getCurrentPlayer(), player1);
+        Assertions.assertNull(f5.get(controller));
+    }
+
+    /**
+     * Tests the BUILD and the MOVE cases
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void propertyChangeTest5() throws Exception {
+        Socket socket = new Socket();
+
+        Field a = GameTable.class.getDeclaredField("news");
+        Field b = GameTable.class.getDeclaredField("type");
+        a.setAccessible(true);
+        b.setAccessible(true);
+        GameTable gameTable = new GameTable(2);
+        MainController controller = new MainController(gameTable);
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        Field d = SocketClientConnection.class.getDeclaredField("out");
+        d.setAccessible(true);
+        SocketClientConnection c1 = new SocketClientConnection(socket, null);
+        SocketClientConnection c2 = new SocketClientConnection(socket, null);
+        d.set(c1, new ObjectOutputStream(OutputStream.nullOutputStream()));
+        d.set(c2, new ObjectOutputStream(OutputStream.nullOutputStream()));
+
+        Player player1 = new Player("gigi", gameTable, c1);
+        Player player2 = new Player("gigi2", gameTable, c2);
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        News news = new News("ASD", c2);
+        player2.setState(MOVE);
+        news.setCoords(4, 4, 1);
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "MOVE", null, news));
+        Assertions.assertEquals("MOVEKO", b.get(gameTable));
+        player2.setState(BUILD);
+        news.setCoords(4, 4, 1);
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "BUILD", null, news));
+        Assertions.assertEquals("BUILDKO", b.get(gameTable));
+    }
+
 
 }
