@@ -4,3 +4,6 @@ ignore:
   - "src/main/java/it/polimi/ingsw/View"
   - "src/main/java/it/polimi/ingsw/ServerMain.java"
   - "src/main/java/it/polimi/ingsw/Network"
+coverage:
+  range: 60..100
+  round: nearest
