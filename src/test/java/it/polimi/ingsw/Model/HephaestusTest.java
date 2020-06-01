@@ -22,12 +22,16 @@ class HephaestusTest {
         Assertions.assertThrows(HephaestusException.class, () -> {
             c2.setHeight(b1, BuildingType.BASE);
         });
-        Assertions.assertThrows(InvalidBuildException.class, () -> {
-            c2.setHeight(b1, BuildingType.DOME);
-        });
-        Assertions.assertThrows(InvalidBuildException.class, () -> {
-            c2.setHeight(b1, BuildingType.DOME);
-        });
+        p1.setFirstTime(true);
+        c2.mustSetHeight(BuildingType.TOP);
+        Assertions.assertDoesNotThrow(() -> c2.setHeight(b1, BuildingType.DOME));
+        p1.setFirstTime(true);
+        c2.mustSetHeight(BuildingType.MIDDLE);
+        Assertions.assertDoesNotThrow(() -> c2.setHeight(b1, BuildingType.TOP));
+        c2.mustSetHeight(BuildingType.BASE);
+
+        Assertions.assertThrows(InvalidBuildException.class, () -> c2.setHeight(b1, BuildingType.DOME));
+        Assertions.assertThrows(InvalidBuildException.class, () -> c2.setHeight(b1, BuildingType.DOME));
     }
 
     @Test
