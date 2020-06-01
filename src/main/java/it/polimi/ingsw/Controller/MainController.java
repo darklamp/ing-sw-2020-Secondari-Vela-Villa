@@ -131,25 +131,21 @@ public class MainController implements PropertyChangeListener {
      * @param turn Turn state from Server side
      * @throws IllegalTurnStateException if not matching
      */
-    private static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
+    public static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
         switch (turn) {
-            case BUILD:
+            case BUILD -> {
                 if (!name.equals("BUILD")) throw new IllegalTurnStateException();
-                break;
-            case MOVE:
+            }
+            case MOVE -> {
                 if (!name.equals("MOVE")) throw new IllegalTurnStateException();
-                break;
-            case MOVEORBUILD:
-                if (name.equals("PASS")) throw new IllegalTurnStateException();
-                break;
-            case BUILDORPASS:
-                if (name.equals("MOVE")) throw new IllegalTurnStateException();
-                break;
-            case WAIT:
-                if (!name.equals("PASS")) throw new IllegalTurnStateException();
-                break;
-            default:
-                throw new IllegalTurnStateException();
+            }
+            case MOVEORBUILD -> {
+                if (!name.equals("MOVE") && !name.equals("BUILD")) throw new IllegalTurnStateException();
+            }
+            case BUILDORPASS -> {
+                if (!name.equals("PASS") && !name.equals("BUILD")) throw new IllegalTurnStateException();
+            }
+            default -> throw new IllegalTurnStateException();
         }
     }
 
