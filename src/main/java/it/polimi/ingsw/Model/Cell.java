@@ -26,28 +26,34 @@ public class Cell implements Serializable {
         this.coordinates = new Pair(x, y);
     }
 
+    /**
+     * Creates a {@link CellView} for the Cell.
+     *
+     * @param table {@link GameTable} on which the Cell stands.
+     * @return {@link CellView} representation of given Cell.
+     */
     CellView getModelView(GameTable table) {
         return new CellView(height, builder == null ? -1 : table.getPlayerIndex(builder.getPlayer()), builder != null && builder.isFirst());
     }
 
-    GameTable getGameTable() {
-        return gameTable;
-    }
-
 
     /**
-     * used in tests only
+     * Forces height on Cell without any check. Used in tests only, hence tagged as deprecated.
      **/
+    @Deprecated
     void mustSetHeight(BuildingType height) {
-        this.height = height; //mette per forza quella costruzione
+        this.height = height;
     }
 
     /**
      * This function is responsible for setting a cell's height, which translates to building on a cell.
+     *
      * @param builder represents the builder which is trying to build on the cell
-     * @param height represents the height at which the builder wants to build
+     * @param height  represents the height at which the builder wants to build
      * @throws InvalidBuildException if the cell is occupied by another builder OR if the cell is not adjacent
-     * @throws DemeterException --> {@link Demeter}
+     * @throws DemeterException      --> {@link Demeter}
+     * @throws HephaestusException   --> {@link Hephaestus}
+     * @throws PrometheusException   --> {@link Prometheus}
      */
     public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, DemeterException, PrometheusException, HephaestusException {
             try {
@@ -80,40 +86,42 @@ public class Cell implements Serializable {
     }
 
     /**
-     * @return list of cells which are near the given cell
+     * @return list of cells which are near the given cell.
      * @example if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
      */
-    protected ArrayList<Cell> getNear() { // returns cell numbers near given cell
+    protected ArrayList<Cell> getNear() {
         return gameTable.toArrayList().stream().filter(cell -> cell.isNear(this)).collect(toCollection(ArrayList::new));
     }
 
     /**
      * This simple function checks whether the  " other "  Cell is near to this.
      * It is a helper function to getNear().
+     *
+     * @param other {@link Cell} to be checked for nearness
      * @return true if near, false otherwise
      */
     private boolean isNear(Cell other){
-        if (this.getRow() == other.getRow() - 1 || this.getRow() == other.getRow() + 1){
+        if (this.getRow() == other.getRow() - 1 || this.getRow() == other.getRow() + 1) {
             return this.getColumn() - other.getColumn() <= 1 && this.getColumn() - other.getColumn() >= -1;
-        }
-        else if (this.getColumn() == other.getColumn() -1 || this.getColumn() == other.getColumn() + 1){
+        } else if (this.getColumn() == other.getColumn() - 1 || this.getColumn() == other.getColumn() + 1) {
             return this.getRow() - other.getRow() <= 1 && this.getRow() - other.getRow() >= -1;
         }
         return false;
     }
 
     /**
+     * Checks whether the given cell is not already occupied
      * @param x X coordinate of the cell to be checked
-     * @param y Y  ..
+     * @param y Y coordinate of the cell to be checked
      * @return true if the Cell has no builder nor dome on it, else false
+     * @throws InvalidCoordinateException if the given coordinates are invalid
      */
     boolean movableCell(int x, int y) throws InvalidCoordinateException{
         return gameTable.getCell(x,y).getBuilder() == null && (gameTable.getCell(x,y).getHeight() != BuildingType.DOME);
     }
 
 
-
-    /** getter / setter **/
+    /** simple getters / setters **/
 
 
     public void setBuilder(Builder builder) {
@@ -138,6 +146,10 @@ public class Cell implements Serializable {
 
     public BuildingType getHeight() {
         return height;
+    }
+
+    GameTable getGameTable() {
+        return gameTable;
     }
 
 }

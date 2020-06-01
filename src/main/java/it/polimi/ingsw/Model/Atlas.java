@@ -8,18 +8,19 @@ public class Atlas extends Builder{
     }
 
     /**
-     * @param cell see super
-     * @param newheight see super
-     * @throws AtlasException when I'm doing something only Atlas can do, aka building a dome on any level
-     * @throws InvalidBuildException see super
+     * {@inheritDoc}
      */
     @Override
     protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, InvalidBuildException, DemeterException, HephaestusException, PrometheusException {
-        super.isValidBuild(cell,newheight);
-        if (newheight.equals(BuildingType.DOME) && !cell.getHeight().equals(BuildingType.DOME)) throw new AtlasException();
-        else verifyBuild(cell,newheight);
+        super.isValidBuild(cell, newheight);
+        if (newheight.equals(BuildingType.DOME) && !cell.getHeight().equals(BuildingType.DOME))
+            throw new AtlasException();
+        else verifyBuild(cell, newheight);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, ArtemisException, PanException {
         super.isValidMove(finalPoint);

@@ -12,12 +12,7 @@ public class Demeter extends Builder {
 
 
     /**
-     * @param cell      represents the cell on which the builder wants to build
-     * @param newheight represents "new height", meaning the height which the builder wants to build on
-     * @throws AtlasException n/a
-     * @throws DemeterException when I just built on a valid cell, to let the controller know I can build again
-     * @throws HephaestusException n/a
-     * @throws InvalidBuildException when thrown by super method or when trying to build using Demeter's power on the same cell as before (see previous)
+     * {@inheritDoc}
      */
     @Override
     protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, DemeterException, HephaestusException, InvalidBuildException, PrometheusException {
@@ -33,7 +28,6 @@ public class Demeter extends Builder {
             } else {
                 super.isValidBuild(cell, newheight);
                 verifyBuild(cell, newheight);
-             //   this.getPlayer().setFirstTime(true); //così quando verrà richiamato il metodo isvalidbuild entrerò nel ramo if
             }
         }
     }

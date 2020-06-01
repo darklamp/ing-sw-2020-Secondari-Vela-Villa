@@ -138,7 +138,10 @@ public class Player implements Serializable {
         }
     }
 
-    public boolean hasNoBuilder(){
+    /**
+     * @return true if the Player has no builders.
+     */
+    public boolean hasNoBuilder() {
         return this.builderList.size() == 0;
     }
 

@@ -19,8 +19,11 @@ public class MoveController {
     }
 
     /**
+     * Method responsible for handling a "Move" news.
+     *
      * @param news contains the cell where the player wants to move.
-     * @throws WinnerException also catch gods' exceptions about moving powers
+     * @throws WinnerException      when a winner is found.
+     * @throws NoMoreMovesException when a player is found to have no more feasible moves.
      */
     void handleMove(News news) throws WinnerException, NoMoreMovesException {
         String moveResult = "MOVEKO";

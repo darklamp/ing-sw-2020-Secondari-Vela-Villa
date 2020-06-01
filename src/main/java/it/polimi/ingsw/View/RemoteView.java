@@ -22,6 +22,9 @@ public class RemoteView extends View {
     private int errorMessageCount = 0;
     private static final int MAX_ERROR_MESSAGE_COUNT = 10000;
 
+    /**
+     * Class responsible for parsing messages.
+     */
     private class MessageReceiver implements PropertyChangeListener {
 
         private News news;
@@ -35,15 +38,13 @@ public class RemoteView extends View {
         public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
             Object obj = propertyChangeEvent.getNewValue();
             setNews((News) obj);
-            System.out.println("Received message from: " + news.getSender().getPlayer().getNickname() +"\n");
+            System.out.println("Received message from: " + news.getSender().getPlayer().getNickname() + "\n");
             String name = propertyChangeEvent.getPropertyName();
-            if (name.equals("PLAYERTIMEOUT")){
-                setControllerNews(news,"PLAYERTIMEOUT");
-            }
-            else if (name.equals("ABORT")){
-                setControllerNews(news,"ABORT");
-            }
-            else isValidNews(news);
+            if (name.equals("PLAYERTIMEOUT")) {
+                setControllerNews(news, "PLAYERTIMEOUT");
+            } else if (name.equals("ABORT")) {
+                setControllerNews(news, "ABORT");
+            } else isValidNews(news);
         }
 
 
@@ -53,7 +54,7 @@ public class RemoteView extends View {
          * if TYPE == PASS --> PASS
          * else  (MOVE||BUILD)$$COORD1$$COORD2$$BUILDERNUMBER
          * <p>
-         * if input is invalid, news is set to invalid, so controller returns an error message tot the client
+         * if input is invalid, news is set to invalid, so controller returns an error message to the client
          *
          * @param news to be parsed
          */
@@ -141,13 +142,8 @@ public class RemoteView extends View {
         c.addPropertyChangeListener(new MessageReceiver());
     }
 
-    @Override
-    protected void showMessage(Object message) {
-        socketClientConnection.send(message);
-    }
-
     /**
-     * this method gets called when the model sends a news; its purpose is to update the view.
+     * {@inheritDoc}
      **/
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {

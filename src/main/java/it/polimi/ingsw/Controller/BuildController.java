@@ -16,7 +16,6 @@ public class BuildController {
     /**
      * @param news contains the cell where the player wants to build
      * @throws NoMoreMovesException see this exception in Model
-     * also catch gods' exceptions about building powers
      */
     public void handleBuild(News news) throws NoMoreMovesException {
         String s = "BUILDKO";

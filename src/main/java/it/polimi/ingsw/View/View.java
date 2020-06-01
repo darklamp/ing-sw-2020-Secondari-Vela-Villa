@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View;
 
 
-import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
 
@@ -53,12 +52,6 @@ public abstract class View implements PropertyChangeListener {
 
     protected Player getPlayer(){
         return player;
-    }
-
-    protected abstract void showMessage(Object message);
-
-    public void reportError(String message){
-        showMessage(message);
     }
 
 }
