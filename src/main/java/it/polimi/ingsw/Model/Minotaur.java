@@ -43,7 +43,6 @@ public class Minotaur extends Builder {
      * @throws InvalidCoordinateException if the given cell is invalid
      */
     boolean checkEmptyCellBehind(Cell finalPoint) throws InvalidCoordinateException {
-        /* Warn : X is the row, so it really is Y, and viceversa */
         int diffY = finalPoint.getRow() - this.getPosition().getRow();
         int diffX = finalPoint.getColumn() - this.getPosition().getColumn();
         if (diffY == 1) {

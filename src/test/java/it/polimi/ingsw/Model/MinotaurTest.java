@@ -93,6 +93,9 @@ class MinotaurTest {
         Assertions.assertEquals(b1.getCellBehind(c3).getSecond(), 2);
         Assertions.assertEquals(b1.getCellBehind(c5).getFirst(), 2);
         Assertions.assertEquals(b1.getCellBehind(c5).getSecond(), 0);
+        Assertions.assertEquals(b2.getCellBehind(c5).getFirst(), 4);
+        Assertions.assertEquals(b2.getCellBehind(c5).getSecond(), 0);
+
 
         Assertions.assertFalse(b2.checkEmptyCellBehind(c3));
         Assertions.assertTrue(b2.checkEmptyCellBehind(c6));
@@ -112,7 +115,6 @@ class MinotaurTest {
         Assertions.assertTrue(b2.checkEmptyCellBehind(c8));
         Assertions.assertTrue(b2.checkEmptyCellBehind(c9));
         Assertions.assertTrue(b2.checkEmptyCellBehind(c10));
-
 
     }
 }
