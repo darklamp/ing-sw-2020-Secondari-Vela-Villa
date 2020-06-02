@@ -350,11 +350,5 @@ public class GameTable implements Serializable {
     /**
      * Only used for tests.
      */
-    private void setCurrentPlayer(int player) {
-        this.currentPlayer = player;
-    }
-
     private String type;
-
-
 }

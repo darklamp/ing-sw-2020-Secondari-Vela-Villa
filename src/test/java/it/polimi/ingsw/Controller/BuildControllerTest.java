@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -75,9 +74,9 @@ class BuildControllerTest {
         gameTable.setPlayers(players);
         b.set(player3, ClientState.BUILD);
         news.setCoords(3, 4, 0);
-        Method f = GameTable.class.getDeclaredMethod("setCurrentPlayer", int.class);
+        Field f = GameTable.class.getDeclaredField("currentPlayer");
         f.setAccessible(true);
-        f.invoke(gameTable, 2);
+        f.set(gameTable, 2);
         //noinspection unchecked
         ArrayList<Builder> bg = (ArrayList<Builder>) c.get(player3);
         gameTable.setCurrentBuilder(bg.get(0));
@@ -90,7 +89,7 @@ class BuildControllerTest {
         player4.initBuilderList(gameTable.getCell(0, 4));
         players.remove(player3);
         players.add(player4);
-        f.invoke(gameTable, 3);
+        f.set(gameTable, 3);
         gameTable.setPlayers(players);
         b.set(player4, ClientState.MOVEORBUILD);
         news.setCoords(0, 2, 0);
