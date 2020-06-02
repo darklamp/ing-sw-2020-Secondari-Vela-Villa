@@ -1,5 +1,8 @@
 # SANTORINI : Progetto Ing.SW 2020 [![codecov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/branch/master/graph/badge.svg?token=PF3WCGV0B5)](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa)
 
+### Test game server : server.santorini.cf 
+Runs on port 1337; before connecting, make sure to [click on this link](server.santorini.cf:1338) twice.
+
 
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
