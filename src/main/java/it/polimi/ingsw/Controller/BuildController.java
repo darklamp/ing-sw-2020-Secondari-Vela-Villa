@@ -22,12 +22,10 @@ public class BuildController {
         try{
             if (gameTable.getCurrentBuilder() != null && news.getBuilder(gameTable) != gameTable.getCurrentBuilder())
                 throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
-            gameTable.checkBuildPreConditions(gameTable.getCurrentBuilder());
+           // gameTable.checkConditions();
             news.getCell(gameTable).setHeight(news.getBuilder(gameTable), news.getHeight());
             gameTable.getCurrentPlayer().setState(WAIT);
-            gameTable.setNews(news, "BUILDOK");
             gameTable.nextTurn();
-            news = new News();
             s = "TURN";
         } catch (InvalidBuildException ignored) {
         } catch (DemeterException | HephaestusException e) {
@@ -41,6 +39,7 @@ public class BuildController {
         finally {
             if (s.equals("BUILDOK") && gameTable.getCurrentBuilder() == null) {
                 gameTable.setCurrentBuilder(news.getBuilder(gameTable));
+                gameTable.checkConditions();
             } else if (s.equals("BUILDKO")) news.setRecipients(news.getSender().getPlayer());
             gameTable.setNews(news, s);
         }

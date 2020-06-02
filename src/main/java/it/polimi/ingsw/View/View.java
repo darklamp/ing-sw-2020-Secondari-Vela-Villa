@@ -22,10 +22,6 @@ public abstract class View implements PropertyChangeListener {
         support.addPropertyChangeListener(pcl);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
-    }
-
     public void setControllerNews(News news, String type) {
         support.firePropertyChange(type, this.controllerNews, news);
         this.controllerNews = news;
@@ -34,12 +30,7 @@ public abstract class View implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
         Object obj = propertyChangeEvent.getNewValue();
-        String name = propertyChangeEvent.getPropertyName();
         this.setModelNews((News) obj);
-    }
-
-    private News getModelNews(){
-        return this.modelNews;
     }
 
     public void setModelNews(News news){

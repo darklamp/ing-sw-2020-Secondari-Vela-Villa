@@ -83,13 +83,21 @@ public class GameTable implements Serializable {
         setCurrentBuilder(null);
         if (currentPlayer == players.size() - 1) currentPlayer = 0;
         else currentPlayer++;
+        getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
         try {
-            if (getCurrentPlayer().getBuilderList().get(0).getFirstState() != ClientState.MOVEORBUILD)
-                checkMovePreConditions();
+            getCurrentPlayer().checkConditions(null);
         } finally {
-            getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
             resetMoveTimer();
         }
+    }
+
+    /**
+     * Checks if the player meets the necessary conditions to continue playing.
+     *
+     * @throws NoMoreMovesException if the player does not meet playable conditions (aka he can't move/build)
+     */
+    public void checkConditions() throws NoMoreMovesException {
+        getCurrentPlayer().checkConditions(currentBuilder);
     }
 
 
@@ -127,52 +135,6 @@ public class GameTable implements Serializable {
         else return playersNumber == 3 ? 2 : -1; // -1 is error case
     }
 
-    /**
-     * Checks for available feasible moves
-     * @see NoMoreMovesException
-     */
-    public final void checkMovePreConditions() throws NoMoreMovesException {
-        ArrayList<Builder> builderList = players.get(currentPlayer).getBuilderList();
-        boolean b1 = players.get(currentPlayer).isFirstTime();
-        int movableBuilders = 1;
-        if (currentBuilder == null) {
-            movableBuilders = 2;
-            for (Builder b : builderList) {
-                if (!b.hasAvailableMoves()) movableBuilders -= 1;
-                if (b1) players.get(currentPlayer).setFirstTime(true);
-            }
-        } else {
-            if (!currentBuilder.hasAvailableMoves()) movableBuilders -= 1;
-            if (b1) players.get(currentPlayer).setFirstTime(true);
-        }
-        if (movableBuilders == 0) throw new NoMoreMovesException(players.get(currentPlayer));
-        if (b1) players.get(currentPlayer).setFirstTime(true);
-
-    }
-
-    /**
-     * Checks for available feasible moves
-     *
-     * @see NoMoreMovesException
-     */
-    public final void checkBuildPreConditions(Builder builder) throws NoMoreMovesException {
-        int builders = 1;
-        boolean b1 = players.get(currentPlayer).isFirstTime();
-        ArrayList<Builder> builderList = new ArrayList<>();
-        if (builder == null) { //player is building before moving: must check both builders
-            builders = 2;
-            builderList = players.get(currentPlayer).getBuilderList();
-        } else {
-            builderList.add(builder);
-        }
-
-        for (Builder b : builderList) {
-            if (!b.hasAvailableBuilds()) builders -= 1;
-            if (b1) players.get(currentPlayer).setFirstTime(true);
-        }
-        if (builders == 0) throw new NoMoreMovesException(players.get(currentPlayer));
-        if (b1) players.get(currentPlayer).setFirstTime(true);
-    }
 
     /**
      * Handles player removal
@@ -196,7 +158,7 @@ public class GameTable implements Serializable {
                 getCurrentPlayer().setFirstTime(true);
                 setCurrentBuilder(null);
                 try {
-                    checkMovePreConditions();
+                    checkConditions();
                 } finally {
                     getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
                     resetMoveTimer();

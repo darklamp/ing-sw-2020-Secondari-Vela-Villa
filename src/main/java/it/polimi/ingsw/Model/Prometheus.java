@@ -35,6 +35,6 @@ public class Prometheus extends Builder {
         return ClientState.MOVEORBUILD;
     }
 
-    }
+}
 
 

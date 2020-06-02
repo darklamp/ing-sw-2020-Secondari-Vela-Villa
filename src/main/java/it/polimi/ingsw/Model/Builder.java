@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public abstract class Builder implements Serializable {
 
     private static final long serialVersionUID = 17756L;
@@ -87,8 +88,10 @@ public abstract class Builder implements Serializable {
      */
     protected void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, HephaestusException, DemeterException, PrometheusException {
 
-        if (cell.getHeight().equals(BuildingType.DOME)) throw new InvalidBuildException(); // verify that there is no dome on the cell
-        else if (cell.getHeight().equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME))) throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
+        if (cell.getHeight().equals(BuildingType.DOME) || cell.getBuilder() != null)
+            throw new InvalidBuildException(); // verify that there is no dome on the cell
+        else if (cell.getHeight().equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME)))
+            throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
 
     }
 
@@ -173,10 +176,8 @@ public abstract class Builder implements Serializable {
 
     /**
      * Checks whether the builder has any feasible move.
-     *
      * @return true if there's at least a valid move to be made.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean hasAvailableMoves() {
         return this.position.getNear().stream().anyMatch(c -> {
             try {
@@ -192,7 +193,6 @@ public abstract class Builder implements Serializable {
 
     /**
      * Checks whether the builder has any feasible build.
-     *
      * @return true if there's at least a valid build to be made.
      */
     boolean hasAvailableBuilds() {

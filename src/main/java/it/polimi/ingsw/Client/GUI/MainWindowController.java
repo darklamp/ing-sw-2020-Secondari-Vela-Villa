@@ -13,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -33,8 +32,7 @@ import java.util.ResourceBundle;
 import static it.polimi.ingsw.Client.ClientState.*;
 
 public class MainWindowController extends WindowController implements Initializable {
-    @FXML
-    Parent mainViewPane;
+
     @FXML
     GridPane buildingPartsPane;
     @FXML

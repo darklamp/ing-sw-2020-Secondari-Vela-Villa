@@ -3,14 +3,14 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
+import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Network.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import static it.polimi.ingsw.Client.ClientState.MOVE;
-import static it.polimi.ingsw.Client.ClientState.MOVEORBUILD;
+import static it.polimi.ingsw.Client.ClientState.*;
 
 public class Player implements Serializable {
 
@@ -139,10 +139,90 @@ public class Player implements Serializable {
     }
 
     /**
-     * @return true if the Player has no builders.
+     * @return true if this player's {@link Player#builderList} is empty
      */
     public boolean hasNoBuilder() {
         return this.builderList.size() == 0;
+    }
+
+    /**
+     * Checks if the player meets the necessary conditions to continue playing.
+     *
+     * @param builder builder to be checked (null if both builders need to be checked)
+     * @throws NoMoreMovesException if the player does not meet playable conditions (aka he can't move/build)
+     */
+    void checkConditions(Builder builder) throws NoMoreMovesException {
+        switch (turnState) {
+            case MOVE -> checkMovePreConditions(builder);
+            case BUILD -> checkBuildPreConditions(builder);
+            case MOVEORBUILD -> {
+                try {
+                    checkMovePreConditions(builder);
+                } catch (NoMoreMovesException e) {
+                    turnState = BUILD;
+                }
+                try {
+                    checkBuildPreConditions(builder);
+                } catch (NoMoreMovesException e) {
+                    if (turnState == BUILD) throw e;
+                    else turnState = MOVE;
+                }
+            }
+            case BUILDORPASS -> {
+                try {
+                    checkBuildPreConditions(builder);
+                } catch (NoMoreMovesException e) {
+                    gameTable.nextTurn();
+                }
+            }
+            default -> {
+            }
+        }
+    }
+
+    /**
+     * Checks for available feasible moves
+     *
+     * @see NoMoreMovesException
+     */
+    public final void checkMovePreConditions(Builder builder) throws NoMoreMovesException {
+        int builders = 1;
+        boolean b1 = firstTime;
+        ArrayList<Builder> builderList = new ArrayList<>();
+        if (builder == null) { //player is building before moving: must check both builders
+            builders = 2;
+        } else {
+            builderList.add(builder);
+        }
+        for (Builder b : builderList) {
+            if (!b.hasAvailableMoves()) builders -= 1;
+            if (b1) firstTime = true;
+        }
+        if (builders == 0) throw new NoMoreMovesException(this);
+        if (b1) firstTime = true;
+
+    }
+
+    /**
+     * Checks for available feasible builds
+     *
+     * @see NoMoreMovesException
+     */
+    public final void checkBuildPreConditions(Builder builder) throws NoMoreMovesException {
+        int builders = 1;
+        boolean b1 = firstTime;
+        ArrayList<Builder> builderList = new ArrayList<>();
+        if (builder == null) { //player is building before moving: must check both builders
+            builders = 2;
+        } else {
+            builderList.add(builder);
+        }
+        for (Builder b : builderList) {
+            if (!b.hasAvailableBuilds()) builders -= 1;
+            if (b1) firstTime = true;
+        }
+        if (builders == 0) throw new NoMoreMovesException(this);
+        if (b1) firstTime = true;
     }
 
     ArrayList<Builder> getBuilderList() {

@@ -157,10 +157,6 @@ class Dice {
     public void Four(){
         this.face= DICE_FACES[4];}
 
-    public Color getColor(){
-        return color;
-    }
-
     public void setColor(Color color){
         this.color= color;
     }

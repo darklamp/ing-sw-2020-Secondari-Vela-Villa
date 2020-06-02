@@ -32,12 +32,12 @@ public class MoveController {
             if (gameTable.getCurrentBuilder() != null) {
                 if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder()) throw new InvalidMoveException();
             }
-            gameTable.checkMovePreConditions();
+         //   gameTable.checkConditions();
             news.getBuilder(gameTable).setPosition(news.getCell(gameTable));
-            gameTable.getCurrentPlayer().setState(BUILD);
             if (gameTable.getCurrentBuilder() == null) {
                 gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             }
+            gameTable.getCurrentPlayer().setState(BUILD);
             moveResult = "MOVEOK";
         } catch (InvalidMoveException ignored) { /* finally executes */
         } catch (PanException e) {
@@ -67,6 +67,7 @@ public class MoveController {
         }
         finally {
             if (moveResult.equals("MOVEKO")) news.setRecipients(news.getSender().getPlayer());
+            else gameTable.checkConditions();
             if (!winner) gameTable.setNews(news, moveResult);
         }
 

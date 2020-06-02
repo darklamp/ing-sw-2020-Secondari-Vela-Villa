@@ -62,9 +62,8 @@ public class Cell implements Serializable {
                     height = this.height.getNext();
                 }
 
-                if (this.builder != null) throw new InvalidBuildException(); // there's a builder on the cell, so I can't build on it
-
-                else if (!(builder.getPosition().getNear().contains((this)))) throw new InvalidBuildException(); // trying to build on a non-near cell
+                if (!(builder.getPosition().getNear().contains((this))))
+                    throw new InvalidBuildException(); // trying to build on a non-near cell
 
                 builder.isValidBuild(this, height);
 
