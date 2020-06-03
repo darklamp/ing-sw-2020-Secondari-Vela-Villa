@@ -103,16 +103,19 @@ public class Minotaur extends Builder {
             else {
                 return new Pair(finalPoint.getRow() - 1, finalPoint.getColumn());
             }
-        }
-        else {
+        } else {
             if (diffX == 1) {
                 return new Pair(finalPoint.getRow(), finalPoint.getColumn() + 1);
-            }
-            else if (diffX == -1) {
+            } else if (diffX == -1) {
                 return new Pair(finalPoint.getRow(), finalPoint.getColumn() - 1);
             }
         }
-        return new Pair(0,0);
+        return new Pair(0, 0);
+    }
+
+    public void minotaurMove(Cell moveTo, Cell cellBehind) {
+        moveTo.getBuilder().forceMove(cellBehind);
+        this.forceMove(moveTo);
     }
 
 }

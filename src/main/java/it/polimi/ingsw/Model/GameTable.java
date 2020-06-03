@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
 
@@ -76,6 +77,8 @@ public class GameTable implements Serializable {
      * - increase the currentPlayer index, so as to effectively skip to next player
      * - check for preConditions -> if the player can't move, throw
      * - change client state
+     *
+     * @throws NoMoreMovesException if the player doesn't pass new turn checks
      */
     public void nextTurn() throws NoMoreMovesException {
         getCurrentPlayer().setFirstTime(true);
@@ -128,18 +131,21 @@ public class GameTable implements Serializable {
 
     /**
      * Takes a Player argument and determines its "player number", aka its index in the players list.
+     * @param player player whose index the function returns
+     * @return index of player (0..2)
      */
     public int getPlayerIndex(Player player) {
         if (players.get(0).equals(player)) return 0;
         else if (players.get(1).equals(player)) return 1;
-        else return playersNumber == 3 ? 2 : -1; // -1 is error case
+        else return (playersNumber == 3 && players.get(2).equals(player)) ? 2 : -1; // -1 is error case
     }
 
 
     /**
      * Handles player removal
-     *
      * @param player to be removed
+     * @param checkWinner boolean to tell the function whether or not it should perform additional checks
+     * @throws NoMoreMovesException if, after the passed player gets removed, the next player doesn't pass checks
      */
     public synchronized void removePlayer(Player player, boolean checkWinner) throws NoMoreMovesException {
         int pIndex = getPlayerIndex(player);
@@ -190,9 +196,9 @@ public class GameTable implements Serializable {
     private transient News news;
 
     /**
-     * Listener news
+     * Adds a listener to this instance of GameTable.
+     * @param pcl PropertyChangeListener to be added
      **/
-
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
     }
@@ -262,13 +268,10 @@ public class GameTable implements Serializable {
      * @param nickname contains nickname to be checked
      * @return true if the nickname isn't already in use, false otherwise
      */
-    /**
-     * support boolean for Athena
-     **/
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     protected boolean isValidPlayer(String nickname) {
         if (players == null) {
-            players = new ArrayList<Player>();
+            players = new ArrayList<>();
             return true;
         }
         return players.stream().noneMatch(player -> sameNickname(player, nickname));
@@ -327,11 +330,7 @@ public class GameTable implements Serializable {
     }
 
     public ArrayList<SocketClientConnection> getPlayerConnections() {
-        ArrayList<SocketClientConnection> out = new ArrayList<>();
-        for (Player p : players) {
-            out.add(p.getConnection());
-        }
-        return out;
+        return players.stream().map(Player::getConnection).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Builder getCurrentBuilder() {

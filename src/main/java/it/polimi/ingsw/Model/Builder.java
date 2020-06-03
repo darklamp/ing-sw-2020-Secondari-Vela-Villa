@@ -154,7 +154,7 @@ public abstract class Builder implements Serializable {
     /**
      * @param position specifies position where to force-move the builder
      */
-    public void forceMove(Cell position){
+    void forceMove(Cell position) {
         position.setBuilder(this);
         this.position = position;
     }
@@ -217,7 +217,6 @@ public abstract class Builder implements Serializable {
 
 
 }
-
 
 /**
  * this class is just a commodity class whose job is

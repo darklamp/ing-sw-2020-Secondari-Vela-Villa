@@ -2,6 +2,7 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Model.GameTable;
@@ -111,6 +112,8 @@ public class MainController implements PropertyChangeListener {
                     } catch (NoMoreMovesException ignored) {
                     }
                 }
+            } catch (InvalidMoveException e) {
+                gameTable.closeGame();
             }
         }
 

@@ -133,11 +133,7 @@ public class Server {
          throw new NickAlreadyTakenException();
      } catch (Exception e) {
          waitingConnection.clear();
-         try {
-             gameList.get(getCurrentGameIndex());
-         } catch (NullPointerException ee) {
-             throw new BrokenLobbyException();
-         }
+         if (gameList.get(getCurrentGameIndex()) == null) throw new BrokenLobbyException();
          if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();
          if (gameProperties.size() > 0) gameProperties.get(getCurrentGameIndex()).clear();
          throw new BrokenLobbyException();

@@ -3,6 +3,7 @@ package it.polimi.ingsw.Controller;
 import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.GameTable;
+import it.polimi.ingsw.Model.Minotaur;
 import it.polimi.ingsw.Model.News;
 
 import static it.polimi.ingsw.Client.ClientState.BUILD;
@@ -25,14 +26,13 @@ public class MoveController {
      * @throws WinnerException      when a winner is found.
      * @throws NoMoreMovesException when a player is found to have no more feasible moves.
      */
-    void handleMove(News news) throws WinnerException, NoMoreMovesException {
+    void handleMove(News news) throws WinnerException, NoMoreMovesException, InvalidMoveException {
         String moveResult = "MOVEKO";
         boolean winner = false;
         try {
             if (gameTable.getCurrentBuilder() != null) {
                 if (news.getBuilder(gameTable) != gameTable.getCurrentBuilder()) throw new InvalidMoveException();
             }
-         //   gameTable.checkConditions();
             news.getBuilder(gameTable).setPosition(news.getCell(gameTable));
             if (gameTable.getCurrentBuilder() == null) {
                 gameTable.setCurrentBuilder(news.getBuilder(gameTable));
@@ -51,15 +51,19 @@ public class MoveController {
             gameTable.setCurrentBuilder(news.getBuilder(gameTable));
             moveResult = "MOVEOK";
         } catch (MinotaurException e) {
-            Cell cellBehind = null, cellOnWhichMinotaurIsToBeMoved;
-            news.getBuilder(gameTable).getPosition().setBuilder(null);
+            Cell cellBehind = null;
+            Minotaur m;
+            try {
+                m = (Minotaur) news.getBuilder(gameTable);
+            } catch (ClassCastException ee) {
+                throw new InvalidMoveException();
+            }
+            m.getPosition().setBuilder(null);
             try {
                 cellBehind = gameTable.getCell(e.getPair().getFirst(), e.getPair().getSecond());
             } catch (InvalidCoordinateException ignored) {
             }
-            cellOnWhichMinotaurIsToBeMoved = news.getCell(gameTable);
-            cellOnWhichMinotaurIsToBeMoved.getBuilder().forceMove(cellBehind);
-            news.getBuilder(gameTable).forceMove(cellOnWhichMinotaurIsToBeMoved);
+            m.minotaurMove(news.getCell(gameTable), cellBehind);
             if (news.getBuilder(gameTable).isWinner()) throw new WinnerException(gameTable.getCurrentPlayer());
             gameTable.getCurrentPlayer().setState(BUILD);
             gameTable.setCurrentBuilder(news.getBuilder(gameTable));
