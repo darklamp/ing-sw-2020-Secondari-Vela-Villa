@@ -125,7 +125,7 @@ public class LoginWindowController extends WindowController {
                 if (!choices.contains(result.get())) {
                     result = dialog.showAndWait();
                 } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())+1));
                     break;
                 }
             } else {
@@ -143,7 +143,7 @@ public class LoginWindowController extends WindowController {
                 if (!choices.contains(result.get())) {
                     result = dialog.showAndWait();
                 } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())+1));
                     break;
                 }
             } else {
@@ -162,7 +162,7 @@ public class LoginWindowController extends WindowController {
                     if (!choices.contains(result.get())) {
                         result = dialog.showAndWait();
                     } else {
-                        GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                        GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())+1));
                         break;
                     }
                 } else {

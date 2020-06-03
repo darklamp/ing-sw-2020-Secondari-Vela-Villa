@@ -179,7 +179,8 @@ public class SocketClientConnection implements Runnable {
         while(true){
             try{
                 choice = in.nextInt();
-                if (choice < 10 && choice >= 0 && gods.contains(choice)){
+                choice -= 1 ;
+                if (choice < 9 && choice >= 0 && gods.contains(choice)){
                     gods.remove(Integer.valueOf(choice));
                     send("You choose: " + GameTable.getCompleteGodList().get(choice));
                     return choice;
@@ -227,7 +228,8 @@ public class SocketClientConnection implements Runnable {
         while(count < playersNumber){
             try{
                 int i = Integer.parseInt(in.nextLine());
-                if (i < 10 && i >= 0 && !gods.contains(i)) {
+                i -= 1 ;
+                if (i < 9 && i >= 0 && !gods.contains(i)) {
                     gods.add(count,i);
                     count += 1;
                 }
