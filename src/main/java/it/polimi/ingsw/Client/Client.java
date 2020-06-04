@@ -62,6 +62,10 @@ public class Client implements Runnable {
 
     private static InetAddress ip;
 
+    public static void setIp(InetAddress ip) {
+        Client.ip = ip;
+    }
+
     private static int god;
     private static int port;
 
@@ -126,14 +130,13 @@ public class Client implements Runnable {
                                 }
                             }
                         }
-                        else if (s.contains(ServerMessage.lastGod)){
+                        else if (s.contains(ServerMessage.lastGod)) {
                             String[] inputs = s.split("@@@");
                             god = Integer.parseInt(inputs[1]);
-                            if(ui instanceof CLI){
-                                ui.process("You're left with " +completeGodList.get(god));
+                            if (ui instanceof CLI) {
+                                ui.process("You're left with " + completeGodList.get(god));
                             }
-                        }
-                                else ui.process((String) inputObject);
+                        } else ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {
                         ui.showTable((CellView[][]) inputObject);
                     } else if (inputObject instanceof GameStateMessage) {

@@ -1,12 +1,15 @@
 package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.ClientMain;
 import it.polimi.ingsw.Network.ServerMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,17 +44,31 @@ public class LoginWindowController extends WindowController {
     }
 
     private static Client client;
+    private boolean flag = false;
 
     @FXML
     private void print(ActionEvent event) {
         event.consume();
         if (!connected) {
-           /* String ipAddress = Client.getIP().toString();
-            String s;
-            s = "Connecting to: " + ipAddress + "...";
-            textAreaMain.setText(s);*/
-            new Thread(client).start();
-            connected = true;
+            if (ClientMain.validIP()) {
+                new Thread(client).start();
+                connected = true;
+            } else if (!flag) {
+                textAreaMain.setText("Please enter the server's IP address: ");
+                ipInput.setText("IP");
+                flag = true;
+            } else {
+                InetAddress ip;
+                try {
+                    ip = InetAddress.getByName(ipInput.getText());
+                    Client.setIp(ip);
+                    flag = true;
+                    new Thread(client).start();
+                    connected = true;
+                } catch (UnknownHostException e) {
+                    textAreaMain.setText("Invalid IP! Please try again: ");
+                }
+            }
         } else GUIClient.setOut(ipInput.getText());
     }
 
