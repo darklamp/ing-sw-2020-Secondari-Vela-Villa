@@ -50,13 +50,13 @@ public class MainController implements PropertyChangeListener {
             return;
         }
         currentPlayer = gameTable.getCurrentPlayer();
-        if (currentPlayer != news.getSender().getPlayer()) {
-            news.setRecipients(news.getSender().getPlayer());
-            gameTable.setNews(news, "NOTYOURTURN");
-        } else if (name.equals("ABORT")) {
+        if (name.equals("ABORT")) {
             News n = new News(null, gameTable.getPlayerConnections().get(0));
             gameTable.setNews(n, "ABORT");
             gameTable.closeGame();
+        } else if (currentPlayer != news.getSender().getPlayer()) {
+            news.setRecipients(news.getSender().getPlayer());
+            gameTable.setNews(news, "NOTYOURTURN");
         } else {
             try {
                 if (name.equals("PLAYERTIMEOUT")) throw new NoMoreMovesException(news.getSender().getPlayer());
