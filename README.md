@@ -23,11 +23,11 @@ To use this web server and the online CLI,  make sure to [click on this link](ht
 
 ---
 
-### Deliverables
+## Deliverables
 
 Github is set up to run the building routine on every push. Hence, pre-packaged multiplatform JARs can be found under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions) tab. 
 
-### Building
+## Building
  
 #### Requirements:
 
@@ -43,7 +43,7 @@ mvn clean package
 
 ---
 
-### Server options:
+## Server options:
 
 * -port : specifies Server port            (default: 1337)
 * -ip   : defines IP to listen on (v4/v6)  (default: localhost)
@@ -57,13 +57,13 @@ example:
 java -jar server.jar -port=1337 -ip=0.0.0.0
 ```
 
-##### debug console commands:
+#### debug console commands:
 
 * kick [gameIndex] [playerName]    : kicks player from game
 * players [gameIndex]              : returns list of players for given gameIndex / for all games if index not given
 * save                             : saves current games' state
 
-### Client options:
+## Client options:
 
 * -port : specifies Server port (default: 1337)
 * -cli  : cli true/false        (default: false)
