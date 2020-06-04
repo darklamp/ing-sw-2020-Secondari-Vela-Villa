@@ -15,7 +15,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>14</maven.compiler.release>
     <maven.compiler.target>14</maven.compiler.target>
-    <argLine>--enable-preview</argLine>
   </properties>
 
   <dependencies>
@@ -171,7 +170,6 @@
               <configuration>
                   <source>14</source>
                   <target>14</target>
-                  <compilerArgs>--enable-preview</compilerArgs>
               </configuration>
           </plugin>
           <plugin>
