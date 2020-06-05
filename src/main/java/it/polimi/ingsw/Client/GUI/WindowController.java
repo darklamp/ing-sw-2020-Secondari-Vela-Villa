@@ -15,18 +15,7 @@ public abstract class WindowController {
      * {@link WindowController#switchScene(String, boolean)} (boolean = true)
      **/
     void switchScene(@SuppressWarnings("SameParameterValue") String fxml) {
-        FXMLLoader loader = new FXMLLoader(getClass()
-                .getResource(fxml));
-        Parent root;
-        try {
-            root = loader.load();
-            WindowController controller = loader.getController();
-            GUIClient.setController(controller);
-            GUIClient.getStage().setScene(new Scene(root));
-            GUIClient.getStage().setFullScreen(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(fxml, true);
     }
 
     /**
@@ -43,7 +32,8 @@ public abstract class WindowController {
             root = loader.load();
             WindowController controller = loader.getController();
             GUIClient.setController(controller);
-            GUIClient.getStage().setScene(new Scene(root));
+            Scene s = new Scene(root);
+            GUIClient.getStage().setScene(s);
             GUIClient.getStage().setFullScreen(fullScreen);
         } catch (IOException e) {
             e.printStackTrace();

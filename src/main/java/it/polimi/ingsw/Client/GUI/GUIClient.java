@@ -79,7 +79,7 @@ public class GUIClient extends Application {
             Platform.exit();
             System.exit(0);
         });
-        stage.setFullScreenExitHint("Mmmmm fullscreen");
+        stage.setFullScreenExitHint("Press F11 to toggle fullscreen.");
     }
 
 

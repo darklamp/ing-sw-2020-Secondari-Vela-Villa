@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -58,6 +59,9 @@ public class MainWindowController extends WindowController implements Initializa
     private static final DataFormat builder = new DataFormat("builder");
     private static final DataFormat building = new DataFormat("building");
     private static boolean newTurn = true;
+
+    private static final double MAX_WIDTH = 1080;
+    private static final double MAX_HEIGHT = 1920;
 
     private static ImageView selected = null;
     /**
@@ -136,11 +140,27 @@ public class MainWindowController extends WindowController implements Initializa
         if (!initialized) {
             for (Node n : gridPaneMain.getChildren()) {
                 ((Button) ((StackPane) n).getChildren().get(0)).setOnAction(null);
-                ((Button) ((StackPane) n).getChildren().get(0)).setStyle(null);
-                ((Button) ((StackPane) n).getChildren().get(0)).setOpacity(1);
+                ((StackPane) n).getChildren().get(0).setStyle(null);
+                ((StackPane) n).getChildren().get(0).setOpacity(1);
             }
+            GUIClient.getStage().getScene().setOnKeyPressed(e -> {
+                if (e.getCode() == KeyCode.F11) {
+                    if (GUIClient.getStage().isFullScreen()) {
+                        GUIClient.getStage().minWidthProperty().bind(GUIClient.getStage().getScene().heightProperty().multiply(1.777778));
+                        GUIClient.getStage().minHeightProperty().bind(GUIClient.getStage().getScene().widthProperty().divide(1.777778));
+                        GUIClient.getStage().setFullScreen(false);
+                    } else {
+                        GUIClient.getStage().minWidthProperty().unbind();
+                        GUIClient.getStage().minHeightProperty().unbind();
+                        GUIClient.getStage().setFullScreen(true);
+                    }
+
+                }
+            });
             initialized = true;
             godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
+            godImage.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(godImage.getImage().getHeight() / 2.24));
+            godImage.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(godImage.getImage().getWidth() / 2.24));
         }
         s1.append("Current turn: ");
         if (newTurn) setTimerBar();
@@ -415,17 +435,17 @@ public class MainWindowController extends WindowController implements Initializa
         } else {
             b.setUserData("domeBuilding");
         }
-        b.setScaleX(0.85);
-        b.setScaleY(0.85);
         b.setOnMouseEntered(e -> b.setEffect(new Glow(1.3)));
+        b.setScaleX(1.1);
+        b.setScaleY(1.1);
         b.setOnMouseClicked(e -> {
-            b.setScaleX(1);
-            b.setScaleY(1);
+            b.setScaleX(1.2);
+            b.setScaleY(1.2);
         });
         b.setOnMouseExited(e -> {
             b.setEffect(null);
-            b.setScaleX(0.85);
-            b.setScaleY(0.85);
+            b.setScaleX(1.1);
+            b.setScaleY(1.1);
         });
 
         StackPane s = switch (i) {
@@ -447,11 +467,8 @@ public class MainWindowController extends WindowController implements Initializa
             ((Button) g.getChildren().get(0)).setGraphic(null);
         } else {
             ImageView b = new ImageView(image);
-            b.setFitHeight(155);
-            b.setFitWidth(155);
-            b.setScaleX(1.34);
-            b.setScaleY(1.34);
-            b.setOpacity(0.9);
+            b.fitHeightProperty().bind(gridPaneMain.heightProperty().divide(5).add(55));
+            b.fitWidthProperty().bind(gridPaneMain.widthProperty().divide(5).add(55));
             ((Button) ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().get(0)).setGraphic(b);
             b.toBack();
         }
@@ -473,9 +490,8 @@ public class MainWindowController extends WindowController implements Initializa
             } else if (Client.getState() == BUILD) {
                 b.setOnMouseClicked(this::builderChosen);
             }
-            b.setScaleX(1.6);
-            b.setScaleY(1.6);
-            b.setScaleZ(1.6);
+            b.fitHeightProperty().bind(gridPaneMain.heightProperty().divide(5).add(55));
+            b.fitWidthProperty().bind(gridPaneMain.widthProperty().divide(5).add(55));
             ((StackPane) gridPaneMain.getChildren().get(row * 5 + column)).getChildren().add(b);
             b.toFront();
             if (!((2 * GUI.getPlayerIndex()) == firstBuilder || (2 * GUI.getPlayerIndex() + 1) == firstBuilder)) {
@@ -524,9 +540,10 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
         ImageView b = (ImageView) event.getSource();
         b.setEffect(new Glow(2));
-        b.setScaleX(1.75);
-        b.setScaleY(1.75);
-        b.setScaleZ(1.75);
+        b.setSmooth(true);
+        b.setScaleX(1.15);
+        b.setScaleY(1.15);
+        b.setScaleZ(1.15);
     }
 
     @FXML
@@ -534,9 +551,10 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
         ImageView b = (ImageView) event.getSource();
         b.setEffect(null);
-        b.setScaleX(1.6);
-        b.setScaleY(1.6);
-        b.setScaleZ(1.6);
+        b.setSmooth(true);
+        b.setScaleX(1);
+        b.setScaleY(1);
+        b.setScaleZ(1);
     }
 
     @FXML
@@ -544,20 +562,24 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
         if (selected != null) {
             selected.setEffect(null);
-            selected.setScaleX(1.6);
-            selected.setScaleY(1.6);
-            selected.setScaleZ(1.6);
+            selected.setScaleX(1);
+            selected.setScaleY(1);
+            selected.setScaleZ(1);
         }
         ImageView b = (ImageView) event.getSource();
         b.setEffect(new Glow(1.2));
-        b.setScaleX(1.75);
-        b.setScaleY(1.75);
-        b.setScaleZ(1.75);
+        b.setScaleX(1.15);
+        b.setScaleY(1.15);
+        b.setScaleZ(1);
         selected = b;
     }
 
 
     private void initStackPane(StackPane g) {
+        g.setMinSize(Region.USE_PREF_SIZE, Region.USE_COMPUTED_SIZE);
+        g.setMaxSize(Region.USE_PREF_SIZE, Region.USE_COMPUTED_SIZE);
+        g.prefHeightProperty().bind(gridPaneMain.heightProperty().divide(5));
+        g.prefWidthProperty().bind(gridPaneMain.widthProperty().divide(5));
         g.setOnDragOver(this::dragOver);
         g.setOnDragDropped(this::dragReleased);
         Button b = new Button();

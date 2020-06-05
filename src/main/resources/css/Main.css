@@ -16,8 +16,10 @@
     -fx-font-style: italic;
     -fx-control-inner-background: #4ee3e3;
     -fx-background-color: transparent;
-    -fx-font-size: 30px;
+    -fx-font-size: 28px;
     -fx-alignment: center;
+    -fx-highlight-fill: null;
+    -fx-highlight-text-fill: null;
 }
 
 

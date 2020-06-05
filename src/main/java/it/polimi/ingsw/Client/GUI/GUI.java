@@ -92,7 +92,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
                 Platform.runLater(() -> loginController.firstPlayerGods());
             } else if (input.contains("POS")) {
                 if (!guiInitialized) {
-                    Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
+                    Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml", true));
                     guiInitialized = true;
                 }
                 Platform.runLater(() -> GUIClient.getController().getStartingPositions(false));
