@@ -8,6 +8,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,13 +57,14 @@ public class MainWindowController extends WindowController implements Initializa
 
     private static Timeline timeline;
     private static CellView[][] lastTable;
+    private static final SimpleStringProperty TEXT_COLOR = new SimpleStringProperty("papayawhip");
 
     private static final DataFormat builder = new DataFormat("builder");
     private static final DataFormat building = new DataFormat("building");
     private static boolean newTurn = true;
 
-    private static final double MAX_WIDTH = 1080;
-    private static final double MAX_HEIGHT = 1920;
+    private static final double MAX_WIDTH = 1920;
+    private static final double MAX_HEIGHT = 1080;
 
     private static ImageView selected = null;
     /**
@@ -116,12 +119,12 @@ public class MainWindowController extends WindowController implements Initializa
                 new KeyFrame(Duration.ZERO, new KeyValue(timerBar.progressProperty(), 0)),
                 new KeyFrame(Duration.seconds(90), e -> {
                     textArea1.setText("\nHurry up! Time's about to finish.");
-                    textArea1.setStyle("-fx-text-fill: #FF0000;");
+                    TEXT_COLOR.set("red");
                     timerBar.setStyle("-fx-accent: red;");
                 }, new KeyValue(timerBar.progressProperty(), 0.75)),
                 new KeyFrame(Duration.seconds(120), e -> {
                     textArea1.setText("Time's up!");
-                    textArea1.setStyle("-fx-text-fill: #FF0000;");
+                    TEXT_COLOR.set("red");
                     timerBar.setStyle("-fx-accent: red;");
                 }, new KeyValue(timerBar.progressProperty(), 1))
         );
@@ -143,11 +146,16 @@ public class MainWindowController extends WindowController implements Initializa
                 ((StackPane) n).getChildren().get(0).setStyle(null);
                 ((StackPane) n).getChildren().get(0).setOpacity(1);
             }
+            StringProperty stringProperty = new SimpleStringProperty();
+            GUIClient.getStage().getScene().heightProperty().addListener(((observableValue, oldV, newV) -> stringProperty.setValue("-fx-font-size: " + (int) (GUIClient.getStage().getScene().heightProperty().get() / MAX_HEIGHT * 30) + "px; -fx-text-fill: " + TEXT_COLOR.get() + ";")));
+            TEXT_COLOR.addListener((observableValue, oldV, newV) -> stringProperty.setValue("-fx-font-size: " + (int) (GUIClient.getStage().getScene().heightProperty().get() / MAX_HEIGHT * 30) + "px; -fx-text-fill: " + TEXT_COLOR.get() + ";"));
+            textArea1.styleProperty().bind(stringProperty);
             GUIClient.getStage().getScene().setOnKeyPressed(e -> {
                 if (e.getCode() == KeyCode.F11) {
                     if (GUIClient.getStage().isFullScreen()) {
                         GUIClient.getStage().minWidthProperty().bind(GUIClient.getStage().getScene().heightProperty().multiply(1.777778));
                         GUIClient.getStage().minHeightProperty().bind(GUIClient.getStage().getScene().widthProperty().divide(1.777778));
+
                         GUIClient.getStage().setFullScreen(false);
                     } else {
                         GUIClient.getStage().minWidthProperty().unbind();
@@ -159,10 +167,11 @@ public class MainWindowController extends WindowController implements Initializa
             });
             initialized = true;
             godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
-            godImage.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(godImage.getImage().getHeight() / 2.24));
-            godImage.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(godImage.getImage().getWidth() / 2.24));
+            godImage.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_WIDTH).multiply(godImage.getImage().getHeight() / 2.24));
+            godImage.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_HEIGHT).multiply(godImage.getImage().getWidth() / 2.24));
         }
         s1.append("Current turn: ");
+        TEXT_COLOR.set("papayawhip");
         if (newTurn) setTimerBar();
         switch (s) {
             case MOVE -> {

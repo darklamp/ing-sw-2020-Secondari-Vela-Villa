@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "JavaDoc"})
 public class LoginWindowController extends WindowController {
     private boolean connected = false;
 
@@ -54,8 +55,9 @@ public class LoginWindowController extends WindowController {
                 new Thread(client).start();
                 connected = true;
             } else if (!flag) {
-                textAreaMain.setText("Please enter the server's IP address: ");
-                ipInput.setText("IP");
+                textAreaMain.setText("Please enter the server's IP address / hostname.");
+                ipInput.setText(null);
+                ipInput.setPromptText("Waiting for input..");
                 flag = true;
             } else {
                 InetAddress ip;
@@ -66,7 +68,7 @@ public class LoginWindowController extends WindowController {
                     new Thread(client).start();
                     connected = true;
                 } catch (UnknownHostException e) {
-                    textAreaMain.setText("Invalid IP! Please try again: ");
+                    textAreaMain.setText("Invalid IP! Please try again.");
                 }
             }
         } else GUIClient.setOut(ipInput.getText());
@@ -75,6 +77,7 @@ public class LoginWindowController extends WindowController {
 
     void waitForIP(Client client) {
         LoginWindowController.client = client;
+        ipSubmitBTN.setDefaultButton(true);
         print(new ActionEvent());
     }
 
@@ -82,7 +85,6 @@ public class LoginWindowController extends WindowController {
         List<Integer> choices = new ArrayList<>();
         choices.add(2);
         choices.add(3);
-
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(2, choices);
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Player number choice");
@@ -109,7 +111,7 @@ public class LoginWindowController extends WindowController {
         alert.setContentText("Please choose whether you'd like to load a previous game or join a new one.");
         ButtonType b1 = new ButtonType("Reload");
         ButtonType b2 = new ButtonType("Join");
-        alert.getButtonTypes().setAll(b1, b2);
+        alert.getButtonTypes().setAll(b2, b1);
         while (true) {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent()) {
@@ -134,54 +136,35 @@ public class LoginWindowController extends WindowController {
         dialog.setHeaderText("Gods choice");
         dialog.setContentText(ServerMessage.nextChoice);
         Optional<String> result = dialog.showAndWait();
-        while (true) {
-            if (result.isPresent()) {
-                if (!choices.contains(result.get())) {
-                    result = dialog.showAndWait();
-                } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())+1));
-                    break;
-                }
-            } else {
-                result = dialog.showAndWait();
-            }
+        getNextChoice(result, choices, dialog);
+        newChoiceDialog(choices, result);
+        if (GUI.getPlayersNumber() == 3) {
+            newChoiceDialog(choices, result);
         }
+    }
+
+    private void newChoiceDialog(List<String> choices, Optional<String> result) {
+        ChoiceDialog<String> dialog;
         choices.remove(result.get());
         dialog = new ChoiceDialog<>(choices.get(0), choices);
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Gods choice");
         dialog.setContentText(ServerMessage.nextChoice);
         result = dialog.showAndWait();
+        getNextChoice(result, choices, dialog);
+    }
+
+    private void getNextChoice(Optional<String> result, List<String> choices, ChoiceDialog<String> dialog) {
         while (true) {
             if (result.isPresent()) {
                 if (!choices.contains(result.get())) {
                     result = dialog.showAndWait();
                 } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())+1));
+                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get()) + 1));
                     break;
                 }
             } else {
                 result = dialog.showAndWait();
-            }
-        }
-        if (GUI.getPlayersNumber() == 3) {
-            choices.remove(result.get());
-            dialog = new ChoiceDialog<>(choices.get(0), choices);
-            dialog.setTitle("Initializing game");
-            dialog.setHeaderText("Gods choice");
-            dialog.setContentText(ServerMessage.nextChoice);
-            result = dialog.showAndWait();
-            while (true) {
-                if (result.isPresent()) {
-                    if (!choices.contains(result.get())) {
-                        result = dialog.showAndWait();
-                    } else {
-                        GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())+1));
-                        break;
-                    }
-                } else {
-                    result = dialog.showAndWait();
-                }
             }
         }
     }

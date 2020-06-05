@@ -5,7 +5,6 @@ import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.GUIClient;
 import it.polimi.ingsw.Utility.Color;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -94,12 +93,7 @@ public class ClientMain {
             System.out.print("Starting CLI..\n");
             ui = cli;
         }
-        try {
-            ui.waitForIP(client);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        ui.waitForIP(client);
     }
 
 }

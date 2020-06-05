@@ -11,6 +11,8 @@ import javafx.application.Platform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Scanner;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class GUI implements Ui, Runnable, PropertyChangeListener {
     /**
@@ -29,14 +31,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
      * variable on which {@link GUI#showTable} and {@link GUI#processTurnChange} synchronize
      */
     private static boolean turnChanged = false;
-    /**
-     * variable on which {@link GUI#nextLine} is synchronized
-     */
-    private volatile boolean newValue = false;
-    /**
-     * String to be printed to output socket, via {@link GUI#nextLine}
-     */
-    private static String out;
 
     synchronized static short getPlayerIndex() {
         return (short) Client.getPlayerIndex();
@@ -70,11 +64,10 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
      */
     @Override
     synchronized public void process(String input) {
+        String[] inputs = input.split("@@@");
         if (input.contains("[ERROR]")) {
-            String[] inputs = input.split("@@@");
             Platform.runLater(() -> GUIClient.getController().setError(inputs[1]));
         } else if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
-            String[] inputs = input.split("@@@");
             Client.setPlayerIndex((short) Integer.parseInt(inputs[1]));
             Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
             if (inputs.length > 3) {
@@ -86,7 +79,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
                     System.out.println("Your game's number is: " + Integer.parseInt(inputs[3]) + ". Keep it in case server goes down.");
             }
         } else if (input.contains("[CHOICE]")) {
-            String[] inputs = input.split("@@@");
             if (inputs[1].equals("GODS")) {
                 Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
                 Platform.runLater(() -> loginController.firstPlayerGods());
@@ -135,8 +127,8 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
     @Override
     synchronized public void processTurnChange(ClientState newState) {
         turnChanged = true;
-        notify();
         Platform.runLater(() -> GUIClient.getController().setMove(newState));
+        notify();
     }
 
     /**
@@ -144,19 +136,25 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
      */
     @Override
     public String nextLine(Scanner in) {
-        while (!newValue) {
-            Thread.onSpinWait();
+        while (true) {
+            try {
+                return queue.take();
+            } catch (InterruptedException ignored) {
+            }
         }
-        newValue = false;
-        return out;
     }
+
+    private final static BlockingQueue<String> queue = new ArrayBlockingQueue<>(1);
 
     /**
      * @see Ui
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        out = (String) evt.getNewValue();
-        newValue = true;
+        try {
+            queue.put((String) evt.getNewValue());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
