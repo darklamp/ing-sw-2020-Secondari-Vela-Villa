@@ -21,11 +21,22 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static it.polimi.ingsw.Client.ClientState.*;
+
 class MainControllerTest {
 
+    /**
+     * Tests {@link MainController#propertyChange(PropertyChangeEvent)} in the case where there's an invalid
+     * or ABORT news
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void propertyChangeTest1() throws Exception {
         Socket socket = new Socket();
@@ -78,6 +89,12 @@ class MainControllerTest {
         Assertions.assertEquals("PLAYERKICKED", stringa);
     }
 
+    /**
+     * Tests {@link MainController#propertyChange(PropertyChangeEvent)} in a PLAYERTIMEOUT case and in
+     * a couple cases where the player is trying to do something it's not supposed to
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void propertyChangeTest2() throws Exception {
         Socket socket = new Socket();
@@ -135,6 +152,11 @@ class MainControllerTest {
         Assertions.assertEquals(stringa, "PLAYERKICKED");
     }
 
+    /**
+     * Tests {@link MainController#propertyChange(PropertyChangeEvent)} in the case where there's a winner
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void propertyChangeTestWinner() throws Exception {
         Socket socket = new Socket();
@@ -193,6 +215,11 @@ class MainControllerTest {
 
     }
 
+    /**
+     * Tests {@link MainController#isLegalState(String, ClientState)}
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void isLegalStateTest() throws Exception {
         Method m = MainController.class.getDeclaredMethod("isLegalState", String.class, ClientState.class);
@@ -202,22 +229,87 @@ class MainControllerTest {
         for (ClientState t : ClientState.values()) {
             try {
                 m.invoke(null, stringa, t);
+                count.addAndGet(1);
             } catch (InvocationTargetException e) {
-                if (e.getCause().getClass().equals(IllegalTurnStateException.class)) count.addAndGet(1);
+                if (e.getCause().getClass().equals(IllegalTurnStateException.class)) ;
             }
         }
-        Assertions.assertEquals(6, count.get());
+        Assertions.assertEquals(0, count.get()); // nothing passes
+        ArrayList<ClientState> list = new ArrayList<>();
         count.set(0);
         for (ClientState t : ClientState.values()) {
             try {
                 m.invoke(null, t.toString(), t);
+                count.addAndGet(1);
+                list.add(t);
             } catch (InvocationTargetException e) {
-                if (e.getCause().getClass().equals(IllegalTurnStateException.class)) count.addAndGet(1);
+                if (e.getCause().getClass().equals(IllegalTurnStateException.class)) ;
             }
         }
-        Assertions.assertEquals(4, count.get());
+        Assertions.assertEquals(2, count.get()); //only BUILD and MOVE have to pass
+        Assertions.assertTrue(list.contains(ClientState.BUILD) && list.contains(ClientState.MOVE) && list.size() == 2);
+
+        count.set(0);
+        list = new ArrayList<>();
+        for (ClientState t : ClientState.values()) {
+            try {
+                m.invoke(null, "BUILD", t);
+                list.add(t);
+                count.addAndGet(1);
+            } catch (InvocationTargetException e) {
+                if (e.getCause().getClass().equals(IllegalTurnStateException.class)) ;
+            }
+        }
+        Assertions.assertEquals(3, count.get()); //only BUILD, MOVEORBUILD and BUILDORPASS have to pass
+        Assertions.assertTrue(list.contains(ClientState.BUILD) && list.contains(ClientState.MOVEORBUILD) && list.contains(BUILDORPASS) && list.size() == 3);
+
+        count.set(0);
+        list = new ArrayList<>();
+        for (ClientState t : ClientState.values()) {
+            try {
+                m.invoke(null, "PASS", t);
+                list.add(t);
+                count.addAndGet(1);
+            } catch (InvocationTargetException e) {
+                if (e.getCause().getClass().equals(IllegalTurnStateException.class)) ;
+            }
+        }
+        Assertions.assertEquals(1, count.get()); //only BUILDORPASS has to pass
+        Assertions.assertTrue(list.contains(BUILDORPASS) && list.size() == 1);
+
+        count.set(0);
+        list = new ArrayList<>();
+        for (ClientState t : ClientState.values()) {
+            try {
+                m.invoke(null, "MOVE", t);
+                list.add(t);
+                count.addAndGet(1);
+            } catch (InvocationTargetException e) {
+                if (e.getCause().getClass().equals(IllegalTurnStateException.class)) ;
+            }
+        }
+        Assertions.assertEquals(2, count.get()); //only MOVEORBUILD and MOVE have to pass
+        Assertions.assertTrue(list.contains(ClientState.MOVE) && list.contains(ClientState.MOVEORBUILD) && list.size() == 2);
+
+        count.set(0);
+        for (ClientState t : ClientState.values()) {
+            try {
+                if (t == LOSE || t == INIT || t == WAIT || t == WIN) {
+                    m.invoke(null, "ASD", t);
+                    count.addAndGet(1);
+                }
+            } catch (InvocationTargetException e) {
+                if (e.getCause().getClass().equals(IllegalTurnStateException.class)) ;
+            }
+        }
+        Assertions.assertEquals(0, count.get()); // nothing passes
     }
 
+    /**
+     * Tests {@link MainController#getNews()}
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void testNews() throws Exception {
         MainController mainController = new MainController(new GameTable(2));
@@ -228,6 +320,11 @@ class MainControllerTest {
         Assertions.assertEquals(f.get(mainController), m.invoke(mainController));
     }
 
+    /**
+     * Tests {@link MainController#MainController(GameTable)}
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void constructorTest() throws Exception {
         Field per = ServerMain.class.getDeclaredField("persistence");
@@ -239,6 +336,11 @@ class MainControllerTest {
         Assertions.assertNotNull(file.get(mainController));
     }
 
+    /**
+     * Tests {@link MainController#setGameInitializer(GameInitializer)} )}
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void testGameInitializer() throws Exception {
         Field file = MainController.class.getDeclaredField("gameInitializer");
@@ -249,6 +351,11 @@ class MainControllerTest {
         Assertions.assertNotNull(file.get(mainController));
     }
 
+    /**
+     * Tests {@link MainController#consoleKickPlayer(String)}
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void consoleKickPlayerTest() throws Exception {
         GameTable g = new GameTable(3);
@@ -268,6 +375,11 @@ class MainControllerTest {
         Assertions.assertEquals(2, g.getPlayers().size());
     }
 
+    /**
+     * Tests {@link MainController#containsPlayer(String)}
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void containsPlayerTest() throws Exception {
         GameTable g = new GameTable(3);
@@ -289,6 +401,11 @@ class MainControllerTest {
 
     }
 
+    /**
+     * Tests {@link MainController#setPlayerFromDisk(String, SocketClientConnection)}
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void setPlayerFromDiskTest() throws Exception {
         GameTable g = new GameTable(3);
@@ -311,6 +428,11 @@ class MainControllerTest {
         Assertions.assertEquals(f1.get(p1), c3);
     }
 
+    /**
+     * Tests {@link MainController#restartFromDisk(ArrayList)}
+     *
+     * @throws Exception if something fails
+     */
     @Test
     void restartFromDiskTest() throws Exception {
         GameTable g = new GameTable(3);
@@ -360,4 +482,204 @@ class MainControllerTest {
         Assertions.assertTrue((boolean) f.get(c3));
 
     }
+
+    /**
+     * Tests {@link MainController#getPlayersNumber()}
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void getPlayersNumberTest() throws Exception {
+        GameTable g = new GameTable(2);
+        ArrayList<Player> p = new ArrayList<>();
+        p.add(new Player("gigi2", g, null));
+        p.add(new Player("gigi3", g, null));
+        g.setPlayers(p);
+        MainController m = new MainController(g);
+        Assertions.assertEquals(2, m.getPlayersNumber());
+        ArrayList<Player> p1 = new ArrayList<>();
+        GameTable g1 = new GameTable(3);
+        p1.add(new Player("gigi4", g1, null));
+        p1.add(new Player("gigi5", g1, null));
+        p1.add(new Player("gigi6", g1, null));
+        g1.setPlayers(p1);
+        MainController m1 = new MainController(g1);
+        Assertions.assertEquals(3, m1.getPlayersNumber());
+        Assertions.assertEquals(2, m.getPlayersNumber());
+    }
+
+    /**
+     * Tests the PASS case and the {@link MainController#saveGameState()} that follows
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void propertyChangeTest3() throws Exception {
+        Socket socket = new Socket();
+
+        Field a = GameTable.class.getDeclaredField("news");
+        Field b = GameTable.class.getDeclaredField("type");
+        a.setAccessible(true);
+        b.setAccessible(true);
+        Field f = ServerMain.class.getDeclaredField("persistence");
+        f.setAccessible(true);
+        f.set(null, true);
+        GameTable gameTable = new GameTable(2);
+        MainController controller = new MainController(gameTable);
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        Field d = SocketClientConnection.class.getDeclaredField("out");
+        d.setAccessible(true);
+        SocketClientConnection c1 = new SocketClientConnection(socket, null);
+        SocketClientConnection c2 = new SocketClientConnection(socket, null);
+        d.set(c1, new ObjectOutputStream(OutputStream.nullOutputStream()));
+        d.set(c2, new ObjectOutputStream(OutputStream.nullOutputStream()));
+
+        Player player1 = new Player("gigi", gameTable, c1);
+        Player player2 = new Player("gigi2", gameTable, c2);
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        Method m = Player.class.getDeclaredMethod("getBuilderList");
+        m.setAccessible(true);
+        gameTable.setCurrentBuilder(((ArrayList<Builder>) m.invoke(player2)).get(0));
+        News news = new News("ASD", c2);
+        player2.setState(BUILDORPASS);
+        int gameIndex = gameTable.getGameIndex();
+        Path file1 = Paths.get("game" + gameIndex + ".save");
+        byte[] before = Files.readAllBytes(file1);
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "PASS", null, news));
+        Assertions.assertEquals(gameTable.getCurrentPlayer(), player1);
+        byte[] after = Files.readAllBytes(file1);
+        Assertions.assertNotEquals(before, after);
+    }
+
+    /**
+     * Same as {@link MainControllerTest#propertyChangeTest3()} but with persistence disabled
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void propertyChangeTest4() throws Exception {
+        Socket socket = new Socket();
+
+        Field a = GameTable.class.getDeclaredField("news");
+        Field b = GameTable.class.getDeclaredField("type");
+        a.setAccessible(true);
+        b.setAccessible(true);
+        Field f = ServerMain.class.getDeclaredField("persistence");
+        f.setAccessible(true);
+        f.set(null, false);
+        GameTable gameTable = new GameTable(2);
+        MainController controller = new MainController(gameTable);
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        Field d = SocketClientConnection.class.getDeclaredField("out");
+        d.setAccessible(true);
+        SocketClientConnection c1 = new SocketClientConnection(socket, null);
+        SocketClientConnection c2 = new SocketClientConnection(socket, null);
+        d.set(c1, new ObjectOutputStream(OutputStream.nullOutputStream()));
+        d.set(c2, new ObjectOutputStream(OutputStream.nullOutputStream()));
+
+        Player player1 = new Player("gigi", gameTable, c1);
+        Player player2 = new Player("gigi2", gameTable, c2);
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        Method m = Player.class.getDeclaredMethod("getBuilderList");
+        m.setAccessible(true);
+        gameTable.setCurrentBuilder(((ArrayList<Builder>) m.invoke(player2)).get(0));
+        News news = new News("ASD", c2);
+        player2.setState(BUILDORPASS);
+        Field f5 = MainController.class.getDeclaredField("fileOutputStream");
+        f5.setAccessible(true);
+        Assertions.assertNull(f5.get(controller));
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "PASS", null, news));
+        Assertions.assertEquals(gameTable.getCurrentPlayer(), player1);
+        Assertions.assertNull(f5.get(controller));
+    }
+
+    /**
+     * Tests the BUILD and the MOVE cases
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void propertyChangeTest5() throws Exception {
+        Socket socket = new Socket();
+
+        Field a = GameTable.class.getDeclaredField("news");
+        Field b = GameTable.class.getDeclaredField("type");
+        a.setAccessible(true);
+        b.setAccessible(true);
+        GameTable gameTable = new GameTable(2);
+        MainController controller = new MainController(gameTable);
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        Field d = SocketClientConnection.class.getDeclaredField("out");
+        d.setAccessible(true);
+        SocketClientConnection c1 = new SocketClientConnection(socket, null);
+        SocketClientConnection c2 = new SocketClientConnection(socket, null);
+        d.set(c1, new ObjectOutputStream(OutputStream.nullOutputStream()));
+        d.set(c2, new ObjectOutputStream(OutputStream.nullOutputStream()));
+
+        Player player1 = new Player("gigi", gameTable, c1);
+        Player player2 = new Player("gigi2", gameTable, c2);
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        News news = new News("ASD", c2);
+        player2.setState(MOVE);
+        news.setCoords(4, 4, 1);
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "MOVE", null, news));
+        Assertions.assertEquals("MOVEKO", b.get(gameTable));
+        player2.setState(BUILD);
+        news.setCoords(4, 4, 1);
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "BUILD", null, news));
+        Assertions.assertEquals("BUILDKO", b.get(gameTable));
+    }
+
+
 }

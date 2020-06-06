@@ -23,30 +23,35 @@ public class SocketClientConnection implements Runnable {
     private final Socket socket;
     private ObjectOutputStream out;
     private final Server server;
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     /**
-     * Listener helper object
+     * Listener helper object.
      **/
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private News news;
     private Player player;
     private boolean ready = false;
 
     private boolean active = true;
 
+    /**
+     * {@inheritDoc}
+     */
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
     }
 
-    public SocketClientConnection() {
-        socket = null;
-        server = null;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public SocketClientConnection(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
     }
 
+
+    /**
+     * Sets the player's ready state.
+     */
     synchronized public void setReady() {
         this.ready = true;
         notify();
@@ -60,10 +65,15 @@ public class SocketClientConnection implements Runnable {
         return player;
     }
 
-    private synchronized boolean isActive(){
+    private synchronized boolean isActive() {
         return active;
     }
 
+    /**
+     * Method responsible for sending messages to a client.
+     *
+     * @param message Message to be sent.
+     */
     public synchronized void send(Object message) {
         try {
             out.reset();
@@ -76,6 +86,9 @@ public class SocketClientConnection implements Runnable {
 
     }
 
+    /**
+     * Closes connection with the respective client.
+     */
     public synchronized void closeConnection() {
         try {
             send(ServerMessage.connClosed);
@@ -87,16 +100,15 @@ public class SocketClientConnection implements Runnable {
         active = false;
     }
 
+    /**
+     * Calls {@link Server#deregisterConnection(SocketClientConnection)} to remove the connection from the server's list.
+     */
     private void close() {
         System.out.println("Deregistering client...");
         Server.deregisterConnection(this);
         System.out.println("Done!");
     }
 
-  /*  public void asyncSend(final Object message){
-        new Thread(() -> send(message)).start();
-    }
-*/
     /**
      * Asks for builder coordinates
      * @param choices list of previously chosen coordinates
@@ -167,7 +179,8 @@ public class SocketClientConnection implements Runnable {
         while(true){
             try{
                 choice = in.nextInt();
-                if (choice < 10 && choice >= 0 && gods.contains(choice)){
+                choice -= 1 ;
+                if (choice < 9 && choice >= 0 && gods.contains(choice)){
                     gods.remove(Integer.valueOf(choice));
                     send("You choose: " + GameTable.getCompleteGodList().get(choice));
                     return choice;
@@ -215,7 +228,8 @@ public class SocketClientConnection implements Runnable {
         while(count < playersNumber){
             try{
                 int i = Integer.parseInt(in.nextLine());
-                if (i < 10 && i >= 0 && !gods.contains(i)) {
+                i -= 1 ;
+                if (i < 9 && i >= 0 && !gods.contains(i)) {
                     gods.add(count,i);
                     count += 1;
                 }
@@ -237,7 +251,7 @@ public class SocketClientConnection implements Runnable {
     public void run() {
         Scanner in;
         String name;
-        try {
+        try{
             socket.setPerformancePreferences(0, 1, 0);
             socket.setTcpNoDelay(true);
             in = new Scanner(socket.getInputStream());
@@ -247,8 +261,7 @@ public class SocketClientConnection implements Runnable {
                 send(ServerMessage.reloadGameChoice);
             } else send(ServerMessage.welcomeNoPersistence);
             String read = in.nextLine();
-            if (read.equals("B")) server.lobbyBot(this, "test");
-            else if (ServerMain.persistence() && read.equals("R")) {
+            if (ServerMain.persistence() && read.equals("R")) {
                 send("Please enter game number: ");
                 int gameNumber = 0;
                 try {

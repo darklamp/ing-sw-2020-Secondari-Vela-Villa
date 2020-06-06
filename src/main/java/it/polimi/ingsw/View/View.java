@@ -1,7 +1,6 @@
 package it.polimi.ingsw.View;
 
 
-import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
 
@@ -23,10 +22,6 @@ public abstract class View implements PropertyChangeListener {
         support.addPropertyChangeListener(pcl);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
-    }
-
     public void setControllerNews(News news, String type) {
         support.firePropertyChange(type, this.controllerNews, news);
         this.controllerNews = news;
@@ -35,12 +30,7 @@ public abstract class View implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
         Object obj = propertyChangeEvent.getNewValue();
-        String name = propertyChangeEvent.getPropertyName();
         this.setModelNews((News) obj);
-    }
-
-    private News getModelNews(){
-        return this.modelNews;
     }
 
     public void setModelNews(News news){
@@ -53,12 +43,6 @@ public abstract class View implements PropertyChangeListener {
 
     protected Player getPlayer(){
         return player;
-    }
-
-    protected abstract void showMessage(Object message);
-
-    public void reportError(String message){
-        showMessage(message);
     }
 
 }

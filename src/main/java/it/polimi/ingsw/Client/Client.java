@@ -62,6 +62,10 @@ public class Client implements Runnable {
 
     private static InetAddress ip;
 
+    public static void setIp(InetAddress ip) {
+        Client.ip = ip;
+    }
+
     private static int god;
     private static int port;
 
@@ -101,7 +105,8 @@ public class Client implements Runnable {
                 while (isActive()) {
                     Object inputObject = socketIn.readObject();
                     if (verbose()) System.out.println("[DEBUG] Recv input: " + inputObject.getClass());
-                    if (inputObject instanceof String s) {
+                    if (inputObject instanceof String) {
+                        String s = (String) inputObject;
                         if (s.equals(ServerMessage.abortMessage)) {
                             ui.process("[ERROR]@@@Game aborted. Someone probably disconnected or timer ran out.");
                             System.exit(0);
@@ -125,17 +130,17 @@ public class Client implements Runnable {
                                 }
                             }
                         }
-                        else if (s.contains(ServerMessage.lastGod)){
+                        else if (s.contains(ServerMessage.lastGod)) {
                             String[] inputs = s.split("@@@");
                             god = Integer.parseInt(inputs[1]);
-                            if(ui instanceof CLI){
-                                ui.process("You're left with " +completeGodList.get(god));
+                            if (ui instanceof CLI) {
+                                ui.process("You're left with " + completeGodList.get(god));
                             }
-                        }
-                                else ui.process((String) inputObject);
+                        } else ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {
                         ui.showTable((CellView[][]) inputObject);
-                    } else if (inputObject instanceof GameStateMessage c) {
+                    } else if (inputObject instanceof GameStateMessage) {
+                        GameStateMessage c = (GameStateMessage) inputObject;
                         state = parse(c);
                         ui.processTurnChange(state);
                         if (state == ClientState.WIN || state == ClientState.LOSE) {

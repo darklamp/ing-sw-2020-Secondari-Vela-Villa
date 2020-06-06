@@ -3,22 +3,22 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Utility.Pair;
 
-public class Minotaur extends Builder{
+public class Minotaur extends Builder {
     Minotaur(Cell position, Player player) {
-        super(position,player);
-    }
-
-    @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
-        super.isValidBuild(cell, newheight);
-        verifyBuild(cell,newheight);
+        super(position, player);
     }
 
     /**
-     * @param finalPoint represents the cell to which the builder wants to move
-     * @throws MinotaurException    when the move is a minotaur-only move and it's valid
-     * @throws ApolloException      see super
-     * @throws InvalidMoveException see super
+     * {@inheritDoc}
+     */
+    @Override
+    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
+        super.isValidBuild(cell, newheight);
+        verifyBuild(cell, newheight);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
@@ -36,11 +36,13 @@ public class Minotaur extends Builder{
     }
 
     /**
+     * Checks whether the {@link Cell} behind the given one is empty
+     *
      * @param finalPoint cell on which builder wants to position
      * @return true if the cell behind the occupied one is empty and valid; else false
+     * @throws InvalidCoordinateException if the given cell is invalid
      */
     boolean checkEmptyCellBehind(Cell finalPoint) throws InvalidCoordinateException {
-        /* Warn : X is the row, so it really is Y, and viceversa */
         int diffY = finalPoint.getRow() - this.getPosition().getRow();
         int diffX = finalPoint.getColumn() - this.getPosition().getColumn();
         if (diffY == 1) {
@@ -101,16 +103,19 @@ public class Minotaur extends Builder{
             else {
                 return new Pair(finalPoint.getRow() - 1, finalPoint.getColumn());
             }
-        }
-        else {
+        } else {
             if (diffX == 1) {
                 return new Pair(finalPoint.getRow(), finalPoint.getColumn() + 1);
-            }
-            else if (diffX == -1) {
+            } else if (diffX == -1) {
                 return new Pair(finalPoint.getRow(), finalPoint.getColumn() - 1);
             }
         }
-        return new Pair(0,0);
+        return new Pair(0, 0);
+    }
+
+    public void minotaurMove(Cell moveTo, Cell cellBehind) {
+        moveTo.getBuilder().forceMove(cellBehind);
+        this.forceMove(moveTo);
     }
 
 }

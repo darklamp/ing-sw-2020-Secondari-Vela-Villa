@@ -87,7 +87,7 @@ public class GodChoiceController extends WindowController {
         event.consume();
         int i = (godCard.getImage() == god1 ? i1 : (godCard.getImage() == god2 ? i2 : i3));
         Client.setGod(i);
-        GUIClient.setOut(String.valueOf(i));
+        GUIClient.setOut(String.valueOf(i+1));
         buttonSubmit.setDisable(true);
         buttonBack.setDisable(true);
         buttonForward.setDisable(true);

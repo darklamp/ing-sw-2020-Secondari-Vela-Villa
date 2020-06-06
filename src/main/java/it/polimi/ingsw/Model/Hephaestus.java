@@ -2,14 +2,16 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.*;
 
-public class Hephaestus extends Builder{
+public class Hephaestus extends Builder {
     private Cell previous;  //ci salvo la cella dove costruisco la prima volta
+
     Hephaestus(Cell position, Player player) {
-        super(position,player);
+        super(position, player);
     }
 
-
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, HephaestusException, InvalidBuildException, DemeterException, PrometheusException {
         if (this.getPlayer().isFirstTime()) {
@@ -29,12 +31,14 @@ public class Hephaestus extends Builder{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }
-
 
 
 }

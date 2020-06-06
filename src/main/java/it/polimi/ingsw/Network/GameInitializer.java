@@ -37,7 +37,10 @@ public class GameInitializer implements Runnable {
 
     /**
      * Gets players' god choices
-     * @param c1,c2,c3 client connections
+     *
+     * @param c1   first client's connection
+     * @param c2   second client's connection
+     * @param c3   (eventual) third client's connection
      * @param gods list of available gods, from which players have to choose
      * @return list of chosen gods, in order from first to last player
      */

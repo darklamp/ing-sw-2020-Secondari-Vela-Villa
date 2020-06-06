@@ -50,5 +50,7 @@ class PrometheusTest {
         c1.mustSetHeight(BuildingType.BASE);
         c3.mustSetHeight(BuildingType.NONE);
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c1));
+        c1.mustSetHeight(BuildingType.NONE);
+        Assertions.assertDoesNotThrow(() -> b1.isValidMove(c1));
     }
 }

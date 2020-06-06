@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Network.SocketClientConnection;
@@ -97,7 +98,7 @@ class BuilderTest {
 
 
     @Test
-    void isValidMove() throws IllegalAccessException, NoSuchFieldException {
+    void isValidMove() throws IllegalAccessException, NoSuchFieldException, InvalidCoordinateException {
         c4.mustSetHeight(BuildingType.DOME);
         c3.mustSetHeight(BuildingType.TOP);
         c2.mustSetHeight(BuildingType.BASE);
@@ -114,9 +115,7 @@ class BuilderTest {
         Assertions.assertThrows(InvalidMoveException.class, () -> {
             b2.isValidMove(c5); //non è adiacente
         });
-        Assertions.assertThrows(InvalidMoveException.class, () -> {
-            b2.isValidMove(null);
-        });
+        Assertions.assertThrows(InvalidMoveException.class, () -> b2.isValidMove(null));
         c1.setBuilder(null);
         c1.mustSetHeight(BuildingType.MIDDLE);
         c2.setBuilder(null);
@@ -125,9 +124,24 @@ class BuilderTest {
         Field f = GameTable.class.getDeclaredField("athenaMove");
         f.setAccessible(true);
         f.set(g, true);
-        Assertions.assertThrows(InvalidMoveException.class, () -> {
-            b4.isValidMove(c2);
-        });
+        Assertions.assertThrows(InvalidMoveException.class, () -> b4.isValidMove(c2));
+        Cell c5 = g.getCell(3, 3);
+        Cell c6 = g.getCell(2, 3);
+
+        c5.mustSetHeight(BuildingType.NONE);
+        c6.mustSetHeight(BuildingType.BASE);
+        c5.setBuilder(null);
+        c6.setBuilder(null);
+
+
+        Builder b5 = new Athena(c5, p1);
+        Assertions.assertDoesNotThrow(() -> b5.isValidMove(c6));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(null));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(new Cell(-1, 4, g)));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(new Cell(4, -1, g)));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(new Cell(5, 0, g)));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(new Cell(0, 5, g)));
+
 
     }
 

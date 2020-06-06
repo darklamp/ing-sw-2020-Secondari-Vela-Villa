@@ -1,106 +1,179 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <AnchorPane id="anchorPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@css/Main.css"
             xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.polimi.ingsw.Client.GUI.MainWindowController">
     <children>
-        <GridPane id="mainGrid" fx:id="gridPaneMain" alignment="CENTER" cache="true" layoutX="560.0" layoutY="145.0"
-                  prefHeight="800.0" prefWidth="800.0" stylesheets="@css/Main.css">
+        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="32.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="46.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="32.0" prefWidth="100.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" percentHeight="100.0" prefHeight="30.0" vgrow="ALWAYS"/>
             </rowConstraints>
             <children>
-                <StackPane fx:id="cell00" maxHeight="160.0" maxWidth="160.0" minHeight="160.0" minWidth="160.0"
-                           prefHeight="160.0" prefWidth="160.0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell01" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell02" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell03" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell04" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell10" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell11" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell12" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell13" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell14" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell20" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell21" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell22" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell23" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell24" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell30" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell31" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell32" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell33" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell34" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell40" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4"
-                           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell41" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell42" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell43" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-                <StackPane fx:id="cell44" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-                           GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" percentHeight="40.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                    </rowConstraints>
+                    <children>
+                        <TextArea id="textArea1" fx:id="textArea1" cache="true" editable="false" minHeight="100.0"
+                                  minWidth="100.0" prefHeight="240.0" prefWidth="407.0" stylesheets="@css/Main.css"
+                                  text="State: WAIT" wrapText="true" GridPane.rowIndex="2">
+                            <GridPane.margin>
+                                <Insets left="30.0" right="90.0"/>
+                            </GridPane.margin>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                            <opaqueInsets>
+                                <Insets right="50.0"/>
+                            </opaqueInsets>
+                        </TextArea>
+                        <ImageView fx:id="godImage" cache="true" fitHeight="500.0" fitWidth="400.0" pickOnBounds="true"
+                                   preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="10.0" left="20.0" right="50.0"/>
+                            </GridPane.margin>
+                        </ImageView>
+                        <ProgressBar id="progressBar" fx:id="timerBar" cache="true" minHeight="40.0" minWidth="80.0"
+                                     opacity="0.92" prefHeight="100.0" prefWidth="300.0" progress="0.0"
+                                     stylesheets="@css/Main.css" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets bottom="50.0" left="50.0" right="100.0" top="50.0"/>
+                            </GridPane.margin>
+                        </ProgressBar>
+                    </children>
+                </GridPane>
+                <GridPane alignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                          GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="100.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" percentHeight="14.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                        <RowConstraints minHeight="10.0" percentHeight="75.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                        <RowConstraints minHeight="10.0" percentHeight="12.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                    </rowConstraints>
+                    <children>
+                        <GridPane id="mainGrid" fx:id="gridPaneMain" cache="true" prefHeight="800.0" prefWidth="800.0"
+                                  stylesheets="@css/Main.css" GridPane.rowIndex="1">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="10.0" percentWidth="20.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="10.0" percentWidth="20.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="10.0" percentWidth="20.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="10.0" percentWidth="20.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="NEVER" maxWidth="150.0" minWidth="10.0" percentWidth="20.0"
+                                                   prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
+                                                prefHeight="30.0" vgrow="NEVER"/>
+                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
+                                                prefHeight="30.0" vgrow="NEVER"/>
+                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
+                                                prefHeight="30.0" vgrow="NEVER"/>
+                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
+                                                prefHeight="30.0" vgrow="NEVER"/>
+                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
+                                                prefHeight="30.0" vgrow="NEVER"/>
+                            </rowConstraints>
+                            <children>
+                                <StackPane fx:id="cell00" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
+                                           GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell01" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
+                                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell02" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                </StackPane>
+                                <StackPane fx:id="cell03" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell04" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell10" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
+                                           GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell11" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell12" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell13" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell14" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell20" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
+                                           GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell21" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell22" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell23" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell24" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell30" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
+                                           GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell31" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell32" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell33" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell34" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell40" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
+                                           GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell41" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell42" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell43" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell44" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                            </children>
+                        </GridPane>
+                    </children>
+                </GridPane>
+                <GridPane fx:id="buildingPartsPane" cache="true" prefHeight="620.0" prefWidth="155.0"
+                          GridPane.columnIndex="2">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <StackPane fx:id="parts0" prefHeight="150.0" prefWidth="200.0"/>
+                        <StackPane fx:id="parts1" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1"/>
+                        <StackPane fx:id="parts2" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="2"/>
+                        <StackPane fx:id="parts3" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="3"/>
+                    </children>
+                </GridPane>
             </children>
         </GridPane>
-        <TextArea id="textArea1" fx:id="textArea1" cache="true" editable="false" layoutX="17.0" layoutY="560.0"
-                  prefHeight="240.0" prefWidth="407.0" stylesheets="@css/Main.css" text="State: WAIT" wrapText="true"/>
-        <GridPane fx:id="buildingPartsPane" cache="true" layoutX="1572.0" layoutY="423.0" prefHeight="620.0"
-                  prefWidth="155.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <children>
-                <StackPane fx:id="parts0" prefHeight="150.0" prefWidth="200.0"/>
-                <StackPane fx:id="parts1" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1"/>
-                <StackPane fx:id="parts2" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="2"/>
-                <StackPane fx:id="parts3" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="3"/>
-            </children>
-        </GridPane>
-        <ProgressBar id="progressBar" fx:id="timerBar" cache="true" layoutX="31.0" layoutY="95.0" opacity="0.92"
-                     prefHeight="99.0" prefWidth="376.0" progress="0.0" stylesheets="@css/Main.css"/>
-        <ImageView fx:id="godImage" cache="true" fitHeight="250.0" fitWidth="200.0" layoutX="221.0" layoutY="261.0"
-                   pickOnBounds="true" preserveRatio="true"/>
     </children>
 </AnchorPane>

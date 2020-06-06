@@ -9,7 +9,7 @@ public class Apollo extends Builder{
 
 
     /**
-     * combines pre + postconditions
+     * {@inheritDoc}
      */
     @Override
     protected void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
@@ -18,9 +18,7 @@ public class Apollo extends Builder{
     }
 
     /**
-     * @param finalPoint indicates the point to which the builder is trying to move
-     * @throws InvalidMoveException can be thrown by the super() method; see Builder.isValidMove()
-     * @throws ApolloException      gets thrown if the builder tries to move to a cell occupied by an enemy builder
+     * {@inheritDoc}
      */
     @Override
     void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, ArtemisException, PanException {

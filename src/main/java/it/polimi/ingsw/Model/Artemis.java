@@ -4,23 +4,25 @@ import it.polimi.ingsw.Model.Exceptions.*;
 
 public class Artemis extends Builder {
     Artemis(Cell position, Player player) {
-        super(position,player);
-    }
-
-    private Cell previous;
-
-    @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
-        super.isValidBuild(cell, newheight);
-        verifyBuild(cell,newheight);
+        super(position, player);
     }
 
     /**
-     * @param finalPoint represents the cell to which the builder wants to move
-     * @throws MinotaurException    n/a
-     * @throws ApolloException      n/a
-     * @throws InvalidMoveException when super method throws it or when I'm trying to move on the same cell as before
-     * @throws ArtemisException     when moving for the first time on a valid cell
+     * Cell on which Artemis came from, and to which she cannot move again until next turn.
+     */
+    private Cell previous;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
+        super.isValidBuild(cell, newheight);
+        verifyBuild(cell, newheight);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {

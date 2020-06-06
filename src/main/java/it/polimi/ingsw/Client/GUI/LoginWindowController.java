@@ -1,16 +1,20 @@
 package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.ClientMain;
 import it.polimi.ingsw.Network.ServerMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "JavaDoc"})
 public class LoginWindowController extends WindowController {
     private boolean connected = false;
 
@@ -35,32 +39,45 @@ public class LoginWindowController extends WindowController {
         alert.setHeaderText(null);
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(GUIClient.getAppIcon());
-        alert.setContentText("""
-                                Favicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon).
-                                Loser gif made by Dylan Morang (https://giphy.com/angchor).
-                """);
+        alert.setContentText("\nFavicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon).\nLoser gif made by Dylan Morang (https://giphy.com/angchor).");
         alert.setResizable(false);
         alert.showAndWait();
     }
 
     private static Client client;
+    private boolean flag = false;
 
     @FXML
     private void print(ActionEvent event) {
         event.consume();
         if (!connected) {
-           /* String ipAddress = Client.getIP().toString();
-            String s;
-            s = "Connecting to: " + ipAddress + "...";
-            textAreaMain.setText(s);*/
-            new Thread(client).start();
-            connected = true;
+            if (ClientMain.validIP()) {
+                new Thread(client).start();
+                connected = true;
+            } else if (!flag) {
+                textAreaMain.setText("Please enter the server's IP address / hostname.");
+                ipInput.setText(null);
+                ipInput.setPromptText("Waiting for input..");
+                flag = true;
+            } else {
+                InetAddress ip;
+                try {
+                    ip = InetAddress.getByName(ipInput.getText());
+                    Client.setIp(ip);
+                    flag = true;
+                    new Thread(client).start();
+                    connected = true;
+                } catch (UnknownHostException e) {
+                    textAreaMain.setText("Invalid IP! Please try again.");
+                }
+            }
         } else GUIClient.setOut(ipInput.getText());
     }
 
 
     void waitForIP(Client client) {
         LoginWindowController.client = client;
+        ipSubmitBTN.setDefaultButton(true);
         print(new ActionEvent());
     }
 
@@ -68,7 +85,6 @@ public class LoginWindowController extends WindowController {
         List<Integer> choices = new ArrayList<>();
         choices.add(2);
         choices.add(3);
-
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(2, choices);
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Player number choice");
@@ -95,7 +111,7 @@ public class LoginWindowController extends WindowController {
         alert.setContentText("Please choose whether you'd like to load a previous game or join a new one.");
         ButtonType b1 = new ButtonType("Reload");
         ButtonType b2 = new ButtonType("Join");
-        alert.getButtonTypes().setAll(b1, b2);
+        alert.getButtonTypes().setAll(b2, b1);
         while (true) {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent()) {
@@ -120,54 +136,35 @@ public class LoginWindowController extends WindowController {
         dialog.setHeaderText("Gods choice");
         dialog.setContentText(ServerMessage.nextChoice);
         Optional<String> result = dialog.showAndWait();
-        while (true) {
-            if (result.isPresent()) {
-                if (!choices.contains(result.get())) {
-                    result = dialog.showAndWait();
-                } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
-                    break;
-                }
-            } else {
-                result = dialog.showAndWait();
-            }
+        getNextChoice(result, choices, dialog);
+        newChoiceDialog(choices, result);
+        if (GUI.getPlayersNumber() == 3) {
+            newChoiceDialog(choices, result);
         }
+    }
+
+    private void newChoiceDialog(List<String> choices, Optional<String> result) {
+        ChoiceDialog<String> dialog;
         choices.remove(result.get());
         dialog = new ChoiceDialog<>(choices.get(0), choices);
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Gods choice");
         dialog.setContentText(ServerMessage.nextChoice);
         result = dialog.showAndWait();
+        getNextChoice(result, choices, dialog);
+    }
+
+    private void getNextChoice(Optional<String> result, List<String> choices, ChoiceDialog<String> dialog) {
         while (true) {
             if (result.isPresent()) {
                 if (!choices.contains(result.get())) {
                     result = dialog.showAndWait();
                 } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
+                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get()) + 1));
                     break;
                 }
             } else {
                 result = dialog.showAndWait();
-            }
-        }
-        if (GUI.getPlayersNumber() == 3) {
-            choices.remove(result.get());
-            dialog = new ChoiceDialog<>(choices.get(0), choices);
-            dialog.setTitle("Initializing game");
-            dialog.setHeaderText("Gods choice");
-            dialog.setContentText(ServerMessage.nextChoice);
-            result = dialog.showAndWait();
-            while (true) {
-                if (result.isPresent()) {
-                    if (!choices.contains(result.get())) {
-                        result = dialog.showAndWait();
-                    } else {
-                        GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
-                        break;
-                    }
-                } else {
-                    result = dialog.showAndWait();
-                }
             }
         }
     }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Model.GameTable;
@@ -33,6 +34,11 @@ public class MainController implements PropertyChangeListener {
     private FileOutputStream fileOutputStream;
     private News news;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param propertyChangeEvent
+     */
     @Override
     synchronized public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
         Object obj = propertyChangeEvent.getNewValue();
@@ -44,13 +50,13 @@ public class MainController implements PropertyChangeListener {
             return;
         }
         currentPlayer = gameTable.getCurrentPlayer();
-        if (currentPlayer != news.getSender().getPlayer()) {
-            news.setRecipients(news.getSender().getPlayer());
-            gameTable.setNews(news, "NOTYOURTURN");
-        } else if (name.equals("ABORT")) {
+        if (name.equals("ABORT")) {
             News n = new News(null, gameTable.getPlayerConnections().get(0));
             gameTable.setNews(n, "ABORT");
             gameTable.closeGame();
+        } else if (currentPlayer != news.getSender().getPlayer()) {
+            news.setRecipients(news.getSender().getPlayer());
+            gameTable.setNews(news, "NOTYOURTURN");
         } else {
             try {
                 if (name.equals("PLAYERTIMEOUT")) throw new NoMoreMovesException(news.getSender().getPlayer());
@@ -106,11 +112,12 @@ public class MainController implements PropertyChangeListener {
                     } catch (NoMoreMovesException ignored) {
                     }
                 }
+            } catch (InvalidMoveException e) {
+                gameTable.closeGame();
             }
         }
 
     }
-
 
     private void setNews(News news) {
         this.news = news;
@@ -121,29 +128,27 @@ public class MainController implements PropertyChangeListener {
     }
 
     /**
+     * Checks whether the player is in a legal state for the move it wants to make.
+     *
      * @param name Turn state from Client side
      * @param turn Turn state from Server side
      * @throws IllegalTurnStateException if not matching
      */
-    private static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
+    public static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
         switch (turn) {
-            case BUILD:
+            case BUILD -> {
                 if (!name.equals("BUILD")) throw new IllegalTurnStateException();
-                break;
-            case MOVE:
+            }
+            case MOVE -> {
                 if (!name.equals("MOVE")) throw new IllegalTurnStateException();
-                break;
-            case MOVEORBUILD:
-                if (name.equals("PASS")) throw new IllegalTurnStateException();
-                break;
-            case BUILDORPASS:
-                if (name.equals("MOVE")) throw new IllegalTurnStateException();
-                break;
-            case WAIT:
-                if (!name.equals("PASS")) throw new IllegalTurnStateException();
-                break;
-            default:
-                throw new IllegalTurnStateException();
+            }
+            case MOVEORBUILD -> {
+                if (!name.equals("MOVE") && !name.equals("BUILD")) throw new IllegalTurnStateException();
+            }
+            case BUILDORPASS -> {
+                if (!name.equals("PASS") && !name.equals("BUILD")) throw new IllegalTurnStateException();
+            }
+            default -> throw new IllegalTurnStateException();
         }
     }
 
@@ -172,7 +177,6 @@ public class MainController implements PropertyChangeListener {
 
     /**
      * If present, kicks the player from the game and checks whether other players possibly won as a result of that
-     *
      * @param playerNick player to be kicked from game
      */
     public void consoleKickPlayer(String playerNick) {
@@ -184,6 +188,9 @@ public class MainController implements PropertyChangeListener {
         });
     }
 
+    /**
+     * Persistence method to save the current game's state to disk.
+     */
     synchronized public void saveGameState() {
         ObjectOutputStream outputStream;
         try {
@@ -200,6 +207,12 @@ public class MainController implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Checks whether a player is present in the game, by nickname
+     *
+     * @param playerNick Nickname of players to be checked
+     * @return index of player if present, else -1
+     */
     synchronized public int containsPlayer(String playerNick) {
         for (Player p : gameTable.getPlayers()) {
             if (p.getNickname().equals(playerNick)) return gameTable.getPlayerIndex(p);
@@ -207,6 +220,12 @@ public class MainController implements PropertyChangeListener {
         return -1;
     }
 
+    /**
+     * Persistence method to recreate player from disk.
+     *
+     * @param name name of players to be set
+     * @param c    connection to be associated with the player
+     */
     synchronized public void setPlayerFromDisk(String name, SocketClientConnection c) {
         Player p = null;
         for (Player p1 : gameTable.getPlayers()) if (p1.getNickname().equals(name)) p = p1;
@@ -218,6 +237,11 @@ public class MainController implements PropertyChangeListener {
         return gameTable.getPlayers().size();
     }
 
+    /**
+     * Persistence main method: restarts game from disk. Basically the equivalent of {@link GameInitializer} for a reloaded game.
+     *
+     * @param connections Contains every player's connection, in order from first to last.
+     */
     synchronized public void restartFromDisk(ArrayList<SocketClientConnection> connections) {
         SocketClientConnection c1 = connections.get(0);
         SocketClientConnection c2 = connections.get(1);

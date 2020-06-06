@@ -40,14 +40,15 @@ public class CLI implements Ui {
         } else if (input.contains("[CHOICE]")) {
             if (inputs[1].equals("GODS")) {
                 Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
-                AtomicInteger counter = new AtomicInteger(0);
+                AtomicInteger counter = new AtomicInteger(1);
                 Client.completeGodList.forEach(name -> System.out.println(counter.getAndIncrement() + ") " + name));
                 System.out.println(ServerMessage.nextChoice);
             } else if (inputs[1].equals("POS")) {
             } else {
                 System.out.println(ServerMessage.nextChoice);
                 for (int i = 1; i < inputs.length; i++) {
-                    System.out.println(inputs[i] + ") " + Client.completeGodList.get(Integer.parseInt(inputs[i])));
+                    int x = Integer.parseInt(inputs[i]);
+                    System.out.println(/*Integer.parseInt(inputs[i])+1*/x+1 + ") " + Client.completeGodList.get(/*Integer.parseInt(inputs[i])+1*/x));
                 }
             }
         } else System.out.println(input);
@@ -156,10 +157,6 @@ class Dice {
 
     public void Four(){
         this.face= DICE_FACES[4];}
-
-    public Color getColor(){
-        return color;
-    }
 
     public void setColor(Color color){
         this.color= color;

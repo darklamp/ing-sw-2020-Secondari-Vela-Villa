@@ -5,7 +5,6 @@ import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.GUIClient;
 import it.polimi.ingsw.Utility.Color;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -15,6 +14,19 @@ import static java.lang.Thread.sleep;
  * Launch the client
  */
 public class ClientMain {
+
+    /**
+     * Simple flag to indicate if the client has been invoked with the -ip flag
+     */
+    private static boolean ipFlag = false;
+
+    public static boolean validIP() {
+        return ipFlag;
+    }
+
+    public static void setValidIP() {
+        ipFlag = true;
+    }
 
     public static void main(String[] args) {
         int port = 1337;
@@ -37,6 +49,7 @@ public class ClientMain {
                     System.exit(0);
                 }
             } else if (a.toLowerCase().contains("ip")) {
+                ipFlag = true;
                 ipString = a.split("=")[1];
                 try {
                     ip = InetAddress.getByName(ipString);
@@ -50,22 +63,10 @@ public class ClientMain {
         }
         Client client = new Client(ip, port, debug);
         Ui ui;
-        //Scanner stdin = new Scanner(System.in);
         System.out.println(Color.ANSI_BLUE);
 
-        String s = """
-                 $$$$$$\\   $$$$$$\\  $$\\   $$\\ $$$$$$$$\\  $$$$$$\\  $$$$$$$\\  $$$$$$\\ $$\\   $$\\ $$$$$$\\\s
-                $$  __$$\\ $$  __$$\\ $$$\\  $$ |\\__$$  __|$$  __$$\\ $$  __$$\\ \\_$$  _|$$$\\  $$ |\\_$$  _|
-                $$ /  \\__|$$ /  $$ |$$$$\\ $$ |   $$ |   $$ /  $$ |$$ |  $$ |  $$ |  $$$$\\ $$ |  $$ | \s
-                \\$$$$$$\\  $$$$$$$$ |$$ $$\\$$ |   $$ |   $$ |  $$ |$$$$$$$  |  $$ |  $$ $$\\$$ |  $$ | \s
-                 \\____$$\\ $$  __$$ |$$ \\$$$$ |   $$ |   $$ |  $$ |$$  __$$<   $$ |  $$ \\$$$$ |  $$ | \s
-                $$\\   $$ |$$ |  $$ |$$ |\\$$$ |   $$ |   $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$$$ |  $$ | \s
-                \\$$$$$$  |$$ |  $$ |$$ | \\$$ |   $$ |    $$$$$$  |$$ |  $$ |$$$$$$\\ $$ | \\$$ |$$$$$$\\\s
-                 \\______/ \\__|  \\__|\\__|  \\__|   \\__|    \\______/ \\__|  \\__|\\______|\\__|  \\__|\\______|
-                """;
+        String s = "\n $$$$$$\\   $$$$$$\\  $$\\   $$\\ $$$$$$$$\\  $$$$$$\\  $$$$$$$\\  $$$$$$\\ $$\\   $$\\ $$$$$$\\\n$$  __$$\\ $$  __$$\\ $$$\\  $$ |\\__$$  __|$$  __$$\\ $$  __$$\\ \\_$$  _|$$$\\  $$ |\\_$$  _|\n$$ /  \\__|$$ /  $$ |$$$$\\ $$ |   $$ |   $$ /  $$ |$$ |  $$ |  $$ |  $$$$\\ $$ |  $$ | \n\\$$$$$$\\  $$$$$$$$ |$$ $$\\$$ |   $$ |   $$ |  $$ |$$$$$$$  |  $$ |  $$ $$\\$$ |  $$ | \n \\____$$\\ $$  __$$ |$$ \\$$$$ |   $$ |   $$ |  $$ |$$  __$$<   $$ |  $$ \\$$$$ |  $$ | \n$$\\   $$ |$$ |  $$ |$$ |\\$$$ |   $$ |   $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$$$ |  $$ | \n\\$$$$$$  |$$ |  $$ |$$ | \\$$ |   $$ |    $$$$$$  |$$ |  $$ |$$$$$$\\ $$ | \\$$ |$$$$$$\\\n\\______/ \\__|  \\__|\\__|  \\__|   \\__|    \\______/ \\__|  \\__|\\______|\\__|  \\__|\\______|\n";
 
-        //System.out.println("Would you like to use a fancy GUI? (y/N)");
-        // String choice = stdin.nextLine().toUpperCase();
         if (useGui) {
             GUI gui = new GUI();
             new Thread(gui).start();
@@ -92,12 +93,7 @@ public class ClientMain {
             System.out.print("Starting CLI..\n");
             ui = cli;
         }
-        try {
-            ui.waitForIP(client);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        ui.waitForIP(client);
     }
 
 }

@@ -1,4 +1,14 @@
-# SANTORINI : Progetto Ing.SW 2020 [![codecov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/branch/master/graph/badge.svg?token=PF3WCGV0B5)](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa)
+# SANTORINI : Progetto Ing.SW 2020
+
+
+
+[![codecov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/branch/master/graph/badge.svg?token=PF3WCGV0B5)](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa)
+
+Test game server :  **server.santorini.cf**
+
+Online CLI: [**here**](http://server.santorini.cf:4200)
+
+To use this web server and the online CLI,  make sure to [click on this link](http://server.santorini.cf:1338) three times.
 
 
 | Functionality | State |
@@ -11,44 +21,49 @@
 | Undo | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 | Additional gods | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 
+---
 
-### Maven
+## Deliverables
 
-Maven is set up so as to create two jars: a server one and a client one. The client one is, by choice, multiplatform:
-the additional weight is due to it including JavaFX libraries for every OS. It is possible to get a lighter client jar by removing other OS's JavaFX libraries from the pom.xml file. 
+Github is set up to run the building routine on every push. Hence, pre-packaged multiplatform JARs can be found under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions) tab. 
+
+## Building
+ 
+#### Requirements:
+
+* Java 14 (because of [switch expressions](https://openjdk.java.net/jeps/361))
+* Maven 3.6.0+
+
+Maven is set up so as to create two jars: a server one and a client one. By default, the pom detects the OS on which Maven is running and packages the client jar with the needed JavaFX libraries only.
+In case you want to create multi-platform jars, just add ``` -Pmulti ``` to the Maven command below.
 
 ```
 mvn clean package
 ```
 
-### Server
-Requires java 14 AND the --enable-preview flag (**NOTE**: the only use of this is the "Text Blocks" feature, which makes it easier and cleaner to handle long &&/|| complex strings).
+---
 
-#### options:
+## Server options:
 
 * -port : specifies Server port            (default: 1337)
 * -ip   : defines IP to listen on (v4/v6)  (default: localhost)
 * -console : starts debug console on stdin (default: no)
 * -v    : print verbose output  (default: no)
-* -disk : on startup, the server tries to load previously saved games (default: no)
+* -disk : persistence flag (default: no)
 
 example:
 
 ```
-java --enable-preview -jar server.jar -port=1337 -ip=0.0.0.0
+java -jar server.jar -port=1337 -ip=0.0.0.0
 ```
 
-##### debug console commands:
+#### debug console commands:
 
 * kick [gameIndex] [playerName]    : kicks player from game
 * players [gameIndex]              : returns list of players for given gameIndex / for all games if index not given
 * save                             : saves current games' state
 
-### Client
-
-Requires java 14 AND the --enable-preview flag (see server). Note: using ```-Dprism.forceGPU=true``` may resolve javafx-related problems (this is not related to the project, and apparently only useful on linux). 
-
-#### options:
+## Client options:
 
 * -port : specifies Server port (default: 1337)
 * -cli  : cli true/false        (default: false)
@@ -58,5 +73,5 @@ Requires java 14 AND the --enable-preview flag (see server). Note: using ```-Dpr
 example: 
 
 ```
-java --enable-preview -jar client.jar -port=1337 -ip=::1
+java -jar client.jar -port=1337 -ip=::1
 ```

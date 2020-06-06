@@ -17,26 +17,20 @@ class AtlasTest {
         GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "ATLAS");
         Cell c1 = g.getCell(4,3);
-        Cell c2 = g.getCell(4,4);
-        Builder b1 = new Atlas(c1,p1);
+        Cell c2 = g.getCell(4, 4);
+        Builder b1 = new Atlas(c1, p1);
 
-        Assertions.assertThrows(AtlasException.class, () -> {
-            b1.isValidBuild(c2, BuildingType.DOME);
-        });
+        Assertions.assertThrows(AtlasException.class, () -> b1.isValidBuild(c2, BuildingType.DOME));
         c2.setHeight(b1, BuildingType.DOME);
-        Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b1.isValidBuild(c2, BuildingType.DOME);
-        });
+        Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c2, BuildingType.DOME));
         Cell c3 = g.getCell(3, 3);
-        Assertions.assertThrows(AtlasException.class, () -> {
-            b1.isValidBuild(c3, BuildingType.DOME);
-        });
+        Assertions.assertThrows(AtlasException.class, () -> b1.isValidBuild(c3, BuildingType.DOME));
         c3.mustSetHeight(BuildingType.DOME);
-        Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b1.isValidBuild(c3, BuildingType.DOME);
-        });
+        Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c3, BuildingType.DOME));
         Cell c4 = g.getCell(4, 2);
-        b1.isValidBuild(c4, BuildingType.BASE);
+        Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c4, BuildingType.BASE));
+        c3.mustSetHeight(BuildingType.BASE);
+        Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c3, BuildingType.MIDDLE));
     }
 
     @Test

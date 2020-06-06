@@ -20,17 +20,12 @@ public enum Color {
 
     private final String escape;
 
-    Color(String escape)
-    {
-        this.escape= escape;
+    Color(String escape) {
+        this.escape = escape;
     }
-    public String getEscape()
-    {
+
+    @Override
+    public String toString() {
         return escape;
     }
-        @Override
-        public String toString()
-        {
-             return escape;
-        }
 }
