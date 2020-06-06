@@ -39,7 +39,10 @@ public class LoginWindowController extends WindowController {
         alert.setHeaderText(null);
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(GUIClient.getAppIcon());
-        alert.setContentText("\nFavicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon).\nLoser gif made by Dylan Morang (https://giphy.com/angchor).");
+        alert.setContentText("""
+                                Favicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon).
+                                Loser gif made by Dylan Morang (https://giphy.com/angchor).
+                """);
         alert.setResizable(false);
         alert.showAndWait();
     }

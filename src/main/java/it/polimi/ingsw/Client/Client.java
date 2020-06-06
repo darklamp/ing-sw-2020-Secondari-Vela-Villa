@@ -105,8 +105,7 @@ public class Client implements Runnable {
                 while (isActive()) {
                     Object inputObject = socketIn.readObject();
                     if (verbose()) System.out.println("[DEBUG] Recv input: " + inputObject.getClass());
-                    if (inputObject instanceof String) {
-                        String s = (String) inputObject;
+                    if (inputObject instanceof String s) {
                         if (s.equals(ServerMessage.abortMessage)) {
                             ui.process("[ERROR]@@@Game aborted. Someone probably disconnected or timer ran out.");
                             System.exit(0);
@@ -139,8 +138,7 @@ public class Client implements Runnable {
                         } else ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {
                         ui.showTable((CellView[][]) inputObject);
-                    } else if (inputObject instanceof GameStateMessage) {
-                        GameStateMessage c = (GameStateMessage) inputObject;
+                    } else if (inputObject instanceof GameStateMessage c) {
                         state = parse(c);
                         ui.processTurnChange(state);
                         if (state == ClientState.WIN || state == ClientState.LOSE) {
