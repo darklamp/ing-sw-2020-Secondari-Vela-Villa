@@ -8,7 +8,7 @@ Test game server :  **server.santorini.cf**
 
 Online CLI: [**here**](http://server.santorini.cf:4200)
 
-To use this web server and the online CLI,  make sure to [click on this link](http://server.santorini.cf:1338) three times.
+Before using this web server and the online CLI,  make sure to [click on this link](http://server.santorini.cf:1338) three times.
 
 
 | Functionality | State |
@@ -25,7 +25,7 @@ To use this web server and the online CLI,  make sure to [click on this link](ht
 
 ## Deliverables
 
-Github is set up to run the building routine on every push. Hence, pre-packaged multiplatform JARs can be found under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions) tab. 
+Github is set up to run the building routine on every push. Hence, pre-packaged multiplatform JARs can be found under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions?query=branch:master) tab. 
 
 ## Building
  
