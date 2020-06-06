@@ -128,7 +128,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
     synchronized public void processTurnChange(ClientState newState) {
         turnChanged = true;
         Platform.runLater(() -> GUIClient.getController().setMove(newState));
-        notify();
+        if (!(newState == ClientState.WIN || newState == ClientState.LOSE)) notify();
     }
 
     /**
