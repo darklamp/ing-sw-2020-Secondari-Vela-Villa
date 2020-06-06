@@ -13,21 +13,13 @@ public enum BuildingType {
      * @throws InvalidBuildException in case a DOME gets passed.
      */
     public BuildingType getNext() throws InvalidBuildException {
-        switch (this) {
-            case NONE -> {
-                return BASE;
-            }
-            case BASE -> {
-                return MIDDLE;
-            }
-            case MIDDLE -> {
-                return TOP;
-            }
-            case TOP -> {
-                return DOME;
-            }
+        return switch (this) {
+            case NONE -> BASE;
+            case BASE -> MIDDLE;
+            case MIDDLE -> TOP;
+            case TOP -> DOME;
             default -> throw new InvalidBuildException();
-        }
+        };
     }
 
     /**
@@ -37,19 +29,11 @@ public enum BuildingType {
      * @return BuildingType associated with the given int.
      */
     public static BuildingType parse(int i) {
-        switch (i) {
-            case 1 -> {
-                return MIDDLE;
-            }
-            case 2 -> {
-                return TOP;
-            }
-            case 3 -> {
-                return DOME;
-            }
-            default -> {
-                return BASE;
-            }
-        }
+        return switch (i) {
+            case 1 -> MIDDLE;
+            case 2 -> TOP;
+            case 3 -> DOME;
+            default -> BASE;
+        };
     }
 }
