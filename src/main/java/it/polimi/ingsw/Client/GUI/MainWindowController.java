@@ -15,6 +15,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -26,6 +28,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +66,9 @@ public class MainWindowController extends WindowController implements Initializa
     private static final DataFormat building = new DataFormat("building");
     private static boolean newTurn = true;
 
-    private static final double MAX_WIDTH = 1920;
-    private static final double MAX_HEIGHT = 1080;
+    private static final double MAX_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static final double MAX_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+    private static final double SCREEN_RATIO = 16.0 / 9.0;
 
     private static ImageView selected = null;
     /**
@@ -153,8 +157,8 @@ public class MainWindowController extends WindowController implements Initializa
             GUIClient.getStage().getScene().setOnKeyPressed(e -> {
                 if (e.getCode() == KeyCode.F11) {
                     if (GUIClient.getStage().isFullScreen()) {
-                        GUIClient.getStage().minWidthProperty().bind(GUIClient.getStage().getScene().heightProperty().multiply(1.777778));
-                        GUIClient.getStage().minHeightProperty().bind(GUIClient.getStage().getScene().widthProperty().divide(1.777778));
+                        GUIClient.getStage().minWidthProperty().bind(GUIClient.getStage().getScene().heightProperty().multiply(SCREEN_RATIO));
+                        GUIClient.getStage().minHeightProperty().bind(GUIClient.getStage().getScene().widthProperty().divide(SCREEN_RATIO));
 
                         GUIClient.getStage().setFullScreen(false);
                     } else {
@@ -167,8 +171,8 @@ public class MainWindowController extends WindowController implements Initializa
             });
             initialized = true;
             godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
-            godImage.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_WIDTH).multiply(godImage.getImage().getHeight() / 2.24));
-            godImage.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_HEIGHT).multiply(godImage.getImage().getWidth() / 2.24));
+            godImage.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(godImage.getImage().getHeight() / (3.75 * 1080 / MAX_HEIGHT)));
+            godImage.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(godImage.getImage().getWidth() / (3.75 * 1920 / MAX_WIDTH)));
         }
         s1.append("Current turn: ");
         TEXT_COLOR.set("papayawhip");

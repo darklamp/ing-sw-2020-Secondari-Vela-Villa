@@ -35,7 +35,7 @@
                                   minWidth="100.0" prefHeight="240.0" prefWidth="407.0" stylesheets="@css/Main.css"
                                   text="State: WAIT" wrapText="true" GridPane.rowIndex="2">
                             <GridPane.margin>
-                                <Insets left="50.0" right="100.0"/>
+                                <Insets left="30.0" right="90.0"/>
                             </GridPane.margin>
                             <cursor>
                                 <Cursor fx:constant="DEFAULT"/>
@@ -44,10 +44,10 @@
                                 <Insets right="50.0"/>
                             </opaqueInsets>
                         </TextArea>
-                        <ImageView fx:id="godImage" cache="true" fitHeight="250.0" fitWidth="200.0" pickOnBounds="true"
+                        <ImageView fx:id="godImage" cache="true" fitHeight="500.0" fitWidth="400.0" pickOnBounds="true"
                                    preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets bottom="60.0" left="30.0" right="50.0" top="20.0"/>
+                                <Insets bottom="10.0" left="20.0" right="50.0"/>
                             </GridPane.margin>
                         </ImageView>
                         <ProgressBar id="progressBar" fx:id="timerBar" cache="true" minHeight="40.0" minWidth="80.0"
