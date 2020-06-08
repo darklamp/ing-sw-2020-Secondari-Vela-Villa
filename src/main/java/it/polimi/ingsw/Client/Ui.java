@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.View.CellView;
 
 import java.util.Scanner;
@@ -8,8 +10,7 @@ public interface Ui {
 
     /**
      * Processes input String message.
-     * Message can be either a {@link it.polimi.ingsw.Network.ServerMessage} , a simple String,
-     * or a "message" String.
+     * Message can be either a simple String or a "message" String.
      * Message strings are formatted as follows:
      * <p>
      * [ TYPE ] + n * ( SEPARATOR + ARG )
@@ -17,18 +18,24 @@ public interface Ui {
      * with n = #arguments
      * SEPARATOR = @@@
      * TYPE =
-     * ERROR  : error message
-     * INIT   : initialization message; used for game initialization or during game reload
      * CHOICE : server prompts client for choice; used when asking for gods, positions
      * <p>
-     * example : [ERROR]@@@Error404aaa   will parse to "ERROR" , "Error404aaa"
      *
      * @param input message to be processed
      */
     void process(String input);
 
     /**
+     * Processes input {@link Message}.
+     * Note : {@link ServerMessage} implements the Message interface, but contains String messages which get parsed as strings by {@link Ui#process(String)}
+     *
+     * @param input message to be processed
+     */
+    void process(Message input);
+
+    /**
      * Starts Client thread, asking for IP input if necessary.
+     *
      * @param client Client to be ran
      */
     void waitForIP(Client client);

@@ -4,7 +4,7 @@ import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
-import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.io.Serializable;

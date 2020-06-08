@@ -2,7 +2,7 @@ package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientMain;
-import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

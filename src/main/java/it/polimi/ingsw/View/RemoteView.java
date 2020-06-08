@@ -4,7 +4,7 @@ package it.polimi.ingsw.View;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.beans.PropertyChangeEvent;

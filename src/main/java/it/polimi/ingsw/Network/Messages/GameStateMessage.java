@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Network;
+package it.polimi.ingsw.Network.Messages;
 
 import it.polimi.ingsw.Client.ClientState;
 
@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Message sent to all clients everytime a state change happens.
  */
-public class GameStateMessage implements Serializable {
+public class GameStateMessage implements Serializable, Message {
 
     private static final long serialVersionUID = 17756L;
 
@@ -27,7 +27,7 @@ public class GameStateMessage implements Serializable {
         this.currentPlayer = currentPlayer;
     }
 
-    public ClientState get(short i) {
+    public ClientState get(int i) {
         return switch (i) {
             case 1 -> p2;
             case 2 -> p3;

@@ -3,7 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
-import it.polimi.ingsw.Network.GameStateMessage;
+import it.polimi.ingsw.Network.Messages.GameStateMessage;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.View.CellView;

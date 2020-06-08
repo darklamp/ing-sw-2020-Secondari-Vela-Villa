@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
 
 import java.io.FileInputStream;

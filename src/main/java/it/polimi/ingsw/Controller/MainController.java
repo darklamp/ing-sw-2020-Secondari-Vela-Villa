@@ -9,7 +9,8 @@ import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.GameInitializer;
-import it.polimi.ingsw.Network.GameStateMessage;
+import it.polimi.ingsw.Network.Messages.GameStateMessage;
+import it.polimi.ingsw.Network.Messages.InitMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.View.RemoteView;
@@ -49,7 +50,11 @@ public class MainController implements PropertyChangeListener {
             gameTable.setNews(news, "INVALIDNEWS");
             return;
         }
-        currentPlayer = gameTable.getCurrentPlayer();
+        try {
+            currentPlayer = gameTable.getCurrentPlayer();
+        } catch (IndexOutOfBoundsException e) {
+            return;
+        }
         if (name.equals("ABORT")) {
             News n = new News(null, gameTable.getPlayerConnections().get(0));
             gameTable.setNews(n, "ABORT");
@@ -276,10 +281,13 @@ public class MainController implements PropertyChangeListener {
             c3.setReady();
         }
         int size = (c3 == null ? 2 : 3);
-        c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c1.getPlayer().getGod()));
-        c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c2.getPlayer().getGod()));
+        c1.send(new InitMessage(gameTable.getPlayerIndex(player1), size, gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), c3 != null ? GameTable.completeGodList.indexOf(c3.getPlayer().getGod()) : -1));
+        c2.send(new InitMessage(gameTable.getPlayerIndex(player2), size, gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), c3 != null ? GameTable.completeGodList.indexOf(c3.getPlayer().getGod()) : -1));
+        // c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c1.getPlayer().getGod()));
+        // c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c2.getPlayer().getGod()));
         if (c3 != null) {
-            c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c3.getPlayer().getGod()));
+            c3.send(new InitMessage(gameTable.getPlayerIndex(player3), size, gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), GameTable.completeGodList.indexOf(c3.getPlayer().getGod())));
+            //      c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c3.getPlayer().getGod()));
         }
         GameStateMessage message = gameTable.getGameState();
         c1.send(message);

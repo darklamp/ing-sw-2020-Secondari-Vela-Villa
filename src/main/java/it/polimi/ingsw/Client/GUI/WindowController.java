@@ -1,7 +1,10 @@
 package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Network.Messages.ErrorMessage;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.View.CellView;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -65,4 +68,21 @@ public abstract class WindowController {
         alert.setResizable(false);
         alert.showAndWait();
     }
+
+    /**
+     * Spawns error dialog with content
+     *
+     * @param input
+     */
+    void setError(ErrorMessage input) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Message");
+        alert.setHeaderText("Error");
+        alert.setContentText(input.getContent());
+        alert.setResizable(false);
+        alert.showAndWait();
+        if (input.equals(ServerMessage.gameLost) || input.equals(ServerMessage.abortMessage) || input.equals(ServerMessage.serverDown))
+            Platform.exit();
+    }
+
 }
