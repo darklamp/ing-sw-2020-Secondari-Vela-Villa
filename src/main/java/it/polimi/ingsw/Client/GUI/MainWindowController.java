@@ -56,7 +56,9 @@ public class MainWindowController extends WindowController implements Initializa
     @FXML
     ProgressBar timerBar;
     @FXML
-    ImageView godImage;
+    ImageView godImage, infoButton;
+   // @FXML
+    //Button infoButton;
 
     private static Timeline timeline;
     private static CellView[][] lastTable;
@@ -86,6 +88,7 @@ public class MainWindowController extends WindowController implements Initializa
     private final static Image topBuildingImage = new Image("/images/buildingTop.png");
     private final static Image domeBuildingImage = new Image("/images/buildingDome.png");
 
+    private final static Image info = new Image("/images/infoButton.png");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -114,6 +117,12 @@ public class MainWindowController extends WindowController implements Initializa
         if (parts2.getChildren().size() != 0) parts2.getChildren().clear();
         if (parts3.getChildren().size() != 0) parts3.getChildren().clear();
     }
+
+    /*private void infoButton(){
+        infoButton.setGraphic(new ImageView(info));
+        infoButton.setVisible(true);
+    }
+    */
 
     private void setTimerBar() {
         newTurn = false;
@@ -173,6 +182,9 @@ public class MainWindowController extends WindowController implements Initializa
             godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
             godImage.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(godImage.getImage().getHeight() / (3.75 * 1080 / MAX_HEIGHT)));
             godImage.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(godImage.getImage().getWidth() / (3.75 * 1920 / MAX_WIDTH)));
+            infoButton.setImage(new Image("/images/infoButton.png"));
+            infoButton.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(infoButton.getImage().getHeight() / (3.75 * 1080 / MAX_HEIGHT)));
+            infoButton.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(infoButton.getImage().getWidth() / (3.75 * 1920 / MAX_WIDTH)));
         }
         s1.append("Current turn: ");
         TEXT_COLOR.set("papayawhip");
