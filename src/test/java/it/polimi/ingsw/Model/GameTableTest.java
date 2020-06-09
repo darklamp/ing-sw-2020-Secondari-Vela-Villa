@@ -73,6 +73,7 @@ class GameTableTest {
         Field f2 = GameTable.class.getDeclaredField("exit");
         f2.setAccessible(true);
         f2.set(g, true);
+        sleep(10);
         thread.interrupt();
         sleep(100);
         assertEquals("ABORT", f1.get(g));
