@@ -74,7 +74,7 @@ class GameTableTest {
         f2.setAccessible(true);
         f2.set(g, true);
         thread.interrupt();
-        sleep(10);
+        sleep(100);
         assertEquals("ABORT", f1.get(g));
     }
 
