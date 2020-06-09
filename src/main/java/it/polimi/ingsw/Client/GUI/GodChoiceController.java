@@ -21,7 +21,19 @@ public class GodChoiceController extends WindowController {
     AnchorPane godChoicePane;
 
     private static Image god1, god2, god3;
+    private static Image[] godCards = new Image[Client.completeGodList.size()];
+
+    static {
+        for (int i = 1; i < Client.completeGodList.size() + 1; i++) {
+            godCards[i - 1] = new Image("/images/GodCards/" + i + ".png");
+        }
+    }
+
     private static int i1, i2, i3;
+
+    static Image getGodCard(int i) {
+        return godCards[i];
+    }
 
     void parseGodChoice(String input) {
         String[] inputs = input.split("@@@");

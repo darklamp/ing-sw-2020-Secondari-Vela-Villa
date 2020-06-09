@@ -69,6 +69,12 @@ public class Client implements Runnable {
 
     private static String currentPlayer;
 
+    public static GameStateMessage getLastStateMessage() {
+        return lastStateMessage;
+    }
+
+    private static GameStateMessage lastStateMessage;
+
     private static InetAddress ip;
 
     public static void setIp(InetAddress ip) {
@@ -255,6 +261,7 @@ public class Client implements Runnable {
     }
 
     private ClientState parseState(GameStateMessage s) {
+        lastStateMessage = s;
         currentPlayer = s.getCurrentPlayer();
         return s.get(playerIndex);
     }

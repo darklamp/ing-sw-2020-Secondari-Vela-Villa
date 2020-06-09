@@ -136,7 +136,8 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         } else if (input.contains(ServerMessage.lastGod)) {
             Client.setGod(Integer.parseInt(inputs[1]));
             process("You're left with " + Client.completeGodList.get(Client.getGod()));
-        } else Platform.runLater(() -> GUIClient.getController().setText(input));
+        } else if (!(input.equals(ServerMessage.firstBuilderPos)) && !(input.equals(ServerMessage.secondBuilderPos)))
+            Platform.runLater(() -> GUIClient.getController().setText(input));
     }
 
     /**

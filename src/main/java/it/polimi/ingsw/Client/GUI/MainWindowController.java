@@ -12,9 +12,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
@@ -29,6 +32,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +86,9 @@ public class MainWindowController extends WindowController implements Initializa
     private static final Image builderImage2 = new Image("/images/builder2.png");
     private static final Image builderImage3 = new Image("/images/builder3.png");
 
+    static Image getBuilderImage(int i) {
+        return i == 1 ? builderImage1 : (i == 2 ? builderImage2 : builderImage3);
+    }
 
     private final static Image baseBuildingImage = new Image("/images/buildingBase.png");
     private final static Image middleBuildingImage = new Image("/images/buildingMiddle.png");
@@ -179,7 +186,20 @@ public class MainWindowController extends WindowController implements Initializa
             infoButton.setImage(new Image("/images/infoButton.png"));
             infoButton.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(infoButton.getImage().getHeight() / (3.75 * 1080 / MAX_HEIGHT)));
             infoButton.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(infoButton.getImage().getWidth() / (3.75 * 1920 / MAX_WIDTH)));
-            infoB.setOnAction(event -> setText("Ale gay"));
+            infoB.setOnAction(event -> {
+                FXMLLoader loader = new FXMLLoader(getClass()
+                        .getResource("/InfoBox.fxml"));
+                Parent root;
+                try {
+                    root = loader.load();
+                    Scene s2 = new Scene(root);
+                    Stage stage1 = new Stage();
+                    stage1.setScene(s2);
+                    stage1.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         s1.append("Current turn: ");
         TEXT_COLOR.set("papayawhip");
@@ -613,5 +633,6 @@ public class MainWindowController extends WindowController implements Initializa
         b.getGraphic().setVisible(false);
         b.toFront();
     }
+
 
 }
