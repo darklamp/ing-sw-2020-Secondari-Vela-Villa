@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -179,15 +180,13 @@ class BuildControllerTest {
         d.setAccessible(true);
         News news = new News("BUILD", (SocketClientConnection) d.get(player2));
         BuildController buildController = new BuildController(gameTable);
-        Field f2 = Player.class.getDeclaredField("builderList");
-        f2.setAccessible(true);
-        Builder b2 = ((ArrayList<Builder>) f2.get(player2)).get(1);
+        ArrayList<Builder> players1 = TestUtilities.getAccessibleField("builderList", player2);
         Field f3 = GameTable.class.getDeclaredField("currentBuilder");
         f3.setAccessible(true);
         f3.set(gameTable, null);
         assert gameTable.getCurrentBuilder() == null;
         news.setCoords(0, 1, 1);
         buildController.handleBuild(news);
-        Assertions.assertSame(gameTable.getCurrentBuilder(), ((ArrayList<Builder>) f2.get(player2)).get(1));
+        Assertions.assertSame(gameTable.getCurrentBuilder(), (players1.get(1)));
     }
 }

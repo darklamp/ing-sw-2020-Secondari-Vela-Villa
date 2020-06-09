@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -43,20 +44,15 @@ class GameTableTest {
         assertEquals(player1.getNickname(), g.getGameState().getName(0));
         assertEquals(player3.getNickname(), g.getGameState().getName(2));
         assertEquals(player2.getNickname(), g.getGameState().getName(1));
-        Field f = GameTable.class.getDeclaredField("players");
-        f.setAccessible(true);
-        ((ArrayList<Player>) f.get(g)).remove(1);
+        ArrayList<Player> players1 = TestUtilities.getAccessibleField("players", g);
+
+        players1.remove(1);
         assertEquals(player3.getNickname(), g.getGameState().getName(1));
         assertNull(g.getGameState().get((short) 2));
         assertNull(g.getGameState().getName(2));
-        ((ArrayList<Player>) f.get(g)).remove(1);
+        players1.remove(1);
         assertEquals(ClientState.LOSE, g.getGameState().get((short) 1));
         assertNull(g.getGameState().getName(2));
-
-
-        /*public GameStateMessage getGameState() {
-            return new GameStateMessage(players.get(0).getState(), players.size() == 1 ? ClientState.LOSE : players.get(1).getState(), players.size() == 3 ? players.get(2).getState() : null, players.get(0).getNickname(), players.size() == 1 ? null : players.get(1).getNickname(), players.size() == 3 ? players.get(2).getNickname() : null, currentPlayer);
-        }*/
 
     }
 
@@ -65,9 +61,7 @@ class GameTableTest {
         GameTable g = new GameTable(2);
         g.resetMoveTimer();
         g.resetMoveTimer();
-        Field f = GameTable.class.getDeclaredField("timerThread");
-        f.setAccessible(true);
-        Thread thread = (Thread) f.get(g);
+        Thread thread = TestUtilities.getAccessibleField("timerThread", g);
         Field f1 = GameTable.class.getDeclaredField("type");
         f1.setAccessible(true);
         Field f2 = GameTable.class.getDeclaredField("exit");
@@ -119,9 +113,8 @@ class GameTableTest {
         gameTable.nextTurn();
 
         gameTable.removePlayer(player3, true);
-        Field f3 = GameTable.class.getDeclaredField("currentPlayer");
-        f3.setAccessible(true);
-        assertEquals(0, f3.get(gameTable));
+        int currentPlayer = TestUtilities.getAccessibleField("currentPlayer", gameTable);
+        assertEquals(0, currentPlayer);
         assertNull(gameTable.getCurrentBuilder());
         assertEquals(player1.getFirstState(), player1.getState());
         assertEquals(2, gameTable.getPlayerConnections().size());

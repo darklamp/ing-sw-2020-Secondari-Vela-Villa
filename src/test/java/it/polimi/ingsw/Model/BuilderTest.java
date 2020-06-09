@@ -82,7 +82,7 @@ class BuilderTest {
             b2.isValidBuild(c4,BuildingType.TOP); //nella cella c4 c'è una TOP quindi ci si può mettere solo una dome sopra,sennò parte eccezione
         });
     }
-     //manca il test out of bound
+
     @Test
     void verifyBuild() {
         TestUtilities.mustSetHeight(c3, BuildingType.DOME);
