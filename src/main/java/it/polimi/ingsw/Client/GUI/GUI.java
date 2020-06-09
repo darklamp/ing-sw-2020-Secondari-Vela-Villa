@@ -12,6 +12,7 @@ import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
 import javafx.application.Platform;
 
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Scanner;
@@ -145,6 +146,8 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
      */
     @Override
     public void waitForIP(Client client) {
+        SplashScreen splashScreen = SplashScreen.getSplashScreen();
+        if (splashScreen != null) splashScreen.close();
         Platform.runLater(() -> loginController.waitForIP(client));
     }
 

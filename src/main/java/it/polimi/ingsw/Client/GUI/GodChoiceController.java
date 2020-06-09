@@ -52,24 +52,6 @@ public class GodChoiceController extends WindowController {
             i3 = choices.get(2);
         }
         godCard.setImage(god1);
-        /*
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
-        dialog.setTitle("Initializing game");
-        dialog.setHeaderText("God choice");
-        dialog.setContentText(ServerMessage.nextChoice);
-        Optional<String> result = dialog.showAndWait();
-        while (true) {
-            if (result.isPresent()) {
-                if (!choices.contains(result.get())) {
-                    result = dialog.showAndWait();
-                } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
-                    break;
-                }
-            } else {
-                result = dialog.showAndWait();
-            }
-        }*/
     }
 
     @FXML

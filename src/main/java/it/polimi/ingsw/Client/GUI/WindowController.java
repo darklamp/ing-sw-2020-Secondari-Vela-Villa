@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
+import java.awt.*;
 import java.io.IOException;
 
 public abstract class WindowController {
@@ -38,6 +39,10 @@ public abstract class WindowController {
             Scene s = new Scene(root);
             GUIClient.getStage().setScene(s);
             GUIClient.getStage().setFullScreen(fullScreen);
+            if (!fullScreen) {
+                GUIClient.getStage().setX((Toolkit.getDefaultToolkit().getScreenSize().getWidth() - GUIClient.getStage().getScene().getWidth()) / 2);
+                GUIClient.getStage().setY((Toolkit.getDefaultToolkit().getScreenSize().getHeight() - GUIClient.getStage().getScene().getHeight()) / 2);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
