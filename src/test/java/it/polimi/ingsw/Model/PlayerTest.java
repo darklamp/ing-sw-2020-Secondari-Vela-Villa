@@ -4,6 +4,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -59,9 +60,9 @@ class  PlayerTest {
         GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "PROMETEUS");
         Player p2 = new Player("Giggino2", g, "ATLAS");
-        g.getCell(1, 0).mustSetHeight(BuildingType.DOME);
-        g.getCell(1, 1).mustSetHeight(BuildingType.DOME);
-        g.getCell(1, 2).mustSetHeight(BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(1, 0), BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(1, 1), BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(1, 2), BuildingType.DOME);
         p1.initBuilderList(g.getCell(0, 0));
         p1.initBuilderList(g.getCell(0, 1));
         p2.initBuilderList(g.getCell(0, 2));
@@ -69,7 +70,7 @@ class  PlayerTest {
         Assertions.assertThrows(NoMoreMovesException.class, () -> p1.checkConditions(p1.getBuilderList().get(0)));
         p1.setState(MOVEORBUILD);
         g.getCell(0, 1).setBuilder(null);
-        g.getCell(0, 1).mustSetHeight(BuildingType.TOP);
+        TestUtilities.mustSetHeight(g.getCell(0, 1), BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> p1.checkConditions(p1.getBuilderList().get(0)));
         Assertions.assertEquals(BUILD, p1.getState());
          /* currently there is no god that can end up in
@@ -78,8 +79,8 @@ class  PlayerTest {
         p3.setState(MOVEORBUILD);
         p3.initBuilderList(g.getCell(0, 1));
         g.getCell(0, 2).setBuilder(null);
-        g.getCell(0, 3).mustSetHeight(BuildingType.DOME);
-        g.getCell(1, 3).mustSetHeight(BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(0, 3), BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(1, 3), BuildingType.DOME);
         p3.initBuilderList(g.getCell(0, 2));
         Assertions.assertDoesNotThrow(() -> p3.checkConditions(null));
         Assertions.assertEquals(MOVE, p3.getState());
@@ -95,9 +96,9 @@ class  PlayerTest {
         GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "HEPHAESTUS");
         Player p2 = new Player("Giggino2", g, "DEMETER");
-        g.getCell(1, 0).mustSetHeight(BuildingType.DOME);
-        g.getCell(1, 1).mustSetHeight(BuildingType.DOME);
-        g.getCell(1, 2).mustSetHeight(BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(1, 0), BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(1, 1), BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(1, 2), BuildingType.DOME);
         p1.initBuilderList(g.getCell(0, 0));
         p1.initBuilderList(g.getCell(0, 1));
         p2.initBuilderList(g.getCell(0, 2));
@@ -107,7 +108,7 @@ class  PlayerTest {
         Assertions.assertThrows(NullPointerException.class, () -> p1.checkConditions(null));
         p1.setState(BUILDORPASS);
         g.getCell(0, 0).setBuilder(null);
-        g.getCell(0, 0).mustSetHeight(BuildingType.TOP);
+        TestUtilities.mustSetHeight(g.getCell(0, 0), BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> p1.checkConditions(null));
         Assertions.assertEquals(BUILDORPASS, p1.getState());
     }

@@ -9,6 +9,7 @@ import it.polimi.ingsw.Network.GameInitializer;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.ServerMain;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -198,12 +199,10 @@ class MainControllerTest {
         players.add(player2);
 
         gameTable.setPlayers(players);
-        Method m = Cell.class.getDeclaredMethod("mustSetHeight", BuildingType.class);
-        m.setAccessible(true);
         Cell c = gameTable.getCell(0, 0);
         Cell c4 = gameTable.getCell(1, 1);
-        m.invoke(c, BuildingType.TOP);
-        m.invoke(c4, BuildingType.MIDDLE);
+        TestUtilities.mustSetHeight(c, BuildingType.TOP);
+        TestUtilities.mustSetHeight(c4, BuildingType.MIDDLE);
         c.setBuilder(null);
         News news5 = new News("MOVE", c2);
         String stringa;

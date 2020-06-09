@@ -2,6 +2,7 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.TestUtilities;
 import it.polimi.ingsw.Utility.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -88,7 +89,7 @@ class CellTest {
     void mustSetHeight() {
         GameTable g = new GameTable(2);
         Cell c = new Cell(4, 4, g);
-        c.mustSetHeight(BASE);
+        TestUtilities.mustSetHeight(c, BASE);
         assertEquals(c.getHeight(), BASE);
     }
 
@@ -101,7 +102,7 @@ class CellTest {
         Builder b = new Prometheus(c1, new Player("g", g, (SocketClientConnection) null));
         c.setHeight(b, BASE);
         assertEquals(c.getHeight(), BASE);
-        c.mustSetHeight(NONE);
+        TestUtilities.mustSetHeight(c, NONE);
         new Apollo(c, p1);
         assertThrows(InvalidBuildException.class, () -> {
             c.setHeight(b, BASE);
