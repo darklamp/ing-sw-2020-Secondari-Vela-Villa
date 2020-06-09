@@ -55,19 +55,24 @@
                                 <Insets bottom="50.0" left="50.0" right="100.0" top="50.0" />
                             </GridPane.margin>
                         </ProgressBar>
-                  <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="200.0" visible="true" GridPane.rowIndex="2">
+                  <Button fx:id="infoB" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="54.0" prefWidth="88.0" visible="true" GridPane.rowIndex="2">
                      <GridPane.margin>
-                        <Insets bottom="40.0" left="40.0" />
+                        <Insets bottom="35.0" left="85.0" top="40.0" />
                      </GridPane.margin>
-                  </Button>
-                  <ImageView fx:id="infoButton" cache="true" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets bottom="40.0" left="40.0" />
-                     </GridPane.margin>
+                     <graphic>
+                        <ImageView fx:id="infoButton" cache="true" fitHeight="53.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
-                  </ImageView>
+                     <opaqueInsets>
+                        <Insets top="70.0" />
+                     </opaqueInsets>
+                  </Button>
                     </children>
                 </GridPane>
                 <GridPane alignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">

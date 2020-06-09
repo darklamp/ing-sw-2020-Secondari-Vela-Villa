@@ -57,8 +57,8 @@ public class MainWindowController extends WindowController implements Initializa
     ProgressBar timerBar;
     @FXML
     ImageView godImage, infoButton;
-   // @FXML
-    //Button infoButton;
+    @FXML
+    Button infoB;
 
     private static Timeline timeline;
     private static CellView[][] lastTable;
@@ -117,12 +117,6 @@ public class MainWindowController extends WindowController implements Initializa
         if (parts2.getChildren().size() != 0) parts2.getChildren().clear();
         if (parts3.getChildren().size() != 0) parts3.getChildren().clear();
     }
-
-    /*private void infoButton(){
-        infoButton.setGraphic(new ImageView(info));
-        infoButton.setVisible(true);
-    }
-    */
 
     private void setTimerBar() {
         newTurn = false;
@@ -185,6 +179,7 @@ public class MainWindowController extends WindowController implements Initializa
             infoButton.setImage(new Image("/images/infoButton.png"));
             infoButton.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(infoButton.getImage().getHeight() / (3.75 * 1080 / MAX_HEIGHT)));
             infoButton.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(infoButton.getImage().getWidth() / (3.75 * 1920 / MAX_WIDTH)));
+            infoB.setOnAction(event -> setText("Ale gay"));
         }
         s1.append("Current turn: ");
         TEXT_COLOR.set("papayawhip");
