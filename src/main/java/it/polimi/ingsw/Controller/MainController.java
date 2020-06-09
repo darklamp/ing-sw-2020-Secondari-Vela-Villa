@@ -75,6 +75,7 @@ public class MainController implements PropertyChangeListener {
                         }
                         case "BUILD" -> buildController.handleBuild(news);
                         case "MOVE" -> moveController.handleMove(news);
+                        /* note : the "default" case should never be met, since the isLegalState function has already filtered the news out */
                         default -> throw new IllegalTurnStateException();
                     }
                     if (ServerMain.persistence()) saveGameState();
