@@ -191,6 +191,7 @@ public class Player implements Serializable {
         ArrayList<Builder> builderList = new ArrayList<>();
         if (builder == null) { //player is building before moving: must check both builders
             builders = 2;
+            builderList = this.builderList;
         } else {
             builderList.add(builder);
         }
@@ -214,6 +215,7 @@ public class Player implements Serializable {
         ArrayList<Builder> builderList = new ArrayList<>();
         if (builder == null) { //player is building before moving: must check both builders
             builders = 2;
+            builderList = this.builderList;
         } else {
             builderList.add(builder);
         }
