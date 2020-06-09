@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
@@ -117,7 +116,7 @@ public class GameTable implements Serializable {
                 while (!exit) {
                     try {
                         //noinspection BusyWait
-                        sleep(TimeUnit.MINUTES.toMillis(Server.getMoveTimer()));
+                        sleep(Server.getMoveTimer());
                         exit = true;
                     } catch (InterruptedException ignored) {
                     }
@@ -178,12 +177,26 @@ public class GameTable implements Serializable {
      * Clears up game instance.
      */
     synchronized public void closeGame() {
-        for (Player p : players) {
+        Player p = players.get(0);
+        try {
+            while (true) {
+                try {
+                    removePlayer(p, false);
+                } catch (NoMoreMovesException ignored) {
+                } finally {
+                    p = players.get(0);
+                }
+            }
+        } catch (IndexOutOfBoundsException ignored) {
+        }
+
+
+      /*  for (Player p : players) {
             try {
                 removePlayer(p, false);
             } catch (NoMoreMovesException ignored) {
             }
-        }
+        }*/
     }
 
 

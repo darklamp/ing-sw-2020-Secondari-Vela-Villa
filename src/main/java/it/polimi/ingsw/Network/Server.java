@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
     private ServerSocket serverSocket;
@@ -42,14 +43,15 @@ public class Server {
      **/
     private static int currentGameIndex = 0;
 
-    public static short getMoveTimer() {
-        return moveTimer;
+    public static long getMoveTimer() {
+        return moveTimerTimeUnit.toMillis(moveTimer);
     }
 
     /**
      * index of game currently in the process of being created; eg: if it's set to 1 it means game 0 is already started / finished, while game 1 is being made
      **/
-    private final static short moveTimer = 2;
+    private static short moveTimer = 2;
+    private static TimeUnit moveTimerTimeUnit = TimeUnit.MINUTES;
 
     public synchronized static int getCurrentGameIndex() {
         return currentGameIndex;

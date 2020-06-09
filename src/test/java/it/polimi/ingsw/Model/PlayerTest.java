@@ -132,8 +132,7 @@ class  PlayerTest {
         Player p1 = new Player("asd", g, new SocketClientConnection(null, null));
         g.addPlayer(p1);
         Assertions.assertThrows(NickAlreadyTakenException.class, () -> new Player("asd", g, new SocketClientConnection(null, null)));
-        Assertions.assertThrows(NickAlreadyTakenException.class, () -> new Player("asd", g, new SocketClientConnection(null, null)));
-
+        Assertions.assertThrows(NickAlreadyTakenException.class, () -> new Player("asd", g, "asdasd"));
 
     }
 
