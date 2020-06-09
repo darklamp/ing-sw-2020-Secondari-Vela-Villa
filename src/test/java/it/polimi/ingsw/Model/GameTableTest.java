@@ -187,7 +187,7 @@ class GameTableTest {
         gameTable.setPlayers(players);
         gameTable.setCurrentBuilder(player2.getBuilderList().get(0));
 
-        gameTable.removePlayer(player3, true);
+        gameTable.removePlayer(player2, true);
         int currentPlayer = TestUtilities.getAccessibleField("currentPlayer", gameTable);
         assertEquals(1, currentPlayer);
     }
@@ -244,6 +244,53 @@ class GameTableTest {
         player1.initBuilderList(g.getCell(2, 3));
         c.setPlayer(player1);
         assertEquals(g.getCell(2, 2), g.getCell(c));
+    }
+
+    @Test
+    public void getPlayerIndexTest() throws Exception {
+        GameTable gameTable = new GameTable(3);
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        choices.add(3);
+        SocketClientConnection c1 = new SocketClientConnection(new Socket(), null);
+        SocketClientConnection c2 = new SocketClientConnection(new Socket(), null);
+        SocketClientConnection c3 = new SocketClientConnection(new Socket(), null);
+
+
+        Player player1 = new Player("gigi", gameTable, c1);
+        Player player2 = new Player("gigi2", gameTable, c2);
+        Player player3 = new Player("gigi3", gameTable, c3);
+        Player player4 = new Player("gigi4", gameTable, c3);
+
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        c3.setPlayer(player3);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        player3.setGod(choices.get(2));
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+            player3.initBuilderList(gameTable.getCell(4, 2));
+            player3.initBuilderList(gameTable.getCell(4, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        players.add(player3);
+        gameTable.setPlayers(players);
+        // gameTable.setCurrentBuilder(player2.getBuilderList().get(0));
+        assert gameTable.getPlayerIndex(player1) == 0;
+        assert gameTable.getPlayerIndex(player2) == 1;
+        assert gameTable.getPlayerIndex(player3) == 2;
+        assert gameTable.getPlayerIndex(player4) == -1;
+
+
     }
 
     @Test
