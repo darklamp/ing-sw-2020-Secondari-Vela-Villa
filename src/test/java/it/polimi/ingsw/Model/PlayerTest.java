@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
@@ -120,6 +121,19 @@ class  PlayerTest {
         Player p1 = new Player("Giggino", g, "HEPHAESTUS");
         p1.setConnection(c);
         assert p1.getConnection() == c;
+
+    }
+
+    @Test
+    void constructorTest1() throws Exception {
+        Assertions.assertThrows(NullPointerException.class, () -> new Player("ASD", null, new SocketClientConnection(null, null)));
+        Assertions.assertThrows(NullPointerException.class, () -> new Player("ASD", null, "ASDASD"));
+        GameTable g = new GameTable(2);
+        Player p1 = new Player("asd", g, new SocketClientConnection(null, null));
+        g.addPlayer(p1);
+        Assertions.assertThrows(NickAlreadyTakenException.class, () -> new Player("asd", g, new SocketClientConnection(null, null)));
+        Assertions.assertThrows(NickAlreadyTakenException.class, () -> new Player("asd", g, new SocketClientConnection(null, null)));
+
 
     }
 

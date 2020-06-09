@@ -79,8 +79,10 @@ class BuilderTest {
             b2.isValidBuild(c4, MIDDLE); //nella cella c4 c'è una TOP quindi ci si può mettere solo una dome sopra,sennò parte eccezione
         });
         Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b2.isValidBuild(c4,BuildingType.TOP); //nella cella c4 c'è una TOP quindi ci si può mettere solo una dome sopra,sennò parte eccezione
+            b2.isValidBuild(c4, BuildingType.TOP); //nella cella c4 c'è una TOP quindi ci si può mettere solo una dome sopra,sennò parte eccezione
         });
+        TestUtilities.mustSetHeight(c4, TOP);
+        Assertions.assertThrows(InvalidBuildException.class, () -> b2.isValidBuild(c4, BuildingType.TOP));
     }
 
     @Test
@@ -191,7 +193,6 @@ class BuilderTest {
      * Checks that, if a player is is the BUILD state and he has available build moves,
      * but those moves are god-specific moves, the {@link Builder#hasAvailableBuilds()} method
      * returns true --> it enters the "Exception" branch
-     * NB: this case doesn't happen with the current gods, hence the lines are marked as untested.
      *
      * @throws Exception aa
      */
@@ -205,6 +206,7 @@ class BuilderTest {
         TestUtilities.mustSetHeight(g.getCell(1, 0), BuildingType.DOME);
         TestUtilities.mustSetHeight(g.getCell(1, 1), BuildingType.DOME);
         TestUtilities.mustSetHeight(g.getCell(1, 2), BuildingType.DOME);
+        TestUtilities.mustSetHeight(g.getCell(0, 2), BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> p1.checkConditions(null));
         assert p1.getState() == BUILD;
     }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.Model.BuildingType.*;
@@ -22,7 +21,7 @@ class BuildingTypeTest {
         b = DOME;
 
         BuildingType finalB = b;
-        assertThrows(InvalidBuildException.class, finalB::getNext);
+        assertThrows(IllegalArgumentException.class, finalB::getNext);
     }
 
     @Test

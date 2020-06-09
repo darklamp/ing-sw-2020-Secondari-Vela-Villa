@@ -24,15 +24,10 @@ public class Minotaur extends Builder {
     void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
         super.isValidMove(finalPoint);
         if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
-            try {
-                if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer())
-                    throw new MinotaurException(getCellBehind(finalPoint));
-                else throw new InvalidMoveException();
-            } catch (InvalidCoordinateException e) {
-                throw new InvalidMoveException();
-            }
-        }
-            else super.verifyMove(finalPoint);
+            if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer())
+                throw new MinotaurException(getCellBehind(finalPoint));
+            else throw new InvalidMoveException();
+        } else super.verifyMove(finalPoint);
     }
 
     /**
@@ -42,39 +37,38 @@ public class Minotaur extends Builder {
      * @return true if the cell behind the occupied one is empty and valid; else false
      * @throws InvalidCoordinateException if the given cell is invalid
      */
-    boolean checkEmptyCellBehind(Cell finalPoint) throws InvalidCoordinateException {
+    boolean checkEmptyCellBehind(Cell finalPoint) throws InvalidMoveException {
         int diffY = finalPoint.getRow() - this.getPosition().getRow();
         int diffX = finalPoint.getColumn() - this.getPosition().getColumn();
-        if (diffY == 1) {
-            if (diffX == 1) {
-                return finalPoint.getRow() != 4 && finalPoint.getColumn() != 4 && finalPoint.movableCell(finalPoint.getRow() + 1, finalPoint.getColumn() + 1); //OK
-            } else if (diffX == -1) {
-                return finalPoint.getRow() != 4 && finalPoint.getColumn() != 0 && finalPoint.movableCell(finalPoint.getRow() + 1, finalPoint.getColumn() - 1); //OK
-            }
-                else {
+        try {
+            if (diffY == 1) {
+                if (diffX == 1) {
+                    return finalPoint.getRow() != 4 && finalPoint.getColumn() != 4 && finalPoint.movableCell(finalPoint.getRow() + 1, finalPoint.getColumn() + 1); //OK
+                } else if (diffX == -1) {
+                    return finalPoint.getRow() != 4 && finalPoint.getColumn() != 0 && finalPoint.movableCell(finalPoint.getRow() + 1, finalPoint.getColumn() - 1); //OK
+                } else {
                     return finalPoint.getRow() != 4 && finalPoint.movableCell(finalPoint.getRow() + 1, finalPoint.getColumn()); //OK
                 }
-            }
-            else if (diffY == -1){
+            } else if (diffY == -1) {
                 if (diffX == 1) {
                     return finalPoint.getRow() != 0 && finalPoint.getColumn() != 4 && finalPoint.movableCell(finalPoint.getRow() - 1, finalPoint.getColumn() + 1); //OK
-                }
-                else if (diffX == -1) {
+                } else if (diffX == -1) {
                     return finalPoint.getRow() != 0 && finalPoint.getColumn() != 0 && finalPoint.movableCell(finalPoint.getRow() - 1, finalPoint.getColumn() - 1); //OK
-                }
-                else {
+                } else {
                     return finalPoint.getRow() != 0 && finalPoint.movableCell(finalPoint.getRow() - 1, finalPoint.getColumn()); //OK
                 }
-            }
-            else {
+            } else {
                 if (diffX == 1) {
                     return finalPoint.getColumn() != 4 && finalPoint.movableCell(finalPoint.getRow(), finalPoint.getColumn() + 1); //OK
-                }
-                else if (diffX == -1) {
+                } else if (diffX == -1) {
                     return finalPoint.getColumn() != 0 && finalPoint.movableCell(finalPoint.getRow(), finalPoint.getColumn() - 1); //OK
                 }
                 return false;
             }
+        } catch (InvalidCoordinateException e) {
+            throw new InvalidMoveException();
+        }
+
     }
 
     /**

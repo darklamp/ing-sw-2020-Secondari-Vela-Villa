@@ -12,13 +12,13 @@ public enum BuildingType {
      * @return next building level if not dome, otherwise throws.
      * @throws InvalidBuildException in case a DOME gets passed.
      */
-    public BuildingType getNext() throws InvalidBuildException {
+    public BuildingType getNext() throws IllegalArgumentException {
         return switch (this) {
             case NONE -> BASE;
             case BASE -> MIDDLE;
             case MIDDLE -> TOP;
             case TOP -> DOME;
-            default -> throw new InvalidBuildException();
+            default -> throw new IllegalArgumentException();
         };
     }
 
