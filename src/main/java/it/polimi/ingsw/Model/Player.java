@@ -227,7 +227,7 @@ public class Player implements Serializable {
         if (b1) firstTime = true;
     }
 
-    ArrayList<Builder> getBuilderList() {
+    public ArrayList<Builder> getBuilderList() {
         return this.builderList;
     }
 

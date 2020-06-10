@@ -3,6 +3,7 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Cell;
 import it.polimi.ingsw.Model.News;
+import it.polimi.ingsw.Network.Messages.GameStateMessage;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.CellView;
@@ -19,6 +20,7 @@ import static it.polimi.ingsw.Client.ClientState.*;
 public class Bot extends SocketClientConnection {
 
     public Bot() {
+        super(null, null);
         try {
             pythonSocket = new Socket("localhost", 13337);
             pr = pythonSocket.getOutputStream();
@@ -27,8 +29,6 @@ public class Bot extends SocketClientConnection {
             e.printStackTrace();
         }
     }
-
-    ;
 
     private StringBuilder toSend = new StringBuilder();
     private String receive;

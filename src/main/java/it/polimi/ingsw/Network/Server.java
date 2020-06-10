@@ -1,12 +1,18 @@
 package it.polimi.ingsw.Network;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Controller.MainController;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
+import it.polimi.ingsw.Network.Messages.GameStateMessage;
 import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
+import it.polimi.ingsw.View.RemoteView;
+import it.polimi.ingsw.View.View;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -314,6 +320,63 @@ public class Server {
                 }
             }
         }).start();
+    }
+
+    public synchronized void lobbyBot(SocketClientConnection c, String name) throws NickAlreadyTakenException {
+        System.out.println("nome è " + name);
+        ArrayList<SocketClientConnection> temp = new ArrayList<>();
+        temp.add(c);
+        Bot bot = new Bot();
+        temp.add(bot);
+        gameList.put(getCurrentGameIndex(), temp);
+        ArrayList<Integer> gods = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            gods.add(i);
+        }
+        GameTable gameTable = new GameTable(2);
+        MainController controller = new MainController(gameTable);
+        Player player1 = new Player("temp", gameTable, c);
+        c.setPlayer(player1);
+        Player player2 = new Player("bot", gameTable, bot);
+        bot.setPlayer(player2);
+        player1.setGod(0);
+        player2.setGod(7);
+        try {
+            player1.initBuilderList(gameTable.getCell(0, 2));
+            player1.initBuilderList(gameTable.getCell(4, 2));
+            player2.initBuilderList(gameTable.getCell(2, 0));
+            player2.initBuilderList(gameTable.getCell(2, 4));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            if (ServerMain.verbose()) e.printStackTrace();
+        }
+        View player1View = new RemoteView(player1, c, gameTable);
+        View player2View = new RemoteView(player2, bot, gameTable);
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player2);
+        players.add(player1);
+        player1.setState(ClientState.MOVE);
+        player2.setState(ClientState.WAIT);
+        gameTable.setPlayers(players);
+        gameTable.addPropertyChangeListener(player1View);
+        gameTable.addPropertyChangeListener(player2View);
+        player1View.addPropertyChangeListener(controller);
+        player2View.addPropertyChangeListener(controller);
+        c.setReady();
+        bot.setReady();
+        c.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + players.size() + "@@@" + gameTable.getGameIndex());
+        GameStateMessage message = gameTable.getGameState();
+        c.send(message);
+        bot.send(message);
+        c.send(gameTable.getBoardCopy());
+        bot.send(gameTable.getBoardCopy());
+        gameTable.resetMoveTimer();
+        gameControllers.put(getCurrentGameIndex(), controller);
+        ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
+        playingConnections.add(c);
+        playingConnections.add(bot);
+        gameList.put(getCurrentGameIndex(), playingConnections);
+        waitingConnection.clear();
+        currentGameIndex += 1;
     }
 
 }

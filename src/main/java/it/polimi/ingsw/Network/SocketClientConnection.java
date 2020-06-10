@@ -270,6 +270,9 @@ public class SocketClientConnection implements Runnable {
                 send(ServerMessage.reloadGameChoice);
             } else send(ServerMessage.welcomeNoPersistence);
             String read = in.nextLine();
+            if (read.equals("B")) {
+                server.lobbyBot(this, "test");
+            }
             if (ServerMain.persistence() && read.equals("R")) {
                 send("Please enter game number: ");
                 int gameNumber = 0;
@@ -326,7 +329,7 @@ public class SocketClientConnection implements Runnable {
         }
     }
 
-    private void setNews(News news, String type) {
+    void setNews(News news, String type) {
         support.firePropertyChange(type, this.news, news);
         this.news = news;
     }
