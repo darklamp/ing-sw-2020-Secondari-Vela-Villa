@@ -38,7 +38,7 @@ public class CLI implements Ui {
             setTimer(m.getMoveTimer());
             Client.setGod(m.getGod(Client.getPlayerIndex()));
             Client.setGods(m.getGod(0), m.getGod(1), m.getGod(2));
-            System.out.println("Your game's number is: " + m.getGameIndex() + ". Keep it in case server goes down.");
+            System.out.println("\n\n\n\n\n\nYour game's number is: " + m.getGameIndex() + ". Keep it in case server goes down.");
             System.out.println("This game's move timer allows " + m.getMoveTimer() / 1000 + " seconds per move.");
 
         } else if (input instanceof ErrorMessage) {
