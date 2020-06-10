@@ -195,6 +195,7 @@ public class MainWindowController extends WindowController implements Initializa
                     Scene s2 = new Scene(root);
                     Stage stage1 = new Stage();
                     stage1.setScene(s2);
+                    stage1.getIcons().add(GUIClient.getAppIcon());
                     stage1.show();
                 } catch (IOException e) {
                     e.printStackTrace();
