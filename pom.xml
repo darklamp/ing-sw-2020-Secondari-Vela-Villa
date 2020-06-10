@@ -10,13 +10,7 @@
 
     <name>GC46</name>
     <url>https://www.github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa</url>
-         
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>14</maven.compiler.release>
-        <maven.compiler.target>14</maven.compiler.target>
-        <!--<argLine>'-splash:/home/ale/Documents/Projects/Java/Progetto\ IngSW/ing-sw-2020-Secondari-Vela-Villa/src/main/resources/images/SantoriniBoard.png'</argLine>-->
-    </properties>
+
 
 
      <properties>
