@@ -4,6 +4,7 @@ import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.Model.Exceptions.PrometheusException;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -47,10 +48,10 @@ class PrometheusTest {
         b1.setPosition(c3);
         b1.isValidMove(c2);
         p1.setState(ClientState.MOVE);
-        c1.mustSetHeight(BuildingType.BASE);
-        c3.mustSetHeight(BuildingType.NONE);
+        TestUtilities.mustSetHeight(c1, BuildingType.BASE);
+        TestUtilities.mustSetHeight(c3, BuildingType.NONE);
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c1));
-        c1.mustSetHeight(BuildingType.NONE);
+        TestUtilities.mustSetHeight(c1, BuildingType.NONE);
         Assertions.assertDoesNotThrow(() -> b1.isValidMove(c1));
     }
 }

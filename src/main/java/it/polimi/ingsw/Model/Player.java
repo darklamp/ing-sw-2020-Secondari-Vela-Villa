@@ -4,7 +4,7 @@ import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
-import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 
 import java.io.Serializable;
@@ -185,12 +185,13 @@ public class Player implements Serializable {
      *
      * @see NoMoreMovesException
      */
-    public final void checkMovePreConditions(Builder builder) throws NoMoreMovesException {
+    private void checkMovePreConditions(Builder builder) throws NoMoreMovesException {
         int builders = 1;
         boolean b1 = firstTime;
         ArrayList<Builder> builderList = new ArrayList<>();
         if (builder == null) { //player is building before moving: must check both builders
             builders = 2;
+            builderList = this.builderList;
         } else {
             builderList.add(builder);
         }
@@ -208,12 +209,13 @@ public class Player implements Serializable {
      *
      * @see NoMoreMovesException
      */
-    public final void checkBuildPreConditions(Builder builder) throws NoMoreMovesException {
+    private void checkBuildPreConditions(Builder builder) throws NoMoreMovesException {
         int builders = 1;
         boolean b1 = firstTime;
         ArrayList<Builder> builderList = new ArrayList<>();
         if (builder == null) { //player is building before moving: must check both builders
             builders = 2;
+            builderList = this.builderList;
         } else {
             builderList.add(builder);
         }
@@ -239,7 +241,6 @@ public class Player implements Serializable {
 
     synchronized void kick(int pIndex) {
         gameTable.setNews(new News(ServerMessage.connClosed + "@@@" + pIndex, null), "PLAYERKICKED");
-        this.connection.send(ServerMessage.gameLost);
-        this.connection.closeConnection();
+        this.connection.gracefullyCloseConnection();
     }
 }

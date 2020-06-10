@@ -4,6 +4,7 @@ import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
@@ -104,8 +105,7 @@ public abstract class Builder implements Serializable {
      */
     protected void verifyBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
 
-        if (newheight.compareTo(cell.getHeight()) <= 0) throw new InvalidBuildException();
-        else if (newheight.compareTo(cell.getHeight()) >= 2) throw new InvalidBuildException();
+        if (newheight.compareTo(cell.getHeight()) != 1) throw new InvalidBuildException();
 
     }
 
@@ -196,15 +196,24 @@ public abstract class Builder implements Serializable {
      * @return true if there's at least a valid build to be made.
      */
     boolean hasAvailableBuilds() {
+        AtomicReference<BuildingType> b = new AtomicReference<>();
         return this.position.getNear().stream().anyMatch(c -> {
-            try {
-                isValidBuild(c, c.getHeight().getNext());
-                return true;
-            } catch (InvalidBuildException e) {
-                return false;
-            } catch (Exception e) {
-                return true;
-            }
+            b.set(c.getHeight());
+            do {
+                try {
+                    isValidBuild(c, b.get().getNext());
+                    return true;
+                } catch (InvalidBuildException | IllegalArgumentException ignored) {
+                } catch (Exception e) {
+                    return true;
+                }
+                try {
+                    b.set(b.get().getNext());
+                } catch (IllegalArgumentException e) {
+                    return false;
+                }
+            } while (b.get() != BuildingType.DOME);
+            return false;
         });
     }
 

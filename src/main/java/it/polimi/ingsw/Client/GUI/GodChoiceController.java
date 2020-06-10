@@ -21,7 +21,19 @@ public class GodChoiceController extends WindowController {
     AnchorPane godChoicePane;
 
     private static Image god1, god2, god3;
+    private static Image[] godCards = new Image[Client.completeGodList.size()];
+
+    static {
+        for (int i = 1; i < Client.completeGodList.size() + 1; i++) {
+            godCards[i - 1] = new Image("/images/GodCards/" + i + ".png");
+        }
+    }
+
     private static int i1, i2, i3;
+
+    static Image getGodCard(int i) {
+        return godCards[i];
+    }
 
     void parseGodChoice(String input) {
         String[] inputs = input.split("@@@");
@@ -40,24 +52,6 @@ public class GodChoiceController extends WindowController {
             i3 = choices.get(2);
         }
         godCard.setImage(god1);
-        /*
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
-        dialog.setTitle("Initializing game");
-        dialog.setHeaderText("God choice");
-        dialog.setContentText(ServerMessage.nextChoice);
-        Optional<String> result = dialog.showAndWait();
-        while (true) {
-            if (result.isPresent()) {
-                if (!choices.contains(result.get())) {
-                    result = dialog.showAndWait();
-                } else {
-                    GUIClient.setOut(String.valueOf(Client.completeGodList.indexOf(result.get())));
-                    break;
-                }
-            } else {
-                result = dialog.showAndWait();
-            }
-        }*/
     }
 
     @FXML

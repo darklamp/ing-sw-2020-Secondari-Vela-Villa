@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Pair;
 
@@ -79,9 +80,7 @@ public class SocketClientConnection implements Runnable {
             out.reset();
             out.writeObject(message);
             out.flush();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        } catch (NullPointerException ignored) {
+        } catch (IOException | NullPointerException ignored) {
         }
 
     }
@@ -91,13 +90,22 @@ public class SocketClientConnection implements Runnable {
      */
     public synchronized void closeConnection() {
         try {
-            send(ServerMessage.connClosed);
+            if (!graceful) {
+                send(ServerMessage.connClosed);
+            }
             socket.close();
             this.close();
         } catch (IOException e) {
             System.err.println("Error while closing socket!");
         }
         active = false;
+    }
+
+    private boolean graceful = false;
+
+    public synchronized void gracefullyCloseConnection() {
+        graceful = true;
+        closeConnection();
     }
 
     /**
@@ -111,19 +119,20 @@ public class SocketClientConnection implements Runnable {
 
     /**
      * Asks for builder coordinates
+     *
      * @param choices list of previously chosen coordinates
      * @return pair of chosen coordinates
      */
-    public synchronized Pair getBuilderChoice(ArrayList<Pair> choices){
+    synchronized Pair getBuilderChoice(ArrayList<Pair> choices) {
         Pair out;
-        int c,r; //sia righe che colonne vanno da 0 a 4 compresi
+        int c, r; //sia righe che colonne vanno da 0 a 4 compresi
         Scanner in = null;
         try {
             in = new Scanner(socket.getInputStream());
         } catch (IOException e) {
             if (ServerMain.verbose()) e.printStackTrace();
         }
-        while(true){
+        while (true) {
             assert in != null;
             send("[CHOICE]@@@POS");
             while(true) {
@@ -156,15 +165,15 @@ public class SocketClientConnection implements Runnable {
 
     /**
      * Asks for god choice
+     *
      * @param gods list of previously choosen by the first player
      * @return integer index of the choosen god
      */
-    public synchronized int getGodChoice(ArrayList<Integer> gods){
+    synchronized int getGodChoice(ArrayList<Integer> gods) {
         StringBuilder s = new StringBuilder();
         s.append("[CHOICE]@@@");
         for (Integer god : gods) {
             s.append(god).append("@@@");
-            //send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
         }
         send(s.toString());
         Scanner in = null;
@@ -267,7 +276,7 @@ public class SocketClientConnection implements Runnable {
                 try {
                     gameNumber = Integer.parseInt(in.nextLine());
                 } catch (NumberFormatException e) {
-                    send("[ERROR]@@@Invalid number!");
+                    send(ServerMessage.invalidNumber);
                     closeConnection();
                 }
                 send("Please enter your previous nickname: ");
@@ -302,18 +311,22 @@ public class SocketClientConnection implements Runnable {
                 }
             }
         } catch (NoSuchElementException e) {
-            System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game...");
-            setNews(new News(null, this), "ABORT");
+            if (!graceful) {
+                System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game...");
+                setNews(new News(null, this), "ABORT");
+            }
         } catch (Exception e) {
-            System.err.println("Exception thrown in SocketClientConnection. Closing game...");
-            if (ServerMain.verbose()) e.printStackTrace();
-            setNews(new News(null, this), "ABORT");
+            if (!graceful) {
+                System.err.println("Exception thrown in SocketClientConnection. Closing game...");
+                if (ServerMain.verbose()) e.printStackTrace();
+                setNews(new News(null, this), "ABORT");
+            }
         } finally {
             closeConnection();
         }
     }
 
-    public void setNews(News news, String type) {
+    private void setNews(News news, String type) {
         support.firePropertyChange(type, this.news, news);
         this.news = news;
     }

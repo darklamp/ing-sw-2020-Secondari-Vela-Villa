@@ -12,9 +12,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
@@ -29,6 +32,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +60,9 @@ public class MainWindowController extends WindowController implements Initializa
     @FXML
     ProgressBar timerBar;
     @FXML
-    ImageView godImage;
+    ImageView godImage, infoButton;
+    @FXML
+    Button infoB;
 
     private static Timeline timeline;
     private static CellView[][] lastTable;
@@ -80,12 +86,16 @@ public class MainWindowController extends WindowController implements Initializa
     private static final Image builderImage2 = new Image("/images/builder2.png");
     private static final Image builderImage3 = new Image("/images/builder3.png");
 
+    static Image getBuilderImage(int i) {
+        return i == 1 ? builderImage1 : (i == 2 ? builderImage2 : builderImage3);
+    }
 
     private final static Image baseBuildingImage = new Image("/images/buildingBase.png");
     private final static Image middleBuildingImage = new Image("/images/buildingMiddle.png");
     private final static Image topBuildingImage = new Image("/images/buildingTop.png");
     private final static Image domeBuildingImage = new Image("/images/buildingDome.png");
 
+    private final static Image info = new Image("/images/infoButton.png");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -121,12 +131,12 @@ public class MainWindowController extends WindowController implements Initializa
         timerBar.setStyle("-fx-background-color: transparent;");
         timeline = new Timeline(60,
                 new KeyFrame(Duration.ZERO, new KeyValue(timerBar.progressProperty(), 0)),
-                new KeyFrame(Duration.seconds(90), e -> {
+                new KeyFrame(Duration.millis(Client.getGameTimer() * 0.75), e -> {
                     textArea1.setText("\nHurry up! Time's about to finish.");
                     TEXT_COLOR.set("red");
                     timerBar.setStyle("-fx-accent: red;");
                 }, new KeyValue(timerBar.progressProperty(), 0.75)),
-                new KeyFrame(Duration.seconds(120), e -> {
+                new KeyFrame(Duration.millis(Client.getGameTimer()), e -> {
                     textArea1.setText("Time's up!");
                     TEXT_COLOR.set("red");
                     timerBar.setStyle("-fx-accent: red;");
@@ -134,9 +144,7 @@ public class MainWindowController extends WindowController implements Initializa
         );
         timeline.setCycleCount(1);
         timeline.play();
-        timeline.setOnFinished(e -> {
-            timeline.stop();
-        });
+        timeline.setOnFinished(e -> timeline.stop());
     }
 
     @Override
@@ -173,6 +181,24 @@ public class MainWindowController extends WindowController implements Initializa
             godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
             godImage.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(godImage.getImage().getHeight() / (3.75 * 1080 / MAX_HEIGHT)));
             godImage.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(godImage.getImage().getWidth() / (3.75 * 1920 / MAX_WIDTH)));
+            infoButton.setImage(new Image("/images/infoButton.png"));
+            infoButton.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(infoButton.getImage().getHeight() / (3.75 * 1080 / MAX_HEIGHT)));
+            infoButton.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(infoButton.getImage().getWidth() / (3.75 * 1920 / MAX_WIDTH)));
+            infoB.setOnAction(event -> {
+                FXMLLoader loader = new FXMLLoader(getClass()
+                        .getResource("/InfoBox.fxml"));
+                Parent root;
+                try {
+                    root = loader.load();
+                    Scene s2 = new Scene(root);
+                    Stage stage1 = new Stage();
+                    stage1.setScene(s2);
+                    stage1.getIcons().add(GUIClient.getAppIcon());
+                    stage1.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         s1.append("Current turn: ");
         TEXT_COLOR.set("papayawhip");
@@ -606,5 +632,6 @@ public class MainWindowController extends WindowController implements Initializa
         b.getGraphic().setVisible(false);
         b.toFront();
     }
+
 
 }

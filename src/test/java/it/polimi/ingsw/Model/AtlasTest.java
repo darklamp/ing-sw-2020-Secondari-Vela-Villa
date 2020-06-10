@@ -3,6 +3,7 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Model.Exceptions.AtlasException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,11 +26,11 @@ class AtlasTest {
         Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c2, BuildingType.DOME));
         Cell c3 = g.getCell(3, 3);
         Assertions.assertThrows(AtlasException.class, () -> b1.isValidBuild(c3, BuildingType.DOME));
-        c3.mustSetHeight(BuildingType.DOME);
+        TestUtilities.mustSetHeight(c3, BuildingType.DOME);
         Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c3, BuildingType.DOME));
         Cell c4 = g.getCell(4, 2);
         Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c4, BuildingType.BASE));
-        c3.mustSetHeight(BuildingType.BASE);
+        TestUtilities.mustSetHeight(c3, BuildingType.BASE);
         Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c3, BuildingType.MIDDLE));
     }
 

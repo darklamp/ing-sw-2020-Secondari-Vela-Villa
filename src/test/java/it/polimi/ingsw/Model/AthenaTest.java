@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +40,7 @@ public class AthenaTest {
         Cell c3 = g.getCell(3,4);
         Builder b1 = new Athena(c1,p1);
         Assertions.assertFalse(g.getAthenaMove());
-        c2.mustSetHeight(BuildingType.BASE);
+        TestUtilities.mustSetHeight(c2, BuildingType.BASE);
         b1.setPosition(c2);
         Assertions.assertTrue(g.getAthenaMove());
         b1.setPosition(c3);

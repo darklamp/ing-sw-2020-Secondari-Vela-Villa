@@ -3,6 +3,8 @@ package it.polimi.ingsw.Client.CLI;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.BuildingType;
+import it.polimi.ingsw.Network.Messages.InitMessage;
+import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.View.CellView;
 import org.junit.jupiter.api.Test;
 
@@ -70,11 +72,12 @@ class CLITest {
         Field c = Client.class.getDeclaredField("playersNumber");
         c.setAccessible(true);
         System.setOut(ps);
-        a.invoke(cli, "[INIT]@@@2@@@3");
+        Method d = CLI.class.getDeclaredMethod("process", Message.class);
+        d.invoke(cli, new InitMessage(2, 3, 1, 1, 2, 3));
         System.out.flush();
         System.setOut(old);
-        assertEquals((short) 2, b.get(cli));
-        assertEquals((short) 3, c.get(cli));
+        assertEquals(2, b.get(cli));
+        assertEquals(3, c.get(cli));
 
     }
 
@@ -107,17 +110,5 @@ class CLITest {
         System.out.flush();
         assertEquals(baos.toString(), "Please choose a cell to build on and which builder to use (x,y,b): " + endLineChar);
         baos.reset();
-        m.invoke(cli, ClientState.WIN);
-        System.out.flush();
-        assertEquals(baos.toString(), "Hurray! You won the game!" + endLineChar);
-        baos.reset();
-        m.invoke(cli, ClientState.LOSE);
-        System.out.flush();
-        assertEquals(baos.toString(), "Looks like you've lost the game." + endLineChar);
-        baos.reset();
-        m.invoke(cli, ClientState.BUILDORPASS);
-        System.out.flush();
-        assertEquals(baos.toString(), "You can choose whether to build(b) or pass(p). Please choose: " + endLineChar);
-
     }
 }

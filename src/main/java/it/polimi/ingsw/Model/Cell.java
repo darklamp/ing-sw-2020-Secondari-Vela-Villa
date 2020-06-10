@@ -38,14 +38,6 @@ public class Cell implements Serializable {
 
 
     /**
-     * Forces height on Cell without any check. Used in tests only, hence tagged as deprecated.
-     **/
-    @Deprecated
-    void mustSetHeight(BuildingType height) {
-        this.height = height;
-    }
-
-    /**
      * This function is responsible for setting a cell's height, which translates to building on a cell.
      *
      * @param builder represents the builder which is trying to build on the cell

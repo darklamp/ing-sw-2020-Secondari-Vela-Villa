@@ -1,9 +1,7 @@
 package it.polimi.ingsw.Client;
 
-import it.polimi.ingsw.Client.CLI.CLI;
-import it.polimi.ingsw.Network.GameStateMessage;
-import it.polimi.ingsw.Network.ServerMessage;
-import it.polimi.ingsw.Utility.Color;
+import it.polimi.ingsw.Network.Messages.GameStateMessage;
+import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.IOException;
@@ -27,11 +25,33 @@ public class Client implements Runnable {
 
     private static boolean debug = false;
 
+    public static int[] getGods() {
+        return gods;
+    }
+
+    public static void setGods(int god1, int god2, int god3) {
+        Client.gods[0] = god1;
+        Client.gods[1] = god2;
+        Client.gods[2] = god3;
+    }
+
+    private static long gameTimer;
+
+    public static void setTimer(long timer) {
+        Client.gameTimer = timer;
+    }
+
+    public static long getGameTimer() {
+        return gameTimer;
+    }
+
+    private static int[] gods = new int[3];
+
     public static int getPlayerIndex() {
         return playerIndex;
     }
 
-    public static void setPlayerIndex(short playerIndex) {
+    public static void setPlayerIndex(int playerIndex) {
         Client.playerIndex = playerIndex;
     }
 
@@ -39,10 +59,9 @@ public class Client implements Runnable {
         return playersNumber;
     }
 
-    public static void setPlayersNumber(short playersNumber) {
+    public static void setPlayersNumber(int playersNumber) {
         Client.playersNumber = playersNumber;
     }
-
 
     public static String getCurrentPlayer() {
         return currentPlayer;
@@ -56,9 +75,15 @@ public class Client implements Runnable {
         Client.god = god;
     }
 
-    private static short playerIndex, playersNumber;
+    private static int playerIndex, playersNumber;
 
     private static String currentPlayer;
+
+    public static GameStateMessage getLastStateMessage() {
+        return lastStateMessage;
+    }
+
+    private static GameStateMessage lastStateMessage;
 
     private static InetAddress ip;
 
@@ -106,50 +131,15 @@ public class Client implements Runnable {
                     Object inputObject = socketIn.readObject();
                     if (verbose()) System.out.println("[DEBUG] Recv input: " + inputObject.getClass());
                     if (inputObject instanceof String) {
-                        String s = (String) inputObject;
-                        if (s.equals(ServerMessage.abortMessage)) {
-                            ui.process("[ERROR]@@@Game aborted. Someone probably disconnected or timer ran out.");
-                            System.exit(0);
-                        } else if (s.equals(ServerMessage.serverDown)) {
-                            ui.process("[ERROR]@@@" + ServerMessage.serverDown);
-                            System.exit(0);
-                        } else if (s.contains(ServerMessage.connClosed)) {
-                            String[] inputs = s.split("@@@");
-                            if (inputs.length == 1) {
-                                System.err.println(Color.RESET + ServerMessage.connClosed);
-                                System.exit(0);
-                            } else {
-                                int pIndex = Integer.parseInt(inputs[1]);
-                                if (pIndex == playerIndex) {
-                                    ui.process(ServerMessage.gameLost);
-                                } else {
-                                    if (pIndex == 1) playerIndex = (short) (playerIndex == 0 ? 0 : 1);
-                                    else if (pIndex == 0) playerIndex -= 1;
-                                    ui.process("Player " + pIndex + " has lost!");
-                                    playersNumber -= 1;
-                                }
-                            }
-                        }
-                        else if (s.contains(ServerMessage.lastGod)) {
-                            String[] inputs = s.split("@@@");
-                            god = Integer.parseInt(inputs[1]);
-                            if (ui instanceof CLI) {
-                                ui.process("You're left with " + completeGodList.get(god));
-                            }
-                        } else ui.process((String) inputObject);
+                        ui.process((String) inputObject);
                     } else if (inputObject instanceof CellView[][]) {
                         ui.showTable((CellView[][]) inputObject);
-                    } else if (inputObject instanceof GameStateMessage) {
-                        GameStateMessage c = (GameStateMessage) inputObject;
-                        state = parse(c);
-                        ui.processTurnChange(state);
-                        if (state == ClientState.WIN || state == ClientState.LOSE) {
-                            if (ui instanceof CLI) {
-                                System.exit(0);
-                            }
-                        }
-                    } else {
-                        throw new IllegalArgumentException();
+                    } else if (inputObject instanceof Message) {
+                        if (inputObject instanceof GameStateMessage) {
+                            GameStateMessage c = (GameStateMessage) inputObject;
+                            state = parseState(c);
+                            ui.processTurnChange(state);
+                        } else ui.process((Message) inputObject);
                     }
                 }
             } catch (Exception e){
@@ -248,16 +238,16 @@ public class Client implements Runnable {
             Socket socket = new Socket(ip, port);
             socket.setPerformancePreferences(0, 1, 0);
             socket.setTcpNoDelay(true);
+            ui.process("Connection established");
+            Scanner stdin = new Scanner(System.in);
+            PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
+            ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
                     socket.close();
                 } catch (IOException ignored) {
                 }
             }));
-            ui.process("Connection established");
-            Scanner stdin = new Scanner(System.in);
-            PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
-            ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
             try {
                 Thread t0 = asyncReadFromSocket(socketIn);
                 Thread t1 = asyncWriteToSocket(stdin, socketOut);
@@ -280,7 +270,8 @@ public class Client implements Runnable {
         }
     }
 
-    private ClientState parse(GameStateMessage s) {
+    private ClientState parseState(GameStateMessage s) {
+        lastStateMessage = s;
         currentPlayer = s.getCurrentPlayer();
         return s.get(playerIndex);
     }

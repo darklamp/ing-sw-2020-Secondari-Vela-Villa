@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import static it.polimi.ingsw.Model.BuildingType.MIDDLE;
 
@@ -95,8 +96,10 @@ class NewsTest {
     @Test
     void getCell() {
         news.setCoords(1, 2, 0);
-        Cell cell=news.getCell(gameTable);
-        Assertions.assertEquals(cell,news.getCell(gameTable));
+        Cell cell = news.getCell(gameTable);
+        Assertions.assertEquals(cell, news.getCell(gameTable));
+        news.setCoords(5, 2, 0);
+        Assertions.assertNull(news.getCell(gameTable));
     }
 
     @Test
@@ -107,7 +110,15 @@ class NewsTest {
 
     @Test
     void getHeight() {
-        news.setCoords(1,2,1,1);
-        Assertions.assertEquals(news.getHeight(),MIDDLE);
+        news.setCoords(1, 2, 1, 1);
+        Assertions.assertEquals(news.getHeight(), MIDDLE);
+    }
+
+    @Test
+    void getRecipientsTest() {
+        news.setRecipients((ArrayList<SocketClientConnection>) null);
+        Assertions.assertNull(news.getRecipients());
+        news.setRecipients(player1);
+        Assertions.assertEquals(player1.getConnection(), news.getRecipients().get(0));
     }
 }

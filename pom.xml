@@ -10,6 +10,13 @@
 
     <name>GC46</name>
     <url>https://www.github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa</url>
+         
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>14</maven.compiler.release>
+        <maven.compiler.target>14</maven.compiler.target>
+        <!--<argLine>'-splash:/home/ale/Documents/Projects/Java/Progetto\ IngSW/ing-sw-2020-Secondari-Vela-Villa/src/main/resources/images/SantoriniBoard.png'</argLine>-->
+    </properties>
 
 
      <properties>
@@ -134,11 +141,6 @@
             </dependencies>
         </profile>
     </profiles>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>14</maven.compiler.release>
-        <maven.compiler.target>14</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -186,7 +188,7 @@
                 <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -205,7 +207,14 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <SplashScreen-Image>images/splash.png</SplashScreen-Image>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
@@ -218,15 +227,15 @@
                 <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.7.1</version>
+                    <version>3.9.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.3</version>
+                    <version>3.2.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -267,7 +276,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.3</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <id>build-first</id>

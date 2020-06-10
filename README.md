@@ -8,7 +8,7 @@ Test game server :  **server.santorini.cf**
 
 Online CLI: [**here**](http://server.santorini.cf:4200)
 
-To use this web server and the online CLI,  make sure to [click on this link](http://server.santorini.cf:1338) three times.
+Before using this web server and the online CLI,  make sure to [click on this link](http://server.santorini.cf:1338) three times.
 
 
 | Functionality | State |
@@ -25,7 +25,7 @@ To use this web server and the online CLI,  make sure to [click on this link](ht
 
 ## Deliverables
 
-Github is set up to run the building routine on every push. Hence, pre-packaged multiplatform JARs can be found under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions) tab. 
+Github is set up to run the building routine on every push. Hence, pre-packaged multiplatform JARs can be found under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions?query=branch:master) tab. 
 
 ## Building
  
@@ -50,11 +50,12 @@ mvn clean package
 * -console : starts debug console on stdin (default: no)
 * -v    : print verbose output  (default: no)
 * -disk : persistence flag (default: no)
+* -time : set allowed time for each turn (examples: ```-time=10,m``` = 10 minutes, ```-time=2,s``` = 2 seconds; default : 2 minutes)
 
 example:
 
 ```
-java -jar server.jar -port=1337 -ip=0.0.0.0
+java -jar server.jar -port=1337 -ip=0.0.0.0 -time=2,m
 ```
 
 #### debug console commands:

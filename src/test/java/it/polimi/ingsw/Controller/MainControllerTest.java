@@ -9,12 +9,14 @@ import it.polimi.ingsw.Network.GameInitializer;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.ServerMain;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.beans.PropertyChangeEvent;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -198,12 +200,10 @@ class MainControllerTest {
         players.add(player2);
 
         gameTable.setPlayers(players);
-        Method m = Cell.class.getDeclaredMethod("mustSetHeight", BuildingType.class);
-        m.setAccessible(true);
         Cell c = gameTable.getCell(0, 0);
         Cell c4 = gameTable.getCell(1, 1);
-        m.invoke(c, BuildingType.TOP);
-        m.invoke(c4, BuildingType.MIDDLE);
+        TestUtilities.mustSetHeight(c, BuildingType.TOP);
+        TestUtilities.mustSetHeight(c4, BuildingType.MIDDLE);
         c.setBuilder(null);
         News news5 = new News("MOVE", c2);
         String stringa;
@@ -212,6 +212,54 @@ class MainControllerTest {
         stringa = (String) b.get(gameTable);
         Assertions.assertEquals(player2.getState(), ClientState.WIN);
         Assertions.assertEquals("PLAYERKICKED", stringa);
+
+    }
+
+    /**
+     * Tests {@link MainController#propertyChange(PropertyChangeEvent)} in the case where there's an OOBException
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void propertyChangeTestOOB() throws Exception {
+        Socket socket = new Socket();
+
+        Field a = GameTable.class.getDeclaredField("news");
+        Field b = GameTable.class.getDeclaredField("type");
+        a.setAccessible(true);
+        b.setAccessible(true);
+        GameTable gameTable = new GameTable(2);
+        MainController controller = new MainController(gameTable);
+        News news = new News();
+        news.setInvalid();
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        Field d = SocketClientConnection.class.getDeclaredField("out");
+        d.setAccessible(true);
+        SocketClientConnection c1 = new SocketClientConnection(socket, null);
+        SocketClientConnection c2 = new SocketClientConnection(socket, null);
+        d.set(c1, new ObjectOutputStream(OutputStream.nullOutputStream()));
+        d.set(c2, new ObjectOutputStream(OutputStream.nullOutputStream()));
+
+        Player player1 = new Player("gigi", gameTable, c1);
+        Player player2 = new Player("gigi2", gameTable, c2);
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(1, 2));
+            player2.initBuilderList(gameTable.getCell(1, 1));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        Field ff = GameTable.class.getDeclaredField("currentPlayer");
+        ff.setAccessible(true);
+        ff.set(gameTable, -1);
+        Assertions.assertDoesNotThrow(() -> controller.propertyChange(new PropertyChangeEvent(new Object(), "MOVE", null, new News())));
 
     }
 
@@ -347,8 +395,14 @@ class MainControllerTest {
         file.setAccessible(true);
         MainController mainController = new MainController(new GameTable(2));
         Assertions.assertNull(file.get(mainController));
-        mainController.setGameInitializer(new GameInitializer(null, null, null, null, null, null, null, null, null));
-        Assertions.assertNotNull(file.get(mainController));
+        Constructor<GameInitializer> m = GameInitializer.class.getDeclaredConstructor(SocketClientConnection.class, SocketClientConnection.class, SocketClientConnection.class, ArrayList.class, Player.class, Player.class, Player.class, GameTable.class, MainController.class);
+        m.setAccessible(true);
+        GameInitializer gameInitializer1 = m.newInstance(null, null, null, null, null, null, null, null, null);
+        mainController.setGameInitializer(gameInitializer1);
+        GameInitializer gameInitializer = (GameInitializer) file.get(mainController);
+        Assertions.assertNotNull(gameInitializer);
+        mainController.setGameInitializer(gameInitializer1);
+        Assertions.assertEquals(gameInitializer, file.get(mainController));
     }
 
     /**
@@ -566,6 +620,8 @@ class MainControllerTest {
         Assertions.assertEquals(gameTable.getCurrentPlayer(), player1);
         byte[] after = Files.readAllBytes(file1);
         Assertions.assertNotEquals(before, after);
+
+
     }
 
     /**
@@ -679,6 +735,19 @@ class MainControllerTest {
         news.setCoords(4, 4, 1);
         controller.propertyChange(new PropertyChangeEvent(new Object(), "BUILD", null, news));
         Assertions.assertEquals("BUILDKO", b.get(gameTable));
+    }
+
+    /**
+     * Tests the the {@link MainController#saveGameState()} function in the exception case
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void saveGameStateTest() throws Exception {
+        Method m = MainController.class.getDeclaredMethod("saveGameState");
+        m.setAccessible(true);
+        MainController controller = new MainController(null);
+        Assertions.assertDoesNotThrow(() -> m.invoke(controller));
     }
 
 

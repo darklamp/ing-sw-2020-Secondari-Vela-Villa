@@ -4,6 +4,7 @@ import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.HephaestusException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,12 +24,12 @@ class HephaestusTest {
             c2.setHeight(b1, BuildingType.BASE);
         });
         p1.setFirstTime(true);
-        c2.mustSetHeight(BuildingType.TOP);
+        TestUtilities.mustSetHeight(c2, BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> c2.setHeight(b1, BuildingType.DOME));
         p1.setFirstTime(true);
-        c2.mustSetHeight(BuildingType.MIDDLE);
+        TestUtilities.mustSetHeight(c2, BuildingType.MIDDLE);
         Assertions.assertDoesNotThrow(() -> c2.setHeight(b1, BuildingType.TOP));
-        c2.mustSetHeight(BuildingType.BASE);
+        TestUtilities.mustSetHeight(c2, BuildingType.BASE);
 
         Assertions.assertThrows(InvalidBuildException.class, () -> c2.setHeight(b1, BuildingType.DOME));
         Assertions.assertThrows(InvalidBuildException.class, () -> c2.setHeight(b1, BuildingType.DOME));
@@ -44,7 +45,7 @@ class HephaestusTest {
         Cell c2 = g.getCell(4, 4);
         Cell c3 = g.getCell(4, 2);
         Builder b1 = new Hephaestus(c1, p1);
-        c2.mustSetHeight(BuildingType.TOP);
+        TestUtilities.mustSetHeight(c2, BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> {
             c2.setHeight(b1, BuildingType.DOME);
         });
@@ -52,7 +53,7 @@ class HephaestusTest {
         f.setAccessible(true);
         f.set(b1, c1);
         p1.setFirstTime(false);
-        c2.mustSetHeight(BuildingType.NONE);
+        TestUtilities.mustSetHeight(c2, BuildingType.NONE);
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             c2.setHeight(b1, BuildingType.BASE);
         });

@@ -3,7 +3,6 @@ package it.polimi.ingsw.Network;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -16,11 +15,7 @@ class ServerTest {
     Server s;
 
     {
-        try {
-            s = new Server();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        s = new Server();
     }
 
     /**

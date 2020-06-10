@@ -3,16 +3,23 @@ package it.polimi.ingsw.Client.GUI;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
-import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Network.Messages.ErrorMessage;
+import it.polimi.ingsw.Network.Messages.InitMessage;
+import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
+import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
 import javafx.application.Platform;
 
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+
+import static it.polimi.ingsw.Client.Client.*;
 
 public class GUI implements Ui, Runnable, PropertyChangeListener {
     /**
@@ -63,22 +70,32 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
      * @see Ui
      */
     @Override
+    synchronized public void process(Message input) {
+        if (input instanceof InitMessage) {
+            InitMessage m = (InitMessage) input;
+            setPlayerIndex(m.getPlayerIndex());
+            setPlayersNumber(m.getSize());
+            setTimer(m.getMoveTimer());
+            System.out.println("Your game's number is: " + m.getGameIndex() + ". Keep it in case server goes down.");
+            Client.setGod(m.getGod(Client.getPlayerIndex()));
+            Client.setGods(m.getGod(0), m.getGod(1), m.getGod(2));
+            if (!guiInitialized) {
+                Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
+                guiInitialized = true;
+            }
+        } else if (input instanceof ErrorMessage) {
+            Platform.runLater(() -> GUIClient.getController().setError((ErrorMessage) input));
+        }
+
+    }
+
+    /**
+     * @see Ui
+     */
+    @Override
     synchronized public void process(String input) {
         String[] inputs = input.split("@@@");
-        if (input.contains("[ERROR]")) {
-            Platform.runLater(() -> GUIClient.getController().setError(inputs[1]));
-        } else if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
-            Client.setPlayerIndex((short) Integer.parseInt(inputs[1]));
-            Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
-            if (inputs.length > 3) {
-                if (inputs.length == 5) {
-                    Client.setGod(Integer.parseInt(inputs[4]));
-                    Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
-                    guiInitialized = true;
-                } else
-                    System.out.println("Your game's number is: " + Integer.parseInt(inputs[3]) + ". Keep it in case server goes down.");
-            }
-        } else if (input.contains("[CHOICE]")) {
+        if (input.contains("[CHOICE]")) {
             if (inputs[1].equals("GODS")) {
                 Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
                 Platform.runLater(() -> loginController.firstPlayerGods());
@@ -96,7 +113,33 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         else if (input.equals(ServerMessage.reloadGameChoice)) Platform.runLater(() -> loginController.gameReload());
         else if (input.equals(ServerMessage.cellNotAvailable))
             Platform.runLater(() -> GUIClient.getController().getStartingPositions(true));
-        else Platform.runLater(() -> loginController.setText(input));
+        else if (input.contains(ServerMessage.connClosed)) {
+            if (inputs.length == 1) {
+                System.err.println(Color.RESET + ServerMessage.connClosed);
+                System.exit(0);
+            } else {
+                int pIndex = Integer.parseInt(inputs[1]);
+                if (pIndex == Client.getPlayerIndex()) {
+                    process(ServerMessage.gameLost);
+                } else {
+                    if (pIndex == 1) {
+                        setGods(Client.getGods()[0], Client.getGods()[2], -1);
+                        Client.setPlayerIndex(Client.getPlayerIndex() == 0 ? 0 : 1);
+                    } else if (pIndex == 0) {
+                        setGods(Client.getGods()[1], Client.getGods()[2], -1);
+                        Client.setPlayerIndex(Client.getPlayerIndex() - 1);
+                    } else {
+                        setGods(Client.getGods()[0], Client.getGods()[1], -1);
+                    }
+                    process("Player " + pIndex + " has lost!");
+                    Client.setPlayersNumber(Client.getPlayersNumber() - 1);
+                }
+            }
+        } else if (input.contains(ServerMessage.lastGod)) {
+            Client.setGod(Integer.parseInt(inputs[1]));
+            process("You're left with " + Client.completeGodList.get(Client.getGod()));
+        } else if (!(input.equals(ServerMessage.firstBuilderPos)) && !(input.equals(ServerMessage.secondBuilderPos)))
+            Platform.runLater(() -> GUIClient.getController().setText(input));
     }
 
     /**
@@ -104,6 +147,10 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
      */
     @Override
     public void waitForIP(Client client) {
+        SplashScreen splashScreen = SplashScreen.getSplashScreen();
+        if (splashScreen != null) {
+            splashScreen.close();
+        }
         Platform.runLater(() -> loginController.waitForIP(client));
     }
 

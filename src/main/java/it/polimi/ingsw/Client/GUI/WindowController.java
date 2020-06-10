@@ -1,12 +1,16 @@
 package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Network.Messages.ErrorMessage;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.View.CellView;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
+import java.awt.*;
 import java.io.IOException;
 
 public abstract class WindowController {
@@ -35,6 +39,10 @@ public abstract class WindowController {
             Scene s = new Scene(root);
             GUIClient.getStage().setScene(s);
             GUIClient.getStage().setFullScreen(fullScreen);
+            if (!fullScreen) {
+                GUIClient.getStage().setX((Toolkit.getDefaultToolkit().getScreenSize().getWidth() - GUIClient.getStage().getScene().getWidth()) / 2);
+                GUIClient.getStage().setY((Toolkit.getDefaultToolkit().getScreenSize().getHeight() - GUIClient.getStage().getScene().getHeight()) / 2);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,4 +73,21 @@ public abstract class WindowController {
         alert.setResizable(false);
         alert.showAndWait();
     }
+
+    /**
+     * Spawns error dialog with content
+     *
+     * @param input
+     */
+    void setError(ErrorMessage input) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Message");
+        alert.setHeaderText("Error");
+        alert.setContentText(input.getContent());
+        alert.setResizable(false);
+        alert.showAndWait();
+        if (input.equals(ServerMessage.gameLost) || input.equals(ServerMessage.abortMessage) || input.equals(ServerMessage.serverDown))
+            Platform.exit();
+    }
+
 }

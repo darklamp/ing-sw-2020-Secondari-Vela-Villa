@@ -2,7 +2,7 @@ package it.polimi.ingsw.Client.GUI;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientMain;
-import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -126,6 +126,9 @@ public class LoginWindowController extends WindowController {
         }
     }
 
+
+    private Optional<String> result;
+
     void firstPlayerGods() {
         List<String> choices = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
@@ -135,15 +138,15 @@ public class LoginWindowController extends WindowController {
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Gods choice");
         dialog.setContentText(ServerMessage.nextChoice);
-        Optional<String> result = dialog.showAndWait();
-        getNextChoice(result, choices, dialog);
-        newChoiceDialog(choices, result);
+        result = dialog.showAndWait();
+        getNextChoice(choices, dialog);
+        newChoiceDialog(choices);
         if (GUI.getPlayersNumber() == 3) {
-            newChoiceDialog(choices, result);
+            newChoiceDialog(choices);
         }
     }
 
-    private void newChoiceDialog(List<String> choices, Optional<String> result) {
+    private void newChoiceDialog(List<String> choices) {
         ChoiceDialog<String> dialog;
         choices.remove(result.get());
         dialog = new ChoiceDialog<>(choices.get(0), choices);
@@ -151,10 +154,10 @@ public class LoginWindowController extends WindowController {
         dialog.setHeaderText("Gods choice");
         dialog.setContentText(ServerMessage.nextChoice);
         result = dialog.showAndWait();
-        getNextChoice(result, choices, dialog);
+        getNextChoice(choices, dialog);
     }
 
-    private void getNextChoice(Optional<String> result, List<String> choices, ChoiceDialog<String> dialog) {
+    private void getNextChoice(List<String> choices, ChoiceDialog<String> dialog) {
         while (true) {
             if (result.isPresent()) {
                 if (!choices.contains(result.get())) {

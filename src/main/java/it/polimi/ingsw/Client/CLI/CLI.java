@@ -3,14 +3,20 @@ package it.polimi.ingsw.Client.CLI;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
-import it.polimi.ingsw.Network.ServerMessage;
+import it.polimi.ingsw.Network.Messages.ErrorMessage;
+import it.polimi.ingsw.Network.Messages.InitMessage;
+import it.polimi.ingsw.Network.Messages.Message;
+import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static it.polimi.ingsw.Client.Client.*;
+
 public class CLI implements Ui {
+
 
     /**
      * @see Ui
@@ -24,22 +30,36 @@ public class CLI implements Ui {
      * @see Ui
      */
     @Override
+    synchronized public void process(Message input) {
+        if (input instanceof InitMessage) {
+            InitMessage m = (InitMessage) input;
+            setPlayerIndex(m.getPlayerIndex());
+            setPlayersNumber(m.getSize());
+            setTimer(m.getMoveTimer());
+            Client.setGod(m.getGod(Client.getPlayerIndex()));
+            Client.setGods(m.getGod(0), m.getGod(1), m.getGod(2));
+            System.out.println("\n\n\n\n\n\nYour game's number is: " + m.getGameIndex() + ". Keep it in case server goes down.");
+            System.out.println("This game's move timer allows " + m.getMoveTimer() / 1000 + " seconds per move.");
+
+        } else if (input instanceof ErrorMessage) {
+            System.err.println(((ErrorMessage) input).getContent());
+            if (input.equals(ServerMessage.gameLost) || input.equals(ServerMessage.abortMessage) || input.equals(ServerMessage.serverDown))
+                System.exit(0);
+        }
+    }
+
+    /**
+     * @see Ui
+     */
+    @Override
     public void process(String input) {
         String[] inputs;
         if (input != null) {
             inputs = input.split("@@@");
         } else return;
-        if (inputs[0].equals("[ERROR]")) {
-            System.err.println(inputs[1]);
-        } else if (input.contains("[INIT]")) { /* if the string contains this prefix, it's an initialization string and it must be treated as such */
-            Client.setPlayerIndex((short) Integer.parseInt(inputs[1]));
-            Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
-            if (inputs.length > 3) {
-                System.out.println("Your game's number is: " + Integer.parseInt(inputs[3]) + ". Keep it in case server goes down.");
-            }
-        } else if (input.contains("[CHOICE]")) {
+        if (input.contains("[CHOICE]")) {
             if (inputs[1].equals("GODS")) {
-                Client.setPlayersNumber((short) Integer.parseInt(inputs[2]));
+                setPlayersNumber((short) Integer.parseInt(inputs[2]));
                 AtomicInteger counter = new AtomicInteger(1);
                 Client.completeGodList.forEach(name -> System.out.println(counter.getAndIncrement() + ") " + name));
                 System.out.println(ServerMessage.nextChoice);
@@ -48,9 +68,34 @@ public class CLI implements Ui {
                 System.out.println(ServerMessage.nextChoice);
                 for (int i = 1; i < inputs.length; i++) {
                     int x = Integer.parseInt(inputs[i]);
-                    System.out.println(/*Integer.parseInt(inputs[i])+1*/x+1 + ") " + Client.completeGodList.get(/*Integer.parseInt(inputs[i])+1*/x));
+                    System.out.println(/*Integer.parseInt(inputs[i])+1*/x + 1 + ") " + Client.completeGodList.get(/*Integer.parseInt(inputs[i])+1*/x));
                 }
             }
+        } else if (input.contains(ServerMessage.connClosed)) {
+            if (inputs.length == 1) {
+                System.err.println(Color.RESET + ServerMessage.connClosed);
+                System.exit(0);
+            } else {
+                int pIndex = Integer.parseInt(inputs[1]);
+                if (pIndex == Client.getPlayerIndex()) {
+                    process(ServerMessage.gameLost);
+                } else {
+                    if (pIndex == 1) {
+                        setGods(Client.getGods()[0], Client.getGods()[2], -1);
+                        Client.setPlayerIndex(Client.getPlayerIndex() == 0 ? 0 : 1);
+                    } else if (pIndex == 0) {
+                        setGods(Client.getGods()[1], Client.getGods()[2], -1);
+                        Client.setPlayerIndex(Client.getPlayerIndex() - 1);
+                    } else {
+                        setGods(Client.getGods()[0], Client.getGods()[1], -1);
+                    }
+                    process("Player " + pIndex + " has lost!");
+                    Client.setPlayersNumber(Client.getPlayersNumber() - 1);
+                }
+            }
+        } else if (input.contains(ServerMessage.lastGod)) {
+            Client.setGod(Integer.parseInt(inputs[1]));
+            process("You're left with " + Client.completeGodList.get(Client.getGod()));
         } else System.out.println(input);
     }
 
@@ -120,13 +165,21 @@ public class CLI implements Ui {
      */
     public void processTurnChange(ClientState newState){
         String s = "";
-        switch (newState){
-            case WAIT -> s = "Waiting for turn...";
+        switch (newState) {
+            case WAIT -> {
+                s = "Waiting for turn...";
+            }
             case MOVEORBUILD -> s = "It's your turn, You can choose whether to move(m) or build(b). Please choose: ";
             case MOVE -> s = "It's your turn! Please choose a cell to move to and which builder to use (x,y,b): ";
             case BUILD -> s = "Please choose a cell to build on and which builder to use (x,y,b): ";
-            case WIN -> s = "Hurray! You won the game!";
-            case LOSE -> s = "Looks like you've lost the game.";
+            case WIN -> {
+                s = "Hurray! You won the game!";
+                System.exit(0);
+            }
+            case LOSE -> {
+                s = "Looks like you've lost the game.";
+                System.exit(0);
+            }
             case BUILDORPASS -> s = "You can choose whether to build(b) or pass(p). Please choose: ";
         }
         System.out.println(s);
