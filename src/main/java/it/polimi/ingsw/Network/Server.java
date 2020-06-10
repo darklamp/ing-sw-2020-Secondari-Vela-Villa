@@ -43,6 +43,9 @@ public class Server {
      **/
     private static int currentGameIndex = 0;
 
+    /**
+     * @return time in milliseconds that a player is allowed (on a per turn basis)
+     */
     public static long getMoveTimer() {
         return moveTimerTimeUnit.toMillis(moveTimer);
     }
@@ -50,9 +53,14 @@ public class Server {
     /**
      * index of game currently in the process of being created; eg: if it's set to 1 it means game 0 is already started / finished, while game 1 is being made
      **/
-    private static short moveTimer = 2;
+    private static short moveTimer = (short) 2;
     private static TimeUnit moveTimerTimeUnit = TimeUnit.MINUTES;
 
+    /**
+     * @return index of game currently in the process of being created
+     * @example there are 4 active games, with indexes 0..3, and the first plauer of the 5th game
+     * has entered the lobby --> the current index is 4.
+     */
     public synchronized static int getCurrentGameIndex() {
         return currentGameIndex;
     }
@@ -185,11 +193,13 @@ public class Server {
     }
 
 
-    public Server() throws IOException {
+    public Server() {
     }/* kept for test compatibility */
 
-    public Server(int port, String ip) {
+    public Server(int port, String ip, short moveTimer, TimeUnit moveTimerTimeUnit) {
         try {
+            Server.moveTimer = moveTimer;
+            Server.moveTimerTimeUnit = moveTimerTimeUnit;
             this.serverSocket = new ServerSocket(port, 1, InetAddress.getByName(ip));
         } catch (Exception e) {
             if (ServerMain.verbose()) e.printStackTrace();

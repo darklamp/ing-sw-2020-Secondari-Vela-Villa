@@ -75,6 +75,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
             InitMessage m = (InitMessage) input;
             setPlayerIndex(m.getPlayerIndex());
             setPlayersNumber(m.getSize());
+            setTimer(m.getMoveTimer());
             System.out.println("Your game's number is: " + m.getGameIndex() + ". Keep it in case server goes down.");
             Client.setGod(m.getGod(Client.getPlayerIndex()));
             Client.setGods(m.getGod(0), m.getGod(1), m.getGod(2));

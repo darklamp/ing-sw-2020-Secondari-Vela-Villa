@@ -131,12 +131,12 @@ public class MainWindowController extends WindowController implements Initializa
         timerBar.setStyle("-fx-background-color: transparent;");
         timeline = new Timeline(60,
                 new KeyFrame(Duration.ZERO, new KeyValue(timerBar.progressProperty(), 0)),
-                new KeyFrame(Duration.seconds(90), e -> {
+                new KeyFrame(Duration.millis(Client.getGameTimer() * 0.75), e -> {
                     textArea1.setText("\nHurry up! Time's about to finish.");
                     TEXT_COLOR.set("red");
                     timerBar.setStyle("-fx-accent: red;");
                 }, new KeyValue(timerBar.progressProperty(), 0.75)),
-                new KeyFrame(Duration.seconds(120), e -> {
+                new KeyFrame(Duration.millis(Client.getGameTimer()), e -> {
                     textArea1.setText("Time's up!");
                     TEXT_COLOR.set("red");
                     timerBar.setStyle("-fx-accent: red;");
@@ -144,9 +144,7 @@ public class MainWindowController extends WindowController implements Initializa
         );
         timeline.setCycleCount(1);
         timeline.play();
-        timeline.setOnFinished(e -> {
-            timeline.stop();
-        });
+        timeline.setOnFinished(e -> timeline.stop());
     }
 
     @Override

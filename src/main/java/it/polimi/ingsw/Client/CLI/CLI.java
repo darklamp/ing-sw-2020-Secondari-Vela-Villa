@@ -17,6 +17,7 @@ import static it.polimi.ingsw.Client.Client.*;
 
 public class CLI implements Ui {
 
+
     /**
      * @see Ui
      */
@@ -34,9 +35,11 @@ public class CLI implements Ui {
             InitMessage m = (InitMessage) input;
             setPlayerIndex(m.getPlayerIndex());
             setPlayersNumber(m.getSize());
+            setTimer(m.getMoveTimer());
             Client.setGod(m.getGod(Client.getPlayerIndex()));
             Client.setGods(m.getGod(0), m.getGod(1), m.getGod(2));
             System.out.println("Your game's number is: " + m.getGameIndex() + ". Keep it in case server goes down.");
+            System.out.println("This game's move timer allows " + m.getMoveTimer() / 1000 + " seconds per move.");
 
         } else if (input instanceof ErrorMessage) {
             System.err.println(((ErrorMessage) input).getContent());
@@ -163,7 +166,9 @@ public class CLI implements Ui {
     public void processTurnChange(ClientState newState){
         String s = "";
         switch (newState) {
-            case WAIT -> s = "Waiting for turn...";
+            case WAIT -> {
+                s = "Waiting for turn...";
+            }
             case MOVEORBUILD -> s = "It's your turn, You can choose whether to move(m) or build(b). Please choose: ";
             case MOVE -> s = "It's your turn! Please choose a cell to move to and which builder to use (x,y,b): ";
             case BUILD -> s = "Please choose a cell to build on and which builder to use (x,y,b): ";

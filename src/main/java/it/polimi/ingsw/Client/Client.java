@@ -35,6 +35,16 @@ public class Client implements Runnable {
         Client.gods[2] = god3;
     }
 
+    private static long gameTimer;
+
+    public static void setTimer(long timer) {
+        Client.gameTimer = timer;
+    }
+
+    public static long getGameTimer() {
+        return gameTimer;
+    }
+
     private static int[] gods = new int[3];
 
     public static int getPlayerIndex() {

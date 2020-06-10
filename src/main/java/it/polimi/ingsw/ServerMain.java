@@ -2,6 +2,8 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.Network.Server;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class ServerMain {
     public static boolean verbose() {
@@ -25,6 +27,8 @@ public class ServerMain {
         int port = 1337;
         String ip = "localhost";
         String[] a;
+        short moveTimer = 2;
+        TimeUnit timerTimeUnit = TimeUnit.MINUTES;
         boolean console = false;
         for (String s : args) {
             if (s.contains("ip")) {
@@ -45,9 +49,24 @@ public class ServerMain {
                 verbose = true;
             } else if (s.contains("disk")) {
                 persistence = true;
+            } else if (s.contains("time")) {
+                try {
+                    a = s.split("=");
+                    String[] b = a[1].split(",");
+                    moveTimer = Short.parseShort(b[0]);
+                    timerTimeUnit = switch (b[1]) {
+                        case "s", "S" -> TimeUnit.SECONDS;
+                        case "m", "M" -> TimeUnit.MINUTES;
+                        case "h", "H" -> TimeUnit.HOURS;
+                        default -> throw new IllegalArgumentException();
+                    };
+                } catch (Exception e) {
+                    System.err.println("[CRITICAL] Invalid timer supplied.");
+                    System.exit(0);
+                }
             }
         }
-        server = new Server(port, ip);
+        server = new Server(port, ip, moveTimer, timerTimeUnit);
         if (console) server.startConsole();
         server.run();
     }

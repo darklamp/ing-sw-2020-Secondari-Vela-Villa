@@ -50,11 +50,12 @@ mvn clean package
 * -console : starts debug console on stdin (default: no)
 * -v    : print verbose output  (default: no)
 * -disk : persistence flag (default: no)
+* -time : set allowed time for each turn (examples: ```-time=10,m``` = 10 minutes, ```-time=2,s``` = 2 seconds; default : 2 minutes)
 
 example:
 
 ```
-java -jar server.jar -port=1337 -ip=0.0.0.0
+java -jar server.jar -port=1337 -ip=0.0.0.0 -time=2,m
 ```
 
 #### debug console commands:
