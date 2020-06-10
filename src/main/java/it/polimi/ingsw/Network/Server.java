@@ -60,7 +60,7 @@ public class Server {
     /**
      * @param c is the client kicked from server
      */
-    public synchronized static void deregisterConnection(SocketClientConnection c) {
+    synchronized static void deregisterConnection(SocketClientConnection c) {
         for (Map.Entry<Integer, ArrayList<SocketClientConnection>> entry : gameList.entrySet()) {
             try {
                 for (SocketClientConnection connection : entry.getValue()) {
@@ -75,23 +75,24 @@ public class Server {
     }
 
     /**
-     * @param c is the client connection
+     * @param c    is the client connection
      * @param name is the Nickname
      * @throws Exception, in this case the lobby is reset
-     * Handle the interaction with the first player and then wait for the other player(s), once the game
-     * is started the lobby is emptied and ready to "host" another game.
+     *                    Handle the interaction with the first player and then wait for the other player(s), once the game
+     *                    is started the lobby is emptied and ready to "host" another game.
      */
-    public synchronized void lobby(SocketClientConnection c, String name) throws Exception {
-     try{
-         if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n")) throw new NickAlreadyTakenException();
-         System.out.println("nome è "+name);
-         waitingConnection.put(name, c);
-         if (waitingConnection.size() == 1){
-             ArrayList<Integer> gameProps = c.firstPlayer();
-             ArrayList<SocketClientConnection> temp= new ArrayList<>();
-             temp.add(c);
-             gameList.put(getCurrentGameIndex(),temp);
-             gameProperties.put(getCurrentGameIndex(),gameProps);
+    synchronized void lobby(SocketClientConnection c, String name) throws Exception {
+        try {
+            if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n"))
+                throw new NickAlreadyTakenException();
+            System.out.println("nome è " + name);
+            waitingConnection.put(name, c);
+            if (waitingConnection.size() == 1) {
+                ArrayList<Integer> gameProps = c.firstPlayer();
+                ArrayList<SocketClientConnection> temp = new ArrayList<>();
+                temp.add(c);
+                gameList.put(getCurrentGameIndex(), temp);
+                gameProperties.put(getCurrentGameIndex(), gameProps);
          }
          else if (! (waitingConnection.size() == gameProperties.get(getCurrentGameIndex()).get(0))){
              ArrayList<SocketClientConnection> temp =  gameList.get(getCurrentGameIndex());
@@ -135,18 +136,27 @@ public class Server {
      } catch (NickAlreadyTakenException e) {
          throw new NickAlreadyTakenException();
      } catch (Exception e) {
-         waitingConnection.clear();
-         if (gameList.get(getCurrentGameIndex()) == null) throw new BrokenLobbyException();
-         if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();
-         if (gameProperties.size() > 0) gameProperties.get(getCurrentGameIndex()).clear();
-         throw new BrokenLobbyException();
-     }
+            waitingConnection.clear();
+            if (gameList.get(getCurrentGameIndex()) == null) throw new BrokenLobbyException();
+            if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();
+            if (gameProperties.size() > 0) gameProperties.get(getCurrentGameIndex()).clear();
+            throw new BrokenLobbyException();
+        }
 
     }
 
     private static final Map<Integer, ArrayList<String>> gameFromDiskList = new LinkedHashMap<>();
 
-    public synchronized void lobbyFromDisk(SocketClientConnection c, String name, int gameIndex) throws NickAlreadyTakenException {
+    /**
+     * Same as {@link Server#lobby(SocketClientConnection, String)}, except it's used to re-create a game
+     * loaded from disk.
+     *
+     * @param c         Client connection to be added
+     * @param name      Client nickname to be added
+     * @param gameIndex Index of game to be resumed
+     * @throws NickAlreadyTakenException if a player with the same nickname is already in game
+     */
+    synchronized void lobbyFromDisk(SocketClientConnection c, String name, int gameIndex) throws NickAlreadyTakenException {
         int oldIndex = gameControllers.get(gameIndex).containsPlayer(name);
         if (oldIndex == -1) throw new NickAlreadyTakenException();
         else {
@@ -216,7 +226,7 @@ public class Server {
         }
     }
 
-    synchronized public void reloadFromDisk() {
+    synchronized private void reloadFromDisk() {
         FileInputStream fileInputStream;
         for (int i = 0; ; i++) {
             try {

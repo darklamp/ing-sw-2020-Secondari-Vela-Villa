@@ -112,19 +112,20 @@ public class SocketClientConnection implements Runnable {
 
     /**
      * Asks for builder coordinates
+     *
      * @param choices list of previously chosen coordinates
      * @return pair of chosen coordinates
      */
-    public synchronized Pair getBuilderChoice(ArrayList<Pair> choices){
+    synchronized Pair getBuilderChoice(ArrayList<Pair> choices) {
         Pair out;
-        int c,r; //sia righe che colonne vanno da 0 a 4 compresi
+        int c, r; //sia righe che colonne vanno da 0 a 4 compresi
         Scanner in = null;
         try {
             in = new Scanner(socket.getInputStream());
         } catch (IOException e) {
             if (ServerMain.verbose()) e.printStackTrace();
         }
-        while(true){
+        while (true) {
             assert in != null;
             send("[CHOICE]@@@POS");
             while(true) {
@@ -157,10 +158,11 @@ public class SocketClientConnection implements Runnable {
 
     /**
      * Asks for god choice
+     *
      * @param gods list of previously choosen by the first player
      * @return integer index of the choosen god
      */
-    public synchronized int getGodChoice(ArrayList<Integer> gods){
+    synchronized int getGodChoice(ArrayList<Integer> gods) {
         StringBuilder s = new StringBuilder();
         s.append("[CHOICE]@@@");
         for (Integer god : gods) {
@@ -314,7 +316,7 @@ public class SocketClientConnection implements Runnable {
         }
     }
 
-    public void setNews(News news, String type) {
+    private void setNews(News news, String type) {
         support.firePropertyChange(type, this.news, news);
         this.news = news;
     }

@@ -168,8 +168,8 @@ public class RemoteView extends View {
                 }
                 default -> {
                     this.socketClientConnection.send(ServerMessage.genericErrorMessage);
-                    if (errorMessageCount > MAX_ERROR_MESSAGE_COUNT) this.socketClientConnection.closeConnection();
-                    else errorMessageCount += 1;
+                    // if (errorMessageCount > MAX_ERROR_MESSAGE_COUNT) this.socketClientConnection.closeConnection();
+                    // else errorMessageCount += 1;
                 }
             }
         }

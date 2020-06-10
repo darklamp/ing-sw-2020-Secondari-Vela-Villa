@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.beans.PropertyChangeEvent;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -394,10 +395,13 @@ class MainControllerTest {
         file.setAccessible(true);
         MainController mainController = new MainController(new GameTable(2));
         Assertions.assertNull(file.get(mainController));
-        mainController.setGameInitializer(new GameInitializer(null, null, null, null, null, null, null, null, null));
+        Constructor<GameInitializer> m = GameInitializer.class.getDeclaredConstructor(SocketClientConnection.class, SocketClientConnection.class, SocketClientConnection.class, ArrayList.class, Player.class, Player.class, Player.class, GameTable.class, MainController.class);
+        m.setAccessible(true);
+        GameInitializer gameInitializer1 = m.newInstance(null, null, null, null, null, null, null, null, null);
+        mainController.setGameInitializer(gameInitializer1);
         GameInitializer gameInitializer = (GameInitializer) file.get(mainController);
         Assertions.assertNotNull(gameInitializer);
-        mainController.setGameInitializer(new GameInitializer(null, null, null, null, null, null, null, null, null));
+        mainController.setGameInitializer(gameInitializer1);
         Assertions.assertEquals(gameInitializer, file.get(mainController));
     }
 

@@ -185,7 +185,7 @@ public class Player implements Serializable {
      *
      * @see NoMoreMovesException
      */
-    public final void checkMovePreConditions(Builder builder) throws NoMoreMovesException {
+    private void checkMovePreConditions(Builder builder) throws NoMoreMovesException {
         int builders = 1;
         boolean b1 = firstTime;
         ArrayList<Builder> builderList = new ArrayList<>();
@@ -209,7 +209,7 @@ public class Player implements Serializable {
      *
      * @see NoMoreMovesException
      */
-    public final void checkBuildPreConditions(Builder builder) throws NoMoreMovesException {
+    private void checkBuildPreConditions(Builder builder) throws NoMoreMovesException {
         int builders = 1;
         boolean b1 = firstTime;
         ArrayList<Builder> builderList = new ArrayList<>();

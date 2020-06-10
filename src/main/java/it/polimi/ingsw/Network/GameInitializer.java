@@ -26,7 +26,7 @@ public class GameInitializer implements Runnable {
     private final GameTable gameTable;
     private final MainController mainController;
 
-    public GameInitializer(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods, Player player1, Player player2, Player player3, GameTable gameTable, MainController mainController) {
+    GameInitializer(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods, Player player1, Player player2, Player player3, GameTable gameTable, MainController mainController) {
         this.c1 = c1;
         this.c2 = c2;
         this.c3 = c3;
@@ -47,16 +47,15 @@ public class GameInitializer implements Runnable {
      * @param gods list of available gods, from which players have to choose
      * @return list of chosen gods, in order from first to last player
      */
-     public ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods){
-        if(c3 == null) {
+    private ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods) {
+        if (c3 == null) {
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
             c1.send(ServerMessage.lastGod + (gods.get(0)));
-            out.add(0,gods.get(0));
+            out.add(0, gods.get(0));
             return out;
-        }
-        else {
+        } else {
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
             out.add(p2choice);
