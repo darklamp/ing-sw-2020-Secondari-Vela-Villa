@@ -80,9 +80,7 @@ public class SocketClientConnection implements Runnable {
             out.reset();
             out.writeObject(message);
             out.flush();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        } catch (NullPointerException ignored) {
+        } catch (IOException | NullPointerException ignored) {
         }
 
     }
@@ -92,13 +90,22 @@ public class SocketClientConnection implements Runnable {
      */
     public synchronized void closeConnection() {
         try {
-            send(ServerMessage.connClosed);
+            if (!graceful) {
+                send(ServerMessage.connClosed);
+            }
             socket.close();
             this.close();
         } catch (IOException e) {
             System.err.println("Error while closing socket!");
         }
         active = false;
+    }
+
+    private boolean graceful = false;
+
+    public synchronized void gracefullyCloseConnection() {
+        graceful = true;
+        closeConnection();
     }
 
     /**
@@ -167,7 +174,6 @@ public class SocketClientConnection implements Runnable {
         s.append("[CHOICE]@@@");
         for (Integer god : gods) {
             s.append(god).append("@@@");
-            //send(god + ") " + GameTable.getCompleteGodList().get(god) + "\n");
         }
         send(s.toString());
         Scanner in = null;
@@ -305,12 +311,16 @@ public class SocketClientConnection implements Runnable {
                 }
             }
         } catch (NoSuchElementException e) {
-            System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game...");
-            setNews(new News(null, this), "ABORT");
+            if (!graceful) {
+                System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game...");
+                setNews(new News(null, this), "ABORT");
+            }
         } catch (Exception e) {
-            System.err.println("Exception thrown in SocketClientConnection. Closing game...");
-            if (ServerMain.verbose()) e.printStackTrace();
-            setNews(new News(null, this), "ABORT");
+            if (!graceful) {
+                System.err.println("Exception thrown in SocketClientConnection. Closing game...");
+                if (ServerMain.verbose()) e.printStackTrace();
+                setNews(new News(null, this), "ABORT");
+            }
         } finally {
             closeConnection();
         }

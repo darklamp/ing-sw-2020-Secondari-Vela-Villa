@@ -238,16 +238,16 @@ public class Client implements Runnable {
             Socket socket = new Socket(ip, port);
             socket.setPerformancePreferences(0, 1, 0);
             socket.setTcpNoDelay(true);
+            ui.process("Connection established");
+            Scanner stdin = new Scanner(System.in);
+            PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
+            ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
                     socket.close();
                 } catch (IOException ignored) {
                 }
             }));
-            ui.process("Connection established");
-            Scanner stdin = new Scanner(System.in);
-            PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
-            ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
             try {
                 Thread t0 = asyncReadFromSocket(socketIn);
                 Thread t1 = asyncWriteToSocket(stdin, socketOut);
