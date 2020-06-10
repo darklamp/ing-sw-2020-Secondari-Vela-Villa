@@ -147,7 +147,9 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
     @Override
     public void waitForIP(Client client) {
         SplashScreen splashScreen = SplashScreen.getSplashScreen();
-        if (splashScreen != null) splashScreen.close();
+        if (splashScreen != null) {
+            splashScreen.close();
+        }
         Platform.runLater(() -> loginController.waitForIP(client));
     }
 

@@ -5,6 +5,7 @@ import it.polimi.ingsw.Client.GUI.GUI;
 import it.polimi.ingsw.Client.GUI.GUIClient;
 import it.polimi.ingsw.Utility.Color;
 
+import java.awt.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -87,6 +88,10 @@ public class ClientMain {
             ui = gui;
         }
         else {
+            SplashScreen splashScreen = SplashScreen.getSplashScreen();
+            if (splashScreen != null) {
+                splashScreen.close();
+            }
             System.out.println(Color.ANSI_BLUE + s + Color.RESET);
             CLI cli = new CLI();
             Client.setUi(cli);
