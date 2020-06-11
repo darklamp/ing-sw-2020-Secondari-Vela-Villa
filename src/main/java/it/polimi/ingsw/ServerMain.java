@@ -32,7 +32,15 @@ public class ServerMain {
         boolean console = false;
         String MOTD = null;
         for (String s : args) {
-            if (s.contains("ip")) {
+            if (s.toLowerCase().contains("motd")) {
+                try {
+                    a = s.split("=");
+                    MOTD = a[1];
+                } catch (Exception e) {
+                    System.err.println("[CRITICAL] Invalid MOTD supplied.");
+                    System.exit(0);
+                }
+            } else if (s.contains("ip")) {
                 a = s.split("=");
                 ip = a[1];
             } else if (s.contains("port")) {
@@ -50,14 +58,6 @@ public class ServerMain {
                 verbose = true;
             } else if (s.contains("disk")) {
                 persistence = true;
-            } else if (s.toLowerCase().contains("motd")) {
-                try {
-                    a = s.split("=");
-                    MOTD = a[1];
-                } catch (Exception e) {
-                    System.err.println("[CRITICAL] Invalid MOTD supplied.");
-                    System.exit(0);
-                }
             } else if (s.contains("time")) {
                 try {
                     a = s.split("=");
