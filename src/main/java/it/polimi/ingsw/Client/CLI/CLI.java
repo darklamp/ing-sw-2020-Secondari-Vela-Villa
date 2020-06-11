@@ -37,8 +37,8 @@ public class CLI implements Ui {
             setTimer(m.getMoveTimer());
             Client.setGod(m.getGod(Client.getPlayerIndex()));
             Client.setGods(m.getGod(0), m.getGod(1), m.getGod(2));
-            System.out.println("\n\n\n\n\n\nYour game's number is: " + m.getGameIndex() + ". Keep it in case server goes down.");
-            System.out.println("This game's move timer allows " + m.getMoveTimer() / 1000 + " seconds per move.");
+            System.out.println("\n\n\nYour game's number is: " + m.getGameIndex() + ". Keep it in case server goes down.");
+            System.out.println("This game's move timer allows " + m.getMoveTimer() / 1000 + " seconds per move.\n");
 
         } else if (input instanceof ErrorMessage) {
             System.err.println(((ErrorMessage) input).getContent());
@@ -115,6 +115,7 @@ public class CLI implements Ui {
     public void showTable(CellView[][] table){
         int r,c;
         Dice dice = new Dice();
+        System.out.println();
         for(r=0;r<5;r++)
         {
             for(c=0;c<5;c++)
