@@ -25,11 +25,12 @@ public class ServerMain {
     public static void main(String[] args) {
         Server server;
         int port = 1337;
-        String ip = "localhost";
+        String ip = "0.0.0.0";
         String[] a;
         short moveTimer = 2;
         TimeUnit timerTimeUnit = TimeUnit.MINUTES;
         boolean console = false;
+        String MOTD = null;
         for (String s : args) {
             if (s.contains("ip")) {
                 a = s.split("=");
@@ -49,6 +50,14 @@ public class ServerMain {
                 verbose = true;
             } else if (s.contains("disk")) {
                 persistence = true;
+            } else if (s.toLowerCase().contains("motd")) {
+                try {
+                    a = s.split("=");
+                    MOTD = a[1];
+                } catch (Exception e) {
+                    System.err.println("[CRITICAL] Invalid MOTD supplied.");
+                    System.exit(0);
+                }
             } else if (s.contains("time")) {
                 try {
                     a = s.split("=");
@@ -66,7 +75,7 @@ public class ServerMain {
                 }
             }
         }
-        server = new Server(port, ip, moveTimer, timerTimeUnit);
+        server = new Server(port, ip, moveTimer, timerTimeUnit, MOTD);
         if (console) server.startConsole();
         server.run();
     }

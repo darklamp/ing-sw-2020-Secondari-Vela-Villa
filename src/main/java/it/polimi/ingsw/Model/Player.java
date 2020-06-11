@@ -240,7 +240,8 @@ public class Player implements Serializable {
     }
 
     synchronized void kick(int pIndex) {
+        this.connection.setGracefulClose();
         gameTable.setNews(new News(ServerMessage.connClosed + "@@@" + pIndex, null), "PLAYERKICKED");
-        this.connection.gracefullyCloseConnection();
+        this.connection.closeConnection();
     }
 }

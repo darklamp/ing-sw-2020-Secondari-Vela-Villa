@@ -21,7 +21,6 @@ public class InitMessage implements Serializable, Message {
         this.god3 = god3;
         this.moveTimer = Server.getMoveTimer();
     }
-
     public long getMoveTimer() {
         return moveTimer;
     }

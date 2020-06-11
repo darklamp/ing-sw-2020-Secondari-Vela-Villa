@@ -19,10 +19,11 @@ public class BuildController {
      */
     public void handleBuild(News news) throws NoMoreMovesException {
         String s = "BUILDKO";
+        boolean flag = false;
         try{
             if (gameTable.getCurrentBuilder() != null && news.getBuilder(gameTable) != gameTable.getCurrentBuilder())
                 throw new InvalidBuildException(); /* trying to build using the builder which I didn't previously move */
-           // gameTable.checkConditions();
+            // gameTable.checkConditions();
             news.getCell(gameTable).setHeight(news.getBuilder(gameTable), news.getHeight());
             gameTable.getCurrentPlayer().setState(WAIT);
             gameTable.nextTurn();
@@ -32,16 +33,20 @@ public class BuildController {
             gameTable.getCurrentPlayer().setState(BUILDORPASS);
             gameTable.getCurrentPlayer().setFirstTime(false);
             s = "BUILDOK";
-        } catch (PrometheusException e){
+        } catch (PrometheusException e) {
             gameTable.getCurrentPlayer().setState(MOVE);
             s = "BUILDOK";
-        }
-        finally {
-            if (s.equals("BUILDOK") && gameTable.getCurrentBuilder() == null) {
-                gameTable.setCurrentBuilder(news.getBuilder(gameTable));
-                gameTable.checkConditions();
-            } else if (s.equals("BUILDKO")) news.setRecipients(news.getSender().getPlayer());
-            gameTable.setNews(news, s);
+        } catch (NoMoreMovesException e) {
+            flag = true;
+            throw e;
+        } finally {
+            if (!flag) {
+                if (s.equals("BUILDOK") && gameTable.getCurrentBuilder() == null) {
+                    gameTable.setCurrentBuilder(news.getBuilder(gameTable));
+                    gameTable.checkConditions();
+                } else if (s.equals("BUILDKO")) news.setRecipients(news.getSender().getPlayer());
+                gameTable.setNews(news, s);
+            }
         }
     }
 

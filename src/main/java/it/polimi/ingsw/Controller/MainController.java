@@ -115,7 +115,11 @@ public class MainController implements PropertyChangeListener {
                 } else {
                     try {
                         gameTable.removePlayer(e.getPlayer(), true);
-                    } catch (NoMoreMovesException ignored) {
+                    } catch (NoMoreMovesException ee) {
+                        try {
+                            gameTable.removePlayer(ee.getPlayer(), true);
+                        } catch (NoMoreMovesException ignored) {
+                        }
                     }
                 }
             } catch (InvalidMoveException e) {

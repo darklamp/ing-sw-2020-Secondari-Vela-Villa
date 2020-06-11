@@ -45,31 +45,38 @@ mvn clean package
 
 ## Server options:
 
-* -port : specifies Server port            (default: 1337)
-* -ip   : defines IP to listen on (v4/v6)  (default: localhost)
-* -console : starts debug console on stdin (default: no)
-* -v    : print verbose output  (default: no)
-* -disk : persistence flag (default: no)
-* -time : set allowed time for each turn (examples: ```-time=10,m``` = 10 minutes, ```-time=2,s``` = 2 seconds; default : 2 minutes)
+| Command | Description | Default |
+|---------|:----------:|------------:|
+| port | specifies Server port | 1337 |
+| ip   | defines IP to listen on (v4/v6) | 0.0.0.0 |
+| console | starts debug console on stdin | no |
+| v    | print verbose output | no |
+| disk | persistence flag | no |
+| time | set allowed time for each turn (s , m or h) | 2 minutes (2,m) |
+| motd | change MOTD | "Have fun!" |
 
 example:
 
 ```
-java -jar server.jar -port=1337 -ip=0.0.0.0 -time=2,m
+java -jar server.jar -port=1337 -ip=0.0.0.0 -time=55,s -motd="Hey!"
 ```
 
 #### debug console commands:
-
-* kick [gameIndex] [playerName]    : kicks player from game
-* players [gameIndex]              : returns list of players for given gameIndex / for all games if index not given
-* save                             : saves current games' state
+| Command | Parameters | Description |
+|---------|:----------:|------------:|
+| kick | [gameIndex] [playerName] | kicks player from game |
+| players | [gameIndex] | returns list of players for given gameIndex / for all games if index not given |
+| save | n/a | saves current games' state |
+| motd | [message] | if a string is provided, the motd is set to the string, else the current motd is printed |
 
 ## Client options:
 
-* -port : specifies Server port (default: 1337)
-* -cli  : cli true/false        (default: false)
-* -ip   : defines server IP     (default: localhost)
-* -v    : print verbose output  (default: no)
+| Command | Description | Default |
+|---------|:----------:|------------:|
+| port    | specifies Server port | 1337 |
+| cli     | CLI true/false | false |
+| ip      | defines server IP | localhost |
+| v       | print verbose output | no |
 
 example: 
 

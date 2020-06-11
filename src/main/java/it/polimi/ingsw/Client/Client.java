@@ -137,6 +137,8 @@ public class Client implements Runnable {
                     } else if (inputObject instanceof Message) {
                         if (inputObject instanceof GameStateMessage) {
                             GameStateMessage c = (GameStateMessage) inputObject;
+                            if (verbose())
+                                System.out.println("[DEBUG] New client states are: " + c.get(0) + "," + c.get(1) + "," + c.get(2));
                             state = parseState(c);
                             ui.processTurnChange(state);
                         } else ui.process((Message) inputObject);

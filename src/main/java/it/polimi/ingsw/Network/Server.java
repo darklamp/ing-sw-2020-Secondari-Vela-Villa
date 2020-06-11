@@ -56,6 +56,19 @@ public class Server {
     private static short moveTimer = (short) 2;
     private static TimeUnit moveTimerTimeUnit = TimeUnit.MINUTES;
 
+    public static String getMOTD() {
+        return MOTD;
+    }
+
+    public static void setMOTD(String MOTD) {
+        Server.MOTD = MOTD;
+    }
+
+    /**
+     * Message of the day
+     */
+    private static String MOTD = "Have fun!";
+
     /**
      * @return index of game currently in the process of being created
      * @example there are 4 active games, with indexes 0..3, and the first plauer of the 5th game
@@ -196,10 +209,11 @@ public class Server {
     public Server() {
     }/* kept for test compatibility */
 
-    public Server(int port, String ip, short moveTimer, TimeUnit moveTimerTimeUnit) {
+    public Server(int port, String ip, short moveTimer, TimeUnit moveTimerTimeUnit, String MOTD) {
         try {
             Server.moveTimer = moveTimer;
             Server.moveTimerTimeUnit = moveTimerTimeUnit;
+            if (MOTD != null) Server.MOTD = MOTD;
             this.serverSocket = new ServerSocket(port, 1, InetAddress.getByName(ip));
         } catch (Exception e) {
             if (ServerMain.verbose()) e.printStackTrace();
@@ -308,6 +322,17 @@ public class Server {
                             System.out.println("[WARNING] Saving state, although current instance was set not to use persistence.");
                         gameControllers.forEach((key, value) -> value.saveGameState());
                         System.out.println("State saved successfully!");
+                    } else if (s.contains("motd") || s.contains("MOTD")) {
+                        String[] input = s.split(" ");
+                        if (input.length > 1) {
+                            StringBuilder temp = new StringBuilder();
+                            boolean first = true;
+                            for (String p : input) {
+                                if (first) first = false;
+                                else temp.append(p).append(" ");
+                            }
+                            MOTD = temp.toString();
+                        } else System.out.println("MOTD: " + MOTD);
                     } else if (s.equalsIgnoreCase("^C")) System.exit(0);
                 } catch (Exception e) {
                     if (ServerMain.verbose()) e.printStackTrace();

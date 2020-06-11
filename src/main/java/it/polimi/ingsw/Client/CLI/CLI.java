@@ -3,10 +3,7 @@ package it.polimi.ingsw.Client.CLI;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
-import it.polimi.ingsw.Network.Messages.ErrorMessage;
-import it.polimi.ingsw.Network.Messages.InitMessage;
-import it.polimi.ingsw.Network.Messages.Message;
-import it.polimi.ingsw.Network.Messages.ServerMessage;
+import it.polimi.ingsw.Network.Messages.*;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 
@@ -14,6 +11,8 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static it.polimi.ingsw.Client.Client.*;
+import static it.polimi.ingsw.Client.ClientState.LOSE;
+import static it.polimi.ingsw.Client.ClientState.WIN;
 
 public class CLI implements Ui {
 
@@ -45,6 +44,8 @@ public class CLI implements Ui {
             System.err.println(((ErrorMessage) input).getContent());
             if (input.equals(ServerMessage.gameLost) || input.equals(ServerMessage.abortMessage) || input.equals(ServerMessage.serverDown))
                 System.exit(0);
+        } else if (input instanceof MOTD) {
+            System.out.println("\nMOTD: " + Color.Rainbow(((MOTD) input).getMOTD()) + "\n");
         }
     }
 
@@ -172,17 +173,12 @@ public class CLI implements Ui {
             case MOVEORBUILD -> s = "It's your turn, You can choose whether to move(m) or build(b). Please choose: ";
             case MOVE -> s = "It's your turn! Please choose a cell to move to and which builder to use (x,y,b): ";
             case BUILD -> s = "Please choose a cell to build on and which builder to use (x,y,b): ";
-            case WIN -> {
-                s = "Hurray! You won the game!";
-                System.exit(0);
-            }
-            case LOSE -> {
-                s = "Looks like you've lost the game.";
-                System.exit(0);
-            }
+            case WIN -> s = "Hurray! You won the game!";
+            case LOSE -> s = "Looks like you've lost the game.";
             case BUILDORPASS -> s = "You can choose whether to build(b) or pass(p). Please choose: ";
         }
         System.out.println(s);
+        if (newState == WIN || newState == LOSE) System.exit(0);
     }
 
 }

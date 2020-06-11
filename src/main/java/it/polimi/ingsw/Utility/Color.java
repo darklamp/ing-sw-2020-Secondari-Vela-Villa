@@ -10,10 +10,7 @@ public enum Color {
     ANSI_BLUE("\u001B[34m"),
     ANSI_PURPLE("\u001B[35m"),
     ANSI_CYAN("\u001B[36m"),
-    ANSI_WHITE("\u001B[37m"),
-    ANSI_WHITE_BG("\u001B[47m"),
-    ANSI_CYAN_BG("\u001b[46"),
-    ANSI_LEVEL1("\u001B[2680m");
+    ANSI_WHITE("\u001B[37m");
 
     public static final String RESET = "\u001B[0m";
     public static final String BOLD = "\u001b[1m";
@@ -22,6 +19,24 @@ public enum Color {
 
     Color(String escape) {
         this.escape = escape;
+    }
+
+    public Color next() {
+        if (this.ordinal() == Color.values().length - 1) return Color.values()[0];
+        else return Color.values()[this.ordinal() + 1];
+    }
+
+    public static String Rainbow(String s) {
+        StringBuilder out = new StringBuilder();
+        Color cur = ANSI_RED;
+        for (char c : s.toCharArray()) {
+            if (c != ' ') {
+                out.append(cur).append(c);
+                cur = cur.next();
+            } else out.append(' ');
+        }
+        out.append(Color.RESET);
+        return out.toString();
     }
 
     @Override

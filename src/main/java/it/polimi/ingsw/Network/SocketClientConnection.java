@@ -5,6 +5,7 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Network.Messages.MOTD;
 import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Pair;
@@ -103,9 +104,8 @@ public class SocketClientConnection implements Runnable {
 
     private boolean graceful = false;
 
-    public synchronized void gracefullyCloseConnection() {
+    public synchronized void setGracefulClose() {
         graceful = true;
-        closeConnection();
     }
 
     /**
@@ -266,6 +266,7 @@ public class SocketClientConnection implements Runnable {
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
             send(ServerMessage.welcome);
+            send(new MOTD(Server.getMOTD()));
             if (ServerMain.persistence()) {
                 send(ServerMessage.reloadGameChoice);
             } else send(ServerMessage.welcomeNoPersistence);
