@@ -88,9 +88,11 @@ public class ClientMain {
             ui = gui;
         }
         else {
-            SplashScreen splashScreen = SplashScreen.getSplashScreen();
-            if (splashScreen != null) {
-                splashScreen.close();
+            if (!GraphicsEnvironment.isHeadless()) {
+                SplashScreen splashScreen = SplashScreen.getSplashScreen();
+                if (splashScreen != null) {
+                    splashScreen.close();
+                }
             }
             System.out.println(Color.ANSI_BLUE + s + Color.RESET);
             CLI cli = new CLI();

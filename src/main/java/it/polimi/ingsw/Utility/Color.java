@@ -29,10 +29,14 @@ public enum Color {
     public static String Rainbow(String s) {
         StringBuilder out = new StringBuilder();
         Color cur = ANSI_RED;
+        short count = 0;
         for (char c : s.toCharArray()) {
             if (c != ' ') {
                 out.append(cur).append(c);
-                cur = cur.next();
+                if (count == (short) 3) {
+                    cur = cur.next();
+                    count = 0;
+                } else count += 1;
             } else out.append(' ');
         }
         out.append(Color.RESET);
