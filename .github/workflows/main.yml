@@ -36,3 +36,7 @@ jobs:
         with:
           name: server
           path: staging/server.jar
+      - uses: actions/upload-artifact@v2
+        with:
+          name: client-cli-only
+          path: staging/client-cli-only.jar
