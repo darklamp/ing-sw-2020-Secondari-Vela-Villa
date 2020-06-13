@@ -85,7 +85,7 @@ public abstract class Builder implements Serializable {
             flag = true;
         } catch (InvalidMoveException e) {
             news.setRecipients(this.player);
-            getGameTable().setNews(new News(), "MOVEKO");
+            getGameTable().setNews(news, "MOVEKO");
             throw e;
         }
         if (!flag) {
