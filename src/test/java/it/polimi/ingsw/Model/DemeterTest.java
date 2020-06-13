@@ -3,9 +3,11 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 class DemeterTest {
@@ -47,5 +49,19 @@ class DemeterTest {
         p1.setState(ClientState.MOVE);
         b1.isValidMove(c3);
         b1.isValidMove(c4);
+    }
+
+    @Test
+    void clearPreviousTest() throws Exception {
+        GameTable g = new GameTable(2);
+        Player p1 = new Player("Giggino", g, "DEMETER");
+        p1.initBuilderList(g.getCell(1, 2));
+        p1.initBuilderList(g.getCell(1, 3));
+        assert TestUtilities.getAccessibleField("previous", p1.getBuilderList().get(0)) == null;
+        Field f = Demeter.class.getDeclaredField("previous");
+        f.setAccessible(true);
+        f.set(p1.getBuilderList().get(0), new Cell(1, 1, g));
+        p1.getBuilderList().get(0).clearPrevious();
+        assert TestUtilities.getAccessibleField("previous", p1.getBuilderList().get(0)) == null;
     }
 }

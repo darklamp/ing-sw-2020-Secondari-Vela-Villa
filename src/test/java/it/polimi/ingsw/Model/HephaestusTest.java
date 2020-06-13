@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
-import it.polimi.ingsw.Model.Exceptions.HephaestusException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.TestUtilities;
@@ -20,10 +19,17 @@ class HephaestusTest {
         GameTable g = new GameTable(2);
 
         Player p1 = new Player("Giggino", g, "HEPHAESTUS");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p2);
+        players.add(p1);
+        g.setPlayers(players);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
         Builder b1 = new Hephaestus(c1, p1);
-        Assertions.assertThrows(HephaestusException.class, () -> b1.isValidBuild(c2, BASE));
+        p1.setState(ClientState.BUILD);
+        Assertions.assertDoesNotThrow(() -> c2.setHeight(b1, BASE));
+        assert c2.getHeight() == BASE;
         p1.setFirstTime(true);
         TestUtilities.mustSetHeight(c2, BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c2, BuildingType.DOME));

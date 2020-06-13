@@ -1,10 +1,12 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
-import it.polimi.ingsw.Model.Exceptions.MinotaurException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 class MinotaurTest {
 
@@ -31,6 +33,11 @@ class MinotaurTest {
         GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "MINOTAUR");
         Player p2 = new Player("Giggino2", g, "ATLAS");
+
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p2);
+        players.add(p1);
+        g.setPlayers(players);
         Cell c0 = g.getCell(4, 2);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
@@ -40,11 +47,12 @@ class MinotaurTest {
         Builder b2 = new Atlas(c1, p2);
         Builder b3 = new Atlas(c4, p1);
 
-        Assertions.assertThrows(MinotaurException.class, () -> b1.isValidMove(c1));
+        Assertions.assertDoesNotThrow(() -> b1.isValidMove(c1));
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c2));
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c4));
+        p1.setState(ClientState.MOVE);
+        Assertions.assertDoesNotThrow(() -> b1.setPosition(c3));
 
-        Assertions.assertDoesNotThrow(() -> b1.isValidMove(c3));
     }
 
     @Test

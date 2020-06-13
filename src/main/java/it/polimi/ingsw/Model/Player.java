@@ -12,23 +12,54 @@ import java.util.ArrayList;
 
 import static it.polimi.ingsw.Client.ClientState.*;
 
+/**
+ * Model representation for player.
+ */
 public class Player implements Serializable {
 
+    /**
+     * @see Serializable
+     */
     private static final long serialVersionUID = 17756L;
 
-    private final ArrayList<Builder> builderList; //array of builders
+    /**
+     * List of the player's builders
+     */
+    private final ArrayList<Builder> builderList;
+
+    /**
+     * Pointer to the table on which the player is.
+     */
     private GameTable gameTable;
+
+    /**
+     * This player's connection.
+     */
     private transient SocketClientConnection connection;
 
-    private final String nickname; //private attribute for the Player's ID
+    private final String nickname;
+
+    /**
+     * This player's god.
+     */
+    private String god;
+
+    /**
+     * Current state of the player,
+     */
+    private ClientState turnState;
+
+    /**
+     * True if the player still hasn't moved. Gets reset by {@link GameTable#nextTurn()}.
+     * Used mostly by gods which can do the same thing twice.
+     */
+    private boolean firstTime = true;
+
 
     public String getGod() {
         return god;
     }
 
-    private String god;
-
-    private ClientState turnState;
 
     public boolean isFirstTime() {
         return firstTime;
@@ -38,7 +69,6 @@ public class Player implements Serializable {
         this.firstTime = firstTime;
     }
 
-    private boolean firstTime = true;
 
     /**
      * Constructor for player; once the object is built, it gets added to the player list in GameTable.
@@ -109,9 +139,11 @@ public class Player implements Serializable {
     public ClientState getState(){
         return this.turnState;
     }
+
     public void setState(ClientState state){
         this.turnState = state;
     }
+
     public ClientState getFirstState(){
         return this.builderList.get(0).getFirstState();
     }
@@ -196,10 +228,20 @@ public class Player implements Serializable {
         }
         for (Builder b : builderList) {
             if (!b.hasAvailableMoves()) builders -= 1;
-            if (b1) firstTime = true;
+            if (b1) {
+                firstTime = true;
+                for (Builder builder1 : builderList) {
+                    builder1.clearPrevious();
+                }
+            }
         }
         if (builders == 0) throw new NoMoreMovesException(this);
-        if (b1) firstTime = true;
+        if (b1) {
+            firstTime = true;
+            for (Builder builder1 : builderList) {
+                builder1.clearPrevious();
+            }
+        }
 
     }
 
@@ -220,10 +262,20 @@ public class Player implements Serializable {
         }
         for (Builder b : builderList) {
             if (!b.hasAvailableBuilds()) builders -= 1;
-            if (b1) firstTime = true;
+            if (b1) {
+                firstTime = true;
+                for (Builder builder1 : builderList) {
+                    builder1.clearPrevious();
+                }
+            }
         }
         if (builders == 0) throw new NoMoreMovesException(this);
-        if (b1) firstTime = true;
+        if (b1) {
+            firstTime = true;
+            for (Builder builder1 : builderList) {
+                builder1.clearPrevious();
+            }
+        }
     }
 
     ArrayList<Builder> getBuilderList() {

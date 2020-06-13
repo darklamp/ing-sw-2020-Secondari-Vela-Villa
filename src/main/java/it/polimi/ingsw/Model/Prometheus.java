@@ -1,31 +1,29 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
-import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+
+import static it.polimi.ingsw.Client.ClientState.MOVE;
+import static it.polimi.ingsw.Client.ClientState.WAIT;
 
 public class Prometheus extends Builder {
     Prometheus(Cell position, Player player) {
         super(position, player);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
+    public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell, newheight);
-        if (this.getPlayer().getState() == ClientState.MOVEORBUILD) throw new PrometheusException();
+        return this.getPlayer().getState() == ClientState.MOVEORBUILD ? MOVE : WAIT;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
-        if (this.getPlayer().getState() == ClientState.MOVE) {
+        if (this.getPlayer().getState() == MOVE) {
             if (getPosition().getHeight().compareTo(finalPoint.getHeight()) < 0) throw new InvalidMoveException();
         }
     }

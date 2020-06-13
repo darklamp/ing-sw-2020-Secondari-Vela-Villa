@@ -1,6 +1,10 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+
+import static it.polimi.ingsw.Client.ClientState.WAIT;
 
 public class Artemis extends Builder {
     Artemis(Cell position, Player player) {
@@ -10,39 +14,48 @@ public class Artemis extends Builder {
     /**
      * Cell on which Artemis came from, and to which she cannot move again until next turn.
      */
-    private Cell previous;
+    private Cell previous = null;
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
+    public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell, newheight);
+        return WAIT;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws InvalidMoveException {
         boolean firstTime = this.getPlayer().isFirstTime();
         if (firstTime) {
             super.isValidMove(finalPoint);
             verifyMove(finalPoint);
-            this.getPlayer().setFirstTime(false);
-            previous = this.getPosition();
-            throw new ArtemisException();
         } else {
             if (finalPoint.equals(previous)) {
                 throw new InvalidMoveException();
-            }// cannot move on same cell as before
-            else {
+            } else {
                 super.isValidMove(finalPoint);
                 verifyMove(finalPoint);
-               // firstTime = true; //così quando verrà richiamato il metodo isValidMove entrerò nel ramo if
             }
         }
+    }
+
+    @Override
+    protected ClientState executeMove(Cell position) {
+        Cell prevPos = this.getPosition();
+        super.executeMove(position);
+        if (previous == null) {
+            this.getPlayer().setFirstTime(false);
+            previous = prevPos;
+            return ClientState.MOVEORBUILD;
+        } else {
+            previous = null;
+            return ClientState.BUILD;
+        }
+    }
+
+    @Override
+    protected void clearPrevious() {
+        previous = null;
     }
 
 }

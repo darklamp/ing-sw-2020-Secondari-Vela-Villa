@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
-import it.polimi.ingsw.Model.Exceptions.AtlasException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.TestUtilities;
@@ -9,6 +8,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+
+import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Client.ClientState.WAIT;
+import static it.polimi.ingsw.Model.BuildingType.DOME;
 
 class AtlasTest {
 
@@ -21,22 +24,31 @@ class AtlasTest {
     void isValidBuildTest() throws Exception {
         GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "ATLAS");
-        Player p2 = new Player("Giggino2", g, "DEMETER");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
+        Cell c1 = g.getCell(4, 3);
+        Cell c2 = g.getCell(4, 4);
+        p1.initBuilderList(c1);
+        p1.initBuilderList(g.getCell(2, 3));
+        p2.initBuilderList(g.getCell(1, 2));
+        p2.initBuilderList(g.getCell(3, 4));
         ArrayList<Player> players = new ArrayList<>();
         players.add(p2);
         players.add(p1);
         g.setPlayers(players);
-        Cell c1 = g.getCell(4, 3);
-        Cell c2 = g.getCell(4, 4);
-        Builder b1 = new Atlas(c1, p1);
+        Builder b1 = p1.getBuilderList().get(0);
         p1.setState(ClientState.BUILD);
-        Assertions.assertThrows(AtlasException.class, () -> b1.isValidBuild(c2, BuildingType.DOME));
-        TestUtilities.mustSetHeight(c2, BuildingType.DOME);
-        Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c2, BuildingType.DOME));
+        ClientState a = b1.isValidBuild(c2, DOME);
+        Assertions.assertEquals(WAIT, a);
+        Assertions.assertDoesNotThrow(() -> c2.setHeight(b1, DOME));
+        assert c2.getHeight() == DOME;
+        Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c2, DOME));
         Cell c3 = g.getCell(3, 3);
-        Assertions.assertThrows(AtlasException.class, () -> b1.isValidBuild(c3, BuildingType.DOME));
-        TestUtilities.mustSetHeight(c3, BuildingType.DOME);
-        Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c3, BuildingType.DOME));
+        p2.setState(BUILD);
+        Assertions.assertDoesNotThrow(() -> c3.setHeight(p2.getBuilderList().get(1), DOME));
+        assert c2.getHeight() == DOME;
+
+        TestUtilities.mustSetHeight(c3, DOME);
+        Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c3, DOME));
         Cell c4 = g.getCell(4, 2);
         Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c4, BuildingType.BASE));
         TestUtilities.mustSetHeight(c3, BuildingType.BASE);

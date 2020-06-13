@@ -67,7 +67,7 @@ class MoveControllerTest {
         assertSame(bb, gameTable.getCell(2, 1).getBuilder());
 
         Player player3 = new Player("giggi2", gameTable, null);
-        player3.setGod(1); /* tests ArtemisException */
+        player3.setGod(1);
         player3.initBuilderList(gameTable.getCell(3, 3));
         player3.initBuilderList(gameTable.getCell(3, 4));
         players.remove(player2);
@@ -87,7 +87,7 @@ class MoveControllerTest {
         players.add(player1);
         players.add(player4);
         gameTable.setPlayers(players);
-        player4.setGod(6); /* tests MinotaurException */
+        player4.setGod(6);
         gameTable.getCell(3, 3).setBuilder(null);
         gameTable.getCell(1, 3).setBuilder(null);
 

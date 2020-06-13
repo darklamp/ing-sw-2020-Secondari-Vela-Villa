@@ -1,6 +1,10 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+
+import static it.polimi.ingsw.Client.ClientState.*;
 
 public class Pan extends Builder{
 
@@ -8,24 +12,26 @@ public class Pan extends Builder{
         super(position, player);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
+    public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
-        verifyBuild(cell,newheight);
+        verifyBuild(cell, newheight);
+        return WAIT;
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
-        if (this.getPosition().getHeight().compareTo(finalPoint.getHeight()) >= 2) {
-            throw new PanException();
+    }
+
+    @Override
+    protected ClientState executeMove(Cell position) {
+        ClientState out = this.getPosition().getHeight().compareTo(position.getHeight()) >= 2 ? WIN : BUILD;
+        if (out == WIN) return WIN;
+        else {
+            super.executeMove(position);
+            return BUILD;
         }
     }
 }

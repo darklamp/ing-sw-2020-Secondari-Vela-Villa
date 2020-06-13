@@ -1,32 +1,33 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.Utility.Pair;
+
+import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Client.ClientState.WAIT;
 
 public class Minotaur extends Builder {
     Minotaur(Cell position, Player player) {
         super(position, player);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException, AtlasException, DemeterException, HephaestusException, PrometheusException {
+    public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell, newheight);
+        return WAIT;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
-    void isValidMove(Cell finalPoint) throws MinotaurException, ApolloException, InvalidMoveException, ArtemisException, PanException {
+    void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
-            if (checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer())
-                throw new MinotaurException(getCellBehind(finalPoint));
-            else throw new InvalidMoveException();
+            if (!(checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer()))
+                throw new InvalidMoveException();
         } else super.verifyMove(finalPoint);
     }
 
@@ -35,7 +36,7 @@ public class Minotaur extends Builder {
      *
      * @param finalPoint cell on which builder wants to position
      * @return true if the cell behind the occupied one is empty and valid; else false
-     * @throws InvalidCoordinateException if the given cell is invalid
+     * @throws InvalidMoveException if the cell is invalid
      */
     boolean checkEmptyCellBehind(Cell finalPoint) throws InvalidMoveException {
         int diffY = finalPoint.getRow() - this.getPosition().getRow();
@@ -72,6 +73,8 @@ public class Minotaur extends Builder {
     }
 
     /**
+     * Gets, if possible, the coordinates of the cell behind the given one.
+     *
      * @param finalPoint is the cell where the Minotaur builder wants to move and it's already occupied.
      * @return the coordinates where the builder from finalPoint is forced to move.
      */
@@ -107,9 +110,20 @@ public class Minotaur extends Builder {
         return new Pair(0, 0);
     }
 
-    public void minotaurMove(Cell moveTo, Cell cellBehind) {
-        moveTo.getBuilder().forceMove(cellBehind);
-        this.forceMove(moveTo);
+    @Override
+    protected ClientState executeMove(Cell position) {
+        if (position.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
+            Cell cellBehind = null;
+            this.getPosition().setBuilder(null);
+            Pair cb = getCellBehind(position);
+            try {
+                cellBehind = this.getPosition().getGameTable().getCell(cb.getFirst(), cb.getSecond());
+            } catch (InvalidCoordinateException ignored) {
+            }
+            assert cellBehind != null;
+            position.getBuilder().forceMove(cellBehind);
+            this.forceMove(position);
+        } else super.executeMove(position);
+        return BUILD;
     }
-
 }

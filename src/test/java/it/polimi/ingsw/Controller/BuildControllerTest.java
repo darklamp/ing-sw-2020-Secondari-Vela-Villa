@@ -68,7 +68,7 @@ class BuildControllerTest {
         buildController.handleBuild(news);
         assertSame(BuildingType.BASE, gameTable.getCell(2, 1).getHeight());
         Player player3 = new Player("gigg2", gameTable, null);
-        player3.setGod(4); /* tests DemeterException handling */
+        player3.setGod(4);
         player3.initBuilderList(gameTable.getCell(3, 3));
         player3.initBuilderList(gameTable.getCell(4, 3));
         players.remove(player2);
@@ -86,7 +86,7 @@ class BuildControllerTest {
         assertSame(BuildingType.BASE, gameTable.getCell(3, 4).getHeight());
 
         Player player4 = new Player("gigg3", gameTable, null);
-        player4.setGod(8); /* tests PrometheusException handling */
+        player4.setGod(8);
         player4.initBuilderList(gameTable.getCell(0, 3));
         player4.initBuilderList(gameTable.getCell(0, 4));
         players.remove(player3);

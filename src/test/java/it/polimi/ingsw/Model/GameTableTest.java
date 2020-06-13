@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.Server;
@@ -244,6 +245,20 @@ class GameTableTest {
         player1.initBuilderList(g.getCell(2, 3));
         c.setPlayer(player1);
         assertEquals(g.getCell(2, 2), g.getCell(c));
+    }
+
+    @Test
+    public void isValidStateTest() throws Exception {
+        GameTable g = new GameTable(2);
+        Player player1 = new Player("gigi", g, "ATLAS");
+        Player player2 = new Player("gigi2", g, "ATHENA");
+        player1.initBuilderList(g.getCell(1, 2));
+        player1.initBuilderList(g.getCell(1, 3));
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player2);
+        players.add(player1);
+        g.setPlayers(players);
+        assertThrows(IllegalTurnStateException.class, () -> g.isLegalState(ClientState.MOVEORBUILD, player1));
     }
 
     @Test

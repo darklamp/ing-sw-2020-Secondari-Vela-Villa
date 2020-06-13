@@ -12,7 +12,46 @@ import java.util.ArrayList;
  */
 public class News implements Serializable {
 
+    /**
+     * @see Serializable
+     */
     private static final long serialVersionUID = 17756L;
+
+    /**
+     * Height of the build to be performed, if any.
+     */
+    private BuildingType height;
+
+    /**
+     * If coords have been set, this object contains the index of the player who sent the move; else, it holds no value.
+     */
+    private int builderIndex;
+
+    /**
+     * Eventual string to be passed.
+     */
+    private String string;
+
+    /**
+     * Connection of the player who sent the news
+     */
+    private transient SocketClientConnection sender;
+
+    /**
+     * This arraylist contains the news' recipients, aka the people to whom the news is to be sent to.
+     * NB: A null value (default) means the news needs to be sent to everyone
+     **/
+    private ArrayList<SocketClientConnection> recipients = null;
+
+    /**
+     * Coordinates of move/build to be performed, if any.
+     */
+    private Pair coords;
+
+    /**
+     * True if the news is valid, false otherwise.
+     */
+    private boolean isValid = true;
 
     public News() {
         this.height = null;
@@ -41,8 +80,6 @@ public class News implements Serializable {
         }
     }
 
-    private BuildingType height;
-
     public Pair getCoords() {
         return coords;
     }
@@ -59,23 +96,9 @@ public class News implements Serializable {
         this.height = BuildingType.parse(height);
     }
 
-    private int builderIndex;
-
-    private Pair coords;
-
-    private String string;
-
     public SocketClientConnection getSender() {
         return sender;
     }
-
-    private transient SocketClientConnection sender;
-
-    /**
-     *  This arraylist contains the news' recipients, aka the people to whom the news is to be sent to
-     *  a null value means the news needs to be sent to everyone
-     **/
-    private ArrayList<SocketClientConnection> recipients = null;
 
     public ArrayList<SocketClientConnection> getRecipients(){
         return this.recipients;
@@ -88,8 +111,6 @@ public class News implements Serializable {
     public void setInvalid() {
         isValid = false;
     }
-
-    private boolean isValid = true;
 
     public String getString(){ return string; }
 

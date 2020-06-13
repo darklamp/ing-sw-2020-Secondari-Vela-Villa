@@ -14,6 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 
+/**
+ * Server-side client view.
+ */
 public class RemoteView extends View {
 
     /**
@@ -143,7 +146,7 @@ public class RemoteView extends View {
     }
 
     /**
-     * {@inheritDoc}
+     * @see PropertyChangeListener
      **/
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {

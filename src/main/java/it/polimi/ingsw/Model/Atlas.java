@@ -1,28 +1,26 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+
+import static it.polimi.ingsw.Client.ClientState.WAIT;
 
 public class Atlas extends Builder{
     Atlas(Cell position, Player player){
         super(position,player);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void isValidBuild(Cell cell, BuildingType newheight) throws AtlasException, InvalidBuildException, DemeterException, HephaestusException, PrometheusException {
+    protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
-        if (newheight.equals(BuildingType.DOME) && !cell.getHeight().equals(BuildingType.DOME))
-            throw new AtlasException();
-        else verifyBuild(cell, newheight);
+        if (!(newheight.equals(BuildingType.DOME) && !cell.getHeight().equals(BuildingType.DOME)))
+            verifyBuild(cell, newheight);
+        return WAIT;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void isValidMove(Cell finalPoint) throws InvalidMoveException, ApolloException, MinotaurException, ArtemisException, PanException {
+    public void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

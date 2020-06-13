@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.ApolloException;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import org.junit.jupiter.api.Assertions;
@@ -46,19 +45,10 @@ class ApolloTest {
         Builder b1 = new Apollo(c1, p1);
         Builder b2 = new Apollo(c2, p2);
         Builder b3 = new Apollo(c4, p1);
-        Assertions.assertThrows(ApolloException.class, () -> {
-            b1.isValidMove(c2);
-        });
-
-        Assertions.assertThrows(InvalidMoveException.class, () -> {
-            b1.isValidMove(c4);
-        });
-        Assertions.assertThrows(InvalidMoveException.class, () -> {
-            b1.setPosition(c1);
-        });
-        Assertions.assertThrows(InvalidMoveException.class, () -> {
-            b1.setPosition(c3);
-        });
+        Assertions.assertDoesNotThrow(() -> b1.isValidMove(c2));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c4));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.setPosition(c1));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.setPosition(c3));
         Cell c0 = g.getCell(3, 3);
         p1.setState(MOVE);
         b1.setPosition(c0); // shouldn't throw

@@ -35,15 +35,15 @@ public class MainController implements PropertyChangeListener {
     private News news;
 
     /**
-     * {@inheritDoc}
+     * Handles news objects received by remote views. Equivalent of {@link java.util.Observable}'s update().
      *
-     * @param propertyChangeEvent
+     * @see PropertyChangeListener
      */
     @Override
     synchronized public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
         Object obj = propertyChangeEvent.getNewValue();
         String name = propertyChangeEvent.getPropertyName();
-        this.setNews((News) obj);
+        news = (News) obj;
         if (!news.isValid()) {
             news.setRecipients(news.getSender().getPlayer());
             gameTable.setNews(news, "INVALIDNEWS");
@@ -125,10 +125,6 @@ public class MainController implements PropertyChangeListener {
 
     }
 
-    private void setNews(News news) {
-        this.news = news;
-    }
-
     public News getNews() {
         return this.news;
     }
@@ -160,6 +156,7 @@ public class MainController implements PropertyChangeListener {
 
     /**
      * Constructor for the MainController.Takes gameTable as argument.
+     * @param gameTable table of the relative game.
      */
     public MainController(GameTable gameTable) {
         this.currentPlayer = null;
@@ -239,6 +236,9 @@ public class MainController implements PropertyChangeListener {
         p.setConnection(c);
     }
 
+    /**
+     * @return number of players in game
+     */
     synchronized public int getPlayersNumber() {
         return gameTable.getPlayers().size();
     }
@@ -284,11 +284,8 @@ public class MainController implements PropertyChangeListener {
         int size = (c3 == null ? 2 : 3);
         c1.send(new InitMessage(gameTable.getPlayerIndex(player1), size, gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), c3 != null ? GameTable.completeGodList.indexOf(c3.getPlayer().getGod()) : -1));
         c2.send(new InitMessage(gameTable.getPlayerIndex(player2), size, gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), c3 != null ? GameTable.completeGodList.indexOf(c3.getPlayer().getGod()) : -1));
-        // c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c1.getPlayer().getGod()));
-        // c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c2.getPlayer().getGod()));
         if (c3 != null) {
             c3.send(new InitMessage(gameTable.getPlayerIndex(player3), size, gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), GameTable.completeGodList.indexOf(c3.getPlayer().getGod())));
-            //      c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + size + "@@@" + gameTable.getGameIndex() + "@@@" + GameTable.completeGodList.indexOf(c3.getPlayer().getGod()));
         }
         GameStateMessage message = gameTable.getGameState();
         c1.send(message);

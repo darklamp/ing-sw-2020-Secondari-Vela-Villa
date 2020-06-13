@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Model;
 
-import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
+import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
@@ -85,7 +88,8 @@ class BuilderTest {
             b2.isValidBuild(c4, BuildingType.TOP); //nella cella c4 c'è una TOP quindi ci si può mettere solo una dome sopra,sennò parte eccezione
         });
         TestUtilities.mustSetHeight(c4, TOP);
-        Assertions.assertThrows(InvalidBuildException.class, () -> b2.isValidBuild(c4, BuildingType.TOP));
+        c4.setBuilder(null);
+        Assertions.assertThrows(InvalidBuildException.class, () -> b2.isValidBuild(c4, BuildingType.MIDDLE));
     }
 
     @Test
@@ -136,7 +140,6 @@ class BuilderTest {
         Cell c6 = g.getCell(2, 3);
         f.set(g, true);
         TestUtilities.mustSetHeight(c2, BASE);
-        Assertions.assertThrows(ArtemisException.class, () -> b4.isValidMove(c2));
 
         TestUtilities.mustSetHeight(c5, BuildingType.NONE);
         TestUtilities.mustSetHeight(c6, BASE);
@@ -151,7 +154,6 @@ class BuilderTest {
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(new Cell(4, -1, g)));
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(new Cell(5, 0, g)));
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(new Cell(0, 5, g)));
-
 
     }
 

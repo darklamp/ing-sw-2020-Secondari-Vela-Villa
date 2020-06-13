@@ -1,16 +1,22 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
-import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
+import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.CellView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import static it.polimi.ingsw.Client.ClientState.*;
+import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Client.ClientState.WAIT;
 import static java.util.stream.Collectors.toCollection;
 
+/**
+ * Represents a cell in a {@link GameTable} object
+ */
 public class Cell implements Serializable {
 
     private static final long serialVersionUID = 17756L;
@@ -45,10 +51,10 @@ public class Cell implements Serializable {
      * @param builder represents the builder which is trying to build on the cell
      * @param height  represents the height at which the builder wants to build
      * @throws InvalidBuildException if the cell is occupied by another builder OR if the cell is not adjacent
-     * @throws NoMoreMovesException
+     * @throws NoMoreMovesException  if the build goes through and the next player has no more moves available
      */
     public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, NoMoreMovesException {
-        ClientState nextState = WAIT;
+        ClientState nextState;
         News news = new News();
         try {
             gameTable.isLegalState(BUILD, builder.getPlayer());
@@ -64,19 +70,13 @@ public class Cell implements Serializable {
             }
             if (!(builder.getPosition().getNear().contains((this))))
                 throw new InvalidBuildException(); // trying to build on a non-near cell
-            builder.isValidBuild(this, height);
-        } catch (AtlasException ignored) {
-        } catch (HephaestusException | DemeterException e) {
-            nextState = BUILDORPASS;
-            flag = true;
-        } catch (PrometheusException e) {
-            nextState = MOVE;
-            flag = true;
+            nextState = builder.isValidBuild(this, height);
         } catch (InvalidBuildException e) {
             news.setRecipients(builder.getPlayer());
             getGameTable().setNews(news, "BUILDKO");
             throw e;
         }
+        if (nextState != WAIT) flag = true;
         this.height = height;
         gameTable.getCurrentPlayer().setState(nextState);
         gameTable.getCurrentPlayer().setFirstTime(false);
@@ -96,6 +96,8 @@ public class Cell implements Serializable {
     private ArrayList<Cell> nearbyCells = null;
 
     /**
+     * Finds cells near the given one.
+     *
      * @return list of cells which are near the given cell.
      * @example if my cell has coord (0,0), the resulting list contains (1,0), (1,1), (0,1)
      */
