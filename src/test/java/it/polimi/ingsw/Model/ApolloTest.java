@@ -6,6 +6,10 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
+import static it.polimi.ingsw.Client.ClientState.MOVE;
+
 class ApolloTest {
 
     @Test
@@ -30,7 +34,11 @@ class ApolloTest {
     void isValidMoveTest() throws Exception {
         GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "APOLLO");
-        Player p2 = new Player("Pippo", g, "APOLLO");
+        Player p2 = new Player("Pippo", g, "ATLAS");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p2);
+        players.add(p1);
+        g.setPlayers(players);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
         Cell c3 = g.getCell(4, 0);
@@ -52,6 +60,7 @@ class ApolloTest {
             b1.setPosition(c3);
         });
         Cell c0 = g.getCell(3, 3);
+        p1.setState(MOVE);
         b1.setPosition(c0); // shouldn't throw
     }
 }

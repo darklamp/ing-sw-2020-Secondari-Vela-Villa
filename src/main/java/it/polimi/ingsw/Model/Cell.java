@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.CellView;
@@ -7,6 +8,7 @@ import it.polimi.ingsw.View.CellView;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.Client.ClientState.*;
 import static java.util.stream.Collectors.toCollection;
 
 public class Cell implements Serializable {
@@ -43,35 +45,46 @@ public class Cell implements Serializable {
      * @param builder represents the builder which is trying to build on the cell
      * @param height  represents the height at which the builder wants to build
      * @throws InvalidBuildException if the cell is occupied by another builder OR if the cell is not adjacent
-     * @throws DemeterException      --> {@link Demeter}
-     * @throws HephaestusException   --> {@link Hephaestus}
-     * @throws PrometheusException   --> {@link Prometheus}
+     * @throws NoMoreMovesException
      */
-    public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, DemeterException, PrometheusException, HephaestusException {
+    public void setHeight(Builder builder, BuildingType height) throws InvalidBuildException, NoMoreMovesException {
+        ClientState nextState = WAIT;
+        News news = new News();
         try {
-
+            gameTable.isLegalState(BUILD, builder.getPlayer());
+        } catch (Exception e) {
+            news.setRecipients(builder.getPlayer());
+            getGameTable().setNews(news, "BUILDKO");
+            throw new InvalidBuildException();
+        }
+        boolean flag = false;
+        try {
             if (height == null) {
                 height = this.height.getNext();
             }
-
             if (!(builder.getPosition().getNear().contains((this))))
                 throw new InvalidBuildException(); // trying to build on a non-near cell
-
             builder.isValidBuild(this, height);
-
-            this.height = height; //OK
-
-        } catch (AtlasException e) { // the player is trying to build dome
-            this.height = BuildingType.DOME;
-        } catch (HephaestusException e) {
-            this.height = height; //OK
-            throw new HephaestusException();
+        } catch (AtlasException ignored) {
+        } catch (HephaestusException | DemeterException e) {
+            nextState = BUILDORPASS;
+            flag = true;
         } catch (PrometheusException e) {
-            this.height = height;
-            throw new PrometheusException();
-        } catch (DemeterException e) {
-            this.height = height;
-            throw new DemeterException();
+            nextState = MOVE;
+            flag = true;
+        } catch (InvalidBuildException e) {
+            news.setRecipients(builder.getPlayer());
+            getGameTable().setNews(news, "BUILDKO");
+            throw e;
+        }
+        this.height = height;
+        gameTable.getCurrentPlayer().setState(nextState);
+        gameTable.getCurrentPlayer().setFirstTime(false);
+        gameTable.setCurrentBuilder(builder);
+        if (!flag) gameTable.nextTurn();
+        else {
+            gameTable.checkConditions();
+            getGameTable().setNews(news, "BUILDOK");
         }
     }
 

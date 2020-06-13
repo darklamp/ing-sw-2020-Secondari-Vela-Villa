@@ -2,7 +2,6 @@ package it.polimi.ingsw.Controller;
 
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
-import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Model.Exceptions.WinnerException;
 import it.polimi.ingsw.Model.GameTable;
@@ -66,16 +65,15 @@ public class MainController implements PropertyChangeListener {
             try {
                 if (name.equals("PLAYERTIMEOUT")) throw new NoMoreMovesException(news.getSender().getPlayer());
                 else {
-                    isLegalState(name, currentPlayer.getState());
+                    isLegalTurnState(name, currentPlayer.getState());
                     switch (name) {
                         case "PASS" -> {
                             gameTable.nextTurn();
                             currentPlayer = gameTable.getCurrentPlayer();
-                            gameTable.setNews(news, "PASSOK");
                         }
                         case "BUILD" -> buildController.handleBuild(news);
                         case "MOVE" -> moveController.handleMove(news);
-                        /* note : the "default" case should never be met, since the isLegalState function has already filtered the news out */
+                        /* note : the "default" case should never be met, since the isLegalTurnState function has already filtered the news out */
                         default -> throw new IllegalTurnStateException();
                     }
                     if (ServerMain.persistence()) saveGameState();
@@ -122,8 +120,6 @@ public class MainController implements PropertyChangeListener {
                         }
                     }
                 }
-            } catch (InvalidMoveException e) {
-                gameTable.closeGame();
             }
         }
 
@@ -144,7 +140,7 @@ public class MainController implements PropertyChangeListener {
      * @param turn Turn state from Server side
      * @throws IllegalTurnStateException if not matching
      */
-    public static void isLegalState(String name, ClientState turn) throws IllegalTurnStateException {
+    public static void isLegalTurnState(String name, ClientState turn) throws IllegalTurnStateException {
         switch (turn) {
             case BUILD -> {
                 if (!name.equals("BUILD")) throw new IllegalTurnStateException();

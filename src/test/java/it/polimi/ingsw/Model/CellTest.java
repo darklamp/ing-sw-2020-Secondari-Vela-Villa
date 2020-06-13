@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static it.polimi.ingsw.Model.BuildingType.BASE;
-import static it.polimi.ingsw.Model.BuildingType.NONE;
+import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Model.BuildingType.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CellTest {
@@ -25,12 +25,16 @@ class CellTest {
      * Initiates various support variables.
      */
     @BeforeAll
-    static void init() throws Exception{
+    static void init() throws Exception {
         g = new GameTable(2);
-        c1 = g.getCell(4, 4);
-        c2 = g.getCell(2, 0);
         p1 = new Player("Giggino", g, "MINOTAUR");
         p2 = new Player("Giggino2", g, "ATLAS");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p2);
+        players.add(p1);
+        g.setPlayers(players);
+        c1 = g.getCell(4, 4);
+        c2 = g.getCell(2, 0);
         b1 = new Minotaur(c1, p1);
         b2 = new Atlas(c2, p2);
     }
@@ -70,13 +74,10 @@ class CellTest {
      * with the cells on which the two builders (p1 and p2) are located.
      */
     @Test
-    void movableCellTest() throws Exception{
-        g.getCell(4,3).setHeight(b1,BuildingType.BASE);
-        g.getCell(3,3).setHeight(b1,BuildingType.BASE);
-        g.getCell(3,4).setHeight(b1,BuildingType.BASE);
-        g.getCell(3,4).setHeight(b1,BuildingType.MIDDLE);
-        g.getCell(3, 4).setHeight(b1, BuildingType.TOP);
-        g.getCell(3, 4).setHeight(b1, BuildingType.DOME);
+    void movableCellTest() throws Exception {
+        TestUtilities.mustSetHeight(g.getCell(4, 3), BASE);
+        TestUtilities.mustSetHeight(g.getCell(3, 3), BASE);
+        TestUtilities.mustSetHeight(g.getCell(3, 4), DOME);
 
         assertTrue(c1.movableCell(4, 3));
         assertTrue(c1.movableCell(3, 3));
@@ -96,17 +97,27 @@ class CellTest {
     @Test
     void setHeight() throws Exception {
         GameTable g = new GameTable(2);
+        Player p1 = new Player("Giggino", g, "PROMETEUS");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p2);
+        players.add(p1);
+        g.setPlayers(players);
         Cell c = g.getCell(1, 1);
         Cell c1 = g.getCell(1, 2);
-
-        Builder b = new Prometheus(c1, new Player("g", g, (SocketClientConnection) null));
-        c.setHeight(b, BASE);
+        Cell c3 = g.getCell(3, 1);
+        Cell c2 = g.getCell(4, 2);
+        p1.initBuilderList(c1);
+        p1.initBuilderList(c);
+        p2.initBuilderList(c2);
+        p2.initBuilderList(c3);
+        p1.setState(BUILD);
+        TestUtilities.mustSetHeight(c, NONE);
+        c.setBuilder(null);
+        c.setHeight(p1.getBuilderList().get(0), BASE);
         assertEquals(c.getHeight(), BASE);
         TestUtilities.mustSetHeight(c, NONE);
-        new Apollo(c, p1);
-        assertThrows(InvalidBuildException.class, () -> {
-            c.setHeight(b, BASE);
-        });
+        assertThrows(InvalidBuildException.class, () -> c.setHeight(p1.getBuilderList().get(0), BASE));
     }
 
     @Test

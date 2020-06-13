@@ -6,7 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.*;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static it.polimi.ingsw.Client.ClientState.WAIT;
+import static it.polimi.ingsw.Client.ClientState.*;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public abstract class Builder implements Serializable {
@@ -29,7 +29,11 @@ public abstract class Builder implements Serializable {
         }
     }
 
-    public boolean isFirst(){
+    private GameTable getGameTable() {
+        return this.position.getGameTable();
+    }
+
+    public boolean isFirst() {
         return first;
     }
 
@@ -50,23 +54,49 @@ public abstract class Builder implements Serializable {
      * @throws PanException         {@link Pan}
      * @throws MinotaurException    {@link Minotaur}
      */
-    public void setPosition(Cell position) throws InvalidMoveException, ArtemisException, PanException, WinnerException, MinotaurException {
+    public void setPosition(Cell position) throws InvalidMoveException, WinnerException {
+        ClientState nextState = BUILD;
+        News news = new News();
         try {
-            isValidMove(position); // check validity of move
-            this.position.setBuilder(null);
-            this.position = position; // sets position if no exceptions are thrown
-            position.setBuilder(this);
-            if (isWinner()) throw new WinnerException(this.player);
-        } catch (ApolloException e) { // swap position cause it's Apollo
-            swapPosition(this, position.getBuilder());
-            if (isWinner()) throw new WinnerException(this.player);
-        } catch (ArtemisException e) {
-            this.position.setBuilder(null);
-            this.position = position; // sets position if no exceptions are thrown
-            position.setBuilder(this);
-            if (isWinner()) throw new WinnerException(this.player);
-            throw new ArtemisException();
+            getGameTable().isLegalState(MOVE, this.player);
+        } catch (Exception e) {
+            news.setRecipients(this.getPlayer());
+            getGameTable().setNews(news, "MOVEKO");
+            throw new InvalidMoveException();
         }
+        boolean flag = false;
+        try {
+            isValidMove(position);
+        } catch (ApolloException e) {
+            swapPosition(this, position.getBuilder());
+            flag = true;
+        } catch (ArtemisException e) {
+            nextState = MOVEORBUILD;
+        } catch (PanException e) {
+            throw new WinnerException(this.player);
+        } catch (MinotaurException e) {
+            Cell cellBehind = null;
+            this.position.setBuilder(null);
+            try {
+                cellBehind = getGameTable().getCell(e.getPair().getFirst(), e.getPair().getSecond());
+            } catch (InvalidCoordinateException ignored) {
+            }
+            ((Minotaur) this).minotaurMove(position, cellBehind); //TODO togliere sta orrenda funzione
+            flag = true;
+        } catch (InvalidMoveException e) {
+            news.setRecipients(this.player);
+            getGameTable().setNews(new News(), "MOVEKO");
+            throw e;
+        }
+        if (!flag) {
+            this.position.setBuilder(null);
+            this.position = position;
+            position.setBuilder(this);
+        }
+        if (isWinner()) throw new WinnerException(this.player);
+        this.player.setState(nextState);
+        getGameTable().setCurrentBuilder(this);
+        getGameTable().setNews(news, "MOVEOK");
     }
 
     /**

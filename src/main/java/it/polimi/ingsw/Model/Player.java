@@ -17,7 +17,6 @@ public class Player implements Serializable {
     private static final long serialVersionUID = 17756L;
 
     private final ArrayList<Builder> builderList; //array of builders
-
     private GameTable gameTable;
     private transient SocketClientConnection connection;
 
@@ -239,9 +238,9 @@ public class Player implements Serializable {
         this.connection = connection;
     }
 
-    synchronized void kick(int pIndex) {
+    synchronized void kick(int pIndex, boolean gameFinished) {
         this.connection.setGracefulClose();
-        gameTable.setNews(new News(ServerMessage.connClosed + "@@@" + pIndex, null), "PLAYERKICKED");
+        if (!gameFinished) gameTable.setNews(new News(ServerMessage.connClosed + "@@@" + pIndex, null), "PLAYERKICKED");
         this.connection.closeConnection();
     }
 }

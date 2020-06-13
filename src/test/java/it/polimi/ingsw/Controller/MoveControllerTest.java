@@ -78,6 +78,7 @@ class MoveControllerTest {
         Builder bc = bd.get(0);
         gameTable.setCurrentBuilder(bc);
         news.setCoords(4, 4, 0);
+        player3.setState(ClientState.MOVE);
         moveController.handleMove(news);
         assertSame(bc, gameTable.getCell(4, 4).getBuilder());
 
@@ -134,13 +135,13 @@ class MoveControllerTest {
         gameTable.setPlayers(players);
         Field f1 = Player.class.getDeclaredField("builderList");
         f1.setAccessible(true);
-        Builder b = (Builder) ((ArrayList<Builder>) f1.get(player2)).get(1);
+        Builder b = ((ArrayList<Builder>) f1.get(player2)).get(1);
         gameTable.setCurrentBuilder(b);
         MoveController moveController = new MoveController(gameTable);
         Field f2 = GameTable.class.getDeclaredField("type");
         f2.setAccessible(true);
         moveController.handleMove(news);
-        assertEquals("MOVEKO", f2.get(gameTable));
+        assertNull(gameTable.getCell(4, 4).getBuilder());
     }
 
     @Test

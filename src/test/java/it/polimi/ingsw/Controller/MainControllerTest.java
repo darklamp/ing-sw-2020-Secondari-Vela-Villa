@@ -88,7 +88,7 @@ class MainControllerTest {
         News news4 = new News("asd", c2);
         controller.propertyChange(new PropertyChangeEvent(new Object(), "ABORT", null, news4));
         stringa = (String) b.get(gameTable);
-        Assertions.assertEquals("PLAYERKICKED", stringa);
+        Assertions.assertEquals("ABORT", stringa);
     }
 
     /**
@@ -151,7 +151,7 @@ class MainControllerTest {
         controller.propertyChange(new PropertyChangeEvent(new Object(), "PLAYERTIMEOUT", null, news6));
         stringa = (String) b.get(gameTable);
         Assertions.assertEquals(player1.getState(), ClientState.WIN);
-        Assertions.assertEquals(stringa, "PLAYERKICKED");
+        Assertions.assertEquals(stringa, "WIN");
     }
 
     /**
@@ -211,7 +211,7 @@ class MainControllerTest {
         controller.propertyChange(new PropertyChangeEvent(new Object(), "MOVE", null, news5));
         stringa = (String) b.get(gameTable);
         Assertions.assertEquals(player2.getState(), ClientState.WIN);
-        Assertions.assertEquals("PLAYERKICKED", stringa);
+        Assertions.assertEquals("WIN", stringa);
 
     }
 
@@ -264,13 +264,13 @@ class MainControllerTest {
     }
 
     /**
-     * Tests {@link MainController#isLegalState(String, ClientState)}
+     * Tests {@link MainController#isLegalTurnState(String, ClientState)}
      *
      * @throws Exception if something fails
      */
     @Test
     void isLegalStateTest() throws Exception {
-        Method m = MainController.class.getDeclaredMethod("isLegalState", String.class, ClientState.class);
+        Method m = MainController.class.getDeclaredMethod("isLegalTurnState", String.class, ClientState.class);
         m.setAccessible(true);
         String stringa = "ASD";
         AtomicInteger count = new AtomicInteger();

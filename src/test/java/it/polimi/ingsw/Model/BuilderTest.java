@@ -8,8 +8,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Client.ClientState.MOVE;
 import static it.polimi.ingsw.Model.BuildingType.*;
 
 class BuilderTest {
@@ -41,6 +43,10 @@ class BuilderTest {
         GameTable g = new GameTable(2);
         Player p1 = new Player("Giggino", g, "APOLLO");
         Player p2 = new Player("Pippo", g, "APOLLO");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p2);
+        players.add(p1);
+        g.setPlayers(players);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
         Cell c3 = g.getCell(0, 3);
@@ -49,20 +55,17 @@ class BuilderTest {
         Builder b1 = new Apollo(c1, p1);
         Builder b2 = new Apollo(c2, p2);
         Builder b3 = new Apollo(c3, p1);
-        Builder b4 = new Apollo(c4, p2);
         Builder b5 = new Artemis(c5, p1);
+        p1.setState(MOVE);
         b1.setPosition(c2);
         Assertions.assertEquals(b1, c2.getBuilder());
         Assertions.assertEquals(b2, c1.getBuilder());
         TestUtilities.mustSetHeight(c3, MIDDLE);
         TestUtilities.mustSetHeight(c4, BuildingType.TOP);
-        Assertions.assertThrows(WinnerException.class, () -> {
-            b3.setPosition(c4);
-        });
+        p1.setState(MOVE);
+        Assertions.assertThrows(WinnerException.class, () -> b3.setPosition(c4));
         c4.setBuilder(null);
-        Assertions.assertThrows(WinnerException.class, () -> {
-            b5.setPosition(c4);
-        });
+        Assertions.assertThrows(WinnerException.class, () -> b5.setPosition(c4));
     }
 
     @Test

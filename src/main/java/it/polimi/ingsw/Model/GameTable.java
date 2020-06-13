@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
+import it.polimi.ingsw.Controller.Exceptions.IllegalTurnStateException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Network.Messages.GameStateMessage;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.Client.ClientState.*;
 import static java.lang.Thread.sleep;
 
 public class GameTable implements Serializable {
@@ -88,8 +90,32 @@ public class GameTable implements Serializable {
         getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
         try {
             getCurrentPlayer().checkConditions(null);
+            News n = new News();
+            setNews(n, "TURN");
         } finally {
             resetMoveTimer();
+        }
+    }
+
+    /**
+     * Checks whether the player is in a legal state for the move it wants to make.
+     *
+     * @param toCheck ClientState to be checked
+     * @param player  player that wants to move
+     * @throws IllegalTurnStateException if not matching
+     */
+    void isLegalState(ClientState toCheck, Player player) throws IllegalTurnStateException {
+        if (getCurrentPlayer() != player) throw new IllegalTurnStateException();
+        ClientState state = getCurrentPlayer().getState();
+        switch (toCheck) {
+            case BUILD -> {
+                if (state != BUILD && state != BUILDORPASS && state != MOVEORBUILD)
+                    throw new IllegalTurnStateException();
+            }
+            case MOVE -> {
+                if (state != MOVE && state != MOVEORBUILD) throw new IllegalTurnStateException();
+            }
+            default -> throw new IllegalTurnStateException();
         }
     }
 
@@ -150,7 +176,7 @@ public class GameTable implements Serializable {
         int pIndex = getPlayerIndex(player);
         player.removeBuilders();
         this.players.remove(player);
-        player.kick(pIndex);
+        player.kick(pIndex, !checkWinner);
         if (checkWinner && players.size() == 1) {
             players.get(0).setState(ClientState.WIN);
             setNews(new News(null, players.get(0).getConnection()), "WIN");
@@ -189,14 +215,6 @@ public class GameTable implements Serializable {
             }
         } catch (IndexOutOfBoundsException ignored) {
         }
-
-
-      /*  for (Player p : players) {
-            try {
-                removePlayer(p, false);
-            } catch (NoMoreMovesException ignored) {
-            }
-        }*/
     }
 
 
@@ -355,7 +373,8 @@ public class GameTable implements Serializable {
     }
 
     public ArrayList<Player> getPlayers() {
-        return players; }
+        return players;
+    }
     /* end simple getters / setters */
 
 

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Controller;
 
-import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.*;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
@@ -14,6 +13,9 @@ import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Model.BuildingType.NONE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 class BuildControllerTest {
@@ -54,7 +56,7 @@ class BuildControllerTest {
 
         BuildController buildController = new BuildController(gameTable);
         buildController.handleBuild(news);
-        assertSame(BuildingType.NONE, gameTable.getCell(4, 4).getHeight());
+        assertSame(NONE, gameTable.getCell(4, 4).getHeight());
 
         news.setCoords(2, 1, 0);
         Field c = Player.class.getDeclaredField("builderList");
@@ -62,10 +64,9 @@ class BuildControllerTest {
         //noinspection unchecked
         ArrayList<Builder> bs = (ArrayList<Builder>) c.get(player2);
         gameTable.setCurrentBuilder(bs.get(0));
+        player2.setState(BUILD);
         buildController.handleBuild(news);
         assertSame(BuildingType.BASE, gameTable.getCell(2, 1).getHeight());
-
-
         Player player3 = new Player("gigg2", gameTable, null);
         player3.setGod(4); /* tests DemeterException handling */
         player3.initBuilderList(gameTable.getCell(3, 3));
@@ -73,7 +74,7 @@ class BuildControllerTest {
         players.remove(player2);
         players.add(player3);
         gameTable.setPlayers(players);
-        b.set(player3, ClientState.BUILD);
+        b.set(player3, BUILD);
         news.setCoords(3, 4, 0);
         Field f = GameTable.class.getDeclaredField("currentPlayer");
         f.setAccessible(true);
@@ -90,9 +91,10 @@ class BuildControllerTest {
         player4.initBuilderList(gameTable.getCell(0, 4));
         players.remove(player3);
         players.add(player4);
+        player4.setState(BUILD);
+
         f.set(gameTable, 3);
         gameTable.setPlayers(players);
-        b.set(player4, ClientState.MOVEORBUILD);
         news.setCoords(0, 2, 0);
         //noinspection unchecked
         ArrayList<Builder> bz = (ArrayList<Builder>) c.get(player4);
@@ -144,10 +146,9 @@ class BuildControllerTest {
         Field f3 = GameTable.class.getDeclaredField("currentBuilder");
         f3.setAccessible(true);
         f3.set(gameTable, b2);
+        player2.setState(BUILD);
         buildController.handleBuild(news);
-        Field type = GameTable.class.getDeclaredField("type");
-        type.setAccessible(true);
-        Assertions.assertEquals("BUILDKO", type.get(gameTable));
+        assertEquals(NONE, gameTable.getCell(4, 4).getHeight());
     }
 
     @Test
@@ -159,7 +160,7 @@ class BuildControllerTest {
         ArrayList<Integer> choices = new ArrayList<>();
         choices.add(1);
         choices.add(8);
-        Player player1 = new Player("gigi", gameTable, new SocketClientConnection(new Socket(), new Server()));
+        Player player1 = new Player("gigi", gameTable, null);
         Player player2 = new Player("gigi2", gameTable, null);
         player1.setGod(choices.get(0));
         player2.setGod(choices.get(1));
@@ -184,9 +185,10 @@ class BuildControllerTest {
         Field f3 = GameTable.class.getDeclaredField("currentBuilder");
         f3.setAccessible(true);
         f3.set(gameTable, null);
-        assert gameTable.getCurrentBuilder() == null;
+        gameTable.setCurrentBuilder(null);
+        player2.setState(BUILD);
         news.setCoords(0, 1, 1);
         buildController.handleBuild(news);
-        Assertions.assertSame(gameTable.getCurrentBuilder(), (players1.get(1)));
+        Assertions.assertSame(null, gameTable.getCurrentBuilder());
     }
 }
