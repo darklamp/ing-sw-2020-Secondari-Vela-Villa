@@ -4,9 +4,11 @@
 
 [![codecov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/branch/master/graph/badge.svg?token=PF3WCGV0B5)](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa)
 
-Online CLI (ASCII not 100% working): [**here**](https://server.santorini.cf) (user:GC46, pwd: santorini)
-
-Test game server :  **server.santorini.cf** (To be able to connect,  make sure to [click on this link](http://server.santorini.cf:1338) three times.)
+User: GC46, pwd: santorini  
+  
+Online CLI (ASCII not 100% working): [**here**](https://server.santorini.cf)   
+JavaDoc: [**here**](https://server.santorini.cf/javadoc)   
+Test game server :  **server.santorini.cf**  
 
 
 | Functionality | State |
