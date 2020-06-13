@@ -35,10 +35,15 @@ class MinotaurTest {
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
         Cell c3 = g.getCell(4, 1);
+        Cell c4 = g.getCell(3, 3);
         Builder b1 = new Minotaur(c0, p1);
         Builder b2 = new Atlas(c1, p2);
+        Builder b3 = new Atlas(c4, p1);
+
         Assertions.assertThrows(MinotaurException.class, () -> b1.isValidMove(c1));
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c2));
+        Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c4));
+
         Assertions.assertDoesNotThrow(() -> b1.isValidMove(c3));
     }
 
