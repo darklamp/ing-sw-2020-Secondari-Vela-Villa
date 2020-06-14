@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ class  PlayerTest {
         Cell c5 = g.getCell(3, 2);
         p2.initBuilderList(c2);
         p2.initBuilderList(c3);
+
 
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             p1.initBuilderList(c2);  //parte l'eccezione perchè la cella c2 è occupata dal player p2
@@ -81,14 +83,14 @@ class  PlayerTest {
          /* currently there is no god that can end up in
         a situation where its state is MOVEORBUILD and he can only move. But still */
         Player p3 = new Player("ALE", g, "APOLLO");
-        p3.setState(MOVEORBUILD);
         p3.initBuilderList(g.getCell(0, 1));
         g.getCell(0, 2).setBuilder(null);
         TestUtilities.mustSetHeight(g.getCell(0, 3), BuildingType.DOME);
         TestUtilities.mustSetHeight(g.getCell(1, 3), BuildingType.DOME);
         p3.initBuilderList(g.getCell(0, 2));
+        p3.setState(MOVEORBUILD);
         Assertions.assertDoesNotThrow(() -> p3.checkConditions(null));
-        Assertions.assertEquals(WAIT, p3.getState());
+        Assertions.assertEquals(MOVE, p3.getState());
     }
 
     /**
@@ -107,10 +109,16 @@ class  PlayerTest {
         p1.initBuilderList(g.getCell(0, 0));
         p1.initBuilderList(g.getCell(0, 1));
         p2.initBuilderList(g.getCell(0, 2));
+        p2.initBuilderList(g.getCell(0, 3));
         p1.setState(BUILDORPASS);
         /* check that the branch gameTable.nextTurn() gets executed */
-        Assertions.assertThrows(NullPointerException.class, () -> p1.checkConditions(p1.getBuilderList().get(0)));
-        Assertions.assertThrows(NullPointerException.class, () -> p1.checkConditions(null));
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p2);
+        players.add(p1);
+        g.setPlayers(players);
+        g.setCurrentBuilder(p1.getBuilderList().get(0));
+        Assertions.assertDoesNotThrow(() -> p1.checkConditions(p1.getBuilderList().get(0)));
+        assert p1.getState() == WAIT;
         p1.setState(BUILDORPASS);
         g.getCell(0, 0).setBuilder(null);
         TestUtilities.mustSetHeight(g.getCell(0, 0), BuildingType.TOP);
