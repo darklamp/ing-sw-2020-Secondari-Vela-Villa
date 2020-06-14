@@ -41,6 +41,14 @@ class  PlayerTest {
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             p2.initBuilderList(c4); // anche se è libera la cella parte l'eccezione perchè p2 ha già due builder posizionati
         });
+        Field f5 = Player.class.getDeclaredField("god");
+        f5.setAccessible(true);
+        f5.set(p1, null);
+
+        Assertions.assertThrows(InvalidBuildException.class, () -> {
+            p1.initBuilderList(c4); // the builder's god attribute is null
+        });
+
 
         Player p3 = new Player("ALE", g, new SocketClientConnection(new Socket(), new Server()));
         p3.setGod(5);
