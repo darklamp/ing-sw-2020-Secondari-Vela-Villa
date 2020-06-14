@@ -178,7 +178,7 @@ public class MainWindowController extends WindowController implements Initializa
                 }
             });
             initialized = true;
-            godImage.setImage(new Image("/images/GodCards/" + (Client.getGod() + 1) + ".png"));
+            godImage.setImage(new Image("/images/GodCards/" + (Client.completeGodList.get(Client.getGod())) + ".png"));
             godImage.fitHeightProperty().bind(GUIClient.getStage().heightProperty().divide(MAX_HEIGHT).multiply(godImage.getImage().getHeight() / (3.75 * 1080 / MAX_HEIGHT)));
             godImage.fitWidthProperty().bind(GUIClient.getStage().widthProperty().divide(MAX_WIDTH).multiply(godImage.getImage().getWidth() / (3.75 * 1920 / MAX_WIDTH)));
             infoButton.setImage(new Image("/images/infoButton.png"));
