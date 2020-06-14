@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static it.polimi.ingsw.Client.ClientState.BUILD;
-import static it.polimi.ingsw.Client.ClientState.MOVE;
+import static it.polimi.ingsw.Client.ClientState.*;
 
 class PrometheusTest {
 
@@ -30,7 +29,10 @@ class PrometheusTest {
         Assertions.assertEquals(ClientState.MOVEORBUILD, b1.getFirstState());
         p1.setState(BUILD);
         p2.setState(BUILD);
-        Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c1, BuildingType.BASE));
+        Assertions.assertEquals(WAIT, b1.isValidBuild(c1, BuildingType.BASE));
+        p1.setState(MOVEORBUILD);
+        Assertions.assertEquals(MOVE, b1.isValidBuild(c1, BuildingType.BASE));
+
         Assertions.assertThrows(InvalidBuildException.class, () -> c2.setHeight(b1, BuildingType.DOME));
 
     }
