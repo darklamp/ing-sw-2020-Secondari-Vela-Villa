@@ -9,10 +9,12 @@ import it.polimi.ingsw.Utility.Pair;
 import static it.polimi.ingsw.Client.ClientState.BUILD;
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@God(name = "MINOTAUR")
 public class Minotaur extends Builder {
     Minotaur(Cell position, Player player) {
         super(position, player);
     }
+
 
     @Override
     public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
@@ -89,15 +91,12 @@ public class Minotaur extends Builder {
             } else {
                 return new Pair(finalPoint.getRow() + 1, finalPoint.getColumn());
             }
-        }
-        else if (diffY == -1){
+        } else if (diffY == -1){
             if (diffX == 1) {
                 return new Pair(finalPoint.getRow() - 1, finalPoint.getColumn() + 1);
-            }
-            else if (diffX == -1) {
+            } else if (diffX == -1) {
                 return new Pair(finalPoint.getRow() - 1, finalPoint.getColumn() - 1);
-            }
-            else {
+            } else {
                 return new Pair(finalPoint.getRow() - 1, finalPoint.getColumn());
             }
         } else {

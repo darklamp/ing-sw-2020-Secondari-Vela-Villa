@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 
 import static it.polimi.ingsw.Client.ClientState.*;
 
+@God(name = "PAN")
 public class Pan extends Builder{
 
     Pan(Cell position, Player player) {

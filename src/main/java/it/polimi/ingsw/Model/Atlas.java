@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@God(name = "ATLAS")
 public class Atlas extends Builder{
     Atlas(Cell position, Player player){
         super(position,player);

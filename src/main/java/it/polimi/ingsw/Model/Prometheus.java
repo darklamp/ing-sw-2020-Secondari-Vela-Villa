@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import static it.polimi.ingsw.Client.ClientState.MOVE;
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@God(name = "PROMETHEUS")
 public class Prometheus extends Builder {
     Prometheus(Cell position, Player player) {
         super(position, player);

@@ -1,0 +1,21 @@
+package it.polimi.ingsw.Network;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Server configuration helper class.
+ * NB: the values here are the defaults. They can get overridden by the yaml conf,
+ * and the yaml conf can in turn be overridden by command line arguments.
+ */
+public class ServerConf {
+    public String ip = "0.0.0.0";
+    public int port = 1337;
+    public boolean disk = false;
+    public boolean verbose = false;
+    public short moveTimer = 2;
+    public boolean console = false;
+    public String MOTD = "Have fun!";
+    public String timeunit = "m";
+    public List<String> gods = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS");
+}

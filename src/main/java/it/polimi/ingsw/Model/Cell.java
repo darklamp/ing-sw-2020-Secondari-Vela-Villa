@@ -125,13 +125,14 @@ public class Cell implements Serializable {
 
     /**
      * Checks whether the given cell is not already occupied
+     *
      * @param x X coordinate of the cell to be checked
      * @param y Y coordinate of the cell to be checked
      * @return true if the Cell has no builder nor dome on it, else false
      * @throws InvalidCoordinateException if the given coordinates are invalid
      */
-    boolean movableCell(int x, int y) throws InvalidCoordinateException{
-        return gameTable.getCell(x,y).getBuilder() == null && (gameTable.getCell(x,y).getHeight() != BuildingType.DOME);
+    boolean movableCell(int x, int y) throws InvalidCoordinateException {
+        return gameTable.getCell(x, y).getBuilder() == null && (gameTable.getCell(x, y).getHeight() != BuildingType.DOME);
     }
 
 

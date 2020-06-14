@@ -189,12 +189,11 @@ public class SocketClientConnection implements Runnable {
             try{
                 choice = in.nextInt();
                 choice -= 1 ;
-                if (choice < 9 && choice >= 0 && gods.contains(choice)){
+                if (choice < GameTable.completeGodList.size() && choice >= 0 && gods.contains(choice)) {
                     gods.remove(Integer.valueOf(choice));
                     send("You choose: " + GameTable.getCompleteGodList().get(choice));
                     return choice;
-                }
-                else{
+                } else {
                     send("Wrong number. Try again: ");
                 }
             }
@@ -238,8 +237,8 @@ public class SocketClientConnection implements Runnable {
             try{
                 int i = Integer.parseInt(in.nextLine());
                 i -= 1 ;
-                if (i < 9 && i >= 0 && !gods.contains(i)) {
-                    gods.add(count,i);
+                if (i < GameTable.completeGodList.size() && i >= 0 && !gods.contains(i)) {
+                    gods.add(count, i);
                     count += 1;
                 }
             }

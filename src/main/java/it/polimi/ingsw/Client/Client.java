@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Network.Messages.GameStateMessage;
+import it.polimi.ingsw.Network.Messages.MOTD;
 import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.View.CellView;
 
@@ -103,7 +104,7 @@ public class Client implements Runnable {
     }
 
     private static ClientState state = ClientState.INIT;
-    public static final List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETEUS"); /* list containing all the basic gods */
+    public static List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS"); /* list containing all the basic gods */
 
     private static Ui ui;
 
@@ -135,7 +136,10 @@ public class Client implements Runnable {
                     } else if (inputObject instanceof CellView[][]) {
                         ui.showTable((CellView[][]) inputObject);
                     } else if (inputObject instanceof Message) {
-                        if (inputObject instanceof GameStateMessage) {
+                        if (inputObject instanceof MOTD) {
+                            completeGodList = ((MOTD) inputObject).getGods();
+                            ui.process((Message) inputObject);
+                        } else if (inputObject instanceof GameStateMessage) {
                             GameStateMessage c = (GameStateMessage) inputObject;
                             if (verbose())
                                 System.out.println("[DEBUG] New client states are: " + c.get(0) + "," + c.get(1) + "," + c.get(2));
@@ -266,6 +270,7 @@ public class Client implements Runnable {
         } catch (ConnectException ee) {
             if (ee.getMessage().contains("Connection refused")) {
                 System.err.println("[CRITICAL] Connection refused. Server probably down or full.");
+                System.exit(-1);
             } else ee.getMessage();
         } catch (Exception e) {
             e.printStackTrace();

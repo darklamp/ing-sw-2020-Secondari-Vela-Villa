@@ -41,13 +41,12 @@ public class GameInitializer implements Runnable {
     /**
      * Gets players' god choices
      *
-     * @param c1   first client's connection
-     * @param c2   second client's connection
-     * @param c3   (eventual) third client's connection
-     * @param gods list of available gods, from which players have to choose
+     * @param c1 first client's connection
+     * @param c2 second client's connection
+     * @param c3 (eventual) third client's connection
      * @return list of chosen gods, in order from first to last player
      */
-    private ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods) {
+    private ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3) {
         if (c3 == null) {
             ArrayList<Integer> out = new ArrayList<>();
             int p2choice = c2.getGodChoice(gods);
@@ -113,7 +112,7 @@ public class GameInitializer implements Runnable {
     @Override
     public void run() {
         try{
-            ArrayList<Integer> choices = getPlayerGodChoices(c1,c2,c3,gods);
+            ArrayList<Integer> choices = getPlayerGodChoices(c1, c2, c3);
             player1.setGod(choices.get(0));
             player2.setGod(choices.get(1));
             if(c3 != null) player3.setGod(choices.get(2));
@@ -158,11 +157,8 @@ public class GameInitializer implements Runnable {
             c1.send(new InitMessage(gameTable.getPlayerIndex(player1), players.size(), gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), c3 != null ? GameTable.completeGodList.indexOf(c3.getPlayer().getGod()) : -1));
             c2.send(new InitMessage(gameTable.getPlayerIndex(player2), players.size(), gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), c3 != null ? GameTable.completeGodList.indexOf(c3.getPlayer().getGod()) : -1));
 
-            //c1.send("[INIT]@@@" + gameTable.getPlayerIndex(player1) + "@@@" + players.size() + "@@@" + gameTable.getGameIndex());
-            //c2.send("[INIT]@@@" + gameTable.getPlayerIndex(player2) + "@@@" + players.size() + "@@@" + gameTable.getGameIndex());
             if (c3 != null) {
                 c3.send(new InitMessage(gameTable.getPlayerIndex(player3), players.size(), gameTable.getGameIndex(), GameTable.completeGodList.indexOf(c1.getPlayer().getGod()), GameTable.completeGodList.indexOf(c2.getPlayer().getGod()), GameTable.completeGodList.indexOf(c3.getPlayer().getGod())));
-                //c3.send("[INIT]@@@" + gameTable.getPlayerIndex(player3) + "@@@" + players.size() + "@@@" + gameTable.getGameIndex());
             }
             GameStateMessage message = gameTable.getGameState();
             c1.send(message);

@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import static it.polimi.ingsw.Client.ClientState.BUILD;
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@God(name = "ATHENA")
 public class Athena extends Builder {
     Athena(Cell position, Player player) {
         super(position, player);

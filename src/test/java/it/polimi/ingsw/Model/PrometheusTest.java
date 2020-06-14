@@ -17,7 +17,7 @@ class PrometheusTest {
     @Test
     void isValidBuildTest() throws Exception {
         GameTable g = new GameTable(2);
-        Player p1 = new Player("Giggino", g, "PROMETEUS");
+        Player p1 = new Player("Giggino", g, "PROMETHEUS");
         Player p2 = new Player("Matte", g, "ATLAS");
         ArrayList<Player> players = new ArrayList<>();
         players.add(p2);

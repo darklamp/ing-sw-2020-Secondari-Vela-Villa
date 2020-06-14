@@ -1,0 +1,14 @@
+gods:
+  - Apollo
+  - Artemis
+  - Athena
+  - Atlas
+  - Demeter
+  - Hephaestus
+  - Minotaur
+  - Pan
+  - Prometheus
+  console:
+    true
+  MOTD:
+    "Have fun!"

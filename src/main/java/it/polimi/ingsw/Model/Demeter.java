@@ -6,12 +6,14 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@God(name = "DEMETER")
 public class Demeter extends Builder {
     private Cell previous;
 
     Demeter(Cell position, Player player) {
         super(position, player);
     }
+
 
     @Override
     protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {

@@ -54,7 +54,7 @@ public class GameTable implements Serializable {
      **/
     private int playersNumber;
 
-    public static final List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETEUS"); /* list containing all the basic gods */
+    public static List<String> completeGodList = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS"); /* list containing all the basic gods */
 
     /**
      * variable which holds the current builder being used by the player

@@ -7,11 +7,11 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import static it.polimi.ingsw.Client.ClientState.BUILD;
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@God(name = "APOLLO")
 public class Apollo extends Builder{
     Apollo(Cell position, Player player) {
         super(position,player);
     }
-
 
     /**
      * {@inheritDoc}

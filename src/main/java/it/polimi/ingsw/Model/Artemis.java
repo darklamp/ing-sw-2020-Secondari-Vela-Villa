@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@God(name = "ARTEMIS")
 public class Artemis extends Builder {
     Artemis(Cell position, Player player) {
         super(position, player);

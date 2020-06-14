@@ -12,7 +12,7 @@ import static it.polimi.ingsw.Client.ClientState.*;
 
 
 /**
- * Every class extending this is a god implementation.
+ * Every class extending this AND annotated with @God is a god implementation.
  */
 public abstract class Builder implements Serializable {
 

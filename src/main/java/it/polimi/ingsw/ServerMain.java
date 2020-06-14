@@ -1,8 +1,17 @@
 package it.polimi.ingsw;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import it.polimi.ingsw.Model.GameTable;
 import it.polimi.ingsw.Network.Server;
+import it.polimi.ingsw.Network.ServerConf;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 public class ServerMain {
@@ -21,16 +30,35 @@ public class ServerMain {
 
     /**
      * Launch the server
+     *
+     * @param args command line args (see README for available params)
      */
     public static void main(String[] args) {
         Server server;
-        int port = 1337;
-        String ip = "0.0.0.0";
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        ServerConf serverConf;
+        int port;
+        String ip, MOTD;
         String[] a;
-        short moveTimer = 2;
-        TimeUnit timerTimeUnit = TimeUnit.MINUTES;
-        boolean console = false;
-        String MOTD = null;
+        short moveTimer;
+        TimeUnit timerTimeUnit;
+        boolean console;
+        try {
+            serverConf = mapper.readValue(new File(System.getProperty("user.dir") + "/santorini.yaml"), ServerConf.class);
+            System.out.println("Configuration file parsed.");
+        } catch (IOException e) {
+            serverConf = new ServerConf();
+        }
+        persistence = serverConf.disk;
+        port = serverConf.port;
+        console = serverConf.console;
+        moveTimer = serverConf.moveTimer;
+        MOTD = serverConf.MOTD;
+        ip = serverConf.ip;
+        List<String> tempgods = serverConf.gods;
+        GameTable.completeGodList = tempgods.stream().map(String::toUpperCase).collect(Collectors.toCollection(ArrayList::new));
+        timerTimeUnit = (serverConf.timeunit.equals("h")) ? TimeUnit.HOURS : (serverConf.timeunit.equals("s") ? TimeUnit.SECONDS : TimeUnit.MINUTES);
+
         for (String s : args) {
             if (s.toLowerCase().contains("motd")) {
                 try {

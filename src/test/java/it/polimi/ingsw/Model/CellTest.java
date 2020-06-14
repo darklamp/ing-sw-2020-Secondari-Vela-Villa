@@ -97,7 +97,7 @@ class CellTest {
     @Test
     void setHeight() throws Exception {
         GameTable g = new GameTable(2);
-        Player p1 = new Player("Giggino", g, "PROMETEUS");
+        Player p1 = new Player("Giggino", g, "PROMETHEUS");
         Player p2 = new Player("Giggino2", g, "ATLAS");
         ArrayList<Player> players = new ArrayList<>();
         players.add(p2);

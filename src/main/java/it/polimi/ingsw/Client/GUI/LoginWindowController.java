@@ -130,10 +130,7 @@ public class LoginWindowController extends WindowController {
     private Optional<String> result;
 
     void firstPlayerGods() {
-        List<String> choices = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            choices.add(Client.completeGodList.get(i));
-        }
+        List<String> choices = new ArrayList<>(Client.completeGodList);
         ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Gods choice");

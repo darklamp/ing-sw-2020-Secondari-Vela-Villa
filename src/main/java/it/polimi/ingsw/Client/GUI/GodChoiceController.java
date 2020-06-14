@@ -24,8 +24,9 @@ public class GodChoiceController extends WindowController {
     private static Image[] godCards = new Image[Client.completeGodList.size()];
 
     static {
-        for (int i = 1; i < Client.completeGodList.size() + 1; i++) {
-            godCards[i - 1] = new Image("/images/GodCards/" + i + ".png");
+        for (int i = 0; i < Client.completeGodList.size(); i++) {
+            System.out.println("/images/GodCards/" + Client.completeGodList.get(i) + ".png");
+            godCards[i] = new Image("/images/GodCards/" + Client.completeGodList.get(i) + ".png");
         }
     }
 
@@ -41,14 +42,14 @@ public class GodChoiceController extends WindowController {
         for (int i = 1; i < inputs.length; i++) {
             choices.add(Integer.parseInt(inputs[i]));
         }
-        god1 = new Image("/images/GodCards/" + (choices.get(0) + 1) + ".png");
+        god1 = new Image("/images/GodCards/" + (Client.completeGodList.get(choices.get(0))) + ".png");
         i1 = choices.get(0);
-        god2 = new Image("/images/GodCards/" + (choices.get(1) + 1) + ".png");
+        god2 = new Image("/images/GodCards/" + (Client.completeGodList.get(choices.get(1))) + ".png");
         i2 = choices.get(1);
         god3 = null;
         i3 = -1;
         if (choices.size() == 3) {
-            god3 = new Image("/images/GodCards/" + (choices.get(2) + 1) + ".png");
+            god3 = new Image("/images/GodCards/" + (Client.completeGodList.get(choices.get(2))) + ".png");
             i3 = choices.get(2);
         }
         godCard.setImage(god1);

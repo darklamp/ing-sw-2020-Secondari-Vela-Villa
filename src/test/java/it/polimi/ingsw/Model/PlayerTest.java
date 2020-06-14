@@ -59,7 +59,7 @@ class  PlayerTest {
     @Test
     void checkConditionsTest1() throws Exception {
         GameTable g = new GameTable(2);
-        Player p1 = new Player("Giggino", g, "PROMETEUS");
+        Player p1 = new Player("Giggino", g, "PROMETHEUS");
         Player p2 = new Player("Giggino2", g, "ATLAS");
         TestUtilities.mustSetHeight(g.getCell(1, 0), BuildingType.DOME);
         TestUtilities.mustSetHeight(g.getCell(1, 1), BuildingType.DOME);
@@ -84,7 +84,7 @@ class  PlayerTest {
         TestUtilities.mustSetHeight(g.getCell(1, 3), BuildingType.DOME);
         p3.initBuilderList(g.getCell(0, 2));
         Assertions.assertDoesNotThrow(() -> p3.checkConditions(null));
-        Assertions.assertEquals(MOVE, p3.getState());
+        Assertions.assertEquals(WAIT, p3.getState());
     }
 
     /**

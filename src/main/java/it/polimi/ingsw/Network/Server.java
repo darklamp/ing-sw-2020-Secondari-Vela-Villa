@@ -60,10 +60,6 @@ public class Server {
         return MOTD;
     }
 
-    public static void setMOTD(String MOTD) {
-        Server.MOTD = MOTD;
-    }
-
     /**
      * Message of the day
      */
@@ -114,49 +110,47 @@ public class Server {
                 temp.add(c);
                 gameList.put(getCurrentGameIndex(), temp);
                 gameProperties.put(getCurrentGameIndex(), gameProps);
-         }
-         else if (! (waitingConnection.size() == gameProperties.get(getCurrentGameIndex()).get(0))){
-             ArrayList<SocketClientConnection> temp =  gameList.get(getCurrentGameIndex());
-             temp.add(c);
-         }
-         else { // start game
-                 List<String> keys = new ArrayList<>(waitingConnection.keySet());
-                 SocketClientConnection c1 = waitingConnection.get(keys.get(0));
-                 SocketClientConnection c2 = waitingConnection.get(keys.get(1));
-                 SocketClientConnection c3 = null;
-                 if (waitingConnection.size() == 3) c3 = waitingConnection.get(keys.get(2));
-                 ArrayList<Integer> gods = new ArrayList<>();
-                 for (int i = 1; i <= gameProperties.get(getCurrentGameIndex()).get(0); i++){
-                     gods.add(gameProperties.get(getCurrentGameIndex()).get(i));
-                 }
-                 GameTable gameTable = new GameTable(keys.size());
-             MainController controller = new MainController(gameTable);
-             Player player1 = new Player(keys.get(0), gameTable, c1);
-             c1.setPlayer(player1);
-             Player player2 = new Player(keys.get(1), gameTable, c2);
-             c2.setPlayer(player2);
-             Player player3 = null;
-             if (c3 != null) {
-                 player3 = new Player(keys.get(2), gameTable, c3);
-                 c3.setPlayer(player3);
-             }
-             GameInitializer gameInitializer = new GameInitializer(c1, c2, c3, gods, player1, player2, player3, gameTable, controller);
-             controller.setGameInitializer(gameInitializer);
-             Thread thread = new Thread(gameInitializer);
-             thread.start();
-             gameControllers.put(getCurrentGameIndex(), controller);
-             ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
-             playingConnections.add(c1);
-             playingConnections.add(c2);
-             if (c3 != null) playingConnections.add(c3);
-             gameList.put(getCurrentGameIndex(), playingConnections);
-             waitingConnection.clear();
-             //      thread.join();
-             currentGameIndex += 1;
-         }
-     } catch (NickAlreadyTakenException e) {
-         throw new NickAlreadyTakenException();
-     } catch (Exception e) {
+            } else if (!(waitingConnection.size() == gameProperties.get(getCurrentGameIndex()).get(0))) {
+                ArrayList<SocketClientConnection> temp = gameList.get(getCurrentGameIndex());
+                temp.add(c);
+            } else { // start game
+                List<String> keys = new ArrayList<>(waitingConnection.keySet());
+                SocketClientConnection c1 = waitingConnection.get(keys.get(0));
+                SocketClientConnection c2 = waitingConnection.get(keys.get(1));
+                SocketClientConnection c3 = null;
+                if (waitingConnection.size() == 3) c3 = waitingConnection.get(keys.get(2));
+                ArrayList<Integer> gods = new ArrayList<>();
+                for (int i = 1; i <= gameProperties.get(getCurrentGameIndex()).get(0); i++) {
+                    gods.add(gameProperties.get(getCurrentGameIndex()).get(i));
+                }
+                GameTable gameTable = new GameTable(keys.size());
+                MainController controller = new MainController(gameTable);
+                Player player1 = new Player(keys.get(0), gameTable, c1);
+                c1.setPlayer(player1);
+                Player player2 = new Player(keys.get(1), gameTable, c2);
+                c2.setPlayer(player2);
+                Player player3 = null;
+                if (c3 != null) {
+                    player3 = new Player(keys.get(2), gameTable, c3);
+                    c3.setPlayer(player3);
+                }
+                GameInitializer gameInitializer = new GameInitializer(c1, c2, c3, gods, player1, player2, player3, gameTable, controller);
+                controller.setGameInitializer(gameInitializer);
+                Thread thread = new Thread(gameInitializer);
+                thread.start();
+                gameControllers.put(getCurrentGameIndex(), controller);
+                ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
+                playingConnections.add(c1);
+                playingConnections.add(c2);
+                if (c3 != null) playingConnections.add(c3);
+                gameList.put(getCurrentGameIndex(), playingConnections);
+                waitingConnection.clear();
+                //      thread.join();
+                currentGameIndex += 1;
+            }
+        } catch (NickAlreadyTakenException e) {
+            throw new NickAlreadyTakenException();
+        } catch (Exception e) {
             waitingConnection.clear();
             if (gameList.get(getCurrentGameIndex()) == null) throw new BrokenLobbyException();
             if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();
@@ -223,7 +217,6 @@ public class Server {
     }
 
     public void run() {
-        if (ServerMain.verbose()) System.out.println(ProcessHandle.current().pid());
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             int count = 0;
             while (count < currentGameIndex) {
@@ -238,6 +231,11 @@ public class Server {
             }
         }));
         if (ServerMain.persistence()) reloadFromDisk();
+        System.out.println("Server started!");
+        if (ServerMain.verbose()) {
+            System.out.println("IP: " + serverSocket.getInetAddress() + ", Port: " + serverSocket.getLocalPort());
+            System.out.println("PID: " + ProcessHandle.current().pid());
+        }
         //noinspection InfiniteLoopStatement
         while (true) {
             try {

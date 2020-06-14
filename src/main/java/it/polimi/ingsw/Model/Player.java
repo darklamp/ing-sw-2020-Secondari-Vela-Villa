@@ -6,11 +6,15 @@ import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import org.reflections.Reflections;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Set;
 
-import static it.polimi.ingsw.Client.ClientState.*;
+import static it.polimi.ingsw.Client.ClientState.BUILD;
+import static it.polimi.ingsw.Client.ClientState.MOVE;
 
 /**
  * Model representation for player.
@@ -31,6 +35,13 @@ public class Player implements Serializable {
      * Pointer to the table on which the player is.
      */
     private GameTable gameTable;
+
+    private final static Set<Class<?>> godClasses;
+
+    static {
+        Reflections reflections = new Reflections("it.polimi.ingsw.Model");
+        godClasses = reflections.getTypesAnnotatedWith(God.class);
+    }
 
     /**
      * This player's connection.
@@ -97,15 +108,13 @@ public class Player implements Serializable {
      */
     public void setGod(Integer god){
         this.god = GameTable.getCompleteGodList().get(god);
-        this.turnState = gameTable.getPlayerIndex(this) == 1 ? getFirstTurnState(god) : ClientState.WAIT;
     }
 
     /**
-     * @param god of the player
-     * @return clientstate "MoveOrBuild" if the god is Prometheus, otherwise just clientstate "move"
+     * @return first state of the player's god
      */
-    private ClientState getFirstTurnState(Integer god){
-        return (god == 8) ? MOVEORBUILD : MOVE; /* if god is prometheus, he can move as well as build at first */
+    private ClientState getFirstTurnState() {
+        return builderList.get(0).getFirstState();
     }
 
     SocketClientConnection getConnection(){
@@ -113,7 +122,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * remove builders from the GameTable
+     * Remove builders from the GameTable
      */
     void removeBuilders(){
         this.getBuilderList().get(0).getPosition().setBuilder(null);
@@ -127,11 +136,11 @@ public class Player implements Serializable {
     Player(String nickname, GameTable g, String god) throws NickAlreadyTakenException, NullPointerException {   //contructor method for player
         if (g == null) throw new NullPointerException();
         else if (!g.isValidPlayer(nickname)) throw new NickAlreadyTakenException();
-            // else if (!isValidGod(god)) throw new InvalidGodException();
         else {
-            this.nickname = nickname;  //If the nickname is accepted,the player'll be insert in the game
+            this.nickname = nickname;
             this.god = god.toUpperCase();
             this.builderList = new ArrayList<>();
+            this.gameTable = g;
             g.addPlayer(this);
         }
     }
@@ -150,23 +159,55 @@ public class Player implements Serializable {
 
     /**
      * This function gets called twice per player by the controller, to initialize the player's builders
+     *
      * @param position position on which the builder is to be placed
-     * @throws InvalidBuildException when the builder is trying to be placed on an occupied cell or the player already has two builders
+     * @throws InvalidBuildException when the builder is trying to be placed on an occupied cell, or the player already has two builders, or the god is not in the server conf
      */
     public void initBuilderList(Cell position) throws InvalidBuildException {
-        if (position.getBuilder() != null || this.builderList.size() == 2) throw new InvalidBuildException();
-        switch (this.god) {
-            case "ATLAS" -> this.builderList.add(new Atlas(position, this));
-            case "APOLLO" -> this.builderList.add(new Apollo(position, this));
-            case "ARTEMIS" -> this.builderList.add(new Artemis(position, this));
-            case "ATHENA" -> this.builderList.add(new Athena(position, this));
-            case "DEMETER" -> this.builderList.add(new Demeter(position, this));
-            case "HEPHAESTUS" -> this.builderList.add(new Hephaestus(position, this));
-            case "MINOTAUR" -> this.builderList.add(new Minotaur(position, this));
-            case "PAN" -> this.builderList.add(new Pan(position, this));
-            case "PROMETEUS" -> this.builderList.add(new Prometheus(position, this));
-            default -> throw new InvalidBuildException();
+        if (position.getBuilder() != null || this.builderList.size() == 2 || this.god == null)
+            throw new InvalidBuildException();
+        if (!(GameTable.completeGodList.contains(this.god))) throw new InvalidBuildException();
+        boolean flagFound = false;
+        for (Class<?> cla : godClasses) {
+            String name = cla.getAnnotation(God.class).name();
+            if (name.equals(this.god)) {
+                flagFound = true;
+                Constructor<?> c = null;
+                try {
+                    c = cla.getDeclaredConstructor(Cell.class, Player.class);
+                } catch (NoSuchMethodException e) {
+                    /* NB:
+                     if this executes, it means that the god was found between the implemented ones.
+                     However, it was not implemented correctly, since it has no constructor.
+                     This should never happen, thus it is not tested.
+                    */
+                    e.printStackTrace();
+                    System.exit(-1);
+                }
+                try {
+                    this.builderList.add((Builder) c.newInstance(position, this));
+                    this.turnState = gameTable.getPlayerIndex(this) == 1 ? getFirstTurnState() : ClientState.WAIT;
+                    break;
+                } catch (Exception e) {
+                    /* NB:
+                     if this executes, it means that the god was found between the implemented ones.
+                     However, it was not implemented correctly.
+                     This should never happen, thus it is not tested.
+                    */
+                    e.printStackTrace();
+                    System.exit(-1);
+                }
+            }
         }
+        if (!flagFound) {
+            /* NB:
+            if this executes, it means that the god couldn't be found between the
+            implemented God classes, AND the god is in the GameTable.completeGodList, which
+            is straight up wrong. Thus, this is not tested because it should never happen.
+             */
+            throw new InvalidBuildException();
+        }
+
     }
 
     /**
@@ -214,7 +255,8 @@ public class Player implements Serializable {
     /**
      * Checks for available feasible moves
      *
-     * @see NoMoreMovesException
+     * @param builder builder to be checked (null if both)
+     * @throws NoMoreMovesException if no feasible moves are found
      */
     private void checkMovePreConditions(Builder builder) throws NoMoreMovesException {
         int builders = 1;
@@ -248,7 +290,8 @@ public class Player implements Serializable {
     /**
      * Checks for available feasible builds
      *
-     * @see NoMoreMovesException
+     * @param builder builder to be checked (null if both)
+     * @throws NoMoreMovesException if no feasible builds are found
      */
     private void checkBuildPreConditions(Builder builder) throws NoMoreMovesException {
         int builders = 1;

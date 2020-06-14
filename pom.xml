@@ -15,6 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>14</maven.compiler.release>
         <maven.compiler.target>14</maven.compiler.target>
+        <jackson.version>2.11.0</jackson.version>
         <!--<argLine>'-splash:/home/ale/Documents/Projects/Java/Progetto\ IngSW/ing-sw-2020-Secondari-Vela-Villa/src/main/resources/images/SantoriniBoard.png'</argLine>-->
     </properties>
 
@@ -149,6 +150,31 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>14-ea+9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.12</version>
         </dependency>
     </dependencies>
 
@@ -290,7 +316,6 @@
                                         <exclude>images/**</exclude>
                                         <exclude>css/**</exclude>
                                         <exclude>*.fxml</exclude>
-                                        <exclude>com/**/**</exclude>
                                     </excludes>
                                 </filter>
                             </filters>

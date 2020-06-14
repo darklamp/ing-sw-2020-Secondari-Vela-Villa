@@ -50,12 +50,16 @@ mvn clean package
 | port | specifies Server port | 1337 |
 | ip   | defines IP to listen on (v4/v6) | 0.0.0.0 |
 | console | starts debug console on stdin | no |
-| v    | print verbose output | no |
+| verbose   | print verbose output | no |
 | disk | persistence flag | no |
 | time | set allowed time for each turn (s , m or h) | 2 minutes (2,m) |
 | motd | change MOTD | "Have fun!" |
+| gods | choose available gods | default basic 9 gods |
 
-example:
+The options can be provided via command line and/or via configuration file. If both are provided, the first takes precedence.
+An example configuration file [is provided](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/blob/master/santorini.yaml).
+
+command line example:
 
 ```
 java -jar server.jar -port=1337 -ip=0.0.0.0 -time=55,s -motd="Hey!"

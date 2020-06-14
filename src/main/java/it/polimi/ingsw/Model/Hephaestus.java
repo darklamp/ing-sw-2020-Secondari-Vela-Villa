@@ -6,6 +6,7 @@ import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 
 import static it.polimi.ingsw.Client.ClientState.WAIT;
 
+@God(name = "HEPHAESTUS")
 public class Hephaestus extends Builder {
     private Cell previous;  //ci salvo la cella dove costruisco la prima volta
 
