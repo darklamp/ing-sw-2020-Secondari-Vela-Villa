@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Model;
 
+import it.polimi.ingsw.BadGod;
+import it.polimi.ingsw.BadGod2;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
@@ -11,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.net.Socket;
+import java.util.List;
+import java.util.Set;
 
 import static it.polimi.ingsw.Client.ClientState.*;
 
@@ -133,6 +137,48 @@ class  PlayerTest {
         g.addPlayer(p1);
         Assertions.assertThrows(NickAlreadyTakenException.class, () -> new Player("asd", g, new SocketClientConnection(null, null)));
         Assertions.assertThrows(NickAlreadyTakenException.class, () -> new Player("asd", g, "asdasd"));
+
+    }
+
+    @Test
+    void badGodTest1() throws Exception {
+        GameTable g = new GameTable(2);
+        Field aa = Player.class.getDeclaredField("godClasses");
+        aa.setAccessible(true);
+        ((Set<Class<?>>) aa.get(null)).add(BadGod.class);
+        Field ab = GameTable.class.getDeclaredField("completeGodList");
+        ab.setAccessible(true);
+        ((List<String>) ab.get(null)).add("TEST_BAD_GOD");
+        Player p1 = new Player("asd", g, new SocketClientConnection(null, null));
+        p1.setGod(9);
+        Assertions.assertThrows(NoSuchMethodException.class, () -> p1.initBuilderList(g.getCell(1, 1)));
+
+    }
+
+    @Test
+    void badGodTest2() throws Exception {
+        GameTable g = new GameTable(2);
+        Field aa = Player.class.getDeclaredField("godClasses");
+        aa.setAccessible(true);
+        ((Set<Class<?>>) aa.get(null)).add(BadGod2.class);
+        Field ab = GameTable.class.getDeclaredField("completeGodList");
+        ab.setAccessible(true);
+        ((List<String>) ab.get(null)).add("TEST_BAD_GOD_2");
+        Player p1 = new Player("asd", g, new SocketClientConnection(null, null));
+        p1.setGod(10);
+        Assertions.assertThrows(IllegalAccessException.class, () -> p1.initBuilderList(g.getCell(1, 1)));
+
+    }
+
+    @Test
+    void badGodTest3() throws Exception {
+        GameTable g = new GameTable(2);
+        Field aa = Player.class.getDeclaredField("godClasses");
+        aa.setAccessible(true);
+        ((Set<Class<?>>) aa.get(null)).remove(BadGod2.class);
+        Player p1 = new Player("asd", g, new SocketClientConnection(null, null));
+        p1.setGod(10);
+        Assertions.assertThrows(InvalidBuildException.class, () -> p1.initBuilderList(g.getCell(1, 1)));
 
     }
 

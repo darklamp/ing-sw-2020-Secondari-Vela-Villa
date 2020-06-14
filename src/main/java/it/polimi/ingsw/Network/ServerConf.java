@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Network;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,5 +18,5 @@ public class ServerConf {
     public boolean console = false;
     public String MOTD = "Have fun!";
     public String timeunit = "m";
-    public List<String> gods = Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS");
+    public static List<String> gods = new ArrayList<>(Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS"));
 }

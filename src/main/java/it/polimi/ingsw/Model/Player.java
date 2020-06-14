@@ -10,6 +10,7 @@ import org.reflections.Reflections;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -163,7 +164,7 @@ public class Player implements Serializable {
      * @param position position on which the builder is to be placed
      * @throws InvalidBuildException when the builder is trying to be placed on an occupied cell, or the player already has two builders, or the god is not in the server conf
      */
-    public void initBuilderList(Cell position) throws InvalidBuildException {
+    public void initBuilderList(Cell position) throws InvalidBuildException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         if (position.getBuilder() != null || this.builderList.size() == 2 || this.god == null)
             throw new InvalidBuildException();
         if (!(GameTable.completeGodList.contains(this.god))) throw new InvalidBuildException();
@@ -172,38 +173,26 @@ public class Player implements Serializable {
             String name = cla.getAnnotation(God.class).name();
             if (name.equals(this.god)) {
                 flagFound = true;
-                Constructor<?> c = null;
-                try {
-                    c = cla.getDeclaredConstructor(Cell.class, Player.class);
-                } catch (NoSuchMethodException e) {
-                    /* NB:
-                     if this executes, it means that the god was found between the implemented ones.
-                     However, it was not implemented correctly, since it has no constructor.
-                     This should never happen, thus it is not tested.
+                Constructor<?> c;
+                /* NB:
+                     if this ( c = cla.get ...) throws, it means that the god was found between the implemented ones;
+                     however, it was not implemented correctly, since it has no constructor.
                     */
-                    e.printStackTrace();
-                    System.exit(-1);
-                }
-                try {
-                    this.builderList.add((Builder) c.newInstance(position, this));
-                    this.turnState = gameTable.getPlayerIndex(this) == 1 ? getFirstTurnState() : ClientState.WAIT;
-                    break;
-                } catch (Exception e) {
-                    /* NB:
-                     if this executes, it means that the god was found between the implemented ones.
-                     However, it was not implemented correctly.
-                     This should never happen, thus it is not tested.
+                c = cla.getDeclaredConstructor(Cell.class, Player.class);
+                /* NB:
+                     if this throws, it means that the god was found between the implemented ones;
+                     however, it was not implemented correctly, since the constructor is private.
                     */
-                    e.printStackTrace();
-                    System.exit(-1);
-                }
+                this.builderList.add((Builder) c.newInstance(position, this));
+                this.turnState = gameTable.getPlayerIndex(this) == 1 ? getFirstTurnState() : ClientState.WAIT;
+                break;
             }
         }
         if (!flagFound) {
             /* NB:
             if this executes, it means that the god couldn't be found between the
             implemented God classes, AND the god is in the GameTable.completeGodList, which
-            is straight up wrong. Thus, this is not tested because it should never happen.
+            is straight up wrong.
              */
             throw new InvalidBuildException();
         }
