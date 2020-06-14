@@ -18,14 +18,14 @@ public class Artemis extends Builder {
     private Cell previous = null;
 
     @Override
-    public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
+    protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell, newheight);
         return WAIT;
     }
 
     @Override
-    void isValidMove(Cell finalPoint) throws InvalidMoveException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException {
         boolean firstTime = this.getPlayer().isFirstTime();
         if (firstTime) {
             super.isValidMove(finalPoint);

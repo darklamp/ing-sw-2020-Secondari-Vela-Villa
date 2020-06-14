@@ -13,7 +13,7 @@ public class Pan extends Builder{
         super(position, player);
     }
 
-    public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
+    protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell, newheight);
         return WAIT;
@@ -21,7 +21,7 @@ public class Pan extends Builder{
 
 
     @Override
-    void isValidMove(Cell finalPoint) throws InvalidMoveException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

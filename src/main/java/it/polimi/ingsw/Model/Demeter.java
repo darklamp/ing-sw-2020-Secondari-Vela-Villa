@@ -14,7 +14,6 @@ public class Demeter extends Builder {
         super(position, player);
     }
 
-
     @Override
     protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         if (this.getPlayer().isFirstTime()) {
@@ -36,7 +35,7 @@ public class Demeter extends Builder {
 
 
     @Override
-    public void isValidMove(Cell finalPoint) throws InvalidMoveException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

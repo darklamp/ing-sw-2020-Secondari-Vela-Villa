@@ -14,14 +14,14 @@ public class Athena extends Builder {
     }
 
     @Override
-    public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
+    protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell, newheight);
         return WAIT;
     }
 
     @Override
-    void isValidMove(Cell finalPoint) throws InvalidMoveException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         verifyMove(finalPoint);
     }

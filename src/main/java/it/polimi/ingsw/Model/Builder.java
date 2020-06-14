@@ -89,7 +89,7 @@ public abstract class Builder implements Serializable {
      *
      * @return true if the client moved to a top level (hence it's the winner)
      */
-    public boolean isWinner() {
+    protected boolean isWinner() {
         return this.position.getHeight() == BuildingType.TOP;
     }
 
@@ -140,7 +140,7 @@ public abstract class Builder implements Serializable {
     /**
      * Resets player's state to WAIT.
      */
-    void resetState() {
+    protected void resetState() {
         this.getPlayer().setState(WAIT);
     }
 
@@ -157,7 +157,7 @@ public abstract class Builder implements Serializable {
      * @param finalPoint represents the cell to which the builder wants to move
      * @throws InvalidMoveException when the move is illegal
      */
-    void isValidMove(Cell finalPoint) throws InvalidMoveException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException {
 
         if (finalPoint == null || finalPoint.getRow() < 0 || finalPoint.getRow() > 4 || finalPoint.getColumn() < 0 || finalPoint.getColumn() > 4)
             throw new InvalidMoveException(); //out of bounds

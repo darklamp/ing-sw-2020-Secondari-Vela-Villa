@@ -17,7 +17,7 @@ public class Minotaur extends Builder {
 
 
     @Override
-    public ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
+    protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
         verifyBuild(cell, newheight);
         return WAIT;
@@ -25,7 +25,7 @@ public class Minotaur extends Builder {
 
 
     @Override
-    void isValidMove(Cell finalPoint) throws InvalidMoveException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         if (finalPoint.getBuilder() != null) { // there's a builder on the cell I'm trying to move to
             if (!(checkEmptyCellBehind(finalPoint) && finalPoint.getBuilder().getPlayer() != this.getPlayer()))

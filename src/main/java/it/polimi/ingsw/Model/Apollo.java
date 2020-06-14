@@ -29,7 +29,7 @@ public class Apollo extends Builder{
      * {@inheritDoc}
      */
     @Override
-    void isValidMove(Cell finalPoint) throws InvalidMoveException {
+    protected void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);
         if (!(finalPoint.getBuilder() != null && finalPoint.getBuilder().getPlayer() != this.getPlayer()))
             verifyMove(finalPoint);
