@@ -18,5 +18,6 @@ public class ServerConf {
     public boolean console = false;
     public String MOTD = "Have fun!";
     public String timeunit = "m";
-    public static List<String> gods = new ArrayList<>(Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS"));
+
+    public List<String> gods = new ArrayList<>(Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS"));
 }

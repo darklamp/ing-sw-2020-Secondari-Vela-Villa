@@ -6,7 +6,6 @@ import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Network.Messages.GameStateMessage;
 import it.polimi.ingsw.Network.Server;
-import it.polimi.ingsw.Network.ServerConf;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.View.CellView;
 
@@ -14,6 +13,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +54,8 @@ public class GameTable implements Serializable {
      **/
     private int playersNumber;
 
-    public static List<String> completeGodList = ServerConf.gods;
+    public static List<String> completeGodList = new ArrayList<>(Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS"));
+    ;
 
     /**
      * variable which holds the current builder being used by the player

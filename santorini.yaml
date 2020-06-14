@@ -6,9 +6,12 @@ gods:
   - Demeter
   - Hephaestus
   - Minotaur
-  - Pan
   - Prometheus
-  console:
-    true
-  MOTD:
-    "Have fun!"
+console:
+  true
+MOTD:
+  "Whatever they say I am, that's what I'm not. Also, Pan is banned because OP."
+disk:
+  true
+verbose:
+  true
