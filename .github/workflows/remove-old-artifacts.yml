@@ -1,12 +1,9 @@
-name: Remove artifacts
+name: Remove old artifacts
 
 on:
-  push:
-    branches:
-      - master
   schedule:
-    # Every day at 05.15 GMT +2
-    - cron: '15 03 * * *'
+    # Every 4 days at 05.15 GMT +2
+    - cron: '15 03 */4 * *'
 jobs:
   remove-old-artifacts:
     runs-on: ubuntu-latest
@@ -19,4 +16,4 @@ jobs:
         age: '2 days'
         # Optional inputs
         skip-tags: true
-        skip-recent: 18
+        skip-recent: 12
