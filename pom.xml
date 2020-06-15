@@ -330,6 +330,15 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <minimizeJar>true</minimizeJar>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>com.fasterxml.*:*</exclude>
+                                    <exclude>org.reflections:*</exclude>
+                                    <exclude>org.yaml:*</exclude>
+                                    <exclude>org.javassist:*</exclude>
+                                </excludes>
+                            </artifactSet>
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
@@ -349,7 +358,6 @@
                                 </filter>
                             </filters>
                             <finalName>client</finalName>
-                            <minimizeJar>true</minimizeJar>
                         </configuration>
                     </execution>
                     <execution>
@@ -363,6 +371,10 @@
                             <artifactSet>
                                 <excludes>
                                     <exclude>org.openjfx:*</exclude>
+                                    <exclude>com.fasterxml.*:*</exclude>
+                                    <exclude>org.reflections:*</exclude>
+                                    <exclude>org.yaml:*</exclude>
+                                    <exclude>org.javassist:*</exclude>
                                 </excludes>
                             </artifactSet>
                             <transformers>
@@ -382,7 +394,6 @@
                                         <exclude>images/**</exclude>
                                         <exclude>css/**</exclude>
                                         <exclude>*.fxml</exclude>
-                                        <exclude>com/**/**</exclude>
                                         <exclude>it/polimi/ingsw/Controller/**</exclude>
                                     </excludes>
                                 </filter>

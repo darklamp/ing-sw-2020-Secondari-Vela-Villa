@@ -49,6 +49,7 @@ public class ServerMain {
         } catch (IOException e) {
             serverConf = new ServerConf();
         }
+        verbose = serverConf.verbose || serverConf.v;
         persistence = serverConf.disk;
         port = serverConf.port;
         console = serverConf.console;

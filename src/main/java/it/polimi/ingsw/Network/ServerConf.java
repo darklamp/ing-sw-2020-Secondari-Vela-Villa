@@ -14,6 +14,7 @@ public class ServerConf {
     public int port = 1337;
     public boolean disk = false;
     public boolean verbose = false;
+    public boolean v = false;
     public short moveTimer = 2;
     public boolean console = false;
     public String MOTD = "Have fun!";
