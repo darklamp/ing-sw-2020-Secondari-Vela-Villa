@@ -26,7 +26,12 @@ class HephaestusTest {
         g.setPlayers(players);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
-        Builder b1 = new Hephaestus(c1, p1);
+        Cell c22 = g.getCell(0, 0);
+
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+
+        Builder b1 = p1.getBuilderList().get(0);
         p1.setState(ClientState.BUILD);
         Assertions.assertDoesNotThrow(() -> c2.setHeight(b1, BASE));
         assert c2.getHeight() == BASE;
@@ -56,7 +61,10 @@ class HephaestusTest {
         Cell c2 = g.getCell(4, 4);
         Cell c3 = g.getCell(4, 2);
         Cell c4 = g.getCell(3, 3);
-        Builder b1 = new Hephaestus(c1, p1);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
         TestUtilities.mustSetHeight(c2, BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> b1.isValidBuild(c2, BuildingType.DOME));
         Field f = Hephaestus.class.getDeclaredField("previous");
@@ -76,13 +84,18 @@ class HephaestusTest {
         GameTable g = new GameTable(2);
 
         Player p1 = new Player("Giggino", g, "HEPHAESTUS");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
+
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(3, 1);
         Cell c3 = g.getCell(3, 2);
         Cell c4 = g.getCell(4, 2);
+        Cell c22 = g.getCell(0, 0);
 
-        Builder b1 = new Hephaestus(c1, p1);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
 
+        Builder b1 = p1.getBuilderList().get(0);
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c2));
         b1.isValidMove(c3);
         b1.isValidMove(c4);

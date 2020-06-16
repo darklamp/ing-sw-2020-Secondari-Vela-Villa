@@ -27,7 +27,7 @@ public class GameTable implements Serializable {
     /**
      * 5x5 matrix representing game table
      **/
-    private final Cell[][] Table;
+    private final Cell[][] table;
 
     /**
      * index of current game
@@ -62,11 +62,6 @@ public class GameTable implements Serializable {
      **/
     private Builder currentBuilder = null;
 
-    /**
-     * support boolean for Athena
-     **/
-    private boolean athenaMove = false;
-
 
     private volatile boolean exit = false;
     private transient Thread timerThread = null;
@@ -91,8 +86,7 @@ public class GameTable implements Serializable {
         getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
         try {
             getCurrentPlayer().checkConditions(null);
-            News n = new News();
-            setNews(n, "TURN");
+            setNews(new News(), "TURN");
         } finally {
             resetMoveTimer();
         }
@@ -218,9 +212,6 @@ public class GameTable implements Serializable {
         }
     }
 
-
-    /* start observable pattern objects */
-
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     /**
      * Listener helper object
@@ -241,11 +232,6 @@ public class GameTable implements Serializable {
         this.type = type;
     }
 
-    /* end observable pattern objects */
-
-
-    /* end observable pattern */
-
     /**
      * @return 5x5 matrix containing CellViews, to be sent to clients
      */
@@ -253,23 +239,25 @@ public class GameTable implements Serializable {
         CellView[][] out = new CellView[5][5];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++){
-                out[i][j] = Table[i][j].getModelView(this);
+                out[i][j] = table[i][j].getModelView();
             }
         }
         return out;
     }
 
     /**
-     * Constructor for GameTable. Takes number of players as argument.
+     * Constructor for GameTable.
+     *
+     * @param playersNumber number of players in game
      */
-    public GameTable(int playersNumber) {   //contructor method for GameTable
+    public GameTable(int playersNumber) {
 
-        Table = new Cell[5][5]; //create new Table
+        table = new Cell[5][5];
         arrayTable = new ArrayList<>();
-        for (int i = 0; i < 5; i++){
-            for (int j = 0; j < 5; j++){
-                Table[i][j] = new Cell(i,j,this);
-                arrayTable.add(Table[i][j]);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                table[i][j] = new Cell(i, j, this);
+                arrayTable.add(table[i][j]);
             }
         }
         this.gameIndex = Server.getCurrentGameIndex();
@@ -290,13 +278,6 @@ public class GameTable implements Serializable {
     }
 
     /**
-     * @return Cell on which the first builder connected to the passed SocketClientConnection stands
-     */
-    public Cell getCell(SocketClientConnection c) {
-        return c.getPlayer().getBuilderList().get(0).getPosition();
-    }
-
-    /**
      * @param nickname contains nickname to be checked
      * @return true if the nickname isn't already in use, false otherwise
      */
@@ -306,43 +287,40 @@ public class GameTable implements Serializable {
             players = new ArrayList<>();
             return true;
         }
-        return players.stream().noneMatch(player -> sameNickname(player, nickname));
-    }
-
-
-    /* start simple getters / setters */
-
-
-    public Cell getCell(int x, int y) throws InvalidCoordinateException {
-        isInvalidCoordinate(x, y);
-        return Table[x][y];
+        return players.stream().noneMatch(player -> player.getNickname().equals(nickname));
     }
 
     /**
-     * @return true if player's nickname is the same as nickname
+     * Getter for table's cells.
+     *
+     * @param x x coordinate of the cell
+     * @param y y coordinate of the cell
+     * @return Cell with the given coordinates
+     * @throws InvalidCoordinateException if the given coordinates are invalid
      */
-    private boolean sameNickname(Player player, String nickname) {
-        return player.getNickname().equals(nickname);
+    public Cell getCell(int x, int y) throws InvalidCoordinateException {
+        isInvalidCoordinate(x, y);
+        return table[x][y];
     }
 
+    /**
+     * Adds player to the table
+     *
+     * @param player player to be added
+     */
     void addPlayer(Player player) {
         players.add(player);
     }
 
+    /**
+     * @return arraylist representation of the table
+     */
     ArrayList<Cell> toArrayList() {
         return arrayTable;
     }
 
-    void setAthenaMove(boolean newValue) {
-        athenaMove = newValue;
-    }
-
     public void setPlayers(ArrayList<Player> players) {
         this.players = players;
-    }
-
-    boolean getAthenaMove() {
-        return athenaMove;
     }
 
     public static List<String> getCompleteGodList() {
@@ -376,8 +354,6 @@ public class GameTable implements Serializable {
     public ArrayList<Player> getPlayers() {
         return players;
     }
-    /* end simple getters / setters */
-
 
     /**
      * Only used for tests.

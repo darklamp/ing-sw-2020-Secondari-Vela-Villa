@@ -13,6 +13,13 @@ public class Athena extends Builder {
         super(position, player);
     }
 
+    private static boolean athenaMove = false;
+
+    @Override
+    protected boolean moveHandicap(Cell finalPoint, Cell startingPoint) {
+        return (athenaMove && finalPoint.getHeight().compareTo(startingPoint.getHeight()) >= 1);
+    }
+
     @Override
     protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
@@ -28,7 +35,8 @@ public class Athena extends Builder {
 
     @Override
     protected ClientState executeMove(Cell position) {
-        this.getPosition().getGameTable().setAthenaMove(position.getHeight().compareTo(getPosition().getHeight()) == 1);
+        athenaMove = position.getHeight().compareTo(getPosition().getHeight()) >= 1;
+        //  this.getPosition().getGameTable().setAthenaMove(position.getHeight().compareTo(getPosition().getHeight()) == 1);
         super.executeMove(position);
         return BUILD;
     }

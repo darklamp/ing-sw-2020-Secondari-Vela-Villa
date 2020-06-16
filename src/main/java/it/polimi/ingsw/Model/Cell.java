@@ -29,7 +29,12 @@ public class Cell implements Serializable {
 
     private BuildingType height = BuildingType.NONE;
 
-    public Cell(int x, int y, GameTable gameTable) { // constructor for Cell
+    /**
+     * @param x         x coord
+     * @param y         y coord
+     * @param gameTable table on which the cell is
+     */
+    protected Cell(int x, int y, GameTable gameTable) {
         this.gameTable = gameTable;
         this.coordinates = new Pair(x, y);
     }
@@ -37,11 +42,10 @@ public class Cell implements Serializable {
     /**
      * Creates a {@link CellView} for the Cell.
      *
-     * @param table {@link GameTable} on which the Cell stands.
      * @return {@link CellView} representation of given Cell.
      */
-    CellView getModelView(GameTable table) {
-        return new CellView(height, builder == null ? -1 : table.getPlayerIndex(builder.getPlayer()), builder != null && builder.isFirst());
+    CellView getModelView() {
+        return new CellView(height, builder == null ? -1 : gameTable.getPlayerIndex(builder.getPlayer()), builder != null && builder.isFirst());
     }
 
 
@@ -68,8 +72,6 @@ public class Cell implements Serializable {
             if (height == null) {
                 height = this.height.getNext();
             }
-            if (!(builder.getPosition().getNear().contains((this))))
-                throw new InvalidBuildException(); // trying to build on a non-near cell
             nextState = builder.isValidBuild(this, height);
         } catch (InvalidBuildException e) {
             news.setRecipients(builder.getPlayer());

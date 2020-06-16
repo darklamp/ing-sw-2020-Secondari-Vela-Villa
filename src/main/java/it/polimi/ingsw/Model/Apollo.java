@@ -13,11 +13,6 @@ public class Apollo extends Builder{
         super(position,player);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @return
-     */
     @Override
     protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
         super.isValidBuild(cell, newheight);
@@ -25,9 +20,6 @@ public class Apollo extends Builder{
         return WAIT;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void isValidMove(Cell finalPoint) throws InvalidMoveException {
         super.isValidMove(finalPoint);

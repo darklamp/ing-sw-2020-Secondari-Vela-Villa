@@ -25,7 +25,10 @@ class PrometheusTest {
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(3, 2);
         Cell c3 = g.getCell(4, 2);
-        Builder b1 = new Prometheus(c3, p1);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c3);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
         Assertions.assertEquals(ClientState.MOVEORBUILD, b1.getFirstState());
         p1.setState(BUILD);
         p2.setState(BUILD);
@@ -50,7 +53,10 @@ class PrometheusTest {
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(3, 1);
         Cell c3 = g.getCell(3, 2);
-        Builder b1 = new Prometheus(c1, p1);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
         p1.setState(MOVE);
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c2));
         p1.setState(MOVE);

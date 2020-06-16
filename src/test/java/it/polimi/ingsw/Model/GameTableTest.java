@@ -235,19 +235,6 @@ class GameTableTest {
     }
 
     @Test
-    public void getCellTest() throws Exception {
-        SocketClientConnection c = new SocketClientConnection(new Socket(), new Server());
-        GameTable g = new GameTable(2);
-        Player player1 = new Player("gigi", g, c);
-        player1.setGod(0);
-
-        player1.initBuilderList(g.getCell(2, 2));
-        player1.initBuilderList(g.getCell(2, 3));
-        c.setPlayer(player1);
-        assertEquals(g.getCell(2, 2), g.getCell(c));
-    }
-
-    @Test
     public void isValidStateTest() throws Exception {
         GameTable g = new GameTable(2);
         Player player1 = new Player("gigi", g, "ATLAS");

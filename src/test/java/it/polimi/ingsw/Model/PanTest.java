@@ -23,8 +23,11 @@ public class PanTest {
         g.setPlayers(players);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
         TestUtilities.mustSetHeight(c1, BuildingType.MIDDLE);
-        Builder b1 = new Pan(c1, p1);
         p1.setState(MOVE);
         Assertions.assertThrows(WinnerException.class, () -> b1.setPosition(c2));
         TestUtilities.mustSetHeight(c1, BuildingType.BASE);
@@ -36,9 +39,13 @@ public class PanTest {
         GameTable g = new GameTable(2);
 
         Player p1 = new Player("Giggino", g, "PAN");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
-        Builder b1 = new Pan(c1, p1);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
 
         Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c2, BuildingType.DOME));
         b1.isValidBuild(c2, BuildingType.BASE);

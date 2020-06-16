@@ -19,7 +19,11 @@ class ArtemisTest {
         Cell c0 = g.getCell(4, 2);
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
-        Builder b1 = new Artemis(c0, p1);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c0);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
+        Builder b2 = p2.getBuilderList().get(0);
         ArrayList<Player> players = new ArrayList<>();
         players.add(p2);
         players.add(p1);
@@ -41,16 +45,16 @@ class ArtemisTest {
         GameTable g = new GameTable(2);
 
         Player p1 = new Player("Giggino", g, "ARTEMIS");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
-        Builder b1 = new Artemis(c1, p1);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
 
-        Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b1.isValidBuild(c2, BuildingType.DOME);
-        });
+        Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c2, BuildingType.DOME));
         b1.isValidBuild(c2, BuildingType.BASE);
-        Assertions.assertThrows(InvalidBuildException.class, () -> {
-            b1.isValidBuild(c2, BuildingType.DOME);
-        });
+        Assertions.assertThrows(InvalidBuildException.class, () -> b1.isValidBuild(c2, BuildingType.DOME));
     }
 }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static it.polimi.ingsw.Client.ClientState.MOVE;
@@ -24,9 +25,13 @@ public class AthenaTest {
         GameTable g = new GameTable(2);
 
         Player p1 = new Player("Giggino", g, "ATHENA");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
-        Builder b1 = new Athena(c1, p1);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
 
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             b1.isValidBuild(c2, BuildingType.DOME);
@@ -48,14 +53,19 @@ public class AthenaTest {
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
         Cell c3 = g.getCell(3, 4);
-        Builder b1 = new Athena(c1, p1);
-        Assertions.assertFalse(g.getAthenaMove());
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
+        Field f = Athena.class.getDeclaredField("athenaMove");
+        f.setAccessible(true);
+        f.set(null, false);
         TestUtilities.mustSetHeight(c2, BuildingType.BASE);
         p1.setState(MOVE);
         b1.setPosition(c2);
-        Assertions.assertTrue(g.getAthenaMove());
+        Assertions.assertTrue((Boolean) f.get(null));
         p1.setState(MOVE);
         b1.setPosition(c3);
-        Assertions.assertFalse(g.getAthenaMove());
+        Assertions.assertFalse((Boolean) f.get(null));
     }
 }

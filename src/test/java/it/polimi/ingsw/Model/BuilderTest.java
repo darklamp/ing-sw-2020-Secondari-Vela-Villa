@@ -35,40 +35,33 @@ class BuilderTest {
         c3 = g.getCell(3, 4);
         c4 = g.getCell(3, 3);
         c5 = g.getCell(1, 1);
-        p1 = new Player("Giggino", g, "MINOTAUR");
+        p1 = new Player("Giggino", g, "ATHENA");
         p2 = new Player("Giggino2", g, "ATLAS");
-        b1 = new Minotaur(c1, p1);
-        b2 = new Demeter(c2, p2);
-    }
-
-    @Test
-    void setPositionTest() throws Exception {
-        GameTable g = new GameTable(2);
-        Player p1 = new Player("Giggino", g, "APOLLO");
-        Player p2 = new Player("Pippo", g, "APOLLO");
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c2);
+        p1.initBuilderList(c3);
+        p2.initBuilderList(c4);
+        b1 = p1.getBuilderList().get(0);
+        b2 = p2.getBuilderList().get(0);
         ArrayList<Player> players = new ArrayList<>();
         players.add(p2);
         players.add(p1);
         g.setPlayers(players);
-        Cell c1 = g.getCell(4, 3);
-        Cell c2 = g.getCell(4, 4);
-        Cell c3 = g.getCell(0, 3);
-        Cell c4 = g.getCell(0, 4);
-        Cell c5 = g.getCell(0, 3);
-        Builder b1 = new Apollo(c1, p1);
-        Builder b2 = new Apollo(c2, p2);
-        Builder b3 = new Apollo(c3, p1);
-        Builder b5 = new Artemis(c5, p1);
+    }
+
+    @Test
+    void setPositionTest() throws Exception {
+        Builder b3 = p1.getBuilderList().get(1);
         p1.setState(MOVE);
+        c2.setBuilder(null);
         b1.setPosition(c2);
         Assertions.assertEquals(b1, c2.getBuilder());
-        Assertions.assertEquals(b2, c1.getBuilder());
+        Assertions.assertNull(c1.getBuilder());
         TestUtilities.mustSetHeight(c3, MIDDLE);
         TestUtilities.mustSetHeight(c4, BuildingType.TOP);
         p1.setState(MOVE);
-        Assertions.assertThrows(WinnerException.class, () -> b3.setPosition(c4));
         c4.setBuilder(null);
-        Assertions.assertThrows(WinnerException.class, () -> b5.setPosition(c4));
+        Assertions.assertThrows(WinnerException.class, () -> b3.setPosition(c4));
     }
 
     @Test
@@ -131,14 +124,14 @@ class BuilderTest {
         TestUtilities.mustSetHeight(c1, MIDDLE);
         c2.setBuilder(null);
         TestUtilities.mustSetHeight(c2, TOP);
-        Builder b4 = new Artemis(c1, p1);
-        Field f = GameTable.class.getDeclaredField("athenaMove");
+        Builder b4 = b2;
+        Field f = Athena.class.getDeclaredField("athenaMove");
         f.setAccessible(true);
-        f.set(g, true);
+        f.set(null, true);
         Assertions.assertThrows(InvalidMoveException.class, () -> b4.isValidMove(c2));
         Cell c5 = g.getCell(3, 3);
         Cell c6 = g.getCell(2, 3);
-        f.set(g, true);
+        f.set(null, true);
         TestUtilities.mustSetHeight(c2, BASE);
 
         TestUtilities.mustSetHeight(c5, BuildingType.NONE);
@@ -170,6 +163,7 @@ class BuilderTest {
 
     @Test
     void verifyMove() {
+        c1.setBuilder(b1);
         Assertions.assertThrows(InvalidMoveException.class, () -> {
             b2.verifyMove(c1); //ci sta già un player p1
         });

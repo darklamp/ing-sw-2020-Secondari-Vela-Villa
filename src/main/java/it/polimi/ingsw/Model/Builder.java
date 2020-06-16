@@ -7,6 +7,9 @@ import it.polimi.ingsw.Model.Exceptions.WinnerException;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static it.polimi.ingsw.Client.ClientState.*;
 
@@ -22,14 +25,14 @@ public abstract class Builder implements Serializable {
 
     private final Player player;
 
-    private boolean first = false;
+    private boolean first;
 
     public Builder(Cell position, Player player) { // constructor for Builder with Cell parameter
         if (player == null || position == null) throw new NullPointerException();
         else {
             this.player = player;
             this.position = position;
-            this.first = player.hasNoBuilder();
+            this.first = !(player.hasBuilder());
             position.setBuilder(this);
         }
     }
@@ -103,10 +106,14 @@ public abstract class Builder implements Serializable {
      */
     protected ClientState isValidBuild(Cell cell, BuildingType newheight) throws InvalidBuildException {
 
-        if (cell.getHeight().equals(BuildingType.DOME) || cell.getBuilder() != null)
+        if (!(this.getPosition().getNear().contains((cell))))
+            throw new InvalidBuildException(); // trying to build on a non-near cell
+        else if (cell.getHeight().equals(BuildingType.DOME) || cell.getBuilder() != null)
             throw new InvalidBuildException(); // verify that there is no dome on the cell
         else if (cell.getHeight().equals(BuildingType.TOP) && !(newheight.equals(BuildingType.DOME)))
             throw new InvalidBuildException(); // if a top level is present, only a dome can be placed
+
+        checkBuildHandicaps(cell, newheight);
 
         return WAIT;
     }
@@ -161,14 +168,13 @@ public abstract class Builder implements Serializable {
 
         if (finalPoint == null || finalPoint.getRow() < 0 || finalPoint.getRow() > 4 || finalPoint.getColumn() < 0 || finalPoint.getColumn() > 4)
             throw new InvalidMoveException(); //out of bounds
-        else if (!(this instanceof Athena) && this.position.getGameTable().getAthenaMove() && finalPoint.getHeight().compareTo(position.getHeight()) >= 1)
-            throw new InvalidMoveException(); // Athena moved up last turn, so this player can't go up
         else if (finalPoint.getHeight() == BuildingType.DOME) throw new InvalidMoveException(); // moving on dome
         else if (finalPoint.getHeight().compareTo(position.getHeight()) >= 2)
             throw new InvalidMoveException(); // check if I'm moving up more than one level
         else if (!(position.getNear().contains(finalPoint)))
             throw new InvalidMoveException(); // check that the cell I'm moving to is adjacent
 
+        checkMoveHandicaps(finalPoint);
     }
 
     /**
@@ -188,6 +194,58 @@ public abstract class Builder implements Serializable {
     void forceMove(Cell position) {
         position.setBuilder(this);
         this.position = position;
+    }
+
+    private final Predicate<Builder> excludeThisPlayer = b -> b != (this.isFirst() ? this : getPlayer().getBuilderList().get(0));
+    private final Function<Player, Builder> playersToBuilder = p -> p.getBuilderList().get(0);
+
+    private Stream<Player> getPlayersAsStream() {
+        return getGameTable().getPlayers().stream();
+    }
+
+    /**
+     * Checks all the handicaps for the move
+     *
+     * @param finalPoint final point of the move
+     * @throws InvalidMoveException if an moveHandicap makes the move invalid
+     */
+    private void checkMoveHandicaps(Cell finalPoint) throws InvalidMoveException {
+        if (getPlayersAsStream().map(playersToBuilder).filter(excludeThisPlayer).anyMatch(god -> god.moveHandicap(finalPoint, this.getPosition())))
+            throw new InvalidMoveException();
+    }
+
+    /**
+     * Checks all the handicaps for the build
+     *
+     * @param cell   final point of the build
+     * @param height height of the building
+     * @throws InvalidBuildException if an buildHandicap makes the move invalid
+     */
+    private void checkBuildHandicaps(Cell cell, BuildingType height) throws InvalidBuildException {
+        if (getPlayersAsStream().map(playersToBuilder).filter(excludeThisPlayer).anyMatch(god -> god.buildHandicap(cell, height)))
+            throw new InvalidBuildException();
+    }
+
+    /**
+     * This method gets overridden by those gods that need to implement a buildHandicap to others.
+     *
+     * @param cell   final point of the build
+     * @param height height of the building
+     * @return true if the buildHandicap matches ( --> the build can't be done ), false otherwise
+     */
+    protected boolean buildHandicap(Cell cell, BuildingType height) {
+        return false;
+    }
+
+    /**
+     * This method gets overridden by those gods that need to implement a moveHandicap to others.
+     *
+     * @param finalPoint    final point of the move
+     * @param startingPoint starting point of the move
+     * @return true if the moveHandicap matches ( --> the move can't be done ), false otherwise
+     */
+    protected boolean moveHandicap(Cell finalPoint, Cell startingPoint) {
+        return false;
     }
 
     /**

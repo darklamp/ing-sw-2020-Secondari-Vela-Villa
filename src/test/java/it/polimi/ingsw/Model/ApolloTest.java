@@ -16,9 +16,14 @@ class ApolloTest {
         GameTable g = new GameTable(2);
 
         Player p1 = new Player("Giggino", g, "APOLLO");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
+
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
-        Builder b1 = new Apollo(c1, p1);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
 
         Assertions.assertThrows(InvalidBuildException.class, () -> {
             b1.isValidBuild(c2, BuildingType.DOME);
@@ -42,9 +47,12 @@ class ApolloTest {
         Cell c2 = g.getCell(4, 4);
         Cell c3 = g.getCell(4, 0);
         Cell c4 = g.getCell(4, 2);
-        Builder b1 = new Apollo(c1, p1);
-        Builder b2 = new Apollo(c2, p2);
-        Builder b3 = new Apollo(c4, p1);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c2);
+        p1.initBuilderList(c4);
+        Builder b1 = p1.getBuilderList().get(0);
+        Builder b2 = p2.getBuilderList().get(0);
+        Builder b3 = p1.getBuilderList().get(1);
         Assertions.assertDoesNotThrow(() -> b1.isValidMove(c2));
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c4));
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.setPosition(c1));

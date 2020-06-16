@@ -202,8 +202,8 @@ public class Player implements Serializable {
     /**
      * @return true if this player's {@link Player#builderList} is empty
      */
-    public boolean hasNoBuilder() {
-        return this.builderList.size() == 0;
+    public boolean hasBuilder() {
+        return this.builderList.size() != 0;
     }
 
     /**

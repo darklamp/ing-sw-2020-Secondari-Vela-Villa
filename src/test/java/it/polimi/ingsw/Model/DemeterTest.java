@@ -24,8 +24,10 @@ class DemeterTest {
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(4, 4);
         Cell c5 = g.getCell(4, 2);
+        Cell c22 = g.getCell(0, 0);
         p1.initBuilderList(c1);
         p1.initBuilderList(c5);
+        p2.initBuilderList(c22);
         Builder b1 = p1.getBuilderList().get(0);
         Assertions.assertThrows(InvalidBuildException.class, () -> c2.setHeight(b1, BuildingType.DOME));
         p1.setState(ClientState.BUILD);
@@ -39,11 +41,18 @@ class DemeterTest {
         GameTable g = new GameTable(2);
 
         Player p1 = new Player("Giggino", g, "DEMETER");
+        Player p2 = new Player("Giggino3", g, "ATLAS");
+
         Cell c1 = g.getCell(4, 3);
         Cell c2 = g.getCell(3, 1);
         Cell c3 = g.getCell(3, 2);
         Cell c4 = g.getCell(3, 4);
-        Builder b1 = new Demeter(c1, p1);
+        Cell c22 = g.getCell(0, 0);
+
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+
+        Builder b1 = p1.getBuilderList().get(0);
 
         Assertions.assertThrows(InvalidMoveException.class, () -> b1.isValidMove(c2));
         p1.setState(ClientState.MOVE);
