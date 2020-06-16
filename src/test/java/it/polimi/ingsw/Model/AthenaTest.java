@@ -68,4 +68,36 @@ public class AthenaTest {
         b1.setPosition(c3);
         Assertions.assertFalse((Boolean) f.get(null));
     }
+
+    @Test
+    void moveHandicapTest() throws Exception {
+        GameTable g = new GameTable(2);
+        Player p1 = new Player("Giggino", g, "ATHENA");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p2);
+        players.add(p1);
+        g.setPlayers(players);
+        Cell c1 = g.getCell(4, 3);
+        Cell c2 = g.getCell(4, 4);
+        Cell c3 = g.getCell(3, 4);
+        Cell c22 = g.getCell(0, 0);
+        p1.initBuilderList(c1);
+        p2.initBuilderList(c22);
+        Builder b1 = p1.getBuilderList().get(0);
+        Field f = Athena.class.getDeclaredField("athenaMove");
+        f.setAccessible(true);
+        f.set(null, false);
+        Assertions.assertFalse(b1.moveHandicap(null, null));
+        TestUtilities.mustSetHeight(c2, BuildingType.BASE);
+        p1.setState(MOVE);
+        b1.setPosition(c2);
+        Assertions.assertTrue((Boolean) f.get(null));
+        Assertions.assertFalse(b1.moveHandicap(c3, c2));
+        Assertions.assertTrue(b1.moveHandicap(c2, c1));
+
+        p1.setState(MOVE);
+        b1.setPosition(c3);
+        Assertions.assertFalse((Boolean) f.get(null));
+    }
 }

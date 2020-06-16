@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import static it.polimi.ingsw.Client.ClientState.BUILD;
@@ -208,6 +210,49 @@ class BuilderTest {
         TestUtilities.mustSetHeight(g.getCell(0, 2), BuildingType.TOP);
         Assertions.assertDoesNotThrow(() -> p1.checkConditions(null));
         assert p1.getState() == BUILD;
+    }
+
+    @Test
+    void checkMoveHandicapsTest() throws Exception {
+        Method m = Builder.class.getDeclaredMethod("checkMoveHandicaps", Cell.class);
+        m.setAccessible(true);
+        Assertions.assertThrows(InvalidMoveException.class, () -> {
+            try {
+                m.invoke(b2, c1);
+            } catch (InvocationTargetException e) {
+                throw e.getCause();
+            }
+        });
+    }
+
+    @Test
+    void checkBuildHandicaps() throws Exception {
+        GameTable g = new GameTable(2);
+        Method m = Builder.class.getDeclaredMethod("checkBuildHandicaps", Cell.class, BuildingType.class);
+        m.setAccessible(true);
+        Field gg = GameTable.class.getDeclaredField("completeGodList");
+        gg.setAccessible(true);
+        ((ArrayList<String>) gg.get(g)).add("TEST_BAD_GOD_3");
+        Player p1 = new Player("Giggi", g, "TEST_BAD_GOD_3");
+        Player p2 = new Player("Giggi2", g, "ATLAS");
+        p1.initBuilderList(g.getCell(0, 0));
+        p2.initBuilderList(g.getCell(0, 1));
+        p1.initBuilderList(g.getCell(1, 0));
+        p2.initBuilderList(g.getCell(2, 0));
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(p1);
+        players.add(p2);
+        g.setPlayers(players);
+        Builder b2 = p2.getBuilderList().get(0);
+        p2.setState(BUILD);
+        g.getCell(1, 1).setBuilder(null);
+        Assertions.assertThrows(InvalidBuildException.class, () -> {
+            try {
+                m.invoke(b2, g.getCell(1, 1), NONE);
+            } catch (InvocationTargetException e) {
+                throw e.getCause();
+            }
+        });
     }
 
 }
