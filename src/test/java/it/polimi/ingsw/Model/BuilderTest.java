@@ -253,6 +253,8 @@ class BuilderTest {
                 throw e.getCause();
             }
         });
+        ((ArrayList<String>) gg.get(g)).remove("TEST_BAD_GOD_3");
+
     }
 
 }
