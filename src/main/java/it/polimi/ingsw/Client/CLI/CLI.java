@@ -91,7 +91,7 @@ public class CLI implements Ui {
                     } else {
                         setGods(Client.getGods()[0], Client.getGods()[1], -1);
                     }
-                    process("Player " + pIndex + " has lost!");
+                    process("Player " + getLastStateMessage().getName(pIndex) + " has lost!");
                     Client.setPlayersNumber(Client.getPlayersNumber() - 1);
                 }
             }

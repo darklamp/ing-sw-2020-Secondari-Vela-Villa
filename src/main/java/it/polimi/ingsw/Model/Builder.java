@@ -25,7 +25,7 @@ public abstract class Builder implements Serializable {
 
     private final Player player;
 
-    private boolean first;
+    private final boolean first;
 
     public Builder(Cell position, Player player) { // constructor for Builder with Cell parameter
         if (player == null || position == null) throw new NullPointerException();
@@ -196,8 +196,8 @@ public abstract class Builder implements Serializable {
         this.position = position;
     }
 
-    private final Predicate<Builder> excludeThisPlayer = b -> b != (this.isFirst() ? this : getPlayer().getBuilderList().get(0));
-    private final Function<Player, Builder> playersToBuilder = p -> p.getBuilderList().get(0);
+    private final Predicate<Builder> excludeThisPlayer = (Predicate<Builder> & Serializable) b -> b != (this.isFirst() ? this : getPlayer().getBuilderList().get(0));
+    private final Function<Player, Builder> playersToBuilder = (Function<Player, Builder> & Serializable) p -> p.getBuilderList().get(0);
 
     private Stream<Player> getPlayersAsStream() {
         return getGameTable().getPlayers().stream();
