@@ -1,13 +1,12 @@
-# SANTORINI : Progetto Ing.SW 2020
+#     SANTORINI : Progetto Ing.SW 2020   [![codecov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/branch/master/graph/badge.svg?token=PF3WCGV0B5)](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa)
+
+![asd](https://i.imgur.com/g7BuRZO.png)
 
 
-
-[![codecov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/branch/master/graph/badge.svg?token=PF3WCGV0B5)](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa)
-
-User: GC46, pwd: santorini  
+JavaDoc: [**here**](https://server.santorini.cf/javadoc) User: GC46, pwd: santorini  
   
 Online CLI (ASCII not 100% working): [**here**](https://server.santorini.cf)   
-JavaDoc: [**here**](https://server.santorini.cf/javadoc)   
+   
 Test game server :  **server.santorini.cf**  
 
 
