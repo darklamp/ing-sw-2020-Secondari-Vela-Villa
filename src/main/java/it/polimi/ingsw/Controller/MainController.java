@@ -96,33 +96,40 @@ public class MainController implements PropertyChangeListener {
                 gameTable.closeGame();
             } catch (NoMoreMovesException e) {
                 if (gameTable.getPlayerConnections().size() == 2) {
-                    SocketClientConnection winner = gameTable.getPlayerConnections().get(0);
-                    Player loser = e.getPlayer();
-                    for (SocketClientConnection c : gameTable.getPlayerConnections()) {
-                        if (c.getPlayer() != e.getPlayer()) {
-                            winner = c;
-                            break;
-                        }
-                    }
-                    News n = new News(null, winner);
-                    n.setRecipients((ArrayList<SocketClientConnection>) null);
-                    winner.getPlayer().setState(ClientState.WIN);
-                    loser.setState(ClientState.LOSE);
-                    gameTable.setNews(n, "WIN");
-                    gameTable.closeGame();
+                    endGame(e);
                 } else {
                     try {
                         gameTable.removePlayer(e.getPlayer(), true);
                     } catch (NoMoreMovesException ee) {
-                        try {
-                            gameTable.removePlayer(ee.getPlayer(), true);
-                        } catch (NoMoreMovesException ignored) {
-                        }
+                        endGame(ee);
                     }
                 }
             }
         }
 
+    }
+
+    /**
+     * Called when the game has to be closed. Takes care of clearing gametable and
+     * setting the winner/losers.
+     *
+     * @param e exception containing the player who has no more moves
+     */
+    private void endGame(NoMoreMovesException e) {
+        SocketClientConnection winner = gameTable.getPlayerConnections().get(0);
+        Player loser = e.getPlayer();
+        for (SocketClientConnection c : gameTable.getPlayerConnections()) {
+            if (c.getPlayer() != e.getPlayer()) {
+                winner = c;
+                break;
+            }
+        }
+        News n = new News(null, winner);
+        n.setRecipients((ArrayList<SocketClientConnection>) null);
+        winner.getPlayer().setState(ClientState.WIN);
+        loser.setState(ClientState.LOSE);
+        gameTable.setNews(n, "WIN");
+        gameTable.closeGame();
     }
 
     public News getNews() {

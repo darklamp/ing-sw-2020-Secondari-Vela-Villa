@@ -184,9 +184,9 @@ public class GameTable implements Serializable {
                 getCurrentPlayer().setFirstTime(true);
                 setCurrentBuilder(null);
                 try {
+                    getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
                     checkConditions();
                 } finally {
-                    getCurrentPlayer().setState(getCurrentPlayer().getBuilderList().get(0).getFirstState());
                     resetMoveTimer();
                 }
             }

@@ -216,6 +216,88 @@ class MainControllerTest {
     }
 
     /**
+     * Tests {@link MainController#propertyChange(PropertyChangeEvent)} in the case where
+     * there are 3 players, 2 of which have no more valid moves
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void propertyChangeTestWinner2() throws Exception {
+        Socket socket = new Socket();
+
+        Field a = GameTable.class.getDeclaredField("news");
+        Field b = GameTable.class.getDeclaredField("type");
+        a.setAccessible(true);
+        b.setAccessible(true);
+        GameTable gameTable = new GameTable(3);
+        MainController controller = new MainController(gameTable);
+        News news = new News();
+        news.setInvalid();
+        ArrayList<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(2);
+        choices.add(3);
+        Field d = SocketClientConnection.class.getDeclaredField("out");
+        d.setAccessible(true);
+        SocketClientConnection c1 = new SocketClientConnection(socket, null);
+        SocketClientConnection c2 = new SocketClientConnection(socket, null);
+        SocketClientConnection c3 = new SocketClientConnection(socket, null);
+
+        d.set(c1, new ObjectOutputStream(OutputStream.nullOutputStream()));
+        d.set(c2, new ObjectOutputStream(OutputStream.nullOutputStream()));
+        d.set(c3, new ObjectOutputStream(OutputStream.nullOutputStream()));
+
+
+        Player player1 = new Player("gigi", gameTable, c1);
+        Player player2 = new Player("gigi2", gameTable, c2);
+        Player player3 = new Player("gigi3", gameTable, c3);
+
+        c1.setPlayer(player1);
+        c2.setPlayer(player2);
+        c2.setPlayer(player3);
+        player1.setGod(choices.get(0));
+        player2.setGod(choices.get(1));
+        player3.setGod(choices.get(2));
+
+        try {
+            player1.initBuilderList(gameTable.getCell(2, 2));
+            player1.initBuilderList(gameTable.getCell(2, 3));
+            player2.initBuilderList(gameTable.getCell(0, 0));
+            player2.initBuilderList(gameTable.getCell(0, 1));
+            player3.initBuilderList(gameTable.getCell(4, 3));
+            player3.initBuilderList(gameTable.getCell(4, 4));
+        } catch (InvalidBuildException | InvalidCoordinateException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player3);
+        players.add(player1);
+        players.add(player2);
+        gameTable.setPlayers(players);
+        Cell c = gameTable.getCell(1, 1);
+        Cell c4 = gameTable.getCell(1, 0);
+        Cell c8 = gameTable.getCell(1, 2);
+        Cell c9 = gameTable.getCell(0, 2);
+        c3.setPlayer(player3);
+        TestUtilities.mustSetHeight(c8, BuildingType.DOME);
+        TestUtilities.mustSetHeight(c, BuildingType.DOME);
+        TestUtilities.mustSetHeight(c9, BuildingType.DOME);
+        TestUtilities.mustSetHeight(c4, BuildingType.DOME);
+        TestUtilities.mustSetHeight(gameTable.getCell(4, 2), BuildingType.DOME);
+        TestUtilities.mustSetHeight(gameTable.getCell(3, 3), BuildingType.DOME);
+        TestUtilities.mustSetHeight(gameTable.getCell(3, 4), BuildingType.DOME);
+        TestUtilities.mustSetHeight(gameTable.getCell(3, 2), BuildingType.DOME);
+        Method m = Player.class.getDeclaredMethod("getBuilderList");
+        m.setAccessible(true);
+        gameTable.setCurrentBuilder(((ArrayList<Builder>) m.invoke(player1)).get(0));
+        c.setBuilder(null);
+        player1.setState(BUILDORPASS);
+        controller.propertyChange(new PropertyChangeEvent(new Object(), "PASS", null, new News(null, c1)));
+        Assertions.assertEquals(0, gameTable.getPlayers().size());
+
+    }
+
+    /**
      * Tests {@link MainController#propertyChange(PropertyChangeEvent)} in the case where there's an OOBException
      *
      * @throws Exception if something fails
@@ -509,7 +591,6 @@ class MainControllerTest {
         Field f4 = ServerMain.class.getDeclaredField("persistence");
         f4.setAccessible(true);
         f4.set(null, false);
-        f3.set(s, new ServerSocket(1337, 1, InetAddress.getByName("localhost")));
         new Thread(s::run).start();
         Socket socket1 = new Socket("localhost", 1337);
         Socket socket2 = new Socket("localhost", 1337);
@@ -534,6 +615,56 @@ class MainControllerTest {
         Assertions.assertTrue((boolean) f.get(c1));
         Assertions.assertTrue((boolean) f.get(c2));
         Assertions.assertTrue((boolean) f.get(c3));
+
+    }
+
+    /**
+     * Tests {@link MainController#restartFromDisk(ArrayList)}
+     *
+     * @throws Exception if something fails
+     */
+    @Test
+    void restartFromDiskTest2Players() throws Exception {
+        GameTable g = new GameTable(2);
+        ArrayList<Player> p = new ArrayList<>();
+        p.add(new Player("gigi2", g, null));
+        Player p1 = new Player("gigi", g, null);
+        p1.setGod(0);
+
+        p1.initBuilderList(g.getCell(0, 0));
+        p1.initBuilderList(g.getCell(0, 1));
+        p.add(p1);
+
+        g.setPlayers(p);
+        MainController mainController = new MainController(g);
+        Socket socket = new Socket();
+        Server s = new Server();
+        Field f3 = Server.class.getDeclaredField("serverSocket");
+        f3.setAccessible(true);
+        Field f4 = ServerMain.class.getDeclaredField("persistence");
+        f4.setAccessible(true);
+        f4.set(null, false);
+        f3.set(s, new ServerSocket(1337, 1, InetAddress.getByName("localhost")));
+        new Thread(s::run).start();
+        Socket socket1 = new Socket("localhost", 1337);
+        Socket socket2 = new Socket("localhost", 1337);
+        Socket socket3 = new Socket("localhost", 1337);
+
+        SocketClientConnection c2 = new SocketClientConnection(socket2, s);
+        SocketClientConnection c1 = new SocketClientConnection(socket3, s);
+        Field f2 = SocketClientConnection.class.getDeclaredField("out");
+        f2.setAccessible(true);
+        f2.set(c1, new ObjectOutputStream(socket1.getOutputStream()));
+        f2.set(c2, new ObjectOutputStream(socket2.getOutputStream()));
+
+        ArrayList<SocketClientConnection> list = new ArrayList<>();
+        list.add(c1);
+        list.add(c2);
+        mainController.restartFromDisk(list);
+        Field f = SocketClientConnection.class.getDeclaredField("ready");
+        f.setAccessible(true);
+        Assertions.assertTrue((boolean) f.get(c1));
+        Assertions.assertTrue((boolean) f.get(c2));
 
     }
 

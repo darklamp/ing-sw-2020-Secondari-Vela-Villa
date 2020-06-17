@@ -3,9 +3,11 @@ package it.polimi.ingsw.Model;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
+import it.polimi.ingsw.Utility.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 class MinotaurTest {
@@ -80,6 +82,29 @@ class MinotaurTest {
         Assertions.assertTrue(((Minotaur) b1).checkEmptyCellBehind(c5));
         Builder b3 = new Atlas(c6, p2);
         Assertions.assertFalse(((Minotaur) b1).checkEmptyCellBehind(c5));
+
+
+    }
+
+    @Test
+    void checkEmptyCellBehindTest2() throws Exception {
+        GameTable g = new GameTable(2);
+        Player p1 = new Player("Giggino", g, "MINOTAUR");
+        Player p2 = new Player("Giggino2", g, "ATLAS");
+
+        Cell c2 = g.getCell(4, 4);
+        Cell c7 = g.getCell(1, 1);
+        Cell c8 = g.getCell(1, 2);
+
+        p2.initBuilderList(c8);
+        Field f = Cell.class.getDeclaredField("coordinates");
+        f.setAccessible(true);
+        f.set(c7, new Pair(5, 5));
+        c7.setBuilder(p2.getBuilderList().get(0));
+
+        Builder b1 = new Minotaur(c2, p1);
+        Assertions.assertThrows(InvalidMoveException.class, () -> ((Minotaur) b1).checkEmptyCellBehind(c7));
+        Assertions.assertThrows(AssertionError.class, () -> ((Minotaur) b1).executeMove(c7));
 
 
     }
