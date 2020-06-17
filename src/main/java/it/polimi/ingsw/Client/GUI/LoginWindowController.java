@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -55,20 +54,26 @@ public class LoginWindowController extends WindowController {
                 new Thread(client).start();
                 connected = true;
             } else if (!flag) {
-                textAreaMain.setText("Please enter the server's IP address / hostname.");
+                textAreaMain.setText("Please enter the server's IP:port\nIf port is not provided, default will be used.");
                 ipInput.setText(null);
                 ipInput.setPromptText("Waiting for input..");
                 flag = true;
             } else {
                 InetAddress ip;
                 try {
-                    ip = InetAddress.getByName(ipInput.getText());
+                    String[] a = ipInput.getText().split(":");
+                    int port;
+                    if (a.length == 1) {
+                        port = Client.getPort();
+                    } else port = Integer.parseInt(a[1]);
+                    ip = InetAddress.getByName(a[0]);
                     Client.setIp(ip);
+                    Client.setPort(port);
                     flag = true;
                     new Thread(client).start();
                     connected = true;
-                } catch (UnknownHostException e) {
-                    textAreaMain.setText("Invalid IP! Please try again.");
+                } catch (Exception e) {
+                    textAreaMain.setText("Invalid address/port! Please try again.");
                 }
             }
         } else GUIClient.setOut(ipInput.getText());

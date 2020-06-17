@@ -84,8 +84,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
                 guiInitialized = true;
             }
         } else if (input instanceof ErrorMessage) {
-            if (input != ServerMessage.gameLost)
-                Platform.runLater(() -> GUIClient.getController().setError((ErrorMessage) input));
+            Platform.runLater(() -> GUIClient.getController().setError((ErrorMessage) input));
         }
 
     }

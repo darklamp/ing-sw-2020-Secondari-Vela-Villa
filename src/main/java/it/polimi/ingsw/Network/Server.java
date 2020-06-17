@@ -112,13 +112,17 @@ public class Server {
                 gameProperties.put(getCurrentGameIndex(), gameProps);
             } else if (!(waitingConnection.size() == gameProperties.get(getCurrentGameIndex()).get(0))) {
                 ArrayList<SocketClientConnection> temp = gameList.get(getCurrentGameIndex());
+                c.send("Wait for one more player..");
                 temp.add(c);
             } else { // start game
                 List<String> keys = new ArrayList<>(waitingConnection.keySet());
                 SocketClientConnection c1 = waitingConnection.get(keys.get(0));
                 SocketClientConnection c2 = waitingConnection.get(keys.get(1));
                 SocketClientConnection c3 = null;
-                if (waitingConnection.size() == 3) c3 = waitingConnection.get(keys.get(2));
+                if (waitingConnection.size() == 3) {
+                    c3 = waitingConnection.get(keys.get(2));
+                    c3.send("Wait for the first player to choose his god..");
+                }
                 ArrayList<Integer> gods = new ArrayList<>();
                 for (int i = 1; i <= gameProperties.get(getCurrentGameIndex()).get(0); i++) {
                     gods.add(gameProperties.get(getCurrentGameIndex()).get(i));

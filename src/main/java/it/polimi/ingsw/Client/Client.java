@@ -15,8 +15,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static it.polimi.ingsw.Client.ClientState.*;
+import static java.lang.Thread.sleep;
 
 public class Client implements Runnable {
 
@@ -93,6 +99,15 @@ public class Client implements Runnable {
     }
 
     private static int god;
+
+    public static int getPort() {
+        return port;
+    }
+
+    public static void setPort(int port) {
+        Client.port = port;
+    }
+
     private static int port;
 
     public synchronized static ClientState getState() {
@@ -241,20 +256,31 @@ public class Client implements Runnable {
     @Override
     public void run() {
         try {
-            Socket socket = new Socket(ip, port);
-            socket.setPerformancePreferences(0, 1, 0);
-            socket.setTcpNoDelay(true);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            AtomicReference<Socket> socket = new AtomicReference<>();
+            Future<?> t11 = executor.submit(() -> {
+                try {
+                    socket.set(new Socket(ip, port));
+                } catch (IOException e) {
+                    throw new RuntimeException();
+                }
+            });
+            try {
+                t11.get(3, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                throw new ConnectException("Connection refused");
+            }
+
+            socket.get().setPerformancePreferences(0, 1, 0);
+            socket.get().setTcpNoDelay(true);
             ui.process("Connection established");
-            Scanner stdin = new Scanner(System.in);
-            PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
-            ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
-                    socket.close();
+                    socket.get().close();
                 } catch (IOException ignored) {
                 }
             }));
-            try {
+            try (Scanner stdin = new Scanner(System.in); PrintWriter socketOut = new PrintWriter(socket.get().getOutputStream()); ObjectInputStream socketIn = new ObjectInputStream(socket.get().getInputStream())) {
                 Thread t0 = asyncReadFromSocket(socketIn);
                 Thread t1 = asyncWriteToSocket(stdin, socketOut);
                 t0.join();
@@ -262,16 +288,18 @@ public class Client implements Runnable {
             } catch (InterruptedException | NoSuchElementException e) {
                 System.out.println("Connection closed from the client side");
             } finally {
-                stdin.close();
-                socketIn.close();
-                socketOut.close();
-                socket.close();
+                socket.get().close();
             }
         } catch (ConnectException ee) {
-            if (ee.getMessage().contains("Connection refused")) {
-                System.err.println("[CRITICAL] Connection refused. Server probably down or full.");
-                System.exit(-1);
-            } else ee.getMessage();
+            if (ee.getMessage().contains("Connection refused"))
+                ui.process("[CRITICAL] Connection refused.\nServer probably down or full.\nExiting..");
+            else
+                ui.process(ee.getMessage());
+            try {
+                sleep(2400);
+            } catch (InterruptedException ignored) {
+            }
+            System.exit(-1);
         } catch (Exception e) {
             e.printStackTrace();
         }
