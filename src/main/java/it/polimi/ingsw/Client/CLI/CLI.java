@@ -45,8 +45,10 @@ public class CLI implements Ui {
             if (input.equals(ServerMessage.gameLost) || input.equals(ServerMessage.abortMessage) || input.equals(ServerMessage.serverDown))
                 System.exit(0);
         } else if (input instanceof MOTD) {
-            Client.completeGodList = ((MOTD) input).getGods();
-            System.out.println("\nMOTD: " + Color.Rainbow(((MOTD) input).getMOTD()) + "\n");
+            MOTD in = (MOTD) input;
+            System.out.println("\nWelcome!\nMOTD: " + Color.Rainbow(in.getMOTD()) + "\n");
+            if (in.persistenceEnabled()) System.out.println(ServerMessage.reloadGameChoice);
+            else System.out.println(ServerMessage.welcomeNoPersistence);
         }
     }
 

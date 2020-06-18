@@ -3,10 +3,7 @@ package it.polimi.ingsw.Client.GUI;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Client.Ui;
-import it.polimi.ingsw.Network.Messages.ErrorMessage;
-import it.polimi.ingsw.Network.Messages.InitMessage;
-import it.polimi.ingsw.Network.Messages.Message;
-import it.polimi.ingsw.Network.Messages.ServerMessage;
+import it.polimi.ingsw.Network.Messages.*;
 import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
@@ -85,6 +82,9 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
             }
         } else if (input instanceof ErrorMessage) {
             Platform.runLater(() -> GUIClient.getController().setError((ErrorMessage) input));
+        } else if (input instanceof MOTD) {
+            if (((MOTD) input).persistenceEnabled()) process(ServerMessage.reloadGameChoice);
+            else process(ServerMessage.welcomeNoPersistence);
         }
 
     }

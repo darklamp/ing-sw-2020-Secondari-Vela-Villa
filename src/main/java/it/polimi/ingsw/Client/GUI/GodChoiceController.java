@@ -25,7 +25,7 @@ public class GodChoiceController extends WindowController {
 
     static {
         for (int i = 0; i < Client.completeGodList.size(); i++) {
-            if (Client.verbose()) System.out.println("Loaded card: " + Client.completeGodList.get(i) + ".png");
+            if (Client.verbose()) System.out.println("[DEBUG] Loaded card: " + Client.completeGodList.get(i) + ".png");
             godCards[i] = new Image("/images/GodCards/" + Client.completeGodList.get(i) + ".png");
         }
     }

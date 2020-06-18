@@ -92,6 +92,55 @@ public class Server {
     }
 
     /**
+     * Asks the first player to input the playerNumber and the choice of gods.
+     *
+     * @return array of integers; in the first position resides playerNumber, while the next 2/3 positions contain the gods
+     */
+    synchronized ArrayList<Integer> firstPlayer(SocketClientConnection c) {
+        c.send(ServerMessage.firstPlayer);
+        Scanner in = null;
+        try {
+            in = c.getScanner();
+        } catch (IOException e) {
+            if (ServerMain.verbose()) e.printStackTrace();
+        }
+        assert in != null;
+        int playersNumber;
+        while (true) {
+            try {
+                playersNumber = Integer.parseInt(in.nextLine());
+                if (playersNumber == 2 || playersNumber == 3) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                c.send("Wrong input. Please try again: ");
+            }
+        }
+        c.send("[CHOICE]@@@GODS@@@" + playersNumber);
+        int count = 0;
+        ArrayList<Integer> gods = new ArrayList<>();
+        while (count < playersNumber) {
+            try {
+                int i = Integer.parseInt(in.nextLine());
+                i -= 1;
+                if (i < GameTable.completeGodList.size() && i >= 0 && !gods.contains(i)) {
+                    gods.add(count, i);
+                    count += 1;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        gods.add(0, playersNumber);
+        if (playersNumber == 2) {
+            c.send("Wait for another player...");
+        } else {
+            c.send("Wait for 2 more players...");
+        }
+        return gods;
+    }
+
+
+    /**
      * @param c    is the client connection
      * @param name is the Nickname
      * @throws Exception, in this case the lobby is reset
@@ -102,10 +151,10 @@ public class Server {
         try {
             if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n"))
                 throw new NickAlreadyTakenException();
-            System.out.println("nome è " + name);
+            System.out.println("User " + name + " connected to game " + getCurrentGameIndex() + "'s lobby.");
             waitingConnection.put(name, c);
             if (waitingConnection.size() == 1) {
-                ArrayList<Integer> gameProps = c.firstPlayer();
+                ArrayList<Integer> gameProps = firstPlayer(c);
                 ArrayList<SocketClientConnection> temp = new ArrayList<>();
                 temp.add(c);
                 gameList.put(getCurrentGameIndex(), temp);
@@ -140,8 +189,7 @@ public class Server {
                 }
                 GameInitializer gameInitializer = new GameInitializer(c1, c2, c3, gods, player1, player2, player3, gameTable, controller);
                 controller.setGameInitializer(gameInitializer);
-                Thread thread = new Thread(gameInitializer);
-                thread.start();
+                new Thread(gameInitializer).start();
                 gameControllers.put(getCurrentGameIndex(), controller);
                 ArrayList<SocketClientConnection> playingConnections = new ArrayList<>();
                 playingConnections.add(c1);
@@ -149,19 +197,21 @@ public class Server {
                 if (c3 != null) playingConnections.add(c3);
                 gameList.put(getCurrentGameIndex(), playingConnections);
                 waitingConnection.clear();
-                //      thread.join();
                 currentGameIndex += 1;
             }
         } catch (NickAlreadyTakenException e) {
             throw new NickAlreadyTakenException();
         } catch (Exception e) {
-            waitingConnection.clear();
-            if (gameList.get(getCurrentGameIndex()) == null) throw new BrokenLobbyException();
-            if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();
-            if (gameProperties.size() > 0) gameProperties.get(getCurrentGameIndex()).clear();
-            throw new BrokenLobbyException();
+            clearLobby();
         }
+    }
 
+    private void clearLobby() throws BrokenLobbyException {
+        waitingConnection.clear();
+        if (gameList.get(getCurrentGameIndex()) == null) throw new BrokenLobbyException();
+        if (gameList.size() > 0) gameList.get(getCurrentGameIndex()).clear();
+        if (gameProperties.size() > 0) gameProperties.get(getCurrentGameIndex()).clear();
+        throw new BrokenLobbyException();
     }
 
     private static final Map<Integer, ArrayList<String>> gameFromDiskList = new LinkedHashMap<>();

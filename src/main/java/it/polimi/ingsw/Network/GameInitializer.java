@@ -13,11 +13,15 @@ import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.RemoteView;
 import it.polimi.ingsw.View.View;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 /**
  * Responsible for initiating a match; gets called asynchronously by {@link it.polimi.ingsw.Network.Server}
  */
+@SuppressWarnings("VariableNotUsedInsideIf")
 public class GameInitializer implements Runnable {
 
     private final SocketClientConnection c1, c2, c3;
@@ -41,58 +45,142 @@ public class GameInitializer implements Runnable {
     /**
      * Gets players' god choices
      *
-     * @param c1 first client's connection
-     * @param c2 second client's connection
-     * @param c3 (eventual) third client's connection
      * @return list of chosen gods, in order from first to last player
      */
-    private ArrayList<Integer> getPlayerGodChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3) {
+    private ArrayList<Integer> getPlayerGodChoices() {
         if (c3 == null) {
             ArrayList<Integer> out = new ArrayList<>();
-            int p2choice = c2.getGodChoice(gods);
+            int p2choice = getGodChoice(c2, gods);
             out.add(p2choice);
             c1.send(ServerMessage.lastGod + (gods.get(0)));
             out.add(0, gods.get(0));
             return out;
         } else {
             ArrayList<Integer> out = new ArrayList<>();
-            int p2choice = c2.getGodChoice(gods);
+            int p2choice = getGodChoice(c2, gods);
             out.add(p2choice);
             c3.send("Here are the available gods:\n");
-            int p3choice = c3.getGodChoice(gods);
+            int p3choice = getGodChoice(c3, gods);
             out.add(p3choice);
             c1.send(ServerMessage.lastGod + (gods.get(0)));
-            out.add(0,gods.get(0));
+            out.add(0, gods.get(0));
             return out;
         }
     }
 
     /**
+     * Asks for god choice
+     *
+     * @param connection connection to send to
+     * @param gods       list of previously choosen by the first player
+     * @return integer index of the choosen god
+     */
+    synchronized int getGodChoice(SocketClientConnection connection, ArrayList<Integer> gods) {
+        StringBuilder s = new StringBuilder();
+        s.append("[CHOICE]@@@");
+        for (Integer god : gods) {
+            s.append(god).append("@@@");
+        }
+        connection.send(s.toString());
+        Scanner in = null;
+        try {
+            in = connection.getScanner();
+        } catch (IOException e) {
+            if (ServerMain.verbose()) e.printStackTrace();
+        }
+        assert in != null;
+        int choice = -1;
+
+        while (true) {
+            try {
+                choice = in.nextInt();
+                choice -= 1;
+                if (choice < GameTable.completeGodList.size() && choice >= 0 && gods.contains(choice)) {
+                    gods.remove(Integer.valueOf(choice));
+                    connection.send("You choose: " + GameTable.getCompleteGodList().get(choice));
+                    return choice;
+                } else {
+                    connection.send("Wrong number. Try again: ");
+                }
+            } catch (InputMismatchException e) {
+                connection.send("Wrong number. Try again: ");
+                in.nextLine();
+            }
+        }
+
+    }
+
+    /**
+     * Asks for builder coordinates
+     *
+     * @param connection connection to send to
+     * @param choices    list of previously chosen coordinates
+     * @return pair of chosen coordinates
+     */
+    synchronized Pair getBuilderChoice(SocketClientConnection connection, ArrayList<Pair> choices) {
+        Pair out;
+        int c, r; //sia righe che colonne vanno da 0 a 4 compresi
+        Scanner in = null;
+        try {
+            in = connection.getScanner();
+        } catch (IOException e) {
+            if (ServerMain.verbose()) e.printStackTrace();
+        }
+        while (true) {
+            assert in != null;
+            connection.send("[CHOICE]@@@POS");
+            while (true) {
+                try {
+                    String s = in.nextLine();
+                    String[] inputs = s.split(",");
+                    if (inputs.length != 2) throw new InputMismatchException();
+                    r = Integer.parseInt(inputs[0]);
+                    c = Integer.parseInt(inputs[1]);
+                    if (r >= 0 && r < 5) {
+                        if (c >= 0 && c < 5) break;
+                        else connection.send(ServerMessage.wrongNumber);
+                    } else {
+                        connection.send(ServerMessage.wrongNumber);
+                    }
+                } catch (InputMismatchException | NumberFormatException e) {
+                    connection.send(ServerMessage.wrongNumber);
+                }
+            }
+            out = new Pair(r, c);
+            if (!choices.contains(out)) {
+                break;
+            } else {
+                connection.send(ServerMessage.cellNotAvailable);
+            }
+        }
+        return out;
+    }
+
+    /**
      * Gets players' initial builder positioning choices
-     * @param c1,c2,c3 client connections
+     *
      * @return list of chosen coordinates where to put builders
      */
-    private synchronized ArrayList<Pair> getPlayerBuilderChoices(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3) { //metodo che richiede le posizioni inziali dei worker
+    private synchronized ArrayList<Pair> getPlayerBuilderChoices() { //metodo che richiede le posizioni iniziali dei worker
         if (c3 != null) {
             c1.send("Wait for the other players to choose their starting position...");
-        }
-        else {
+        } else {
             c1.send("Wait for the other player to choose his starting position...");
         }
         ArrayList<Pair> choices = new ArrayList<Pair>(); //array che conterrà tutte le coppie delle posizioni iniziali
         c2.send(ServerMessage.firstBuilderPos);
-        Pair c2b1 = c2.getBuilderChoice(choices); //nomenclatura è NomeConnessione+NumeroWorker
+        Pair c2b1 = getBuilderChoice(c2, choices); //nomenclatura è NomeConnessione+NumeroWorker
         choices.add(c2b1); //aggiungo man mano ogni coppia all'array choices. Il controllo dell'input avviene nel metodo getBuilderChoice.
         c2.send(ServerMessage.secondBuilderPos);
-        Pair c2b2 = c2.getBuilderChoice(choices);
+        Pair c2b2 = getBuilderChoice(c2, choices);
         choices.add(c2b2);
         if (c3 != null){
             c2.send("Wait for the other players to choose their starting position...");
             c3.send(ServerMessage.firstBuilderPos);
-            Pair c3b1 = c3.getBuilderChoice(choices);
+            Pair c3b1 = getBuilderChoice(c3, choices);
             choices.add(c3b1);
             c3.send(ServerMessage.secondBuilderPos);
-            Pair c3b2 = c3.getBuilderChoice(choices);
+            Pair c3b2 = getBuilderChoice(c3, choices);
             choices.add(c3b2);
             c3.send("Wait for the other player to choose his starting positions...");
         }
@@ -100,10 +188,10 @@ public class GameInitializer implements Runnable {
             c2.send("Wait for the other player to choose his starting positions...");
         }
         c1.send(ServerMessage.firstBuilderPos);
-        Pair c1b1 = c1.getBuilderChoice(choices);
+        Pair c1b1 = getBuilderChoice(c1, choices);
         choices.add(0, c1b1);
         c1.send(ServerMessage.secondBuilderPos);
-        Pair c1b2 = c1.getBuilderChoice(choices);
+        Pair c1b2 = getBuilderChoice(c1, choices);
         choices.add(1,c1b2);
         return choices;
     }
@@ -111,12 +199,12 @@ public class GameInitializer implements Runnable {
 
     @Override
     public void run() {
-        try{
-            ArrayList<Integer> choices = getPlayerGodChoices(c1, c2, c3);
+        try {
+            ArrayList<Integer> choices = getPlayerGodChoices();
             player1.setGod(choices.get(0));
             player2.setGod(choices.get(1));
-            if(c3 != null) player3.setGod(choices.get(2));
-            ArrayList<Pair> startPos = getPlayerBuilderChoices(c1,c2,c3);
+            if (c3 != null) player3.setGod(choices.get(2));
+            ArrayList<Pair> startPos = getPlayerBuilderChoices();
             try {
                 player1.initBuilderList(gameTable.getCell(startPos.get(0).getFirst(), startPos.get(0).getSecond()));
                 player1.initBuilderList(gameTable.getCell(startPos.get(1).getFirst(), startPos.get(1).getSecond()));

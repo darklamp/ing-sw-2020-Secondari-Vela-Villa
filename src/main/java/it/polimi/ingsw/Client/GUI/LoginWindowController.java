@@ -54,14 +54,14 @@ public class LoginWindowController extends WindowController {
                 new Thread(client).start();
                 connected = true;
             } else if (!flag) {
-                textAreaMain.setText("Please enter the server's IP:port\nIf port is not provided, default will be used.");
+                textAreaMain.setText("Please enter the server's IP;port\nIf port is not provided, default will be used.");
                 ipInput.setText(null);
                 ipInput.setPromptText("Waiting for input..");
                 flag = true;
             } else {
                 InetAddress ip;
                 try {
-                    String[] a = ipInput.getText().split(":");
+                    String[] a = ipInput.getText().split(";");
                     int port;
                     if (a.length == 1) {
                         port = Client.getPort();
@@ -71,12 +71,16 @@ public class LoginWindowController extends WindowController {
                     Client.setPort(port);
                     flag = true;
                     new Thread(client).start();
+                    ipInput.clear();
                     connected = true;
                 } catch (Exception e) {
                     textAreaMain.setText("Invalid address/port! Please try again.");
                 }
             }
-        } else GUIClient.setOut(ipInput.getText());
+        } else {
+            GUIClient.setOut(ipInput.getText());
+            ipInput.clear();
+        }
     }
 
 
