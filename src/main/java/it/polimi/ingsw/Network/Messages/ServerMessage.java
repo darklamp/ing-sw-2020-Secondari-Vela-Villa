@@ -12,7 +12,8 @@ public final class ServerMessage implements Serializable, Message {
     public static final String welcome = "Welcome!";
     public static final String reloadGameChoice = "Please enter your name if you want to start a new game,\n or enter \"R\" if you want to rejoin a saved game: ";
     public static final String userAlreadyTaken = "Username already taken. Please enter a different one: ";
-    public static final String firstPlayer = "Looks like you're the first player to connect. You get to decide the number of players.\n" +
+    public static final String firstPlayer = "Looks like you're the first player to connect.\n" +
+            "You get to decide the number of players.\n" +
             "Please input a natural lower than 4 and higher than 1: ";
     public final static ErrorMessage wrongNumber = new ErrorMessage("Wrong number. Please try again.");
     public final static ErrorMessage notYourTurn = new ErrorMessage("It's probably not your turn.");

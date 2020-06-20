@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -20,8 +21,13 @@ public class InfoBoxController extends WindowController implements Initializable
     ImageView builderImage;
     @FXML
     Text playerName;
+    @FXML
+    Button closeButton, buttonForward, buttonBack;
 
     private int index;
+    private final static Image btnBack = new Image("/images/btn_back.png");
+    private final static Image btnForward = new Image("/images/btn_fwd.png");
+
 
     @FXML
     void back(ActionEvent event) {
@@ -45,6 +51,7 @@ public class InfoBoxController extends WindowController implements Initializable
     void close(ActionEvent event) {
         event.consume();
         Button b = (Button) (event.getSource());
+        GUIClient.getStage().getScene().getRoot().setEffect(null);
         ((Stage) (b.getParent().getScene().getWindow())).close();
     }
 
@@ -60,5 +67,12 @@ public class InfoBoxController extends WindowController implements Initializable
         godCard.setImage(GodChoiceController.getGodCard(Client.getGod()));
         builderImage.setImage(MainWindowController.getBuilderImage(index + 1));
         playerName.setText(Client.getLastStateMessage().getName(index));
+        /* NB: we can't load fonts within css stylesheets because JavaFX breaks if there's a whitespace in the path
+           (known JavaFX bug apparently)
+         */
+        playerName.setFont(GUIClient.getDefaultFont());
+        closeButton.setFont(GUIClient.getDefaultFont());
+        buttonBack.setGraphic(new ImageView(btnBack));
+        buttonForward.setGraphic(new ImageView(btnForward));
     }
 }

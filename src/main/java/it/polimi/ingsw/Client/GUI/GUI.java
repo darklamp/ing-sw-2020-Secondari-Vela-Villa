@@ -8,6 +8,7 @@ import it.polimi.ingsw.Utility.Color;
 import it.polimi.ingsw.View.CellView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.stage.StageStyle;
 
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
@@ -44,7 +45,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         return (short) Client.getPlayersNumber();
     }
 
-
     @Override
     public void run() {
         Application.launch(GUIClient.class);
@@ -63,9 +63,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         return isReady;
     }
 
-    /**
-     * @see Ui
-     */
+
     @Override
     synchronized public void process(Message input) {
         if (input instanceof InitMessage) {
@@ -77,7 +75,7 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
             Client.setGod(m.getGod(Client.getPlayerIndex()));
             Client.setGods(m.getGod(0), m.getGod(1), m.getGod(2));
             if (!guiInitialized) {
-                Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml"));
+                Platform.runLater(() -> GUIClient.getController().switchScene("/fxml/Main.fxml", true, null));
                 guiInitialized = true;
             }
         } else if (input instanceof ErrorMessage) {
@@ -89,9 +87,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
 
     }
 
-    /**
-     * @see Ui
-     */
     @Override
     synchronized public void process(String input) {
         String[] inputs = input.split("@@@");
@@ -101,18 +96,18 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
                 Platform.runLater(() -> loginController.firstPlayerGods());
             } else if (input.contains("POS")) {
                 if (!guiInitialized) {
-                    Platform.runLater(() -> GUIClient.getController().switchScene("/Main.fxml", true));
+                    Platform.runLater(() -> GUIClient.getController().switchScene("/fxml/Main.fxml", true, null));
                     guiInitialized = true;
                 }
-                Platform.runLater(() -> GUIClient.getController().getStartingPositions(false));
+                Platform.runLater(() -> GUIClient.getController().getStartingPositions(false, inputs));
             } else {
-                Platform.runLater(() -> loginController.switchScene("/GodChoice.fxml", false));
+                Platform.runLater(() -> loginController.switchScene("/fxml/GodChoice.fxml", false, StageStyle.UNDECORATED));
                 Platform.runLater(() -> ((GodChoiceController) GUIClient.getController()).parseGodChoice(input));
             }
         } else if (input.contains(ServerMessage.firstPlayer)) Platform.runLater(() -> loginController.firstPlayer());
         else if (input.equals(ServerMessage.reloadGameChoice)) Platform.runLater(() -> loginController.gameReload());
         else if (input.equals(ServerMessage.cellNotAvailable))
-            Platform.runLater(() -> GUIClient.getController().getStartingPositions(true));
+            Platform.runLater(() -> GUIClient.getController().getStartingPositions(true, inputs));
         else if (input.contains(ServerMessage.connClosed)) {
             if (inputs.length == 1) {
                 System.err.println(Color.RESET + ServerMessage.connClosed);

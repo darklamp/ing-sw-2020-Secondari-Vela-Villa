@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -35,10 +36,18 @@ public class LoginWindowController extends WindowController {
     private void showCredits() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Credits");
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.setGraphic(null);
+        alert.getDialogPane().setId("creditsPane");
+        alert.getDialogPane().getStylesheets().add("css/Main.css");
         alert.setHeaderText(null);
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(GUIClient.getAppIcon());
-        alert.setContentText("\nFavicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon).\nLoser gif made by Dylan Morang (https://giphy.com/angchor).");
+        alert.setContentText("\nFavicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon)\n" +
+                "Loser gif made by Dylan Morang (https://giphy.com/angchor)\n" +
+                "Roman SD font by Steve Deffeyes (https://www.dafont.com/steve-deffeyes.d923)\n" +
+                "Error icon by Eucalyp (https://www.flaticon.com/authors/eucalyp)\n" +
+                "Dalek Pinpoint font by K-Type (https://www.dafont.com/k-type.d872)\n");
         alert.setResizable(false);
         alert.showAndWait();
     }
@@ -97,6 +106,9 @@ public class LoginWindowController extends WindowController {
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(2, choices);
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Player number choice");
+        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.setGraphic(null);
+        dialog.getDialogPane().getStylesheets().add("css/Main.css");
         dialog.setContentText(ServerMessage.firstPlayer);
         Optional<Integer> result = dialog.showAndWait();
         while (true) {
@@ -117,7 +129,10 @@ public class LoginWindowController extends WindowController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(null);
+        alert.setGraphic(null);
         alert.setContentText("Please choose whether you'd like to load a previous game or join a new one.");
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.getDialogPane().getStylesheets().add("css/Main.css");
         ButtonType b1 = new ButtonType("Reload");
         ButtonType b2 = new ButtonType("Join");
         alert.getButtonTypes().setAll(b2, b1);
@@ -128,7 +143,7 @@ public class LoginWindowController extends WindowController {
                     GUIClient.setOut("R");
                     ipInput.setText(null);
                 } else {
-                    textAreaMain.setText("Please enter your name and press the button.");
+                    textAreaMain.setText("Enter your name and press the connect button.");
                 }
                 break;
             }
@@ -143,6 +158,9 @@ public class LoginWindowController extends WindowController {
         ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Gods choice");
+        dialog.setGraphic(null);
+        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.getDialogPane().getStylesheets().add("css/Main.css");
         dialog.setContentText(ServerMessage.nextChoice);
         result = dialog.showAndWait();
         getNextChoice(choices, dialog);
@@ -156,6 +174,9 @@ public class LoginWindowController extends WindowController {
         ChoiceDialog<String> dialog;
         choices.remove(result.get());
         dialog = new ChoiceDialog<>(choices.get(0), choices);
+        dialog.setGraphic(null);
+        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.getDialogPane().getStylesheets().add("css/Main.css");
         dialog.setTitle("Initializing game");
         dialog.setHeaderText("Gods choice");
         dialog.setContentText(ServerMessage.nextChoice);

@@ -128,7 +128,15 @@ public class GameInitializer implements Runnable {
         }
         while (true) {
             assert in != null;
-            connection.send("[CHOICE]@@@POS");
+            StringBuilder aa = new StringBuilder();
+            aa.append("[CHOICE]@@@POS");
+            for (Pair p : choices) {
+                aa.append("@@@");
+                aa.append(p.getFirst());
+                aa.append(",");
+                aa.append(p.getSecond());
+            }
+            connection.send(aa.toString());
             while (true) {
                 try {
                     String s = in.nextLine();

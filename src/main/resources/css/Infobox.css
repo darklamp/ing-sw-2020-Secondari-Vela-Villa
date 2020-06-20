@@ -1,0 +1,13 @@
+#playerName {
+    -fx-background-image: url('../images/bg_playerName.png');
+    -fx-font-size: 35px;
+    -fx-font-weight: bolder;
+}
+
+#anchorPane {
+    -fx-background-image: url('../images/infobox_bg.png');
+    -fx-opacity: 90%;
+    -fx-background-size: cover;
+}
+
+

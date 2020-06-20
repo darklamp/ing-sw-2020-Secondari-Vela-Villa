@@ -35,7 +35,6 @@ public interface Ui {
 
     /**
      * Starts Client thread, asking for IP input if necessary.
-     *
      * @param client Client to be ran
      */
     void waitForIP(Client client);

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:id="godChoicePane" prefHeight="650.0" prefWidth="600.0" stylesheets="@../css/GodChoice.css"
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.polimi.ingsw.Client.GUI.GodChoiceController">
+   <children>
+      <Button fx:id="buttonForward" contentDisplay="CENTER" focusTraversable="false" layoutX="486.0" layoutY="300.0"
+              mnemonicParsing="false" onAction="#forward" prefHeight="50.0" prefWidth="50.0"
+              style="-fx-background-color: transparent;" text="&gt;" textAlignment="CENTER"/>
+      <Button fx:id="buttonBack" contentDisplay="CENTER" focusTraversable="false" layoutX="59.0" layoutY="300.0"
+              mnemonicParsing="false" onAction="#back" prefHeight="50.0" prefWidth="50.0"
+              style="-fx-background-color: transparent;" text="&lt;" textAlignment="CENTER"/>
+      <ImageView fx:id="godCard" fitHeight="424.0" fitWidth="283.0" layoutX="174.0" layoutY="113.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <image>
+            <Image url="@../images/GodCards/ATLAS.png"/>
+         </image>
+         <effect>
+            <DropShadow/>
+         </effect>
+      </ImageView>
+      <Button fx:id="buttonSubmit" alignment="CENTER" defaultButton="true" ellipsisString="" focusTraversable="false"
+              layoutX="150.0" layoutY="567.0" mnemonicParsing="false" onAction="#submit" prefHeight="60.0"
+              prefWidth="300.0" style="-fx-background-color: transparent;" text="Submit" textAlignment="CENTER"/>
+      <Button fx:id="buttonClose" ellipsisString="X" layoutY="1.0" mnemonicParsing="false" onAction="#closeApp"
+              prefHeight="75.0" prefWidth="75.0" style="-fx-background-color: transparent;" text="X"
+              textAlignment="CENTER"/>
+      <Button fx:id="buttonMinimize" ellipsisString="—" layoutX="72.0" layoutY="1.0" mnemonicParsing="false"
+              onAction="#minimize" prefHeight="75.0" prefWidth="75.0" style="-fx-background-color: transparent;"
+              text="—"/>
+   </children>
+   <opaqueInsets>
+      <Insets/>
+   </opaqueInsets>
+   <effect>
+      <DropShadow height="87.78" radius="44.9075" spread="0.02" width="93.85"/>
+   </effect>
+</AnchorPane>

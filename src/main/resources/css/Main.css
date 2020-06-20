@@ -10,18 +10,6 @@
     -fx-background-size: cover;
 }
 
-#textArea1 {
-    -fx-text-fill: papayawhip;
-    -fx-font-weight: bold;
-    -fx-font-style: italic;
-    -fx-control-inner-background: #4ee3e3;
-    -fx-background-color: transparent;
-    -fx-font-size: 28px;
-    -fx-alignment: center;
-    -fx-highlight-fill: null;
-    -fx-highlight-text-fill: null;
-}
-
 
 #progressBar {
     -fx-control-inner-background: #30cafe;
@@ -29,6 +17,12 @@
     -fx-border-width: 0;
 }
 
+#gridBuildings {
+    -fx-background-image: url('../images/buildingparts_bg.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
 
 .text-area, .text-area .viewport, .text-area .content {
     -fx-background-color: transparent;
@@ -36,4 +30,102 @@
 
 .button {
     -fx-background-color: transparent;
+}
+
+.dialog-pane {
+    -fx-background-color: saddlebrown;
+    -fx-text-fill: white;
+}
+
+.dialog-pane > *.button-bar > *.container {
+    -fx-background-color: #bf6220;
+    -fx-text-fill: white;
+}
+
+.dialog-pane > *.label.content {
+    -fx-font-family: 'Roman SD';
+    -fx-font-size: 18px;
+    -fx-font-weight: bolder;
+    -fx-text-fill: white;
+    -fx-background-color: #bf6220;
+}
+
+.dialog-pane *.label {
+    -fx-font-family: 'Roman SD';
+    -fx-font-size: 16px;
+    -fx-background-color: saddlebrown;
+    -fx-text-fill: white;
+}
+
+.dialog-pane *.header-panel {
+    -fx-background-color: saddlebrown;
+    -fx-text-fill: white;
+}
+
+.dialog-pane *.header-panel *.label {
+    -fx-font-family: 'Dalek Pinpoint';
+    -fx-font-size: 20px;
+    -fx-font-weight: normal;
+    -fx-text-fill: white;
+}
+
+.dialog-pane .button {
+    -fx-font-family: 'Roman SD';
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 12, 0.0, 0, 8);
+}
+
+.dialog-pane .choice-box {
+    -fx-font-family: 'Roman SD';
+    -fx-text-fill: white;
+    -fx-background-color: #bf6220;
+}
+
+.dialog-pane .button:hover {
+    -fx-font-family: 'Roman SD';
+    -fx-background-color: #f59551;
+    -fx-text-fill: white;
+}
+
+.combo-box {
+    -fx-background-color: #bf6220;
+    -fx-font-weight: bolder;
+    -fx-text-fill: white;
+    -fx-font-family: 'Roman SD';
+}
+
+.combo-box > .list-cell {
+    -fx-background-color: #bf6220;
+    -fx-text-fill: white;
+}
+
+.combo-box > .content {
+    -fx-font-family: 'Roman SD';
+    -fx-font-weight: bolder;
+    -fx-text-fill: white;
+    -fx-background-color: #bf6220;
+}
+
+.combo-box-popup > .list-view {
+    -fx-background-color: #f59551;
+    -fx-text-fill: white;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 12, 0.0, 0, 8);
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-padding: 4 0 4 5;
+    -fx-background-color: #f59551;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
+    -fx-background-color: #f59551;
+    -fx-text-fill: white;
+}
+
+#creditsPane > * {
+    -fx-font-size: 15px;
+    -fx-min-height: 130px;
+    -fx-min-width: 270px;
 }

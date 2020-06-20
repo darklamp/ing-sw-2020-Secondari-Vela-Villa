@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane id="anchorPane" prefHeight="150.0" prefWidth="400.0" stylesheets="@../css/Login.css"
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.polimi.ingsw.Client.GUI.LoginWindowController">
+   <children>
+      <BorderPane id="borderPane" prefHeight="250.0" prefWidth="400.0" stylesheets="@../css/Login.css">
+         <top>
+            <VBox prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TextField id="inputBar" fx:id="ipInput" prefHeight="50.0" prefWidth="308.0" promptText="Name"
+                                   stylesheets="@../css/Login.css"/>
+                        <Button id="connectButton" fx:id="ipSubmitBTN" alignment="CENTER" mnemonicParsing="false"
+                                onAction="#print" prefHeight="50.0" prefWidth="92.0" stylesheets="@../css/Login.css"
+                                text="Connect" textAlignment="CENTER"/>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <TextArea fx:id="textAreaMain" editable="false" prefHeight="400.0" prefWidth="200.0" text=" "
+                      BorderPane.alignment="CENTER"/>
+         </center>
+         <bottom>
+            <AnchorPane prefHeight="26.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button id="creditsButton" fx:id="creditsButton" layoutX="329.0" mnemonicParsing="false"
+                          onAction="#showCredits" stylesheets="@../css/Login.css" text="Credits"/>
+                  <Button id="closeButton" ellipsisString="" mnemonicParsing="false" onAction="#closeApp"
+                          stylesheets="@../css/Login.css" text="Close" textAlignment="CENTER"/>
+               </children>
+            </AnchorPane>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

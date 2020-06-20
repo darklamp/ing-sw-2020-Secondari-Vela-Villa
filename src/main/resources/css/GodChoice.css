@@ -1,0 +1,7 @@
+#godChoicePane {
+    -fx-background-image: url('../images/infobox_bg.png');
+    -fx-opacity: 90%;
+    -fx-background-size: cover;
+}
+
+

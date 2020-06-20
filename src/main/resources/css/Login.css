@@ -1,0 +1,49 @@
+
+#anchorPane {
+    -fx-background-image: url('../images/infobox_bg.png');
+}
+
+#borderPane {
+    -fx-border-color: saddlebrown;
+    -fx-border-width: 2px;
+}
+
+.text-field {
+    -fx-background-color: #b1a397;
+    -fx-border-color: saddlebrown;
+    -fx-text-fill: saddlebrown;
+    -fx-prompt-text-fill: brown;
+}
+
+.text-area {
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-color: saddlebrown;
+    -fx-text-fill: saddlebrown;
+    -fx-background-image: url('../images/infobox_bg.png');
+}
+
+.text-area .content {
+    -fx-background-image: url('../images/infobox_bg.png');
+}
+
+.button {
+    -fx-border-color: saddlebrown;
+    -fx-text-fill: saddlebrown;
+    -fx-background-color: transparent;
+}
+
+#creditsButton {
+    -fx-border-width: 0 0 0 2px;
+}
+
+#inputBar {
+    -fx-border-width: 0 2px 2px 0;
+}
+
+#connectButton {
+    -fx-border-width: 0 0 2px 0;
+}
+
+#closeButton {
+    -fx-border-width: 0 2px 0 0;
+}

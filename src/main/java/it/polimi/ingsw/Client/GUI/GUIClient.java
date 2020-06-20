@@ -3,10 +3,14 @@ package it.polimi.ingsw.Client.GUI;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -19,6 +23,22 @@ public class GUIClient extends Application {
     }
 
     private static Image appIcon;
+
+    static Font getDefaultFont() {
+        return defaultFont;
+    }
+
+    /**
+     * Getter for specific size of font
+     *
+     * @param size size of font
+     * @return font in specified size
+     */
+    static Font getDefaultFont(double size) {
+        return size > 0 ? Font.font(defaultFont.getName(), size) : defaultFont;
+    }
+
+    private static Font defaultFont;
 
     static GUI getGui() {
         return gui;
@@ -36,8 +56,12 @@ public class GUIClient extends Application {
 
     private static WindowController controller;
 
-    public static Stage getStage() {
+    static Stage getStage() {
         return stage;
+    }
+
+    static void setStage(Stage stage) {
+        GUIClient.stage = stage;
     }
 
     private static Stage stage;
@@ -61,16 +85,22 @@ public class GUIClient extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
         support = new PropertyChangeSupport(this);
         Parent root = loader.load();
         controller = loader.getController();
         primaryStage.setTitle("Santorini Client");
         primaryStage.setScene(new Scene(root, 400, 250));
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
         stage = primaryStage;
+        WindowController.setCursor(new ImageCursor(new Image("/images/cursor.png")));
+        stage.getScene().setCursor(WindowController.getCursor());
         appIcon = new Image("/images/appIcon.png");
         stage.getIcons().add(appIcon);
+        Font.loadFont(getClass().getResourceAsStream("/fonts/DalekPinpoint.ttf"), 35);
+        defaultFont = Font.loadFont(getClass().getResourceAsStream("/fonts/Roman_SD.ttf"), 35);
+        WindowController.setErrorIcon(new ImageView(new Image("/images/errorIcon.png")));
         gui.setReady(true);
         stage.setAlwaysOnTop(false);
         stage.setOnCloseRequest(we -> {
@@ -79,7 +109,6 @@ public class GUIClient extends Application {
             Platform.exit();
             System.exit(0);
         });
-        stage.setFullScreenExitHint("Press F11 to toggle fullscreen.");
     }
 
 

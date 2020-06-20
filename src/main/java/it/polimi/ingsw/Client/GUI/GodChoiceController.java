@@ -3,25 +3,32 @@ package it.polimi.ingsw.Client.GUI;
 import it.polimi.ingsw.Client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class GodChoiceController extends WindowController {
+public class GodChoiceController extends WindowController implements Initializable {
 
     @FXML
-    Button buttonForward, buttonBack, buttonSubmit;
+    Button buttonForward, buttonBack, buttonSubmit, buttonClose, buttonMinimize;
     @FXML
     ImageView godCard;
     @FXML
     AnchorPane godChoicePane;
 
     private static Image god1, god2, god3;
-    private static Image[] godCards = new Image[Client.completeGodList.size()];
+    private static final Image[] godCards = new Image[Client.completeGodList.size()];
+    private final static Image btnBack = new Image("/images/btn_back.png");
+    private final static Image btnForward = new Image("/images/btn_fwd.png");
+
 
     static {
         for (int i = 0; i < Client.completeGodList.size(); i++) {
@@ -82,7 +89,7 @@ public class GodChoiceController extends WindowController {
         event.consume();
         int i = (godCard.getImage() == god1 ? i1 : (godCard.getImage() == god2 ? i2 : i3));
         Client.setGod(i);
-        GUIClient.setOut(String.valueOf(i+1));
+        GUIClient.setOut(String.valueOf(i + 1));
         buttonSubmit.setDisable(true);
         buttonBack.setDisable(true);
         buttonForward.setDisable(true);
@@ -92,5 +99,15 @@ public class GodChoiceController extends WindowController {
     @Override
     void setText(String s) {
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        buttonBack.setGraphic(new ImageView(btnBack));
+        buttonForward.setGraphic(new ImageView(btnForward));
+        Font font = (GUIClient.getDefaultFont());
+        buttonSubmit.setFont(font);
+        buttonMinimize.setFont(font);
+        buttonClose.setFont(font);
     }
 }
