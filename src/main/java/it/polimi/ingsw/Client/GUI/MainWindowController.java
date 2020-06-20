@@ -70,7 +70,7 @@ public class MainWindowController extends WindowController implements Initializa
     @FXML
     ProgressBar timerBar;
     @FXML
-    ImageView godImage, infoButton;
+    ImageView godImage, infoButton, winnerImage;
     @FXML
     Button infoB;
     @FXML
@@ -300,9 +300,21 @@ public class MainWindowController extends WindowController implements Initializa
             }
             case WIN -> {
                 timerBar.setVisible(false);
-                setChoiceDialog("WINNER", null, "Congrats! Looks like you just won.", "Rejoice", "Rejoice", WIN);
-                Platform.exit();
-                System.exit(0);
+                winnerImage.toFront();
+                winnerImage.fitHeightProperty().bind(GUIClient.getStage().getScene().heightProperty());
+                winnerImage.fitWidthProperty().bind(GUIClient.getStage().getScene().widthProperty());
+                winnerImage.setVisible(true);
+                Button button = new Button();
+                button.setMinHeight(windowMoveBar.getHeight());
+                button.setMinWidth(windowMoveBar.getWidth());
+                button.setText("CLOSE");
+                button.setStyle("-fx-background-color: goldenrod; -fx-text-fill: white; -fx-font-weight:bold; -fx-font-family: 'Roman SD'; -fx-font-size: 30px;");
+                button.setVisible(true);
+                windowMoveBar.getChildren().add(button);
+                winnerImage.setOnMouseClicked(e -> {
+                    Platform.exit();
+                    System.exit(0);
+                });
             }
             case LOSE -> {
                 timerBar.setVisible(false);
@@ -326,15 +338,11 @@ public class MainWindowController extends WindowController implements Initializa
         choices.add(opt2);
         if (c != null) for (int i = 0; i < 10; i++) choices.add(opt1);
         ChoiceDialog<String> dialog = new ChoiceDialog<>(opt1, choices);
-        if (c != null) {
-            if (c == WIN) dialog.setGraphic(new ImageView(new Image("/images/confetti.gif")));
-            else if (c == LOSE) dialog.setGraphic(new ImageView(new Image("/images/loser.gif")));
-        }
+        dialog.initStyle(StageStyle.UNDECORATED);
         dialog.setTitle(title);
         dialog.getDialogPane().setCursor(WindowController.getCursor());
         dialog.setHeaderText(header);
         dialog.setContentText(text);
-        dialog.initStyle(StageStyle.UNDECORATED);
         dialog.setGraphic(null);
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/css/Main.css").toExternalForm());
         Optional<String> result = dialog.showAndWait();

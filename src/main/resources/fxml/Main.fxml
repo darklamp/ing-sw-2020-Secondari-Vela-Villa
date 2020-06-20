@@ -6,14 +6,23 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.Shadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <AnchorPane id="anchorPane" fx:id="anchorPane" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../css/Main.css"
             xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.polimi.ingsw.Client.GUI.MainWindowController">
     <children>
+        <ImageView fx:id="winnerImage" fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true"
+                   visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="@../images/winner.png"/>
+            </image>
+            <effect>
+                <ColorAdjust brightness="0.15" contrast="0.56" saturation="0.88"/>
+            </effect>
+        </ImageView>
         <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                   AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -134,9 +143,12 @@
                                                 prefHeight="30.0" vgrow="NEVER"/>
                                 <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
                                                 prefHeight="30.0" vgrow="NEVER"/>
-                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="NEVER" />
-                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="NEVER" />
-                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="NEVER" />
+                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
+                                                prefHeight="30.0" vgrow="NEVER"/>
+                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
+                                                prefHeight="30.0" vgrow="NEVER"/>
+                                <RowConstraints maxHeight="150.0" minHeight="10.0" percentHeight="20.0"
+                                                prefHeight="30.0" vgrow="NEVER"/>
                             </rowConstraints>
                             <children>
                                 <StackPane fx:id="cell00" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
@@ -161,24 +173,42 @@
                                            GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
                                 <StackPane fx:id="cell11" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
                                            GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
-                                <StackPane fx:id="cell12" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell13" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell14" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell20" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell21" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell22" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell23" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell24" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell30" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell31" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell32" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell33" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell34" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell40" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell41" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell42" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell43" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
-                                <StackPane fx:id="cell44" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS" />
+                                <StackPane fx:id="cell12" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell13" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell14" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell20" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
+                                           GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell21" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell22" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell23" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell24" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell30" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
+                                           GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell31" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell32" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell33" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell34" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell40" minHeight="10.0" minWidth="10.0" GridPane.hgrow="ALWAYS"
+                                           GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell41" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="1"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell42" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="2"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell43" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="3"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
+                                <StackPane fx:id="cell44" minHeight="10.0" minWidth="10.0" GridPane.columnIndex="4"
+                                           GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS"/>
                             </children>
                         </GridPane>
                         <Pane fx:id="windowMoveBar" prefHeight="200.0" prefWidth="200.0"/>
