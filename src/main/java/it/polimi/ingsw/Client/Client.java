@@ -139,6 +139,9 @@ public class Client implements Runnable {
 
     /**
      * Reads news from socket connection and calls Ui method on it
+     *
+     * @param socketIn input socket ObjectStream
+     * @return Thread
      */
     public synchronized Thread asyncReadFromSocket(final ObjectInputStream socketIn) {
         Thread t = new Thread(() -> {
@@ -184,6 +187,9 @@ public class Client implements Runnable {
 
     /**
      * Ask for input -> verify it -> send it to server via socket
+     * @param stdin System.in scanner
+     * @param socketOut output
+     * @return Thread
      */
     public synchronized Thread asyncWriteToSocket(final Scanner stdin, final PrintWriter socketOut) {
         Thread t = new Thread(() -> {

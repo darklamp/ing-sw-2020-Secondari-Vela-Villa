@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Controls god choice after login.
+ */
 public class GodChoiceController extends WindowController implements Initializable {
 
     @FXML
@@ -39,10 +42,21 @@ public class GodChoiceController extends WindowController implements Initializab
 
     private static int i1, i2, i3;
 
+    /**
+     * Returns the player's god card
+     *
+     * @param i player index (0..2)
+     * @return god card as image if index valid, else defaults to returning godCards[0]
+     */
     static Image getGodCard(int i) {
-        return godCards[i];
+        return (i < godCards.length && i >= 0) ? godCards[i] : godCards[0];
     }
 
+    /**
+     * Parses player god choices to create the view.
+     *
+     * @param input eventually contains other player's previous choices
+     */
     void parseGodChoice(String input) {
         String[] inputs = input.split("@@@");
         List<Integer> choices = new ArrayList<>();
@@ -62,6 +76,11 @@ public class GodChoiceController extends WindowController implements Initializab
         godCard.setImage(god1);
     }
 
+    /**
+     * Arrow back
+     *
+     * @param event click event
+     */
     @FXML
     void back(ActionEvent event) {
         event.consume();
@@ -73,6 +92,11 @@ public class GodChoiceController extends WindowController implements Initializab
         } else godCard.setImage(god2);
     }
 
+    /**
+     * Arrow fwd
+     *
+     * @param event click event
+     */
     @FXML
     void forward(ActionEvent event) {
         event.consume();
@@ -84,6 +108,12 @@ public class GodChoiceController extends WindowController implements Initializab
         } else godCard.setImage(god1);
     }
 
+
+    /**
+     * Submit button. Sends god choice to server and disables buttons until game starts.
+     *
+     * @param event click event
+     */
     @FXML
     void submit(ActionEvent event) {
         event.consume();
@@ -98,7 +128,6 @@ public class GodChoiceController extends WindowController implements Initializab
 
     @Override
     void setText(String s) {
-
     }
 
     @Override

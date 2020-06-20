@@ -29,7 +29,7 @@ public class ServerMain {
 
 
     /**
-     * Launch the server
+     * Launches the server.
      *
      * @param args command line args (see README for available params)
      */

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Network.Messages.Message;
-import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.View.CellView;
 
 import java.util.Scanner;
@@ -12,14 +11,11 @@ public interface Ui {
      * Processes input String message.
      * Message can be either a simple String or a "message" String.
      * Message strings are formatted as follows:
-     * <p>
      * [ TYPE ] + n * ( SEPARATOR + ARG )
-     * <p>
      * with n = #arguments
      * SEPARATOR = @@@
      * TYPE =
-     * CHOICE : server prompts client for choice; used when asking for gods, positions
-     * <p>
+     * - CHOICE : server prompts client for choice; used when asking for gods, positions
      *
      * @param input message to be processed
      */
@@ -27,8 +23,6 @@ public interface Ui {
 
     /**
      * Processes input {@link Message}.
-     * Note : {@link ServerMessage} implements the Message interface, but contains String messages which get parsed as strings by {@link Ui#process(String)}
-     *
      * @param input message to be processed
      */
     void process(Message input);
@@ -47,7 +41,6 @@ public interface Ui {
 
     /**
      * Responsible for reacting to new {@link ClientState}
-     *
      * @param newState state to be processed
      */
     void processTurnChange(ClientState newState);

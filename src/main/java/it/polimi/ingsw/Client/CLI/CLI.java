@@ -17,17 +17,13 @@ import static it.polimi.ingsw.Client.ClientState.WIN;
 public class CLI implements Ui {
 
 
-    /**
-     * @see Ui
-     */
+
     @Override
     public String nextLine(Scanner in) {
         return in.nextLine();
     }
 
-    /**
-     * @see Ui
-     */
+
     @Override
     synchronized public void process(Message input) {
         if (input instanceof InitMessage) {
@@ -52,9 +48,7 @@ public class CLI implements Ui {
         }
     }
 
-    /**
-     * @see Ui
-     */
+
     @Override
     public void process(String input) {
         String[] inputs;
@@ -104,6 +98,7 @@ public class CLI implements Ui {
     }
 
     /**
+     * {@inheritDoc}
      * Flow: Get input ip -> verify it -> if valid, try to connect, else ask again
      */
     @Override
@@ -111,9 +106,7 @@ public class CLI implements Ui {
         client.run();
     }
 
-    /**
-     * @see Ui
-     */
+
     @Override
     public void showTable(CellView[][] table){
         int r,c;
@@ -165,9 +158,7 @@ public class CLI implements Ui {
         System.out.print("\n  └───┴───┴───┴───┴───┘\n");
     }
 
-    /**
-     * @see Ui
-     */
+    @Override
     public void processTurnChange(ClientState newState){
         String s = "";
         switch (newState) {

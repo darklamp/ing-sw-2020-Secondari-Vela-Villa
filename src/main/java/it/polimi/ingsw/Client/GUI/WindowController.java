@@ -43,15 +43,17 @@ public abstract class WindowController {
 
 
     /**
-     * {@link WindowController#switchScene(String, boolean)} (boolean = true)
-     **/
+     * @param fxml file to be loaded
+     * @see WindowController#switchScene(String, boolean)
+     * Note: stage style set to null, so default will get used; fullScreen set to true.
+     */
     void switchScene(@SuppressWarnings("SameParameterValue") String fxml) {
         switchScene(fxml, true);
     }
 
     /**
-     * Loads fxml file if present, then switches scene
-     *
+     * @see WindowController#switchScene(String, boolean, StageStyle)
+     * Note: stage style set to null, so default will get used.
      * @param fxml       file to be loaded
      * @param fullScreen true if scene has to be set to fullscreen
      */
@@ -61,9 +63,9 @@ public abstract class WindowController {
 
     /**
      * Loads fxml file if present, then switches scene
-     *
      * @param fxml       file to be loaded
      * @param fullScreen true if scene has to be set to fullscreen
+     * @param stageStyle style with which the stage has to be initialized
      */
     void switchScene(@SuppressWarnings("SameParameterValue") String fxml, boolean fullScreen, StageStyle stageStyle) {
         FXMLLoader loader = new FXMLLoader(getClass()
@@ -103,15 +105,38 @@ public abstract class WindowController {
 
     abstract void setText(String s);
 
+    /**
+     * Takes a table representation from the server and proceeds to display it.
+     *
+     * @param table newly received table to be printed
+     * @see MainWindowController#updateTable(CellView[][])
+     */
     void updateTable(CellView[][] table) {
     }
 
+    /**
+     * Gets player builders' starting positions.
+     *
+     * @param cellOccupied if the server determined the selected cell is already occupied
+     * @param inputs       eventual previously selected cells
+     */
     void getStartingPositions(boolean cellOccupied, String[] inputs) {
     }
 
+    /**
+     * Reacts to ClientState news.
+     *
+     * @param newState
+     */
     void setMove(ClientState newState) {
     }
 
+    /**
+     * Closes client application. Usually used with close buttons.
+     *
+     * @param event click event
+     * @example {@link GodChoiceController#buttonClose}
+     */
     @FXML
     void closeApp(ActionEvent event) {
         event.consume();
@@ -119,6 +144,12 @@ public abstract class WindowController {
         System.exit(0);
     }
 
+    /**
+     * Minimizes current stage.
+     *
+     * @param event click event
+     * @example {@link GodChoiceController#buttonMinimize}
+     */
     @FXML
     void minimize(ActionEvent event) {
         event.consume();
@@ -128,7 +159,6 @@ public abstract class WindowController {
 
     /**
      * Spawns error dialog with content
-     *
      * @param input
      */
     void setError(String input) {
@@ -144,7 +174,6 @@ public abstract class WindowController {
 
     /**
      * Spawns error dialog with content
-     *
      * @param input
      */
     void setError(ErrorMessage input) {

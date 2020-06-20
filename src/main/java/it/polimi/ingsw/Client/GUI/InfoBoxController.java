@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controls in-game InfoBox.
+ *
+ * @see MainWindowController#infoButton
+ */
 public class InfoBoxController extends WindowController implements Initializable {
 
     @FXML
@@ -29,6 +34,11 @@ public class InfoBoxController extends WindowController implements Initializable
     private final static Image btnForward = new Image("/images/btn_fwd.png");
 
 
+    /**
+     * Back button.
+     *
+     * @param event click event
+     */
     @FXML
     void back(ActionEvent event) {
         event.consume();
@@ -38,6 +48,11 @@ public class InfoBoxController extends WindowController implements Initializable
         playerName.setText(Client.getLastStateMessage().getName(index));
     }
 
+    /**
+     * Fwd button.
+     *
+     * @param event click event
+     */
     @FXML
     void forward(ActionEvent event) {
         event.consume();
@@ -47,6 +62,11 @@ public class InfoBoxController extends WindowController implements Initializable
         playerName.setText(Client.getLastStateMessage().getName(index));
     }
 
+    /**
+     * Close button.
+     *
+     * @param event click event
+     */
     @FXML
     void close(ActionEvent event) {
         event.consume();

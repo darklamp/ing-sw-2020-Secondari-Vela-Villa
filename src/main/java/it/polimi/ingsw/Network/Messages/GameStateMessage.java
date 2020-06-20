@@ -5,7 +5,7 @@ import it.polimi.ingsw.Client.ClientState;
 import java.io.Serializable;
 
 /**
- * Message sent to all clients everytime a state change happens.
+ * Message sent to all clients every time a state change happens.
  */
 public class GameStateMessage implements Serializable, Message {
 
@@ -27,6 +27,12 @@ public class GameStateMessage implements Serializable, Message {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     * Getter for player's ClientState by index.
+     *
+     * @param i index of the player.
+     * @return player's CLientState
+     */
     public ClientState get(int i) {
         return switch (i) {
             case 1 -> p2;
@@ -35,6 +41,12 @@ public class GameStateMessage implements Serializable, Message {
         };
     }
 
+    /**
+     * Getter for player nickname by index.
+     *
+     * @param i index of the player.
+     * @return player's nickname
+     */
     public String getName(int i) {
         return switch (i) {
             case 1 -> player2;

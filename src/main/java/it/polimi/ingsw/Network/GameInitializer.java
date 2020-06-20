@@ -19,7 +19,12 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Responsible for initiating a match; gets called asynchronously by {@link it.polimi.ingsw.Network.Server}
+ * Responsible for initiating a match; gets called asynchronously by {@link it.polimi.ingsw.Network.Server}.
+ * Takes care of:
+ * - getting players' choices for gods and positions
+ * - initializing GameTable
+ * - initializing Observer/Observable relations
+ * - other magic
  */
 @SuppressWarnings("VariableNotUsedInsideIf")
 public class GameInitializer implements Runnable {

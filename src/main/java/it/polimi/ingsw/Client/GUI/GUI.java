@@ -137,9 +137,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
             Platform.runLater(() -> GUIClient.getController().setText(input));
     }
 
-    /**
-     * @see Ui
-     */
     @Override
     public void waitForIP(Client client) {
         SplashScreen splashScreen = SplashScreen.getSplashScreen();
@@ -149,9 +146,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         Platform.runLater(() -> loginController.waitForIP(client));
     }
 
-    /**
-     * @see Ui
-     */
     @Override
     synchronized public void showTable(CellView[][] table) {
         while (!turnChanged) {
@@ -163,9 +157,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         Platform.runLater(() -> GUIClient.getController().updateTable(table));
     }
 
-    /**
-     * @see Ui
-     */
     @Override
     synchronized public void processTurnChange(ClientState newState) {
         turnChanged = true;
@@ -173,9 +164,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
         if (!(newState == ClientState.WIN || newState == ClientState.LOSE)) notify();
     }
 
-    /**
-     * @see Ui
-     */
     @Override
     public String nextLine(Scanner in) {
         while (true) {
@@ -188,9 +176,6 @@ public class GUI implements Ui, Runnable, PropertyChangeListener {
 
     private final static BlockingQueue<String> queue = new ArrayBlockingQueue<>(1);
 
-    /**
-     * @see Ui
-     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         try {

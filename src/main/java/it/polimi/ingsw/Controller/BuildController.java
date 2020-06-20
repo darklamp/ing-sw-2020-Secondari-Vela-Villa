@@ -27,6 +27,8 @@ public class BuildController {
 
     /**
      * Constructor for the BuildController.Takes gameTable as argument.
+     *
+     * @param gameTable table to be referenced
      */
     public BuildController(GameTable gameTable){
         this.gameTable = gameTable;

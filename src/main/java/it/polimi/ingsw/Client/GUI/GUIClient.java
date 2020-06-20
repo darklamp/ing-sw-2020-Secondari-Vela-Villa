@@ -30,7 +30,6 @@ public class GUIClient extends Application {
 
     /**
      * Getter for specific size of font
-     *
      * @param size size of font
      * @return font in specified size
      */
@@ -83,6 +82,12 @@ public class GUIClient extends Application {
         support.addPropertyChangeListener(pcl);
     }
 
+    /**
+     * Default method for main JavaFx class; loads stage, LoginController's scene, and a bunch of useful elements like fonts.
+     *
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));

@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controls game joining.
+ */
 @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "JavaDoc"})
 public class LoginWindowController extends WindowController {
     private boolean connected = false;

@@ -31,7 +31,13 @@ public class MainController implements PropertyChangeListener {
     private final MoveController moveController;
     private final GameTable gameTable;
     private GameInitializer gameInitializer;
+    /**
+     * If persistence is enabled, this attribute contains a reference to file used to save the game's state.
+     */
     private FileOutputStream fileOutputStream;
+    /**
+     * News object coming in from {@link RemoteView}'s MessageReceiver
+     */
     private News news;
 
     /**
@@ -232,7 +238,6 @@ public class MainController implements PropertyChangeListener {
 
     /**
      * Persistence method to recreate player from disk.
-     *
      * @param name name of players to be set
      * @param c    connection to be associated with the player
      */
@@ -252,7 +257,6 @@ public class MainController implements PropertyChangeListener {
 
     /**
      * Persistence main method: restarts game from disk. Basically the equivalent of {@link GameInitializer} for a reloaded game.
-     *
      * @param connections Contains every player's connection, in order from first to last.
      */
     synchronized public void restartFromDisk(ArrayList<SocketClientConnection> connections) {

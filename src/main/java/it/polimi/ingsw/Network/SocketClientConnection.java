@@ -16,6 +16,9 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Class representation of the socket connection between the server and a specific client.
+ */
 public class SocketClientConnection implements Runnable {
 
 

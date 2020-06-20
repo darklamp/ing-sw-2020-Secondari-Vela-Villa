@@ -49,39 +49,49 @@ import java.util.ResourceBundle;
 
 import static it.polimi.ingsw.Client.ClientState.*;
 
+/**
+ * Main GUI controller. Controls everything that the others don't.
+ */
 public class MainWindowController extends WindowController implements Initializable {
 
     @FXML
-    GridPane buildingPartsPane;
+    private GridPane buildingPartsPane;
     @FXML
-    AnchorPane anchorPane;
+    private AnchorPane anchorPane;
     @FXML
-    Text textArea1;
+    private Text textArea1;
     @FXML
-    GridPane gridPaneMain;
+    private GridPane gridPaneMain;
     @FXML
-    StackPane cell00, cell01, cell02, cell03, cell04, cell10, cell11, cell12, cell13;
+    private StackPane parts0, parts1, parts2, parts3;
     @FXML
-    StackPane cell14, cell20, cell21, cell22, cell23, cell24, cell30, cell31, cell32;
+    private ProgressBar timerBar;
     @FXML
-    StackPane cell33, cell34, cell40, cell41, cell42, cell43, cell44;
+    private ImageView godImage, infoButton, winnerImage;
     @FXML
-    StackPane parts0, parts1, parts2, parts3;
+    private Button infoB;
     @FXML
-    ProgressBar timerBar;
+    private Button buttonClose, buttonMinimize;
     @FXML
-    ImageView godImage, infoButton, winnerImage;
-    @FXML
-    Button infoB;
-    @FXML
-    Button buttonClose, buttonMinimize;
-    @FXML
-    Pane windowMoveBar;
+    private Pane windowMoveBar;
 
+    /**
+     * @see MainWindowController#timerBar
+     */
     private static Timeline timeline;
+    /**
+     * Contains last received table.
+     */
     private static CellView[][] lastTable;
 
+    /**
+     * Used in dragBoard to differentiate between builder and building grab.
+     */
     private static final DataFormat builder = new DataFormat("builder");
+
+    /**
+     * @see MainWindowController#builder
+     */
     private static final DataFormat building = new DataFormat("building");
     private static boolean newTurn = true;
 
@@ -89,12 +99,19 @@ public class MainWindowController extends WindowController implements Initializa
     private static final double MAX_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
     private static final double SCREEN_RATIO = 16.0 / 9.0;
 
-    private static ImageView selected = null;
     /**
      * keeps track of selected builder
      **/
+    private static ImageView selected = null;
 
+
+    /**
+     * True not after initialization by initialize(), but after initialization in {@link MainWindowController#setMove(ClientState)}.
+     */
     private boolean initialized = false;
+    /**
+     * Property to keep track of whether building parts should be visible.
+     */
     private final SimpleBooleanProperty buildingPartsVisible = new SimpleBooleanProperty();
 
     private static final Image builderImage1 = new Image("/images/builder1.png");
@@ -110,6 +127,9 @@ public class MainWindowController extends WindowController implements Initializa
     private final static Image topBuildingImage = new Image("/images/buildingTop.png");
     private final static Image domeBuildingImage = new Image("/images/buildingDome.png");
 
+    /**
+     * Used to make {@link MainWindowController#windowMoveBar} behave like system title bar, aka drag to move window around.
+     */
     private double xOffset, yOffset;
 
     @Override
@@ -140,6 +160,13 @@ public class MainWindowController extends WindowController implements Initializa
 
     }
 
+    /**
+     * Fired when, during builder position selection, a button is clicked to position a builder.
+     * Positions a temporary builder image on the cell and communicates the coordinates to the server.
+     * Has no effect if the game is not in an initialization state (and in fact doesn't get called, since it gets unbound).
+     *
+     * @param event click event
+     */
     @FXML
     void buttonClicked(Event event) {
         event.consume();
@@ -147,8 +174,8 @@ public class MainWindowController extends WindowController implements Initializa
         Button b = (Button) event.getSource();
         StackPane g = (StackPane) b.getParent();
         ImageView ii = new ImageView(builderImage2);
-        ii.setFitWidth(200);
-        ii.setFitHeight(200);
+        ii.setFitWidth(215);
+        ii.setFitHeight(215);
         b.setGraphic(ii);
         int i = getRow(g);
         int j = getColumn(g);
@@ -156,6 +183,9 @@ public class MainWindowController extends WindowController implements Initializa
         GUIClient.setOut(i + "," + j);
     }
 
+    /**
+     * Clears up building parts.
+     */
     private void clearAvailableParts() {
         if (parts0.getChildren().size() != 0) parts0.getChildren().clear();
         if (parts1.getChildren().size() != 0) parts1.getChildren().clear();
@@ -163,6 +193,9 @@ public class MainWindowController extends WindowController implements Initializa
         if (parts3.getChildren().size() != 0) parts3.getChildren().clear();
     }
 
+    /**
+     * Takes care of switching correctly between fullscreen or not, binding dimension etc..
+     */
     private void toggleFullScreen() {
         if (GUIClient.getStage().isFullScreen()) {
             buttonClose.setVisible(false);
@@ -185,6 +218,9 @@ public class MainWindowController extends WindowController implements Initializa
         }
     }
 
+    /**
+     * Resets timer bar.
+     */
     private void setTimerBar() {
         newTurn = false;
         timerBar.setVisible(true);
@@ -328,10 +364,28 @@ public class MainWindowController extends WindowController implements Initializa
         textArea1.setText(s1.toString());
     }
 
+    /**
+     * Spawns choice dialog to choose between different possible turn options.
+     *
+     * @param opt1 option 1
+     * @param opt2 option 2
+     * @return true if option 1 was chosen, false otherwise
+     */
     private boolean setStateChoiceDialog(String opt1, String opt2) {
         return setChoiceDialog("Turn choice", null, "Please choose what to do now: ", opt1, opt2, null);
     }
 
+    /**
+     * Spawns generic choice dialog with 2 options.
+     *
+     * @param title  Title of the dialog
+     * @param header Header text.
+     * @param text   Content text.
+     * @param opt1   option 1
+     * @param opt2   option 2
+     * @param c      Optional current clientState.
+     * @return true if option 1 was chosen, false otherwise
+     */
     private boolean setChoiceDialog(String title, String header, String text, String opt1, String opt2, ClientState c) {
         List<String> choices = new ArrayList<>();
         choices.add(opt1);
@@ -360,17 +414,34 @@ public class MainWindowController extends WindowController implements Initializa
         return result.get().equals(opt1);
     }
 
+    /**
+     * Fired when a builder is grabbed.
+     *
+     * @param event grab event
+     * @see MainWindowController#grabDetected(MouseEvent, DataFormat)
+     */
     @FXML
     void builderGrab(MouseEvent event) {
         grabDetected(event, builder);
     }
 
-
+    /**
+     * Fired when a building is grabbed.
+     *
+     * @param event grab event
+     * @see MainWindowController#grabDetected(MouseEvent, DataFormat)
+     */
     @FXML
     void buildingGrab(MouseEvent event) {
         grabDetected(event, building);
     }
 
+    /**
+     * Fired when an object is grabbed.
+     *
+     * @param event grab event
+     * @param type  type of the object
+     */
     private void grabDetected(MouseEvent event, DataFormat type) {
         if (Client.verbose())
             System.out.println("[DEBUG]" + new Throwable().getStackTrace()[0].getMethodName() + event.getSource() + " Entered drag");
@@ -391,6 +462,14 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
     }
 
+    /**
+     * Safely returns gridPane row on which the node is.
+     * NB: There's a bug in JavaFX where the {@link GridPane#getRowIndex(Node)} function will randomly throw if the row index of the node is 0.
+     * Hence, the function will return 0 as a row index both in case the index is actually 0 and in case the node isn't inside the pane.
+     *
+     * @param node node whose row relative to {@link MainWindowController#gridPaneMain} need to be found.
+     * @return int containing row of the node, or 0 in case an exception is thrown.
+     */
     private static int getRow(Node node) {
         int row;
         try {
@@ -401,6 +480,11 @@ public class MainWindowController extends WindowController implements Initializa
         return row;
     }
 
+    /**
+     * @param node node whose column relative to {@link MainWindowController#gridPaneMain} need to be found.
+     * @return int containing column of the node, or 0 in case an exception is thrown.
+     * @see MainWindowController#getRow(Node)
+     */
     private static int getColumn(Node node) {
         int col;
         try {
@@ -411,6 +495,12 @@ public class MainWindowController extends WindowController implements Initializa
         return col;
     }
 
+    /**
+     * Fired when a dragged object gets released.
+     * If the object has been dragged onto a valid cell, it informs the server as needed.
+     *
+     * @param event drag released (finished) event
+     */
     @FXML
     void dragReleased(DragEvent event) {
         if (Client.verbose())
@@ -475,10 +565,19 @@ public class MainWindowController extends WindowController implements Initializa
         event.consume();
     }
 
+    @Override
     void setText(String s) {
         setText("Message", "Message", s);
     }
 
+    /**
+     * Sets text dialog with custom title / header / message, following game's general style.
+     * Look at  resources/css/Main.css  for style directives.
+     *
+     * @param title   title of the popup
+     * @param header  header content
+     * @param message message content
+     */
     @SuppressWarnings("SameParameterValue")
     void setText(String title, String header, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -524,6 +623,13 @@ public class MainWindowController extends WindowController implements Initializa
         }
     }
 
+    /**
+     * Adds building part to {@link MainWindowController#buildingPartsPane}
+     *
+     * @param image image of the building part
+     * @param i     number of the part (0..3, where 0 is the first and 3 is the last)
+     * @see MainWindowController#updateTable(CellView[][])
+     */
     private void addAvailablePart(Image image, int i) {
         ImageView b = new ImageView(image);
         b.setFitHeight(155);
@@ -563,6 +669,14 @@ public class MainWindowController extends WindowController implements Initializa
         b.setOnDragDetected(this::buildingGrab);
     }
 
+    /**
+     * Adds building part to cell of {@link MainWindowController#gridPaneMain}
+     *
+     * @param image  image of the building part
+     * @param row    row of the cell
+     * @param column column of the cell
+     * @see MainWindowController#updateTable(CellView[][])
+     */
     private void addBuildingToCell(Image image, int row, int column) {
         if (image == null) {
             StackPane g = (StackPane) gridPaneMain.getChildren().get(row * 5 + column);
@@ -576,6 +690,15 @@ public class MainWindowController extends WindowController implements Initializa
         }
     }
 
+    /**
+     * Adds builder part to cell of {@link MainWindowController#gridPaneMain}
+     *
+     * @param image        image of the builder
+     * @param row          row of the cell
+     * @param column       column of the cell
+     * @param firstBuilder used to determine which actions need to be bound
+     * @see MainWindowController#updateTable(CellView[][])
+     */
     private void addBuilderToCell(Image image, int row, int column, int firstBuilder) {
         if (image == null) {
             StackPane g = (StackPane) gridPaneMain.getChildren().get(row * 5 + column);
@@ -606,12 +729,17 @@ public class MainWindowController extends WindowController implements Initializa
 
     }
 
+    /**
+     * Keeps track of number of builders positioned by this player.
+     */
     private int positionedBuilders = -1;
     private boolean flagInvalidPos = false;
+
 
     @Override
     void getStartingPositions(boolean cellOccupied, String[] inputs) {
         String s;
+        // sets the already selected cells to red color
         if (inputs.length > 2) {
             for (int i = 2; i < inputs.length; i++) {
                 String[] b = inputs[i].split(",");
@@ -641,6 +769,12 @@ public class MainWindowController extends WindowController implements Initializa
 
     }
 
+    /**
+     * DragBoard method fired whenever a drag event runs over a {@link MainWindowController#gridPaneMain} cell.
+     * Instructs the controller to accept transfers of any type on the cell (for a type example see {@link MainWindowController#builder}
+     *
+     * @param event drag over event
+     */
     @FXML
     void dragOver(DragEvent event) {
         event.acceptTransferModes(TransferMode.ANY);
@@ -648,6 +782,11 @@ public class MainWindowController extends WindowController implements Initializa
     }
 
 
+    /**
+     * Fired when a part gets mouse-hovered.
+     *
+     * @param event mouse hover event
+     */
     @FXML
     void setHovered(Event event) {
         event.consume();
@@ -659,6 +798,11 @@ public class MainWindowController extends WindowController implements Initializa
         b.setScaleZ(1.15);
     }
 
+    /**
+     * Fired when an hover exits from a part
+     *
+     * @param event mouse hover event
+     */
     @FXML
     void unsetHovered(Event event) {
         event.consume();
@@ -670,6 +814,11 @@ public class MainWindowController extends WindowController implements Initializa
         b.setScaleZ(1);
     }
 
+    /**
+     * Fired when a builder is chosen to execute a build move.
+     *
+     * @param event mouse click event
+     */
     @FXML
     void builderChosen(Event event) {
         event.consume();
@@ -717,6 +866,11 @@ public class MainWindowController extends WindowController implements Initializa
             Platform.exit();
     }
 
+    /**
+     * Initializes a StackPane to the specifics needed by {@link MainWindowController#gridPaneMain}
+     *
+     * @param g StackPane to be initialized
+     */
     private void initStackPane(StackPane g) {
         g.setMinSize(Region.USE_PREF_SIZE, Region.USE_COMPUTED_SIZE);
         g.setMaxSize(Region.USE_PREF_SIZE, Region.USE_COMPUTED_SIZE);

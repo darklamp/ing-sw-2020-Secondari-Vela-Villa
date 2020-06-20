@@ -1,9 +1,10 @@
 package it.polimi.ingsw.Utility;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
- * Class to handle cells like pair of int [row,column]
+ * Simple class to handle a pair of ints.
  */
 public class Pair implements Serializable {
 
@@ -34,8 +35,9 @@ public class Pair implements Serializable {
                 num2 == pair.num2;
     }
 
-    /*@Override
+    @Override
     public int hashCode() {
         return Objects.hash(num1, num2);
-    }*/
+    }
+
 }
