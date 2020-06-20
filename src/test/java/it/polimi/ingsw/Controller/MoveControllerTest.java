@@ -17,6 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MoveControllerTest {
 
+    /**
+     * Tests basic move cases.
+     *
+     * @throws Exception aa
+     */
     @Test
     void handleMoveTest() throws Exception {
         Field a = GameTable.class.getDeclaredField("news");
@@ -103,6 +108,11 @@ class MoveControllerTest {
 
     }
 
+    /**
+     * Tests basic move cases part 2.
+     *
+     * @throws Exception aa
+     */
     @Test
     void handleMoveTest2() throws Exception {
         Field a = GameTable.class.getDeclaredField("news");
@@ -144,6 +154,11 @@ class MoveControllerTest {
         assertNull(gameTable.getCell(4, 4).getBuilder());
     }
 
+    /**
+     * Tests for Pan specific case handling.
+     *
+     * @throws Exception aa
+     */
     @Test
     void panExcTest() throws Exception {
         GameTable gameTable = new GameTable(2);
@@ -180,6 +195,11 @@ class MoveControllerTest {
         assertThrows(WinnerException.class, () -> moveController.handleMove(news));
     }
 
+    /**
+     * Tests for Artemis specific case handling.
+     *
+     * @throws Exception aa
+     */
     @Test
     void artemisExcTest() throws Exception {
         GameTable gameTable = new GameTable(2);

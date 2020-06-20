@@ -15,9 +15,13 @@ import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Very simple test to verify CLI prints without errors.
+ */
 class CLITest {
     private static final CLI classecli = new CLI();
     private static final CellView [][] Matrix = new CellView[5][5];
+
     @Test
     void showTable() {
         Matrix[0][0]= new CellView(BuildingType.NONE,0,true);

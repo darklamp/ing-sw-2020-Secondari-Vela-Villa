@@ -20,6 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 class BuildControllerTest {
 
+    /**
+     * Tests basic build cases.
+     *
+     * @throws Exception aa
+     */
     @Test
     void handleBuildTest() throws Exception {
         Field a = GameTable.class.getDeclaredField("news");
@@ -105,6 +110,11 @@ class BuildControllerTest {
 
     }
 
+    /**
+     * Tests build edge cases.
+     *
+     * @throws Exception aa
+     */
     @Test
     void edgeCasesTest() throws Exception {
         Field a = GameTable.class.getDeclaredField("news");
@@ -151,6 +161,11 @@ class BuildControllerTest {
         assertEquals(NONE, gameTable.getCell(4, 4).getHeight());
     }
 
+    /**
+     * Tests cases of building before moving (rn just Prometheus)
+     *
+     * @throws Exception aa
+     */
     @Test
     void buildBeforeMoveTest() throws Exception {
         Field a = GameTable.class.getDeclaredField("news");
