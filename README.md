@@ -74,6 +74,8 @@ java -jar server.jar -port=1337 -ip=0.0.0.0 -time=55,s -motd="Hey!"
 
 ## Client options:
 
+Note: on Linux (doesn't seem to do anything on Windows), setting the JVM ```-Dprism.forceGPU=true``` flag might help in case the graphics are slow / misaligned.
+
 | Command | Description | Default |
 |---------|:----------:|------------:|
 | port    | specifies Server port | 1337 |
