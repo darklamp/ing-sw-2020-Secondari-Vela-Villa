@@ -14,6 +14,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -863,7 +864,7 @@ public class MainWindowController extends WindowController implements Initializa
         alert.getDialogPane().getStylesheets().add(getClass().getResource("/css/Main.css").toExternalForm());
         alert.showAndWait();
         if (input.equals(ServerMessage.gameLost) || input.equals(ServerMessage.abortMessage) || input.equals(ServerMessage.serverDown))
-            Platform.exit();
+            closeApp(new ActionEvent());
     }
 
     /**
