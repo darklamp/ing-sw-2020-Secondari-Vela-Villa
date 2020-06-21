@@ -24,6 +24,7 @@ Test game server :  **server.santorini.cf**
 
 ## Deliverables
 
+[Signature key](https://darklamp.github.io/ale/assets/pubkey.asc).
 Pre-packaged multiplatform JARs can be found under the deliverables folder,  under the [***Release***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/releases) tab, or under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions?query=branch:master) tab.
 
 ## Building
