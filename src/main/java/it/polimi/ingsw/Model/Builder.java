@@ -2,8 +2,10 @@ package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Client.ClientState;
 import it.polimi.ingsw.Model.Exceptions.InvalidBuildException;
+import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Model.Exceptions.InvalidMoveException;
 import it.polimi.ingsw.Model.Exceptions.WinnerException;
+import it.polimi.ingsw.Utility.Pair;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
@@ -255,9 +257,12 @@ public abstract class Builder implements Serializable {
      * @param otherBuilder builder whose position gets swapped
      */
     protected void swapPosition(Builder firstBuilder, Builder otherBuilder) {
-        CellPointer temp = new CellPointer(firstBuilder.getPosition());
+        Pair temp = firstBuilder.getPosition().getPosition();
         firstBuilder.forceMove(otherBuilder.getPosition());
-        otherBuilder.forceMove(temp.getPointer());
+        try {
+            otherBuilder.forceMove(getGameTable().getCell(temp));
+        } catch (InvalidCoordinateException ignored) {
+        }
     }
 
     /**
@@ -314,22 +319,5 @@ public abstract class Builder implements Serializable {
         return ClientState.MOVE;
     }
 
-
-}
-
-/**
- * this class is just a commodity class whose job is
- * to keep a pointer to a Cell object
- */
-class CellPointer {
-    public Cell getPointer() {
-        return pointer;
-    }
-
-    public CellPointer(Cell pointer) {
-        this.pointer = pointer;
-    }
-
-    private final Cell pointer;
 
 }

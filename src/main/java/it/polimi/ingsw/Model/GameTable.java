@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Exceptions.NoMoreMovesException;
 import it.polimi.ingsw.Network.Messages.GameStateMessage;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.CellView;
 
 import java.beans.PropertyChangeListener;
@@ -301,6 +302,18 @@ public class GameTable implements Serializable {
     public Cell getCell(int x, int y) throws InvalidCoordinateException {
         isInvalidCoordinate(x, y);
         return table[x][y];
+    }
+
+    /**
+     * Getter for table's cells.
+     *
+     * @param p pair of coordinates
+     * @return Cell with the given coordinates
+     * @throws InvalidCoordinateException if the given coordinates are invalid
+     */
+    public Cell getCell(Pair p) throws InvalidCoordinateException {
+        if (p == null) throw new InvalidCoordinateException();
+        return getCell(p.getFirst(), p.getSecond());
     }
 
     /**
