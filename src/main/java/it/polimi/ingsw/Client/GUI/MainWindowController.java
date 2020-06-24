@@ -157,7 +157,6 @@ public class MainWindowController extends WindowController implements Initializa
             GUIClient.getStage().setY(e.getScreenY() + yOffset);
         });
 
-        GUIClient.getStage().getIcons().add(GUIClient.getAppIcon());
 
     }
 
@@ -254,6 +253,7 @@ public class MainWindowController extends WindowController implements Initializa
                 ((StackPane) n).getChildren().get(0).setStyle(null);
                 ((StackPane) n).getChildren().get(0).setOpacity(1);
             }
+            GUIClient.getStage().getIcons().add(GUIClient.getAppIcon());
             textArea1.setStyle("-fx-font-size: 30px; -fx-text-fill: black; -fx-font-family: 'Roman SD';");
             StringProperty stringProperty = new SimpleStringProperty();
             GUIClient.getStage().getScene().heightProperty().addListener(((observableValue, oldV, newV) -> stringProperty.setValue("-fx-font-size: " + (int) (GUIClient.getStage().getScene().heightProperty().get() / MAX_HEIGHT * 30) + "px; -fx-text-fill: black; -fx-font-family: 'Roman SD';")));
