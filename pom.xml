@@ -352,6 +352,8 @@
                                     <exclude>org.reflections:*</exclude>
                                     <exclude>org.yaml:*</exclude>
                                     <exclude>org.javassist:*</exclude>
+                                    <exclude>org.apache.logging.log4j:*</exclude>
+                                    <exclude>org.slf4j:*</exclude>
                                 </excludes>
                             </artifactSet>
                             <transformers>
@@ -390,6 +392,8 @@
                                     <exclude>org.reflections:*</exclude>
                                     <exclude>org.yaml:*</exclude>
                                     <exclude>org.javassist:*</exclude>
+                                    <exclude>org.apache.logging.log4j:*</exclude>
+                                    <exclude>org.slf4j:*</exclude>
                                 </excludes>
                             </artifactSet>
                             <transformers>
