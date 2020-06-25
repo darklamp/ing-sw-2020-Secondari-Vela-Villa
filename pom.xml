@@ -317,16 +317,11 @@
                                     <exclude>org.openjfx:*</exclude>
                                 </excludes>
                             </artifactSet>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>it.polimi.ingsw.ServerMain</mainClass>
-                                </transformer>
-                            </transformers>
                             <filters>
                                 <filter>
                                     <artifact>*.*</artifact>
                                     <excludes>
+                                        <exclude>**/Log4j2Plugins.dat</exclude>
                                         <exclude>Gimp/**</exclude>
                                         <exclude>images/**</exclude>
                                         <exclude>css/**</exclude>
@@ -334,7 +329,13 @@
                                     </excludes>
                                 </filter>
                             </filters>
-                            <minimizeJar>true</minimizeJar>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>it.polimi.ingsw.ServerMain</mainClass>
+                                </transformer>
+                            </transformers>
+
                             <finalName>server</finalName>
                         </configuration>
                     </execution>
