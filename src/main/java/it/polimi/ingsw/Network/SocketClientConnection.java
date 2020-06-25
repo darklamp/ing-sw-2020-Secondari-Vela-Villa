@@ -7,6 +7,8 @@ import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Messages.MOTD;
 import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -25,6 +27,7 @@ public class SocketClientConnection implements Runnable {
     private final Socket socket;
     private ObjectOutputStream out;
     private final Server server;
+    private final Logger logger = LoggerFactory.getLogger(SocketClientConnection.class);
 
     /**
      * Listener helper object.
@@ -96,7 +99,7 @@ public class SocketClientConnection implements Runnable {
             socket.close();
             this.close();
         } catch (IOException e) {
-            System.err.println("Error while closing socket!");
+            logger.error("Error while closing socket!");
         }
         active = false;
     }
@@ -115,9 +118,7 @@ public class SocketClientConnection implements Runnable {
      * Calls {@link Server#deregisterConnection(SocketClientConnection)} to remove the connection from the server's list.
      */
     private void close() {
-        System.out.println("Deregistering client...");
         Server.deregisterConnection(this);
-        System.out.println("Done!");
     }
 
     @Override
@@ -177,16 +178,17 @@ public class SocketClientConnection implements Runnable {
             }
         } catch (NoSuchElementException e) {
             if (!graceful) {
-                System.err.println("Player " + this.getPlayer().getNickname() + " closed connection. Closing game...");
+                logger.info("Player {}'s connection dropped. Closing game...", this.getPlayer().getNickname());
                 setNews(new News(null, this), "ABORT");
             }
         } catch (Exception e) {
             if (!graceful) {
-                System.err.println("Exception thrown in SocketClientConnection. Closing game...");
-                if (ServerMain.verbose()) e.printStackTrace();
+                logger.info("Exception thrown in SocketClientConnection of player {} (probably dc'ed). Closing game.", this.getPlayer().getNickname());
+                logger.debug("StackTrace:\n", e);
                 setNews(new News(null, this), "ABORT");
             }
         } finally {
+            if (graceful) logger.info("Gracefully closing {}'s connection...", this.getPlayer().getNickname());
             closeConnection();
         }
     }

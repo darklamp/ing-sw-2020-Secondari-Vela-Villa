@@ -16,7 +16,10 @@ public abstract class View implements PropertyChangeListener {
 
     News controllerNews; /* news to be sent to controller */
 
-    final PropertyChangeSupport support = new PropertyChangeSupport(this); /** Listener helper object **/
+    /**
+     * Listener helper object
+     **/
+    final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);

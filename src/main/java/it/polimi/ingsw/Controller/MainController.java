@@ -13,7 +13,10 @@ import it.polimi.ingsw.Network.Messages.InitMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.View.RemoteView;
+import it.polimi.ingsw.View.ServerView;
 import it.polimi.ingsw.View.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,6 +34,7 @@ public class MainController implements PropertyChangeListener {
     private final MoveController moveController;
     private final GameTable gameTable;
     private GameInitializer gameInitializer;
+    private final Logger logger = LoggerFactory.getLogger(MainController.class);
     /**
      * If persistence is enabled, this attribute contains a reference to file used to save the game's state.
      */
@@ -219,7 +223,7 @@ public class MainController implements PropertyChangeListener {
             outputStream.writeObject(gameTable);
             outputStream.close();
         } catch (Exception e) {
-            if (ServerMain.verbose()) e.printStackTrace();
+            logger.error("Error during game save to file.", e);
         }
     }
 
@@ -284,9 +288,13 @@ public class MainController implements PropertyChangeListener {
         }
         player1View.addPropertyChangeListener(this);
         player2View.addPropertyChangeListener(this);
+        if (logger.isDebugEnabled()) {
+            gameTable.addPropertyChangeListener(new ServerView(gameTable));
+        }
         if (c3 != null) {
             player3View.addPropertyChangeListener(this);
         }
+
         c1.setReady();
         c2.setReady();
         if (c3 != null) {

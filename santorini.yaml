@@ -1,3 +1,5 @@
+# Sample configuration file for Santorini server (contains default values).
+# It is possible to specify a god twice or thrice, and the order doesn't matter.
 gods:
   - Apollo
   - Artemis
@@ -6,12 +8,24 @@ gods:
   - Demeter
   - Hephaestus
   - Minotaur
+  #   You better disable or pick Pan as it's way too OP
+  - Pan
   - Prometheus
 console:
   true
 MOTD:
-  "Whatever they say I am, that's what I'm not. Also, Pan is banned because OP."
+  Whatever they say I am, that's what I'm not.
 disk:
   true
-verbose:
-  true
+verb:
+  info
+port:
+  1337
+ip:
+  0.0.0.0
+moveTimer:
+  2
+timeunit:
+  m
+maxPlayers:
+  3

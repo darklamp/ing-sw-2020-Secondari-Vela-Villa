@@ -13,12 +13,11 @@ public class ServerConf {
     public String ip = "0.0.0.0";
     public int port = 1337;
     public boolean disk = false;
-    public boolean verbose = false;
-    public boolean v = false;
+    public String verb = "info";
     public short moveTimer = 2;
     public boolean console = false;
     public String MOTD = "Have fun!";
     public String timeunit = "m";
-
+    public int maxPlayers = 3;
     public List<String> gods = new ArrayList<>(Arrays.asList("APOLLO", "ARTEMIS", "ATHENA", "ATLAS", "DEMETER", "HEPHAESTUS", "MINOTAUR", "PAN", "PROMETHEUS"));
 }

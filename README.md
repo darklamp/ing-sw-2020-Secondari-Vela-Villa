@@ -45,24 +45,26 @@ mvn clean package
 
 ## Server options:
 
-| Command | Description | Default |
-|---------|:----------:|------------:|
-| port | specifies Server port | 1337 |
-| ip   | defines IP to listen on (v4/v6) | 0.0.0.0 |
-| console | starts debug console on stdin | no |
-| verbose   | print verbose output | no |
-| disk | persistence flag | no |
-| time | set allowed time for each turn (s , m or h) | 2 minutes (2,m) |
-| motd | change MOTD | "Have fun!" |
-| gods | choose available gods | default basic 9 gods |
+| Option | Description | Default | Possible values
+|---------|:----------:|:------------:|-----------:|
+| port | specifies Server port | 1337 | |
+| ip   | defines IP to listen on | 0.0.0.0 | any v4/v6 |
+| console | starts debug console on stdin | no | yes/no |
+| verb | verbosity | info | debug > info > warn > error |
+| disk | persistence flag | no | yes/no |
+| time | set allowed time for each turn | 2 minutes (2,m) | s, m, h |
+| motd | change MOTD | "Have fun!" | |
+| maxPlayers | maximum number of players | 3 | 2 or 3 |
+| gods | choose available gods | default basic 9 gods | any composition of size >= 2 |
 
-The options can be provided via command line and/or via configuration file. If both are provided, the first takes precedence.
+All options (except the gods list) can be provided via command line and via configuration file. In case both are provided, command line takes precedence.
 An example configuration file [is provided](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/blob/master/santorini.yaml).
+An error log file (error.log) is used to keep track of errors/traces.
 
 command line example:
 
 ```
-java -jar server.jar -port=1337 -ip=0.0.0.0 -time=55,s -motd="Hey!"
+java -jar server.jar -verb=info -port=1337 -ip=0.0.0.0 -time=55,s -motd="Hey!"
 ```
 
 #### debug console commands:
@@ -75,7 +77,7 @@ java -jar server.jar -port=1337 -ip=0.0.0.0 -time=55,s -motd="Hey!"
 
 ## Client options:
 
-Note: on Linux (doesn't seem to do anything on Windows), setting the JVM ```-Dprism.forceGPU=true``` flag might help in case the graphics are slow / misaligned.
+Note: especially on Linux/MacOS, setting the JVM ```-Dprism.forceGPU=true``` flag might help in case the graphics look slow / misaligned.
 
 | Command | Description | Default |
 |---------|:----------:|------------:|

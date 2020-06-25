@@ -6,6 +6,8 @@ import it.polimi.ingsw.Model.News;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.Network.SocketClientConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -33,6 +35,7 @@ public class RemoteView extends View {
         private News news;
 
         private final List<String> validTypes = Arrays.asList("MOVE", "BUILD", "PASS");
+        private final Logger logger = LoggerFactory.getLogger(MessageReceiver.class);
 
         /**
          * receive message from SocketClientConnection -> parse -> forward to MainController
@@ -41,7 +44,7 @@ public class RemoteView extends View {
         public void propertyChange(PropertyChangeEvent propertyChangeEvent) { // equivalente di update
             Object obj = propertyChangeEvent.getNewValue();
             setNews((News) obj);
-            System.out.println("Received message from: " + news.getSender().getPlayer().getNickname() + "\n");
+            //     logger.debug("Received message from: {}", news.getSender().getPlayer().getNickname());
             String name = propertyChangeEvent.getPropertyName();
             if (name.equals("PLAYERTIMEOUT")) {
                 setControllerNews(news, "PLAYERTIMEOUT");

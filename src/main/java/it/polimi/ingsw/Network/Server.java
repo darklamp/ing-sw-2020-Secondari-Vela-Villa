@@ -7,6 +7,8 @@ import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
 import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -56,6 +58,8 @@ public class Server {
     private static short moveTimer = (short) 2;
     private static TimeUnit moveTimerTimeUnit = TimeUnit.MINUTES;
 
+    private final Logger logger = LoggerFactory.getLogger(Server.class);
+
     public static String getMOTD() {
         return MOTD;
     }
@@ -93,29 +97,33 @@ public class Server {
 
     /**
      * Asks the first player to input the playerNumber and the choice of gods.
+     * NB: in case the maximum number of players is 2, the function does not ask for the number of players.
      *
+     * @param c connection of first player
      * @return array of integers; in the first position resides playerNumber, while the next 2/3 positions contain the gods
      */
     synchronized ArrayList<Integer> firstPlayer(SocketClientConnection c) {
-        c.send(ServerMessage.firstPlayer);
         Scanner in = null;
         try {
             in = c.getScanner();
         } catch (IOException e) {
-            if (ServerMain.verbose()) e.printStackTrace();
+            logger.error("Error during first player's choices.", e);
         }
         assert in != null;
         int playersNumber;
-        while (true) {
-            try {
-                playersNumber = Integer.parseInt(in.nextLine());
-                if (playersNumber == 2 || playersNumber == 3) {
-                    break;
+        if (ServerMain.getMaxPlayersNumber() != 2) {
+            c.send(ServerMessage.firstPlayer);
+            while (true) {
+                try {
+                    playersNumber = Integer.parseInt(in.nextLine());
+                    if (playersNumber >= 2 && playersNumber <= ServerMain.getMaxPlayersNumber()) {
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    c.send("Wrong input. Please try again: ");
                 }
-            } catch (NumberFormatException e) {
-                c.send("Wrong input. Please try again: ");
             }
-        }
+        } else playersNumber = 2;
         c.send("[CHOICE]@@@GODS@@@" + playersNumber);
         int count = 0;
         ArrayList<Integer> gods = new ArrayList<>();
@@ -151,7 +159,7 @@ public class Server {
         try {
             if (waitingConnection.containsKey(name) || name.equals("") || name.contains("\n"))
                 throw new NickAlreadyTakenException();
-            System.out.println("User " + name + " connected to game " + getCurrentGameIndex() + "'s lobby.");
+            logger.info("User {} connected to game {}'s lobby.", name, getCurrentGameIndex());
             waitingConnection.put(name, c);
             if (waitingConnection.size() == 1) {
                 ArrayList<Integer> gameProps = firstPlayer(c);
@@ -264,8 +272,7 @@ public class Server {
             if (MOTD != null) Server.MOTD = MOTD;
             this.serverSocket = new ServerSocket(port, 1, InetAddress.getByName(ip));
         } catch (Exception e) {
-            if (ServerMain.verbose()) e.printStackTrace();
-            System.err.println("[CRITICAL] Invalid IP address supplied. Please use a valid ipv4/ipv6 address.");
+            logger.error("Invalid IP address supplied. Please use a valid ipv4/ipv6 address.", e);
             System.exit(0);
         }
     }
@@ -273,6 +280,7 @@ public class Server {
     public void run() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             int count = 0;
+            logger.warn("Caught SIGHUP. Trying to cleanly close connections before dying.");
             while (count < currentGameIndex) {
                 try {
                     for (SocketClientConnection c : gameList.get(count)) {
@@ -285,19 +293,17 @@ public class Server {
             }
         }));
         if (ServerMain.persistence()) reloadFromDisk();
-        System.out.println("Server started!");
-        if (ServerMain.verbose()) {
-            System.out.println("IP: " + serverSocket.getInetAddress() + ", Port: " + serverSocket.getLocalPort());
-            System.out.println("PID: " + ProcessHandle.current().pid());
-        }
-        //noinspection InfiniteLoopStatement
+        logger.info("Server started!");
+        logger.info("IP: " + serverSocket.getInetAddress() + ", Port: " + serverSocket.getLocalPort());
+        logger.info("PID: " + ProcessHandle.current().pid());
         while (true) {
             try {
                 Socket newSocket = serverSocket.accept();
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
                 executor.submit(socketConnection);
             } catch (IOException e) {
-                System.out.println("Connection Error!");
+                logger.error("Error in server main thread.", e);
+                System.exit(-1);
             }
         }
     }
@@ -309,6 +315,10 @@ public class Server {
                 fileInputStream = new FileInputStream("game" + i + ".save");
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 GameTable g = (GameTable) objectInputStream.readObject();
+                if (g.getPlayers().size() > ServerMain.getMaxPlayersNumber()) {
+                    logger.error("Cannot reload game from disk as new maximum number of players is lower than the saved game's. Please increase the number and try again. ");
+                    System.exit(-1);
+                }
                 MainController mainController = new MainController(g);
                 gameControllers.put(i, mainController);
                 gameList.put(i, null);
@@ -318,7 +328,7 @@ public class Server {
                 break;
             }
         }
-        System.out.println("Successfully reloaded " + currentGameIndex + " games from disk.");
+        logger.info("Successfully reloaded {} games from disk.", currentGameIndex);
     }
 
     /**
@@ -369,11 +379,11 @@ public class Server {
                         System.out.println(s1);
                     } else if (s.contains("save")) {
                         if (ServerMain.persistence())
-                            System.out.println("Saving state to disk..");
+                            logger.info("Saving state to disk...");
                         else
-                            System.out.println("[WARNING] Saving state, although current instance was set not to use persistence.");
+                            logger.warn("Saving state, although current instance was set not to use persistence.");
                         gameControllers.forEach((key, value) -> value.saveGameState());
-                        System.out.println("State saved successfully!");
+                        logger.info("State saved successfully!");
                     } else if (s.contains("motd") || s.contains("MOTD")) {
                         String[] input = s.split(" ");
                         if (input.length > 1) {
@@ -387,7 +397,7 @@ public class Server {
                         } else System.out.println("MOTD: " + MOTD);
                     } else if (s.equalsIgnoreCase("^C")) System.exit(0);
                 } catch (Exception e) {
-                    if (ServerMain.verbose()) e.printStackTrace();
+                    logger.error("Invalid command.");
                 }
             }
         }).start();

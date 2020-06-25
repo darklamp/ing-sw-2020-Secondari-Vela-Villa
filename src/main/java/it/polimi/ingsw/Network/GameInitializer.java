@@ -11,7 +11,10 @@ import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.RemoteView;
+import it.polimi.ingsw.View.ServerView;
 import it.polimi.ingsw.View.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ public class GameInitializer implements Runnable {
     private final Player player1, player2, player3;
     private final GameTable gameTable;
     private final MainController mainController;
+    private final Logger logger = LoggerFactory.getLogger(GameInitializer.class);
 
     GameInitializer(SocketClientConnection c1, SocketClientConnection c2, SocketClientConnection c3, ArrayList<Integer> gods, Player player1, Player player2, Player player3, GameTable gameTable, MainController mainController) {
         this.c1 = c1;
@@ -91,7 +95,7 @@ public class GameInitializer implements Runnable {
         try {
             in = connection.getScanner();
         } catch (IOException e) {
-            if (ServerMain.verbose()) e.printStackTrace();
+            logger.error("Error during god choice.", e);
         }
         assert in != null;
         int choice = -1;
@@ -129,7 +133,7 @@ public class GameInitializer implements Runnable {
         try {
             in = connection.getScanner();
         } catch (IOException e) {
-            if (ServerMain.verbose()) e.printStackTrace();
+            logger.error("Error during builder choice.", e);
         }
         while (true) {
             assert in != null;
@@ -228,7 +232,7 @@ public class GameInitializer implements Runnable {
                     player3.initBuilderList(gameTable.getCell(startPos.get(5).getFirst(), startPos.get(5).getSecond()));
                 }
             } catch (InvalidBuildException | InvalidCoordinateException e) {
-                if (ServerMain.verbose()) e.printStackTrace();
+                logger.error("Error during builders initialization.", e);
             }
             View player1View = new RemoteView(player1, c1, gameTable);
             View player2View = new RemoteView(player2, c2, gameTable);
@@ -242,14 +246,19 @@ public class GameInitializer implements Runnable {
             gameTable.setPlayers(players);
             gameTable.addPropertyChangeListener(player1View);
             gameTable.addPropertyChangeListener(player2View);
-            if (c3 != null){
+            if (c3 != null) {
                 gameTable.addPropertyChangeListener(player3View);
             }
+
             player1View.addPropertyChangeListener(mainController);
             player2View.addPropertyChangeListener(mainController);
+            if (logger.isDebugEnabled()) {
+                gameTable.addPropertyChangeListener(new ServerView(gameTable));
+            }
             if (c3 != null) {
                 player3View.addPropertyChangeListener(mainController);
             }
+
             c1.setReady();
             c2.setReady();
             if (c3 != null) {
@@ -269,7 +278,7 @@ public class GameInitializer implements Runnable {
             c2.send(gameTable.getBoardCopy());
             if (c3 != null) c3.send(gameTable.getBoardCopy());
             gameTable.resetMoveTimer();
-            if (ServerMain.verbose()) mainController.saveGameState();
+            if (ServerMain.persistence()) mainController.saveGameState();
         }
         catch (Exception e){
             c1.closeConnection();
