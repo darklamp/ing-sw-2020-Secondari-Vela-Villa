@@ -1,8 +1,10 @@
 package it.polimi.ingsw.Client.GUI;
 
+import it.polimi.ingsw.Client.Client;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Dimension2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -85,27 +87,42 @@ public class GUIClient extends Application {
     /**
      * Default method for main JavaFx class; loads stage, LoginController's scene, and a bunch of useful elements like fonts.
      *
-     * @param primaryStage
-     * @throws Exception
+     * @param primaryStage default stage
+     * @throws Exception if fxml loading doesn't go well
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //load login graphics
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
         support = new PropertyChangeSupport(this);
         Parent root = loader.load();
+        primaryStage.setFullScreenExitHint("Please use F11 to toggle fullscreen on/off.");
         controller = loader.getController();
         primaryStage.setTitle("Santorini Client");
         primaryStage.setScene(new Scene(root, 400, 250));
         primaryStage.initStyle(StageStyle.UNDECORATED);
+
         primaryStage.show();
         stage = primaryStage;
-        WindowController.setCursor(new ImageCursor(new Image("/images/cursor.png")));
+
+        // get system preferred cursor size and set cursor property
+        Dimension2D dimension2D = ImageCursor.getBestSize(64, 64);
+        if (Client.verbose())
+            System.out.println("[DEBUG] Setting cursor size: " + dimension2D.getHeight() + "x" + dimension2D.getWidth());
+        WindowController.setCursor(new ImageCursor(new Image("/images/cursor.png"), dimension2D.getHeight(), dimension2D.getWidth()));
         stage.getScene().setCursor(WindowController.getCursor());
+
+        // set app icon
         appIcon = new Image("/images/appIcon.png");
         stage.getIcons().add(appIcon);
+
+        // add fonts
         Font.loadFont(getClass().getResourceAsStream("/fonts/DalekPinpoint.ttf"), 35);
         defaultFont = Font.loadFont(getClass().getResourceAsStream("/fonts/Roman_SD.ttf"), 35);
+
+        // add error icon
         WindowController.setErrorIcon(new ImageView(new Image("/images/errorIcon.png")));
+
         gui.setReady(true);
         stage.setAlwaysOnTop(false);
         stage.setOnCloseRequest(we -> {
@@ -114,6 +131,7 @@ public class GUIClient extends Application {
             Platform.exit();
             System.exit(0);
         });
+
     }
 
 

@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 
@@ -74,6 +75,13 @@ public class GodChoiceController extends WindowController implements Initializab
             i3 = choices.get(2);
         }
         godCard.setImage(god1);
+        GUIClient.getStage().getScene().setOnKeyReleased(e -> {
+            if (e.getCode() == KeyCode.RIGHT) {
+                forward(new ActionEvent());
+            } else if (e.getCode() == KeyCode.LEFT) {
+                back(new ActionEvent());
+            }
+        });
     }
 
     /**
@@ -123,6 +131,7 @@ public class GodChoiceController extends WindowController implements Initializab
         buttonSubmit.setDisable(true);
         buttonBack.setDisable(true);
         buttonForward.setDisable(true);
+        GUIClient.getStage().getScene().setOnKeyReleased(null);
     }
 
 

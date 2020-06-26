@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 /**
  * Controls in-game InfoBox.
  *
- * @see MainWindowController#infoButton
+ * @see MainWindowController
  */
 public class InfoBoxController extends WindowController implements Initializable {
 

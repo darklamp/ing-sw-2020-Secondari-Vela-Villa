@@ -85,6 +85,7 @@ public abstract class WindowController {
                 System.exit(0);
             });
             stage.setResizable(true);
+            if (fullScreen) stage.setFullScreenExitHint("Please use F11 to toggle fullscreen on/off.");
             s.setCursor(cursor);
             s.cursorProperty().addListener((obs, oldV, newV) -> s.setCursor(cursor));
             stage.initStyle(stageStyle == null ? StageStyle.DECORATED : stageStyle);

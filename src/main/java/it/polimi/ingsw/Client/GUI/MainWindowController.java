@@ -170,7 +170,7 @@ public class MainWindowController extends WindowController implements Initializa
     @FXML
     void buttonClicked(Event event) {
         event.consume();
-        if (Client.getState() != INIT) return;
+        if (Client.getState() != INIT || positionedBuilders >= 2) return;
         Button b = (Button) event.getSource();
         StackPane g = (StackPane) b.getParent();
         ImageView ii = new ImageView(builderImage2);
@@ -181,6 +181,7 @@ public class MainWindowController extends WindowController implements Initializa
         int j = getColumn(g);
         if (Client.verbose()) System.out.println(i + "   " + j);
         GUIClient.setOut(i + "," + j);
+        positionedBuilders += 1;
     }
 
     /**
@@ -258,7 +259,7 @@ public class MainWindowController extends WindowController implements Initializa
             StringProperty stringProperty = new SimpleStringProperty();
             GUIClient.getStage().getScene().heightProperty().addListener(((observableValue, oldV, newV) -> stringProperty.setValue("-fx-font-size: " + (int) (GUIClient.getStage().getScene().heightProperty().get() / MAX_HEIGHT * 30) + "px; -fx-text-fill: black; -fx-font-family: 'Roman SD';")));
             textArea1.styleProperty().bind(stringProperty);
-            GUIClient.getStage().getScene().setOnKeyPressed(e -> {
+            GUIClient.getStage().getScene().setOnKeyReleased(e -> {
                 if (e.getCode() == KeyCode.F11) {
                     toggleFullScreen();
                 }
@@ -733,7 +734,7 @@ public class MainWindowController extends WindowController implements Initializa
     /**
      * Keeps track of number of builders positioned by this player.
      */
-    private int positionedBuilders = -1;
+    private int positionedBuilders = 0;
     private boolean flagInvalidPos = false;
 
 
@@ -757,8 +758,7 @@ public class MainWindowController extends WindowController implements Initializa
         }
         if (!cellOccupied) {
             if (!flagInvalidPos) {
-                s = "Please select a cell on which to position your " + (positionedBuilders == -1 ? "first" : "second") + " builder.";
-                positionedBuilders += 1;
+                s = "Please select a cell on which to position your " + (positionedBuilders == 0 ? "first" : "second") + " builder.";
                 setText("Message", "Builders starting positions choice", s);
             }
             flagInvalidPos = false;
