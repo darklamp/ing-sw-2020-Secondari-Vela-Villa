@@ -1,4 +1,4 @@
-# Sample configuration file for Santorini server (contains default values).
+# Sample configuration file for Santorini server.
 # It is possible to specify a god twice or thrice, and the order doesn't matter.
 gods:
   - Apollo

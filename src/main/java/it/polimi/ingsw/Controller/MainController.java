@@ -203,7 +203,7 @@ public class MainController implements PropertyChangeListener {
         gameTable.getPlayers().stream().filter(c -> c.getNickname().equals(playerNick)).findFirst().ifPresent(player -> {
             try {
                 gameTable.removePlayer(player, true);
-            } catch (NoMoreMovesException ignored) {
+            } catch (Exception ignored) {
             }
         });
     }

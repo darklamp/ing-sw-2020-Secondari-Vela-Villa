@@ -74,6 +74,8 @@ java -jar server.jar -verb=info -port=1337 -ip=server.santorini.cf -time=55,s -m
 | players | [gameIndex] | returns list of players for given gameIndex / for all games if index not given |
 | save | n/a | saves current games' state |
 | motd | [message] | if a string is provided, the motd is set to the string, else the current motd is printed |
+| close | n/a | stop console |
+| kill | n/a | stop server |
 
 ## Client options:
 

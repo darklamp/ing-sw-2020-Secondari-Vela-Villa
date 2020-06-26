@@ -5,9 +5,7 @@ import it.polimi.ingsw.Network.Messages.MOTD;
 import it.polimi.ingsw.Network.Messages.Message;
 import it.polimi.ingsw.View.CellView;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -138,6 +136,12 @@ public class Client implements Runnable {
     }
 
     /**
+     * Filters what to accept for serialization and what not to accept.
+     * Note: not needed server-side since the server accepts only strings.
+     */
+    private static final ObjectInputFilter serializationFilter = ObjectInputFilter.Config.createFilter("it.polimi.ingsw.**;java.**;!*");
+
+    /**
      * Reads news from socket connection and calls Ui method on it
      *
      * @param socketIn input socket ObjectStream
@@ -166,7 +170,9 @@ public class Client implements Runnable {
                         } else ui.process((Message) inputObject);
                     }
                 }
-            } catch (Exception e){
+            } catch (InvalidClassException e) {
+                System.err.println("Invalid class received. Filtered out.");
+            } catch (Exception e) {
                 setActive(false);
             }
         });
@@ -287,6 +293,7 @@ public class Client implements Runnable {
                 }
             }));
             try (Scanner stdin = new Scanner(System.in); PrintWriter socketOut = new PrintWriter(socket.get().getOutputStream()); ObjectInputStream socketIn = new ObjectInputStream(socket.get().getInputStream())) {
+                socketIn.setObjectInputFilter(serializationFilter);
                 Thread t0 = asyncReadFromSocket(socketIn);
                 Thread t1 = asyncWriteToSocket(stdin, socketOut);
                 t0.join();

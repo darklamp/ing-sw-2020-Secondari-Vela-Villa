@@ -178,7 +178,7 @@ public class SocketClientConnection implements Runnable {
             }
         } catch (NoSuchElementException e) {
             if (!graceful) {
-                logger.info("Player {}'s connection dropped. Closing game...", this.getPlayer().getNickname());
+                logger.info("Player {}'s connection closed. Closing game...", this.getPlayer().getNickname());
                 setNews(new News(null, this), "ABORT");
             }
         } catch (Exception e) {

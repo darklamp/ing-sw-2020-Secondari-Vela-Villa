@@ -7,6 +7,7 @@ import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
 import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
+import it.polimi.ingsw.Utility.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -278,9 +279,10 @@ public class Server {
     }
 
     public void run() {
+        // add shutdown hook to notice clients of server death
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             int count = 0;
-            logger.warn("Caught SIGHUP. Trying to cleanly close connections before dying.");
+            logger.info("Caught SIGHUP. Trying to cleanly close connections before dying.");
             while (count < currentGameIndex) {
                 try {
                     for (SocketClientConnection c : gameList.get(count)) {
@@ -292,7 +294,9 @@ public class Server {
                 }
             }
         }));
+        //reload games from save files if persistence enabled
         if (ServerMain.persistence()) reloadFromDisk();
+        // log some infos
         logger.info("Server started!");
         logger.info("IP: " + serverSocket.getInetAddress() + ", Port: " + serverSocket.getLocalPort());
         logger.info("PID: " + ProcessHandle.current().pid());
@@ -301,8 +305,9 @@ public class Server {
                 Socket newSocket = serverSocket.accept();
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket, this);
                 executor.submit(socketConnection);
+                logger.debug("Accepted new connection from {}", newSocket.getInetAddress());
             } catch (IOException e) {
-                logger.error("Error in server main thread.", e);
+                logger.trace("Error in server main thread.", e);
                 System.exit(-1);
             }
         }
@@ -315,7 +320,7 @@ public class Server {
                 fileInputStream = new FileInputStream("game" + i + ".save");
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 GameTable g = (GameTable) objectInputStream.readObject();
-                if (g.getPlayers().size() > ServerMain.getMaxPlayersNumber()) {
+                if (g.getPlayers() != null && g.getPlayers().size() > ServerMain.getMaxPlayersNumber()) {
                     logger.error("Cannot reload game from disk as new maximum number of players is lower than the saved game's. Please increase the number and try again. ");
                     System.exit(-1);
                 }
@@ -337,6 +342,7 @@ public class Server {
     public void startConsole() {
         new Thread(() -> {
             Scanner stdin = new Scanner(System.in);
+            logger.info("Console started!");
             while (true) {
                 try {
                     String s = stdin.nextLine();
@@ -374,7 +380,6 @@ public class Server {
                             } catch (NullPointerException e) {
                                 s1.append("empty");
                             }
-                            // gameList.get(index).iterator().forEachRemaining(c -> s1.append(c.getPlayer().getNickname()).append(" "));
                         }
                         System.out.println(s1);
                     } else if (s.contains("save")) {
@@ -395,9 +400,12 @@ public class Server {
                             }
                             MOTD = temp.toString();
                         } else System.out.println("MOTD: " + MOTD);
-                    } else if (s.equalsIgnoreCase("^C")) System.exit(0);
+                    } else if (s.equalsIgnoreCase("close")) break;
+                    else if (s.equalsIgnoreCase("kill")) System.exit(0);
+                    else throw new Exception();
+                    logger.debug(Color.ANSI_GREEN + "Console command executed." + Color.RESET);
                 } catch (Exception e) {
-                    logger.error("Invalid command.");
+                    logger.error(Color.ANSI_RED + "Invalid command." + Color.RESET);
                 }
             }
         }).start();
