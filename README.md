@@ -48,10 +48,10 @@ mvn clean package
 | Option | Description | Default | Possible values
 |---------|:----------:|:------------:|-----------:|
 | port | specifies Server port | 1337 | |
-| ip   | defines IP to listen on | 0.0.0.0 | any v4/v6 |
-| console | starts debug console on stdin | no | yes/no |
+| ip   | defines IP to listen on | 0.0.0.0 | any v4/v6, or any hostname |
+| console | starts debug console on stdin | false |  |
 | verb | verbosity | info | debug > info > warn > error |
-| disk | persistence flag | no | yes/no |
+| disk | persistence flag | false | true/false |
 | time | set allowed time for each turn | 2 minutes (2,m) | s, m, h |
 | motd | change MOTD | "Have fun!" | |
 | maxPlayers | maximum number of players | 3 | 2 or 3 |
@@ -64,7 +64,7 @@ An error log file (error.log) is used to keep track of errors/traces.
 command line example:
 
 ```
-java -jar server.jar -verb=info -port=1337 -ip=0.0.0.0 -time=55,s -motd="Hey!"
+java -jar server.jar -verb=info -port=1337 -ip=server.santorini.cf -time=55,s -motd="Hey!" -console -disk
 ```
 
 #### debug console commands:
@@ -89,5 +89,5 @@ Note: especially on Linux/MacOS, setting the JVM ```-Dprism.forceGPU=true``` fla
 example: 
 
 ```
-java -jar client.jar -port=1337 -ip=::1
+java -jar client.jar -port=1337 -ip=1:5ee:bad::c0de -cli
 ```
