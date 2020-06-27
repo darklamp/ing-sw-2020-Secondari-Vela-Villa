@@ -26,10 +26,18 @@ Test game server :  **server.santorini.cf**
 An accurate coverage report can be found [on CodeCov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/tree/master/src/main/java/it/polimi/ingsw).
 Intellij's coverage report is also available in the deliverables folder.
 
+
+---
+
+
 ## Deliverables
 
 [Signature key](https://darklamp.github.io/ale/assets/pubkey.asc).
 Pre-packaged multi-platform JARs can be found under the deliverables folder,  under the [***Release***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/releases) tab, or under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions?query=branch:master) tab.
+
+
+---
+
 
 ## Building
  
@@ -46,6 +54,7 @@ mvn clean package
 ```
 
 ---
+
 
 ## Server options:
 
@@ -80,6 +89,10 @@ java -jar server.jar -verb=info -port=1337 -ip=server.santorini.cf -time=55,s -m
 | motd | [message] | if a string is provided, the motd is set to the string, else the current motd is printed |
 | close | n/a | stop console |
 | kill | n/a | stop server |
+
+
+---
+
 
 ## Client options:
 
