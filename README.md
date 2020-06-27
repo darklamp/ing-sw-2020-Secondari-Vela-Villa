@@ -48,7 +48,7 @@ Pre-packaged multi-platform JARs can be found under the deliverables folder,  un
 * Java 14 (because of [switch expressions](https://openjdk.java.net/jeps/361))
 * Maven 3.6.0+
 
-Maven is set up so as to create three jars: a server one and a two client ones: one contains both gui and cli, whereas the other is cli-only. By default, the pom detects the OS on which Maven is running and packages the client jar with the needed JavaFX libraries only.
+Maven is set up so as to create three jars: a server one and two client ones, of which one contains both gui and cli, whereas the other is cli-only. By default, the pom detects the OS on which Maven is running and packages the client jar with the needed JavaFX libraries only.
 In case you want to create multi-platform jars, just add ``` -Pmulti ``` to the Maven command below.
 
 ```
