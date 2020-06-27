@@ -24,8 +24,10 @@ Test game server :  **server.santorini.cf**
 ## Unit Tests
 
 An accurate coverage report can be found [on CodeCov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/tree/master/src/main/java/it/polimi/ingsw).
-Intellij's coverage report is also available in the deliverables folder.
+Intellij's coverage report is also available in the deliverables folder. This is the coverage percentage for model and controller, extracted from IntelliJ's report.
 
+
+![IntelliJ Coverage](https://i.imgur.com/qQQj9CO.png)
 
 ---
 
