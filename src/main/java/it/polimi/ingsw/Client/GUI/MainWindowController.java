@@ -226,16 +226,19 @@ public class MainWindowController extends WindowController implements Initializa
         newTurn = false;
         timerBar.setVisible(true);
         timerBar.setStyle("-fx-background-color: transparent;");
-        timeline = new Timeline(60,
+
+        // note : the fps value is low because apparently drawing a simple timer bar in javafx at 30fps takes about 20% cpu alone. ¯\_(ツ)_/¯
+        timeline = new Timeline(4,
                 new KeyFrame(Duration.ZERO, new KeyValue(timerBar.progressProperty(), 0)),
                 new KeyFrame(Duration.millis(Client.getGameTimer() * 0.75), e -> {
-                    textArea1.setText("\nHurry up! Time's about to finish.");
-                    timerBar.setStyle("-fx-accent: red;");
+                    textArea1.setText("\nHurry up!\n Time's\n almost over.");
+                    timerBar.setStyle("-fx-accent: orangered;");
                 }, new KeyValue(timerBar.progressProperty(), 0.75)),
-                new KeyFrame(Duration.millis(Client.getGameTimer()), e -> {
-                    textArea1.setText("Time's up!");
+                new KeyFrame(Duration.millis(Client.getGameTimer() * 0.9), e -> {
+                    textArea1.setText("HURRY UP!");
                     timerBar.setStyle("-fx-accent: red;");
-                }, new KeyValue(timerBar.progressProperty(), 1))
+                }, new KeyValue(timerBar.progressProperty(), 0.9)),
+                new KeyFrame(Duration.millis(Client.getGameTimer()), new KeyValue(timerBar.progressProperty(), 1))
         );
         timeline.setCycleCount(1);
         timeline.play();

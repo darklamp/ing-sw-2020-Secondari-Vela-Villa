@@ -2,6 +2,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.Model.BuildingType;
 import it.polimi.ingsw.Model.Cell;
+import it.polimi.ingsw.Network.ServerConf;
 
 import java.lang.reflect.Field;
 
@@ -24,6 +25,20 @@ public class TestUtilities {
             TestUtilities.height.set(cell, height);
         } catch (IllegalAccessException ignored) {
         }
+    }
+
+    public static void enablePersistence() throws Exception {
+        Field f = ServerMain.class.getDeclaredField("serverConf");
+        f.setAccessible(true);
+        ServerConf serverConf = (ServerConf) f.get(null);
+        serverConf.disk = true;
+    }
+
+    public static void disablePersistence() throws Exception {
+        Field f = ServerMain.class.getDeclaredField("serverConf");
+        f.setAccessible(true);
+        ServerConf serverConf = (ServerConf) f.get(null);
+        serverConf.disk = false;
     }
 
     public static <T> T getAccessibleField(String s, Object c) {

@@ -13,7 +13,8 @@ import java.util.ArrayList;
 
 
 /**
- * Server-side client view, used like a filter to log every move/whatever we feel like logging.
+ * Server-side view which observes a single game.
+ * Used as a filter to log every move/whatever we feel like logging.
  */
 public class ServerView extends View {
 

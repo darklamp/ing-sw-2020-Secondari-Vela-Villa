@@ -8,7 +8,6 @@ import it.polimi.ingsw.Model.Exceptions.InvalidCoordinateException;
 import it.polimi.ingsw.Network.GameInitializer;
 import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
-import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -457,9 +456,7 @@ class MainControllerTest {
      */
     @Test
     void constructorTest() throws Exception {
-        Field per = ServerMain.class.getDeclaredField("persistence");
-        per.setAccessible(true);
-        per.set(null, true);
+        TestUtilities.enablePersistence();
         Field file = MainController.class.getDeclaredField("fileOutputStream");
         file.setAccessible(true);
         MainController mainController = new MainController(new GameTable(2));
@@ -588,9 +585,6 @@ class MainControllerTest {
         Server s = new Server();
         Field f3 = Server.class.getDeclaredField("serverSocket");
         f3.setAccessible(true);
-        Field f4 = ServerMain.class.getDeclaredField("persistence");
-        f4.setAccessible(true);
-        f4.set(null, false);
         new Thread(s::run).start();
         Socket socket1 = new Socket("localhost", 1337);
         Socket socket2 = new Socket("localhost", 1337);
@@ -641,9 +635,7 @@ class MainControllerTest {
         Server s = new Server();
         Field f3 = Server.class.getDeclaredField("serverSocket");
         f3.setAccessible(true);
-        Field f4 = ServerMain.class.getDeclaredField("persistence");
-        f4.setAccessible(true);
-        f4.set(null, false);
+        TestUtilities.enablePersistence();
         f3.set(s, new ServerSocket(1337, 1, InetAddress.getByName("localhost")));
         new Thread(s::run).start();
         Socket socket1 = new Socket("localhost", 1337);
@@ -706,9 +698,7 @@ class MainControllerTest {
         Field b = GameTable.class.getDeclaredField("type");
         a.setAccessible(true);
         b.setAccessible(true);
-        Field f = ServerMain.class.getDeclaredField("persistence");
-        f.setAccessible(true);
-        f.set(null, true);
+        TestUtilities.enablePersistence();
         GameTable gameTable = new GameTable(2);
         MainController controller = new MainController(gameTable);
         ArrayList<Integer> choices = new ArrayList<>();
@@ -768,9 +758,8 @@ class MainControllerTest {
         Field b = GameTable.class.getDeclaredField("type");
         a.setAccessible(true);
         b.setAccessible(true);
-        Field f = ServerMain.class.getDeclaredField("persistence");
-        f.setAccessible(true);
-        f.set(null, false);
+        TestUtilities.disablePersistence();
+
         GameTable gameTable = new GameTable(2);
         MainController controller = new MainController(gameTable);
         ArrayList<Integer> choices = new ArrayList<>();

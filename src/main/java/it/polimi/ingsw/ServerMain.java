@@ -25,19 +25,15 @@ import static org.apache.logging.log4j.Level.*;
 public class ServerMain {
 
     public static boolean persistence() {
-        return persistence;
+        return serverConf.disk;
     }
-
-    private static boolean persistence = false;
 
     public static int getMaxPlayersNumber() {
-        return maxPlayersNumber;
+        return serverConf.maxPlayers;
     }
 
-    /**
-     * Holds maximum number of players allowed for games.
-     */
-    private static int maxPlayersNumber = 3;
+    private static ServerConf serverConf = new ServerConf();
+
 
     /**
      * Launches the server.
@@ -50,18 +46,12 @@ public class ServerMain {
         Server server;
         Logger logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        ServerConf serverConf;
-        int port;
-        String ip, MOTD;
         String[] a;
-        short moveTimer;
         TimeUnit timerTimeUnit;
-        boolean console;
         try {
             serverConf = mapper.readValue(new File(System.getProperty("user.dir") + "/santorini.yaml"), ServerConf.class);
             logger.debug("Configuration file parsed.");
         } catch (IOException e) {
-            serverConf = new ServerConf();
             logger.debug("Configuration file not found / invalid.");
         }
         Level verbosityLevel = switch (serverConf.verb.toLowerCase()) {
@@ -70,13 +60,6 @@ public class ServerMain {
             case "warn" -> WARN;
             default -> INFO;
         };
-        maxPlayersNumber = serverConf.maxPlayers;
-        persistence = serverConf.disk;
-        port = serverConf.port;
-        console = serverConf.console;
-        moveTimer = serverConf.moveTimer;
-        MOTD = serverConf.MOTD;
-        ip = serverConf.ip;
         List<String> tempgods = serverConf.gods;
         GameTable.completeGodList = tempgods.stream().map(String::toUpperCase).collect(Collectors.toCollection(ArrayList::new));
         timerTimeUnit = (serverConf.timeunit.equals("h")) ? TimeUnit.HOURS : (serverConf.timeunit.equals("s") ? TimeUnit.SECONDS : TimeUnit.MINUTES);
@@ -84,25 +67,25 @@ public class ServerMain {
             if (s.toLowerCase().contains("motd")) {
                 try {
                     a = s.split("=");
-                    MOTD = a[1];
+                    serverConf.MOTD = a[1];
                 } catch (Exception e) {
                     logger.error("Invalid motd supplied.");
                     System.exit(-1);
                 }
             } else if (s.contains("ip")) {
                 a = s.split("=");
-                ip = a[1];
+                serverConf.ip = a[1];
             } else if (s.contains("port")) {
                 a = s.split("=");
                 try {
-                    port = Integer.parseInt(a[1]);
-                    if (port < 0 || port > 65535) throw new NumberFormatException();
+                    serverConf.port = Integer.parseInt(a[1]);
+                    if (serverConf.port < 0 || serverConf.port > 65535) throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     logger.error("Invalid port supplied.");
                     System.exit(0);
                 }
             } else if (s.contains("console")) {
-                console = true;
+                serverConf.console = true;
             } else if (s.contains("verb")) {
                 verbosityLevel = switch (s.split("=")[1].toLowerCase()) {
                     case "debug" -> DEBUG;
@@ -110,13 +93,14 @@ public class ServerMain {
                     case "warn" -> WARN;
                     default -> INFO;
                 };
+                serverConf.verb = s.split("=")[1].toLowerCase();
             } else if (s.contains("disk")) {
-                persistence = true;
+                serverConf.disk = true;
             } else if (s.contains("maxPlayers")) {
                 a = s.split("=");
                 try {
                     int temp = Integer.parseInt(a[1]);
-                    if (temp == 2 || temp == 3) maxPlayersNumber = temp;
+                    if (temp == 2 || temp == 3) serverConf.maxPlayers = temp;
                     else throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     logger.error("Invalid player number supplied.");
@@ -126,13 +110,14 @@ public class ServerMain {
                 try {
                     a = s.split("=");
                     String[] b = a[1].split(",");
-                    moveTimer = Short.parseShort(b[0]);
+                    serverConf.moveTimer = Short.parseShort(b[0]);
                     timerTimeUnit = switch (b[1]) {
                         case "s", "S" -> TimeUnit.SECONDS;
                         case "m", "M" -> TimeUnit.MINUTES;
                         case "h", "H" -> TimeUnit.HOURS;
                         default -> throw new IllegalArgumentException();
                     };
+                    serverConf.timeunit = b[1].toLowerCase();
                 } catch (Exception e) {
                     logger.error("Invalid timer supplied.");
                     System.exit(-1);
@@ -145,7 +130,7 @@ public class ServerMain {
         if (size <= 1) {
             logger.error("Invalid number of gods. There must be at least 1.");
             System.exit(-1);
-        } else if (size == 2) maxPlayersNumber = 2;
+        } else if (size == 2) serverConf.maxPlayers = 2;
 
         // set logger verbosity
         Configurator.setRootLevel(verbosityLevel);
@@ -161,8 +146,8 @@ public class ServerMain {
             }
         }
 
-        server = new Server(port, ip, moveTimer, timerTimeUnit, MOTD);
-        if (console) server.startConsole();
+        server = new Server(serverConf.port, serverConf.ip, serverConf.moveTimer, timerTimeUnit, serverConf.MOTD);
+        if (serverConf.console) server.startConsole();
         server.run();
     }
 }
