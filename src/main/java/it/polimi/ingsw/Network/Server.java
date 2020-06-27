@@ -8,6 +8,7 @@ import it.polimi.ingsw.Network.Exceptions.BrokenLobbyException;
 import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Color;
+import it.polimi.ingsw.View.ServerView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +70,12 @@ public class Server {
      * Message of the day
      */
     private static String MOTD = "Have fun!";
+
+    public static ServerView getServerView() {
+        return serverView;
+    }
+
+    private static ServerView serverView;
 
     /**
      * @return index of game currently in the process of being created
@@ -270,6 +277,7 @@ public class Server {
         try {
             Server.moveTimer = moveTimer;
             Server.moveTimerTimeUnit = moveTimerTimeUnit;
+            Server.serverView = (logger.isDebugEnabled() ? new ServerView() : null);
             if (MOTD != null) Server.MOTD = MOTD;
             this.serverSocket = new ServerSocket(port, 1, InetAddress.getByName(ip));
         } catch (Exception e) {

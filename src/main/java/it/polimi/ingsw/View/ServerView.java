@@ -13,17 +13,15 @@ import java.util.ArrayList;
 
 
 /**
- * Server-side view which observes a single game.
+ * Server-side view which observes games.
  * Used as a filter to log every move/whatever we feel like logging.
  */
 public class ServerView extends View {
 
-    private final GameTable gameTable;
     private final Logger logger = LoggerFactory.getLogger(ServerView.class);
 
-    public ServerView(GameTable g) {
+    public ServerView() {
         super(null);
-        this.gameTable = g;
     }
 
     /**
@@ -32,6 +30,7 @@ public class ServerView extends View {
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         News news = (News) propertyChangeEvent.getNewValue();
+        GameTable gameTable = (GameTable) propertyChangeEvent.getSource();
         String name = propertyChangeEvent.getPropertyName();
         ArrayList<SocketClientConnection> c = news.getRecipients();
         switch (name) {

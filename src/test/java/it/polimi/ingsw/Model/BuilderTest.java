@@ -172,12 +172,21 @@ class BuilderTest {
     }
 
     @Test
-    void swapPosition() {
-        Cell temp1 = b1.getPosition(); //mi salvo la posizione
-        Cell temp2 = b2.getPosition(); //mi salvo la posizione
-        b1.swapPosition(b1, b2); //scambio posizioni builders
-        Assertions.assertEquals(b1.getPosition(), temp2); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
-        Assertions.assertEquals(b2.getPosition(), temp1); //controlla che la nuova posizione sia uguale a quella di dove si trovava l'altro giocatore prima
+    void swapPosition() throws Exception {
+        Cell temp1 = b1.getPosition();
+        Cell temp2 = b2.getPosition();
+        b1.swapPosition(b1, b2);
+        Assertions.assertEquals(b1.getPosition(), temp2); //check 1
+        Assertions.assertEquals(b2.getPosition(), temp1); //check 2
+
+        //test for invalid coordinates exception
+        GameTable g = new GameTable(2);
+        Builder b = new Prometheus(new Cell(2, 2, g), new Player("g", g, (SocketClientConnection) null));
+        Builder b1 = new Prometheus(new Cell(2, 3, g), new Player("g2", g, (SocketClientConnection) null));
+        b.forceMove(new Cell(5, 5, g));
+        b.swapPosition(b, b1);
+        assert b.getPosition().getPosition().getFirst() == 5 && b.getPosition().getPosition().getSecond() == 5 && b1.getPosition().getPosition().getFirst() == 2 && b1.getPosition().getPosition().getSecond() == 3;
+
     }
 
     @Test

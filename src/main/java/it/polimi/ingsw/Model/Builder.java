@@ -258,11 +258,15 @@ public abstract class Builder implements Serializable {
      */
     protected void swapPosition(Builder firstBuilder, Builder otherBuilder) {
         Pair temp = firstBuilder.getPosition().getPosition();
-        firstBuilder.forceMove(otherBuilder.getPosition());
+        Cell cell;
         try {
-            otherBuilder.forceMove(getGameTable().getCell(temp));
-        } catch (InvalidCoordinateException ignored) {
+            cell = getGameTable().getCell(temp);
+        } catch (InvalidCoordinateException e) {
+            return;
         }
+        firstBuilder.forceMove(otherBuilder.getPosition());
+        otherBuilder.forceMove(cell);
+
     }
 
     /**

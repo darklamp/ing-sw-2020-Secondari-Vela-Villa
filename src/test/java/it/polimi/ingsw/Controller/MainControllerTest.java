@@ -562,7 +562,7 @@ class MainControllerTest {
     }
 
     /**
-     * Tests {@link MainController#restartFromDisk(ArrayList)}
+     * Tests {@link MainController#restartFromDisk(ArrayList)} with 3 players
      *
      * @throws Exception if something fails
      */
@@ -613,7 +613,7 @@ class MainControllerTest {
     }
 
     /**
-     * Tests {@link MainController#restartFromDisk(ArrayList)}
+     * Tests {@link MainController#restartFromDisk(ArrayList)} with 2 players and debug enabled
      *
      * @throws Exception if something fails
      */
@@ -628,7 +628,7 @@ class MainControllerTest {
         p1.initBuilderList(g.getCell(0, 0));
         p1.initBuilderList(g.getCell(0, 1));
         p.add(p1);
-
+        TestUtilities.enableDebugVerbosity();
         g.setPlayers(p);
         MainController mainController = new MainController(g);
         Socket socket = new Socket();

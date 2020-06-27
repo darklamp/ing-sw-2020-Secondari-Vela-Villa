@@ -11,7 +11,6 @@ import it.polimi.ingsw.Network.Messages.ServerMessage;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.Utility.Pair;
 import it.polimi.ingsw.View.RemoteView;
-import it.polimi.ingsw.View.ServerView;
 import it.polimi.ingsw.View.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -253,7 +252,7 @@ public class GameInitializer implements Runnable {
             player1View.addPropertyChangeListener(mainController);
             player2View.addPropertyChangeListener(mainController);
             if (logger.isDebugEnabled()) {
-                gameTable.addPropertyChangeListener(new ServerView(gameTable));
+                gameTable.addPropertyChangeListener(Server.getServerView());
             }
             if (c3 != null) {
                 player3View.addPropertyChangeListener(mainController);

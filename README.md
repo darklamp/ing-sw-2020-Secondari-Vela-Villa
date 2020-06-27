@@ -21,11 +21,15 @@ Test game server :  **server.santorini.cf**
 | Additional gods | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 
 ---
+## Unit Tests
+
+An accurate coverage report can be found [on CodeCov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/tree/master/src/main/java/it/polimi/ingsw).
+Intellij's coverage report is also available in the deliverables folder.
 
 ## Deliverables
 
 [Signature key](https://darklamp.github.io/ale/assets/pubkey.asc).
-Pre-packaged multiplatform JARs can be found under the deliverables folder,  under the [***Release***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/releases) tab, or under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions?query=branch:master) tab.
+Pre-packaged multi-platform JARs can be found under the deliverables folder,  under the [***Release***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/releases) tab, or under the [***Actions***](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/actions?query=branch:master) tab.
 
 ## Building
  

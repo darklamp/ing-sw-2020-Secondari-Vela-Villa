@@ -310,5 +310,11 @@ class GameTableTest {
         }
     }
 
+    @Test
+    public void getCellPairTest() throws Exception {
+        GameTable g = new GameTable(2);
+        assertThrows(InvalidCoordinateException.class, () -> g.getCell(null));
+    }
+
 
 }

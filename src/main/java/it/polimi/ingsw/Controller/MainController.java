@@ -10,10 +10,10 @@ import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Network.GameInitializer;
 import it.polimi.ingsw.Network.Messages.GameStateMessage;
 import it.polimi.ingsw.Network.Messages.InitMessage;
+import it.polimi.ingsw.Network.Server;
 import it.polimi.ingsw.Network.SocketClientConnection;
 import it.polimi.ingsw.ServerMain;
 import it.polimi.ingsw.View.RemoteView;
-import it.polimi.ingsw.View.ServerView;
 import it.polimi.ingsw.View.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -289,7 +289,7 @@ public class MainController implements PropertyChangeListener {
         player1View.addPropertyChangeListener(this);
         player2View.addPropertyChangeListener(this);
         if (logger.isDebugEnabled()) {
-            gameTable.addPropertyChangeListener(new ServerView(gameTable));
+            gameTable.addPropertyChangeListener(Server.getServerView());
         }
         if (c3 != null) {
             player3View.addPropertyChangeListener(this);
