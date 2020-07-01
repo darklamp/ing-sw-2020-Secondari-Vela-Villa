@@ -203,7 +203,7 @@ public class GameTable implements Serializable {
         try {
             while (true) {
                 try {
-                    removePlayer(p, false);
+                    removePlayer(p, true);
                 } catch (NoMoreMovesException ignored) {
                 } finally {
                     p = players.get(0);

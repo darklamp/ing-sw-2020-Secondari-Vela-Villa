@@ -215,21 +215,28 @@ class GameTableTest {
         player2.setGod(choices.get(1));
         player3.setGod(choices.get(2));
         try {
-            player1.initBuilderList(gameTable.getCell(2, 2));
-            player1.initBuilderList(gameTable.getCell(2, 3));
-            player2.initBuilderList(gameTable.getCell(1, 2));
-            player2.initBuilderList(gameTable.getCell(1, 1));
+            player1.initBuilderList(gameTable.getCell(1, 4));
+            player1.initBuilderList(gameTable.getCell(1, 3));
+            player2.initBuilderList(gameTable.getCell(0, 1));
+            player2.initBuilderList(gameTable.getCell(0, 0));
             player3.initBuilderList(gameTable.getCell(4, 2));
             player3.initBuilderList(gameTable.getCell(4, 1));
         } catch (InvalidBuildException | InvalidCoordinateException e) {
             e.printStackTrace();
         }
+        TestUtilities.mustSetHeight(gameTable.getCell(0, 2), BuildingType.DOME);
+        TestUtilities.mustSetHeight(gameTable.getCell(1, 2), BuildingType.DOME);
+        TestUtilities.mustSetHeight(gameTable.getCell(1, 1), BuildingType.DOME);
+        TestUtilities.mustSetHeight(gameTable.getCell(1, 0), BuildingType.DOME);
         ArrayList<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         players.add(player3);
         gameTable.setPlayers(players);
-        gameTable.setCurrentBuilder(player2.getBuilderList().get(0));
+        gameTable.setCurrentBuilder(player1.getBuilderList().get(0));
+        Field f = GameTable.class.getDeclaredField("currentPlayer");
+        f.setAccessible(true);
+        f.set(gameTable, 0);
         assertDoesNotThrow(gameTable::closeGame);
         assert gameTable.getPlayers().size() == 0;
     }

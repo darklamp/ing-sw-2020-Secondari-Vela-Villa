@@ -325,7 +325,7 @@
                                         <exclude>Gimp/**</exclude>
                                         <exclude>images/**</exclude>
                                         <exclude>css/**</exclude>
-                                        <exclude>*.fxml</exclude>
+                                        <exclude>fxml/**</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
@@ -416,7 +416,7 @@
                                         <exclude>Gimp/**</exclude>
                                         <exclude>images/**</exclude>
                                         <exclude>css/**</exclude>
-                                        <exclude>*.fxml</exclude>
+                                        <exclude>fxml/**</exclude>
                                         <exclude>it/polimi/ingsw/Controller/**</exclude>
                                     </excludes>
                                 </filter>

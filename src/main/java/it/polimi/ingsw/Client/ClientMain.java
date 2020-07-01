@@ -32,6 +32,11 @@ public class ClientMain {
     public static void main(String[] args) {
         int port = 1337;
         boolean useGui = true;
+        try {
+            Class.forName("javafx.application.Application");
+        } catch (ClassNotFoundException e) {
+            useGui = false;
+        }
         boolean debug = false;
         InetAddress ip = null;
         try {

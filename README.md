@@ -27,7 +27,7 @@ An accurate coverage report can be found [on CodeCov](https://codecov.io/gh/dark
 Intellij's coverage report is also available in the deliverables folder. This is the coverage percentage for model and controller, extracted from IntelliJ's report.
 
 
-![IntelliJ Coverage](https://i.imgur.com/qQQj9CO.png)
+![IntelliJ Coverage](deliverables/intellij_coverage.png)
 
 ---
 
@@ -98,7 +98,10 @@ java -jar server.jar -verb=info -port=1337 -ip=server.santorini.cf -time=55,s -m
 
 ## Client options:
 
-Note: especially on Linux/MacOS, setting the JVM ```-Dprism.forceGPU=true``` flag might help in case the graphics look slow / misaligned.
+Note 1: especially on Linux/MacOS, setting the JVM ```-Dprism.forceGPU=true``` flag might help in case the graphics look slow / misaligned.
+
+
+Note 2: in the cli-only client package, the cli parameter gets forced to true, so there's no need to pass it.
 
 | Command | Description | Default |
 |---------|:----------:|------------:|
@@ -110,5 +113,9 @@ Note: especially on Linux/MacOS, setting the JVM ```-Dprism.forceGPU=true``` fla
 example: 
 
 ```
-java -jar client.jar -port=1337 -ip=1:5ee:bad::c0de -cli
+java -jar client.jar -port=1337 -ip=1:5ee:bad::c0de -cli -v
+```
+
+```
+java -jar client-cli-only.jar -port=1337 -ip=1:5ee:bad::c0de
 ```
