@@ -1,7 +1,6 @@
-#     SANTORINI : Progetto Ing.SW 2020   [![codecov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/branch/master/graph/badge.svg?token=PF3WCGV0B5)](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa)
+#     SANTORINI : Progetto Ing.SW 2020   [![codecov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/branch/master/graph/badge.svg?token=PF3WCGV0B5)](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa) [![javadoc](https://img.shields.io/badge/JavaDoc-here-blue)](https://darklamp.github.io/ing-sw-2020-Secondari-Vela-Villa)
 
 ![asd](https://i.imgur.com/g7BuRZO.png)
-
 
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
@@ -12,15 +11,6 @@
 | Persistence | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | Undo | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 | Additional gods | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-
----
-## Unit Tests
-
-An accurate coverage report can be found [on CodeCov](https://codecov.io/gh/darklamp/ing-sw-2020-Secondari-Vela-Villa/tree/master/src/main/java/it/polimi/ingsw).
-Intellij's coverage report is also available in the deliverables folder. This is the coverage percentage for model and controller, extracted from IntelliJ's report.
-
-
-![IntelliJ Coverage](deliverables/intellij_coverage.png)
 
 ---
 
@@ -66,7 +56,7 @@ mvn clean package
 | gods | choose available gods | default basic 9 gods | any composition of size >= 2 |
 
 All options (except the gods list) can be provided via command line and via configuration file. In case both are provided, command line takes precedence.
-An example configuration file [is provided](https://github.com/darklamp/ing-sw-2020-Secondari-Vela-Villa/blob/master/santorini.yaml).
+An example configuration file [is provided](santorini.yaml).
 An error log file (error.log) is used to keep track of errors/traces.
 
 command line example:
@@ -118,4 +108,4 @@ java -jar client-cli-only.jar -port=1337 -ip=1:5ee:bad::c0de
 The Santorini board game and every related graphical asset belong to Roxley Games (Copyright © Roxley Games 2020).
 
 
-This project is licensed under AGPL 3.0; see [here](LICENSE) for a copy of the license.
+This project is licensed under AGPL 3.0; a copy of the license can be found [here](LICENSE).
