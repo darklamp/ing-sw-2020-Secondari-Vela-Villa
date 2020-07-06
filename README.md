@@ -3,13 +3,6 @@
 ![asd](https://i.imgur.com/g7BuRZO.png)
 
 
-JavaDoc: [**here**](https://server.santorini.cf/javadoc) User: GC46, pwd: santorini  
-  
-Online CLI (ASCII not 100% working): [**here**](https://server.santorini.cf)   
-   
-Test game server :  **server.santorini.cf**  
-
-
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
 | Complete rules | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
@@ -119,3 +112,10 @@ java -jar client.jar -port=1337 -ip=1:5ee:bad::c0de -cli -v
 ```
 java -jar client-cli-only.jar -port=1337 -ip=1:5ee:bad::c0de
 ```
+
+## Copyright
+
+The Santorini board game and every related graphical asset belong to Roxley Games (Copyright © Roxley Games 2020).
+
+
+This project is licensed under AGPL 3.0; see [here](LICENSE) for a copy of the license.
