@@ -108,4 +108,15 @@ java -jar client-cli-only.jar -port=1337 -ip=1:5ee:bad::c0de
 The Santorini board game and every related graphical asset belong to Roxley Games (Copyright © Roxley Games 2020).
 
 
-This project is licensed under AGPL 3.0; a copy of the license can be found [here](LICENSE).
+Attributions for other used resources can be found [here](#credits).
+
+
+A copy of this project's license can be found [here](LICENSE) or [here](https://www.gnu.org/licenses/agpl-3.0.en.html).
+
+## Credits
+
+Favicon made by Adib Sulthon (https://www.flaticon.com/authors/adib-sulthon).
+Loser gif made by Dylan Morang (https://giphy.com/angchor).
+Roman SD font by Steve Deffeyes (https://www.dafont.com/steve-deffeyes.d923).
+Error icon by Eucalyp (https://www.flaticon.com/authors/eucalyp).
+Dalek Pinpoint font by K-Type (https://www.dafont.com/k-type.d872).
