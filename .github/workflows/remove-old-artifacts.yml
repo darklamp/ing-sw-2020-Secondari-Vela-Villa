@@ -16,3 +16,4 @@ jobs:
         age: '2 hours'
         # Optional inputs
         skip-tags: true
+        skip-recent: 3
