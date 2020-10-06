@@ -52,11 +52,11 @@ public enum Color {
     public static String Rainbow(String s) {
         StringBuilder out = new StringBuilder();
         Color cur = ANSI_RED;
-        short count = 0;
+        int count = 0;
         for (char c : s.toCharArray()) {
             if (c != ' ') {
                 out.append(cur).append(c);
-                if (count == (short) 3) {
+                if (count == 3) {
                     cur = cur.next();
                     count = 0;
                 } else count += 1;
