@@ -4,13 +4,13 @@
 
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
-| Complete rules | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| GUI (JavaFX) | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| CLI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| Multiple games | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| Persistence | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| Undo | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-| Additional gods | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
+| Complete rules | 🟩 |
+| GUI (JavaFX) | 🟩 |
+| CLI | 🟩 |
+| Multiple games | 🟩 |
+| Persistence | 🟩 |
+| Undo | 🟥 |
+| Additional gods | 🟥 |
 
 ---
 
